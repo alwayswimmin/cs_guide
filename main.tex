@@ -1522,7 +1522,7 @@ We can try the $O(N!)$ brute force, trying every permutation of cows possible. H
 
 When greedy fails, the next strategy we look at is dynamic programming. To decide whether $S$ is stable, we have to find whether there exists a cow $j$ in $S$ that can support the weight of all the other cows in $S$. But how do we know whether the set $S \setminus \{j\}$ is stable? This is where dynamic programming comes in.
 
-This leads to a $O(N 2^N)$ solution. This seems like a pain to code iteratively, but there is a nice fact about subsets: there is a bijection from the subsets of $\{0,1,2, \ldots, N-1\}$ to the integers from 0 to $2^N - 1$. We call this technique \textit{masking}. We require all the subsets of $S$ to be processed before $S$ is processed, but that property is also handled by our bijection, since subtracting a power of 2 from a number decreases it. With a little knowledge of bit operators, this can be handled easily.
+This leads to a $O(N 2^N)$ solution. This seems like a pain to code iteratively, but there is a nice fact about subsets: there is a cute bijection from the subsets of $\{0,1,2, \ldots, N-1\}$ to the integers from 0 to $2^N - 1$. That is, the subset $\{0,2,5,7\}$ maps to $2^0 + 2^2 + 2^5 + 2^7 = 165$ in the bijection. We call this technique \textit{masking}. We require all the subsets of $S$ to be processed before $S$ is processed, but that property is also handled by our bijection, since subtracting a power of 2 from a number decreases it. With a little knowledge of bit operators, this can be handled easily.
 
 \begin{algorithmic}
 \For{$i\gets 0, 2^N-1$}
@@ -3091,7 +3091,7 @@ where $2^{v_2(i)}$ is simply the greatest power of 2 that divides $i$. Let's loo
 
 All the framework is now in place. Now we need to find out how to query and update the Fenwick tree.
 
-Suppose we wanted to find the sum $\sum_{k=1}^11 a_k$. Let's take a look at the diagram to see which elements we need.
+Suppose we wanted to find the sum $\sum_{k=1}^{11} a_k$. Let's take a look at the diagram to see which elements we need.
 
 \begin{center}
 {
@@ -3360,7 +3360,7 @@ We needed to increment the highlighted values, $b_{11}$, $b_{12}$, and $b_{16}$,
 
 It appears that instead of subtracting the largest dividing power of 2, we are adding. Once again this is an $O(\log{n})$ operation.
 
-The real magic in the Fenwick tree is how easy it is to code. The only tricky part is finding exactly what $2^{v_2(i)}$ is. But it turns out, by the way bits are arranged in negative numbers, this is just \texttt{i \& -i}. With this in mind, here's all the code that's necessary to code a Fenwick tree.
+The real magic in the Fenwick tree is how quickly it can be coded. The only tricky part is finding exactly what $2^{v_2(i)}$ is. But it turns out, by the way bits are arranged in negative numbers, this is just \texttt{i \& -i}. With this in mind, here's all the code that's necessary to code a Fenwick tree.
 
 \begin{mylstlisting}
 int[] b = new int[MAXN]; // Fenwick tree stored as array
@@ -3380,6 +3380,459 @@ int query(int i, int j) {
 \end{mylstlisting}
 
 \subsection{Lazy Propagation}
+
+It is often the case that in addition to performing range queries, we need to be able to perform \textit{range updates}. (Before, we only had to implement point updates.) One extension of our sum problem would require the following two functions:
+
+\begin{itemize}
+\item
+$update(i, j, x)$ -- increment the value of $a_k$ by $x$ for all $k\in [i,j]$
+
+\item
+$query(i, j)$ -- return $\sum_{k=i}^j a_k$.
+\end{itemize}
+
+\subsubsection{Some Motivation: $\sqrt{n}$ Blocking}
+
+Let's go back to our $\sqrt{n}$ blocking solution and see what changes we can make, and hopefully we can extend this idea back to our segment tree. If we're looking for an $O(\sqrt{n})$ implementation for $update$, we clearly can't perform point updates for all values in the range. The way we sped up $query$ was by keeping track of an extra set of data, the sum of all the elements in a bucket, which we used when \textit{the entire bucket was in the query range}.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+
+\node[myrect=16]
+  (array2)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-5$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 6
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\node[myrect=4, text width=21.2ex] [below=of array2]
+  (array)
+  {
+  					\strut 8
+  \nodepart{two}	\strut 7
+  \nodepart{three}	\strut $-10$
+  \nodepart{four}	\strut 7
+  };
+
+\node[below] at (array.one south) {$[1,4]$};
+\node[below] at (array.two south) {$[5,8]$};
+\node[below] at (array.three south) {$[9,12]$};
+\node[below] at (array.four south) {$[13,16]$};
+\end{tikzpicture}
+}
+\end{center}
+
+What can we do with this idea for $update$? Let's see what we can do if an entire bucket were included in the update range. Again, we don't want to touch the original array $a$ at all since that makes the operation linear. Let's try storing some information separately. This other information we're storing is the key idea behind lazy propagation.
+
+With this in mind, highlighted are the elements we'll need for $update(4,14,3)$.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+
+\node[myrect=16, rectangle split part fill={myseagreen, myseagreen, myseagreen, mysalmon, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, mysalmon, myseagreen, myseagreen}]
+  (array2)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-2$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 11
+  \nodepart{fourteen}	\strut 9
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\node[myrect=4, text width=21.2ex, rectangle split part fill={mysalmon, mysalmon, mysalmon, mysalmon}] [below=of array2]
+  (array)
+  {
+  					\strut 11
+  \nodepart{two}	\strut 19
+  \nodepart{three}	\strut 2
+  \nodepart{four}	\strut 13
+  };
+
+\node[below] at (array.one south) {$[1,4]$};
+\node[below] at (array.two south) {$[5,8]$};
+\node[below] at (array.three south) {$[9,12]$};
+\node[below] at (array.four south) {$[13,16]$};
+
+\node[myrect=4, text width=21.2ex, rectangle split part fill={myseagreen, mysalmon, mysalmon, myseagreen}] [below=of array]
+  (array3)
+  {
+  					\strut 0
+  \nodepart{two}	\strut 3
+  \nodepart{three}	\strut 3
+  \nodepart{four}	\strut 0
+  };
+
+\node[below] at (array3.one south) {$[1,4]$};
+\node[below] at (array3.two south) {$[5,8]$};
+\node[below] at (array3.three south) {$[9,12]$};
+\node[below] at (array3.four south) {$[13,16]$};
+\end{tikzpicture}
+}
+\end{center}
+
+Note that the sums associated with each bucket must adjust appropriately. In the example, there are four elements per bucket, so when an entire bucket needs to be incremented by 3, a single bucket can increment its sum by $4 \cdot 3 = 12$ easily.
+
+To reiterate, we not storing the actual values of the elements where they were stored in solving the original formulation of the problem. Despite this fact, we are able to calculate what any single value is supposed to be. $a_i$ is simply equal to the $\ceiling{\frac{i}{\sqrt{n}}}$th value stored in the newest third array added to the $i$th value stored in the first array. Because of this, querying a range works in almost exactly the same way as it did in the original formulation.
+
+Highlighted are the values necessary for $query(7,15)$.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+
+\node[myrect=16, rectangle split part fill={myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, mysalmon, myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, mysalmon, mysalmon, myseagreen}]
+  (array2)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-2$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 11
+  \nodepart{fourteen}	\strut 9
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\node[myrect=4, text width=21.2ex, rectangle split part fill={myseagreen, myseagreen, mysalmon, myseagreen}] [below=of array2]
+  (array)
+  {
+  					\strut 11
+  \nodepart{two}	\strut 19
+  \nodepart{three}	\strut 2
+  \nodepart{four}	\strut 13
+  };
+
+\node[below] at (array.one south) {$[1,4]$};
+\node[below] at (array.two south) {$[5,8]$};
+\node[below] at (array.three south) {$[9,12]$};
+\node[below] at (array.four south) {$[13,16]$};
+
+\node[myrect=4, text width=21.2ex, rectangle split part fill={myseagreen, mysalmon, myseagreen, mysalmon}] [below=of array]
+  (array3)
+  {
+  					\strut 0
+  \nodepart{two}	\strut 3
+  \nodepart{three}	\strut 3
+  \nodepart{four}	\strut 0
+  };
+
+\node[below] at (array3.one south) {$[1,4]$};
+\node[below] at (array3.two south) {$[5,8]$};
+\node[below] at (array3.three south) {$[9,12]$};
+\node[below] at (array3.four south) {$[13,16]$};
+\end{tikzpicture}
+}
+\end{center}
+
+Thus we have achieved $O(\sqrt{n})$ for both range updates and and range queries.
+
+\subsubsection{Lazy Propagation on a Segment Tree}
+
+Motivated by how we fixed our $O(\sqrt{n})$ solution, let's try adding a similar extra piece of information to our segment tree to try to get an $O(\log{n})$ solution. Let's call this extra number the ``lazy'' number.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  very thick,
+  level 1/.style={sibling distance=80mm},
+  level 2/.style={sibling distance=40mm},
+  level 3/.style={sibling distance=20mm},
+  level 4/.style={sibling distance=10mm},
+  myrect/.style={
+    draw,
+    thick,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split parts=2,
+    rectangle split part align=left,
+    text width=3.5ex,
+    text centered
+    }
+]
+\node [myrect] (r){$12$\nodepart{two}0}
+  child {
+    node [myrect] (a) {15\nodepart{two}0}
+    child {
+      node [myrect] {8\nodepart{two}0}
+      child {
+        node [myrect] {6\nodepart{two}0}
+        child {node [myrect] {2\nodepart{two}0}}
+        child {node [myrect] {4\nodepart{two}0}}
+      } 
+      child {
+        node [myrect] {2\nodepart{two}0}
+        child {node [myrect] {7\nodepart{two}0}}
+        child {node [myrect] {$-5$\nodepart{two}0}}
+      }
+    }
+    child {
+      node [myrect] {7\nodepart{two}0}
+      child {node [myrect] {9\nodepart{two}0}
+              child {node [myrect] {3\nodepart{two}0}}
+        child {node [myrect] {6\nodepart{two}0}}
+      }
+      child {node [myrect] {$-2$\nodepart{two}0}
+              child {node [myrect] {$-3$\nodepart{two}0}}
+        child {node [myrect] {1\nodepart{two}0}}
+      }
+    }
+  }
+  child {
+    node [myrect] {$-3$\nodepart{two}0}
+    child {
+      node [myrect, text width=4ex] {$-10$\nodepart{two}0}
+      child {node [myrect] {$-6$\nodepart{two}0}
+              child {node [myrect] {$-2$\nodepart{two}0}}
+        child {node [myrect] {$-4$\nodepart{two}0}}}
+      child {node [myrect] {$-4$\nodepart{two}0}
+              child {node [myrect] {$-6$\nodepart{two}0}}
+        child {node [myrect] {$2$\nodepart{two}0}}}
+    }
+    child {
+      node [myrect] {7\nodepart{two}0}
+      child {node [myrect] {14\nodepart{two}0}
+              child {node [myrect] {8\nodepart{two}0}}
+        child {node [myrect] {6\nodepart{two}0}}}
+      child {node [myrect] {$-7$\nodepart{two}0}
+              child {node [myrect] {0\nodepart{two}0}}
+        child {node [myrect] {$-7$\nodepart{two}0}}}
+    }
+  };
+
+\end{tikzpicture}
+}
+\end{center}
+
+Once again, if the entire range associated with a node is contained within the update interval, we'll just make a note of it on that particular node and not update any of its children. We'll call such a node ``lazy.''
+
+Here's the status of the tree after $update(3,12,2)$.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  very thick,
+  level 1/.style={sibling distance=80mm},
+  level 2/.style={sibling distance=40mm},
+  level 3/.style={sibling distance=20mm},
+  level 4/.style={sibling distance=10mm},
+  myrect/.style={
+    draw,
+    thick,
+    rectangle split,
+    rectangle split parts=2,
+    rectangle split part fill={myseagreen, myseagreen},
+    rectangle split part align=left,
+    text width=3.5ex,
+    text centered
+    }
+]
+\node [myrect, rectangle split part fill={mysalmon, myseagreen}] (r){$32$\nodepart{two}0}
+  child {
+    node [myrect, rectangle split part fill={mysalmon, myseagreen}] (a) {27\nodepart{two}0}
+    child {
+      node [myrect, rectangle split part fill={mysalmon, myseagreen}] {12\nodepart{two}0}
+      child {
+        node [myrect] {6\nodepart{two}0}
+        child {node [myrect] {2\nodepart{two}0}}
+        child {node [myrect] {4\nodepart{two}0}}
+      } 
+      child {
+        node [myrect, rectangle split part fill={mysalmon, mysalmon}] {6\nodepart{two}2}
+        child {node [myrect] {7\nodepart{two}0}}
+        child {node [myrect] {$-5$\nodepart{two}0}}
+      }
+    }
+    child {
+      node [myrect, rectangle split part fill={mysalmon, mysalmon}] {15\nodepart{two}2}
+      child {node [myrect] {9\nodepart{two}0}
+              child {node [myrect] {3\nodepart{two}0}}
+        child {node [myrect] {6\nodepart{two}0}}
+      }
+      child {node [myrect] {$-2$\nodepart{two}0}
+              child {node [myrect] {$-3$\nodepart{two}0}}
+        child {node [myrect] {1\nodepart{two}0}}
+      }
+    }
+  }
+  child {
+    node [myrect, rectangle split part fill={mysalmon, myseagreen}] {$5$\nodepart{two}0}
+    child {
+      node [myrect, rectangle split part fill={mysalmon, mysalmon}] {$-2$\nodepart{two}2}
+      child {node [myrect] {$-6$\nodepart{two}0}
+              child {node [myrect] {$-2$\nodepart{two}0}}
+        child {node [myrect] {$-4$\nodepart{two}0}}}
+      child {node [myrect] {$-4$\nodepart{two}0}
+              child {node [myrect] {$-6$\nodepart{two}0}}
+        child {node [myrect] {$2$\nodepart{two}0}}}
+    }
+    child {
+      node [myrect] {7\nodepart{two}0}
+      child {node [myrect] {14\nodepart{two}0}
+              child {node [myrect] {8\nodepart{two}0}}
+        child {node [myrect] {6\nodepart{two}0}}}
+      child {node [myrect] {$-7$\nodepart{two}0}
+              child {node [myrect] {0\nodepart{two}0}}
+        child {node [myrect] {$-7$\nodepart{two}0}}}
+    }
+  };
+
+\end{tikzpicture}
+}
+\end{center}
+
+When a node is lazy, it indicates that the sum numbers of every other node in its subtree is no longer accurate. In particular, if a node is lazy, the sum number it keeps track of is not equal to the sum of the sum numbers of its children. This means whenever we need to access any node in that subtree, we'll need to update them then. Numbers in the tree therefore can change even after a query. Let's perform a query to illustrate that point.
+
+$query(7,13)$ requires access to the nodes for the ranges $[7,8]$, $[9,12]$, and $[13,13]$. The nodes for $[9,12]$ and $[13,13]$ are up to date and store the correct sum, but the node for $[7,8]$ does not, as it is a descendent of the node for $[5,8]$, which has a nonzero lazy number. Highlighted are the nodes we'll need to update as we perform the query. Notice how $[5,8]$ simply passes its lazy number onto its children, and they update themselves as necessary.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  very thick,
+  level 1/.style={sibling distance=80mm},
+  level 2/.style={sibling distance=40mm},
+  level 3/.style={sibling distance=20mm},
+  level 4/.style={sibling distance=10mm},
+  myrect/.style={
+    draw,
+    thick,
+    rectangle split,
+    rectangle split parts=2,
+    rectangle split part fill={myseagreen, myseagreen},
+    rectangle split part align=left,
+    text width=3.5ex,
+    text centered
+    }
+]
+\node [myrect] (r){$32$\nodepart{two}0}
+  child {
+    node [myrect] (a) {27\nodepart{two}0}
+    child {
+      node [myrect] {12\nodepart{two}0}
+      child {
+        node [myrect] {6\nodepart{two}0}
+        child {node [myrect] {2\nodepart{two}0}}
+        child {node [myrect] {4\nodepart{two}0}}
+      } 
+      child {
+        node [myrect] {6\nodepart{two}2}
+        child {node [myrect] {7\nodepart{two}0}}
+        child {node [myrect] {$-5$\nodepart{two}0}}
+      }
+    }
+    child {
+      node [myrect, rectangle split part fill={myseagreen, mysalmon}] {15\nodepart{two}0}
+      child {node [myrect, rectangle split part fill={mysalmon, mysalmon}] {13\nodepart{two}2}
+              child {node [myrect] {3\nodepart{two}0}}
+        child {node [myrect] {6\nodepart{two}0}}
+      }
+      child {node [myrect, rectangle split part fill={mysalmon, mysalmon}] {$2$\nodepart{two}2}
+              child {node [myrect] {$-3$\nodepart{two}0}}
+        child {node [myrect] {1\nodepart{two}0}}
+      }
+    }
+  }
+  child {
+    node [myrect] {$5$\nodepart{two}0}
+    child {
+      node [myrect] {$-2$\nodepart{two}2}
+      child {node [myrect] {$-6$\nodepart{two}0}
+              child {node [myrect] {$-2$\nodepart{two}0}}
+        child {node [myrect] {$-4$\nodepart{two}0}}}
+      child {node [myrect] {$-4$\nodepart{two}0}
+              child {node [myrect] {$-6$\nodepart{two}0}}
+        child {node [myrect] {$2$\nodepart{two}0}}}
+    }
+    child {
+      node [myrect] {7\nodepart{two}0}
+      child {node [myrect] {14\nodepart{two}0}
+              child {node [myrect] {8\nodepart{two}0}}
+        child {node [myrect] {6\nodepart{two}0}}}
+      child {node [myrect] {$-7$\nodepart{two}0}
+              child {node [myrect] {0\nodepart{two}0}}
+        child {node [myrect] {$-7$\nodepart{two}0}}}
+    }
+  };
+
+\end{tikzpicture}
+}
+\end{center}
+
+Now, the nodes that we need are all up to date, and we can perform our query. This process is necessary whenever we are performing an operation on an interval that intersects but does not contain the range associated with a lazy node. Since this can only happen for two such nodes (one at either end of the interval in question), both updating and querying change values of at most four nodes per level, so both operations are $O(\log{n})$.
 
 \subsection{2D Segment Tree}
 

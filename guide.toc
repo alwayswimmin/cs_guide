@@ -71,24 +71,26 @@
 \contentsline {section}{\numberline {7.2}Segment Tree}{52}{section.7.2}
 \contentsline {subsection}{\numberline {7.2.1}Fenwick Tree}{55}{subsection.7.2.1}
 \contentsline {subsection}{\numberline {7.2.2}Lazy Propagation}{59}{subsection.7.2.2}
-\contentsline {subsection}{\numberline {7.2.3}2D Segment Tree}{59}{subsection.7.2.3}
-\contentsline {subsection}{\numberline {7.2.4}3D Segment Tree}{59}{subsection.7.2.4}
-\contentsline {subsection}{\numberline {7.2.5}Persistent Segment Tree}{59}{subsection.7.2.5}
-\contentsline {section}{\numberline {7.3}Queue with Minimum Query}{59}{section.7.3}
-\contentsline {section}{\numberline {7.4}Balanced Binary Search Tree}{59}{section.7.4}
-\contentsline {subsection}{\numberline {7.4.1}Splay Tree}{59}{subsection.7.4.1}
-\contentsline {subsection}{\numberline {7.4.2}Treap}{59}{subsection.7.4.2}
-\contentsline {section}{\numberline {7.5}Euler Tour Technique}{59}{section.7.5}
-\contentsline {section}{\numberline {7.6}$2^n$ Jump Pointers}{59}{section.7.6}
-\contentsline {section}{\numberline {7.7}Fractional Cascading}{59}{section.7.7}
-\contentsline {section}{\numberline {7.8}Heavy-Light Decomposition}{59}{section.7.8}
-\contentsline {section}{\numberline {7.9}Link-Cut Tree}{60}{section.7.9}
-\contentsline {section}{\numberline {7.10}Top Tree}{60}{section.7.10}
-\contentsline {section}{\numberline {7.11}Link-Cut Cactus}{60}{section.7.11}
-\contentsline {chapter}{\numberline {8}Math}{61}{chapter.8}
-\contentsline {section}{\numberline {8.1}Games}{61}{section.8.1}
-\contentsline {section}{\numberline {8.2}Karatsuba}{61}{section.8.2}
-\contentsline {section}{\numberline {8.3}Matrices}{61}{section.8.3}
-\contentsline {section}{\numberline {8.4}Fast Fourier Transform}{61}{section.8.4}
-\contentsline {subsection}{\numberline {8.4.1}Number Theoretic Transform}{61}{subsection.8.4.1}
-\contentsline {section}{\numberline {8.5}Primes}{61}{section.8.5}
+\contentsline {subsubsection}{Some Motivation: $\sqrt {n}$ Blocking}{59}{section*.12}
+\contentsline {subsubsection}{Lazy Propagation on a Segment Tree}{60}{section*.13}
+\contentsline {subsection}{\numberline {7.2.3}2D Segment Tree}{62}{subsection.7.2.3}
+\contentsline {subsection}{\numberline {7.2.4}3D Segment Tree}{62}{subsection.7.2.4}
+\contentsline {subsection}{\numberline {7.2.5}Persistent Segment Tree}{62}{subsection.7.2.5}
+\contentsline {section}{\numberline {7.3}Queue with Minimum Query}{62}{section.7.3}
+\contentsline {section}{\numberline {7.4}Balanced Binary Search Tree}{62}{section.7.4}
+\contentsline {subsection}{\numberline {7.4.1}Splay Tree}{62}{subsection.7.4.1}
+\contentsline {subsection}{\numberline {7.4.2}Treap}{62}{subsection.7.4.2}
+\contentsline {section}{\numberline {7.5}Euler Tour Technique}{62}{section.7.5}
+\contentsline {section}{\numberline {7.6}$2^n$ Jump Pointers}{62}{section.7.6}
+\contentsline {section}{\numberline {7.7}Fractional Cascading}{62}{section.7.7}
+\contentsline {section}{\numberline {7.8}Heavy-Light Decomposition}{62}{section.7.8}
+\contentsline {section}{\numberline {7.9}Link-Cut Tree}{63}{section.7.9}
+\contentsline {section}{\numberline {7.10}Top Tree}{63}{section.7.10}
+\contentsline {section}{\numberline {7.11}Link-Cut Cactus}{63}{section.7.11}
+\contentsline {chapter}{\numberline {8}Math}{65}{chapter.8}
+\contentsline {section}{\numberline {8.1}Games}{65}{section.8.1}
+\contentsline {section}{\numberline {8.2}Karatsuba}{65}{section.8.2}
+\contentsline {section}{\numberline {8.3}Matrices}{65}{section.8.3}
+\contentsline {section}{\numberline {8.4}Fast Fourier Transform}{65}{section.8.4}
+\contentsline {subsection}{\numberline {8.4.1}Number Theoretic Transform}{65}{subsection.8.4.1}
+\contentsline {section}{\numberline {8.5}Primes}{65}{section.8.5}
