@@ -56,7 +56,7 @@
     }
 }
 
-\title{untitled napkin thing}
+\title{Coding Crash Course Companion}
 \author{Samuel Hsiang}
 \date{July 2015}
 
@@ -188,7 +188,7 @@ From here, we divide and conquer. Simply cut the array in half, recurse on each 
 
 Quicksort also uses a divide and conquer strategy to achieve an $O(n \log (n))$ amortized bound. We take a random element from the array, move anything less than it to the left of the array, anything right of it to the right of the array, and recurse.
 
-This is implemented in \texttt{Arrays.sort()} and \texttt{Collections.sort()}.
+This was previously implemented by \texttt{Arrays.sort()} and \texttt{Collections.sort()}, but Java now uses either dual-pivot quicksort or timsort.
 
 \section{Binary Search}
 
@@ -1257,7 +1257,7 @@ For transferring to STL.
 \begin{itemize}
 
 \item \texttt{ArrayList} -- \texttt{vector}
-\item \texttt{LinkedList} -- no explicit equivalent, but see \texttt{queue}
+\item \texttt{LinkedList} -- \texttt{list}
 \item \texttt{Stack} -- \texttt{stack}
 \item \texttt{Queue} -- \texttt{queue}
 \item \texttt{PriorityQueue} -- \texttt{priority\_queue}, but note that \texttt{priority\_queue} pops \textit{max} element first
@@ -1339,6 +1339,25 @@ Suppose that the problem we need to solve is finding the minimum number $M$ such
 The nature of this problem should remind you of some other search technique. Oftentimes, with problems of this property, it is easy to check whether some condition holds for some given $x$. In this case, it is much easier to binary search on $M$ rather than find it some other way.
 
 \begin{enumerate}
+
+\item
+(USACO March 2014, sabotage)
+Farmer John's arch-nemesis, Farmer Paul, has decided to sabotage Farmer
+John's milking equipment!
+
+The milking equipment consists of a row of $N$ ($3 \le N \le 100,000$)
+milking machines, where the $i$th machine produces $M_i$ units of milk ($1 \le M_i \le 10,000$).  Farmer Paul plans to disconnect a contiguous block
+of these machines -- from the $i$th machine up to the $j$th machine ($2 \le i \le j \le N-1$); note that Farmer Paul does not want to disconnect
+either the first or the last machine, since this will make his plot
+too easy to discover.  Farmer Paul's goal is to minimize the average
+milk production of the remaining machines.  Farmer Paul plans to
+remove at least 1 cow, even if it would be better for him to avoid
+sabotage entirely.
+
+Fortunately, Farmer John has learned of Farmer Paul's evil plot, and
+he is wondering how bad his milk production will suffer if the plot
+succeeds.  Please help Farmer John figure out the minimum average milk
+production of the remaining machines if Farmer Paul does succeed.
 
 \item
 (Matthew Savage)
@@ -1941,7 +1960,7 @@ Now, we continue choosing the closest unvisited node, mark it as visited, and an
 \end{tikzpicture}
 \end{center}
 
-The slow part of the $O(V^2)$ formulation is the linear search for the vertex $v$ with the minimum $dist(v)$. We happen to have a data structure that resolves this problem -- a binary heap. However, we can't simply use the standard library heap, as we need to be able to change the value of the distances once they are already in the heap, or \textit{decrease-key}. This is a pretty simple function to add, however, if you have a heap already coded. Once we have this implemented, we achieve $O(E \log{V})$, as we do $E+V$ updates to our heap, each costing $O(V)$.
+The slow part of the $O(V^2)$ formulation is the linear search for the vertex $v$ with the minimum $dist(v)$. We happen to have a data structure that resolves this problem -- a binary heap. The main problem with using the standard library heap is having repeated vertices in the heap. We could just ignore this problem and discard visited vertices as they come out of the heap. Alternatively, we could choose never to have repeated vertices in the heap. To do this, we need to be able to change the value of the distances once they are already in the heap, or \textit{decrease-key}. This is a pretty simple function to add, however, if you have a heap already coded. Either way, we achieve $O(E \log{V})$, as we do $E+V$ updates to our heap, each costing $O(V)$.
 
 \begin{enumerate}
 
@@ -2516,7 +2535,7 @@ It is often the case that $O(\sqrt{n})$ bounds can be improved to $O(\log{n})$ u
 
 \section{Segment Tree}
 
-It turns out for our specific sum problem that we can do as good as $O(\log{n})$ with a \textit{segment tree}, or \textit{range tree}, or \textit{static BBST}. The essential idea is still the same -- we want to group elements in some way that allows us to update and query efficiently.
+It turns out for our specific sum problem that we can do as good as $O(\log{n})$ with a \textit{segment tree}, or \textit{range tree}, or \textit{augmented static BBST}. The essential idea is still the same -- we want to group elements in some way that allows us to update and query efficiently.
 
 As the name ``tree'' suggests, we draw inspiration from a binary structure. Let's build a tree on top of the array, where each node keeps track of the sum of the numbers associated with its children.
 
@@ -3852,6 +3871,29 @@ $j$, inclusive.
 \end{enumerate}
 
 \section{Queue with Minimum Query}
+
+Suppose we wanted a list data structure with the following three operations:
+
+\begin{itemize}
+
+\item
+$add(x)$ -- add $x$ to the end of the list.
+
+\item
+$remove()$ -- remove the first element in the list.
+
+\item
+$min()$ -- return the minimum element in the list.
+
+\end{itemize}
+
+This is different from a heap since $remove$ does not remove the minimum element. It's pretty easy to find a $O(\log{n})$ solution using the data structures we already know. However, it is possible to build a data structure that can do any of these operations with complexity $O(1)$.
+
+To solve this problem, we'll first solve an easier problem. Suppose instead of removing the first element of the list, we had remove the last element; in other words, we needed to build a stack with minimum query instead of a queue. This is a simple task; we'll just use a normal stack, but instead of storing single numbers, we'll store pairs. The pairs will each contain the number we're adding and the minimum element up to that point in the stack.
+
+To build a queue given a stack with minimum query, we'll just have two stacks. When we add an element, we push it to the top of the first stack. When we remove an element, we take it off the top of the second stack. The minimum element in the queue is the smaller element between the minima of either stack.
+
+This seems like it obviously doesn't work -- one of the stacks keeps growing, while the other can only shrink. This is not a problem, however; when the second stack runs out of elements, we'll just pop off every element of the first stack and push each onto the second stack. This amounts to one $O(n)$ operation for every $n$ $O(1)$ operations, which averages out to constant time.
 
 \section{Balanced Binary Search Tree}
 

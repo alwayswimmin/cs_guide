@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  20 JUL 2015 11:34
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  21 JUL 2015 08:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1337,192 +1337,199 @@ Underfull \vbox (badness 6268) has occurred while \output is active []
 Chapter 3.
 [25
 
-] [26] (/usr/local/texlive/2014/texmf-dist/tex/latex/ucs/data/uni-32.def
+] [26] [27]
+(/usr/local/texlive/2014/texmf-dist/tex/latex/ucs/data/uni-32.def
 File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
 )
 (/usr/local/texlive/2014/texmf-dist/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
-) [27] [28]
-[29]pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.
-1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1458 \Function
-                {Process}{$i$}pdfTeX warning (ext4): destination with the same 
-identifier (name{ALG@line.2}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1459 \If
-          {$i$ has already been processed}pdfTeX warning (ext4): destination wi
-th the same identifier (name{ALG@line.3}) has been already used, duplicate igno
-red
-<to be read again> 
-                   \relax 
-l.1460 	\State
-               \Return $dp(i)$pdfTeX warning (ext4): destination with the same 
-identifier (name{ALG@line.4}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1462 \State
-              $max \gets 0$pdfTeX warning (ext4): destination with the same ide
-ntifier (name{ALG@line.1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1479 \For
-           {$i \equiv N,1$}pdfTeX warning (ext4): destination with the same ide
-ntifier (name{ALG@line.2}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1481 	\State
-               $max \gets 0$pdfTeX warning (ext4): destination with the same id
-entifier (name{ALG@line.3}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1482 	\For
-            {$j\equiv i+1,N$}pdfTeX warning (ext4): destination with the same i
-dentifier (name{ALG@line.4}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1483 		\If
-            {$value(i) > value(j)$} [30pdfTeX warning (ext4): destination with 
-the same identifier (name{ALG@line.5}) has been already used, duplicate ignored
-
+) [28] [29]
+[30pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.1
+}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1505 (
-        USACO December 2014, guard)pdfTeX warning (ext4): destination with the 
-same identifier (name{ALG@line.6}) has been already used, duplicate ignored
+l.1513 
+       pdfTeX warning (ext4): destination with the same identifier (name{ALG@li
+ne.2}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1505 (
-        USACO December 2014, guard)pdfTeX warning (ext4): destination with the 
-same identifier (name{ALG@line.7}) has been already used, duplicate ignored
+l.1513 
+       pdfTeX warning (ext4): destination with the same identifier (name{ALG@li
+ne.3}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1505 (
-        USACO December 2014, guard)pdfTeX warning (ext4): destination with the 
-same identifier (name{ALG@line.8}) has been already used, duplicate ignored
+l.1513 
+       pdfTeX warning (ext4): destination with the same identifier (name{ALG@li
+ne.4}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1505 (
-        USACO December 2014, guard)pdfTeX warning (ext4): destination with the 
-same identifier (name{ALG@line.5}) has been already used, duplicate ignored
+l.1513 
+       pdfTeX warning (ext4): destination with the same identifier (name{ALG@li
+ne.5}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1505 (
-        USACO December 2014, guard)pdfTeX warning (ext4): destination with the 
-same identifier (name{ALG@line.6}) has been already used, duplicate ignored
+l.1513 
+       pdfTeX warning (ext4): destination with the same identifier (name{ALG@li
+ne.6}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1505 (
-        USACO December 2014, guard)pdfTeX warning (ext4): destination with the 
-same identifier (name{ALG@line.7}) has been already used, duplicate ignored
+l.1513 
+       pdfTeX warning (ext4): destination with the same identifier (name{ALG@li
+ne.7}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1505 (
-        USACO December 2014, guard)]pdfTeX warning (ext4): destination with the
- same identifier (name{ALG@line.1}) has been already used, duplicate ignored
+l.1513 
+       pdfTeX warning (ext4): destination with the same identifier (name{ALG@li
+ne.8}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.1513 
+       pdfTeX warning (ext4): destination with the same identifier (name{ALG@li
+ne.1}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.1513 
+       pdfTeX warning (ext4): destination with the same identifier (name{ALG@li
+ne.2}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.1513 
+       pdfTeX warning (ext4): destination with the same identifier (name{ALG@li
+ne.3}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.1513 
+       pdfTeX warning (ext4): destination with the same identifier (name{ALG@li
+ne.4}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.1513 
+       pdfTeX warning (ext4): destination with the same identifier (name{ALG@li
+ne.5}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.1513 
+       pdfTeX warning (ext4): destination with the same identifier (name{ALG@li
+ne.6}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.1513 
+       ] [31pdfTeX warning (ext4): destination with the same identifier (name{A
+LG@line.7}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.1547 \For
+           {$i\gets 0, 2^N-1$}]pdfTeX warning (ext4): destination with the same
+ identifier (name{ALG@line.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1528 \For
+l.1547 \For
            {$i\gets 0, 2^N-1$}pdfTeX warning (ext4): destination with the same 
 identifier (name{ALG@line.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1530 	\State
+l.1549 	\State
                $dp(i) \gets -1$pdfTeX warning (ext4): destination with the same
  identifier (name{ALG@line.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1531 	\ForAll
+l.1550 	\ForAll
                {$j \in S$}pdfTeX warning (ext4): destination with the same iden
 tifier (name{ALG@line.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1533 		\State
+l.1552 		\State
                 $alt \gets \min(dp(i-2^j), strength(j) - \sum_{k \in S \setm...
 pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.5}) 
 has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1534 		\If
+l.1553 		\If
             {$dp(i) < alt$}pdfTeX warning (ext4): destination with the same ide
 ntifier (name{ALG@line.6}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1535 			\State
-                 $dp(i) \gets alt$ [31] [32
-
-]
+l.1554 			\State
+                 $dp(i) \gets alt$ [32]
 Chapter 4.
-[33] [34]
+[33
+
+] [34]
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 1737.
+put line 1756.
 pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.1}) 
 has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1740 \Function
+l.1759 \Function
                 {Find}{$v$}pdfTeX warning (ext4): destination with the same ide
 ntifier (name{ALG@line.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1741 	\If
+l.1760 	\If
             {$v$ is the root}pdfTeX warning (ext4): destination with the same i
 dentifier (name{ALG@line.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1742 		\State
+l.1761 		\State
                 \Return $v$pdfTeX warning (ext4): destination with the same ide
 ntifier (name{ALG@line.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1744     \State
+l.1763     \State
                   $parent(v) \gets \Call{Find}{parent(v)}$pdfTeX warning (ext4)
 : destination with the same identifier (name{ALG@line.5}) has been already used
 , duplicate ignored
 <to be read again> 
                    \relax 
-l.1745     \State
+l.1764     \State
                   \Return $parent(v)$pdfTeX warning (ext4): destination with th
 e same identifier (name{ALG@line.6}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1747 \Function
+l.1766 \Function
                 {Union}{$u$, $v$}pdfTeX warning (ext4): destination with the sa
 me identifier (name{ALG@line.7}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1748 	\State
+l.1767 	\State
                $uRoot \gets \Call{Find}{u}$pdfTeX warning (ext4): destination w
 ith the same identifier (name{ALG@line.8}) has been already used, duplicate ign
 ored
 <to be read again> 
                    \relax 
-l.1749 	\State
+l.1768 	\State
                $vRoot \gets \Call{Find}{v}$pdfTeX warning (ext4): destination w
 ith the same identifier (name{ALG@line.9}) has been already used, duplicate ign
 ored
 <to be read again> 
                    \relax 
-l.1750     \If
+l.1769     \If
                {$uRoot = vRoot$}pdfTeX warning (ext4): destination with the sam
 e identifier (name{ALG@line.10}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1751 		\State
+l.1770 		\State
                 \ReturnpdfTeX warning (ext4): destination with the same identif
 ier (name{ALG@line.11}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1753     \If
+l.1772     \If
                {$size(uRoot)<size(vRoot)$}
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -1531,313 +1538,313 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1799 \ForAll
+l.1818 \ForAll
               {vertices $v$}pdfTeX warning (ext4): destination with the same id
 entifier (name{ALG@line.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1800 	\State
+l.1819 	\State
                $dist(v) \gets \infty$pdfTeX warning (ext4): destination with th
 e same identifier (name{ALG@line.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1801 	\State
+l.1820 	\State
                $visited(v) \gets 0$pdfTeX warning (ext4): destination with the 
 same identifier (name{ALG@line.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1802     \State
+l.1821     \State
                   $prev(v) \gets -1$pdfTeX warning (ext4): destination with the
  same identifier (name{ALG@line.5}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1804 \State
+l.1823 \State
               $dist(src) \gets 0$pdfTeX warning (ext4): destination with the sa
 me identifier (name{ALG@line.6}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1805 \While
+l.1824 \While
              {$\exists v$ s.t. $visited(v)=0$}pdfTeX warning (ext4): destinatio
 n with the same identifier (name{ALG@line.7}) has been already used, duplicate 
 ignored
 <to be read again> 
                    \relax 
-l.1806 	\State
+l.1825 	\State
                $v \equiv v$ s.t. $visited(v)=0$ with min $dist(v)$pdfTeX warnin
 g (ext4): destination with the same identifier (name{ALG@line.8}) has been alre
 ady used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1807     \State
+l.1826     \State
                   $visited(v) \gets 1$pdfTeX warning (ext4): destination with t
 he same identifier (name{ALG@line.9}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1808 	\ForAll
+l.1827 	\ForAll
                {neighbors $u$ of $v$}pdfTeX warning (ext4): destination with th
 e same identifier (name{ALG@line.10}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1809     	\If
+l.1828     	\If
                {$visited(u) = 0$}pdfTeX warning (ext4): destination with the sa
 me identifier (name{ALG@line.11}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1810     		\State
+l.1829     		\State
                     $alt \gets dist(v) + weight(v, u)$pdfTeX warning (ext4): de
 stination with the same identifier (name{ALG@line.12}) has been already used, d
 uplicate ignored
 <to be read again> 
                    \relax 
-l.1811 			\If
+l.1830 			\If
              {$alt < dist(u)$}pdfTeX warning (ext4): destination with the same 
 identifier (name{ALG@line.13}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1812 				\State
+l.1831 				\State
                   $dist(u) \gets alt$pdfTeX warning (ext4): destination with th
 e same identifier (name{ALG@line.14}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1813    	        	\State
+l.1832    	        	\State
                            $prev(u) \gets v$ [37] [38] [39] [40]pdfTeX warning 
 (ext4): destination with the same identifier (name{ALG@line.1}) has been alread
 y used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2031 \ForAll
+l.2050 \ForAll
               {vertices $v$}pdfTeX warning (ext4): destination with the same id
 entifier (name{ALG@line.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2032 	\State
+l.2051 	\State
                $dist(v,v)=0$pdfTeX warning (ext4): destination with the same id
 entifier (name{ALG@line.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2034 \ForAll
+l.2053 \ForAll
               {edges $(u,v)$}pdfTeX warning (ext4): destination with the same i
 dentifier (name{ALG@line.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2035 	\State
+l.2054 	\State
                $dist(u,v)=weight(u,v)$pdfTeX warning (ext4): destination with t
 he same identifier (name{ALG@line.5}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2037 \ForAll
+l.2056 \ForAll
               {vertices $k$}pdfTeX warning (ext4): destination with the same id
 entifier (name{ALG@line.6}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2038 	\ForAll
+l.2057 	\ForAll
                {vertices $i$}pdfTeX warning (ext4): destination with the same i
 dentifier (name{ALG@line.7}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2039     	\ForAll
+l.2058     	\ForAll
                    {vertices $j$}pdfTeX warning (ext4): destination with the sa
 me identifier (name{ALG@line.8}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2040         	\If
+l.2059         	\If
                    {$dist(i,j) > dist(i,k)+dist(k,j)$}pdfTeX warning (ext4): de
 stination with the same identifier (name{ALG@line.9}) has been already used, du
 plicate ignored
 <to be read again> 
                    \relax 
-l.2041             	\State
+l.2060             	\State
                            $dist(i,j) \gets dist(i,k)+dist(k,j)$pdfTeX warning 
 (ext4): destination with the same identifier (name{ALG@line.1}) has been alread
 y used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2058 \ForAll
+l.2077 \ForAll
               {vertices $v$}pdfTeX warning (ext4): destination with the same id
 entifier (name{ALG@line.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2059 	\State
+l.2078 	\State
                $dist(v)\gets\infty$pdfTeX warning (ext4): destination with the 
 same identifier (name{ALG@line.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2060     \State
+l.2079     \State
                   $prev(v)=\gets -1$pdfTeX warning (ext4): destination with the
  same identifier (name{ALG@line.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2062 \State
+l.2081 \State
               $dist(src) \gets 0$pdfTeX warning (ext4): destination with the sa
 me identifier (name{ALG@line.5}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2063 \For
+l.2082 \For
            {$i\equiv 1,V-1$}pdfTeX warning (ext4): destination with the same id
 entifier (name{ALG@line.6}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2064 	\ForAll
+l.2083 	\ForAll
                {edges $(u,v)$}pdfTeX warning (ext4): destination with the same 
 identifier (name{ALG@line.7}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2065 		\If
+l.2084 		\If
             {$dist(u)+weight(u,v) < dist(v)$}pdfTeX warning (ext4): destination
  with the same identifier (name{ALG@line.8}) has been already used, duplicate i
 gnored
 <to be read again> 
                    \relax 
-l.2066     	    \State
+l.2085     	    \State
                        $dist(v) \gets dist(u)+weight(u,v)$pdfTeX warning (ext4)
 : destination with the same identifier (name{ALG@line.9}) has been already used
 , duplicate ignored
 <to be read again> 
                    \relax 
-l.2067 	        \State
+l.2086 	        \State
                        $prev(v) \gets u$pdfTeX warning (ext4): destination with
  the same identifier (name{ALG@line.10}) has been already used, duplicate ignor
 ed
 <to be read again> 
                    \relax 
-l.2071 \ForAll
+l.2090 \ForAll
               {edges $(u,v)$}pdfTeX warning (ext4): destination with the same i
 dentifier (name{ALG@line.11}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2073 	\If
+l.2092 	\If
            {$dist(u)+weight(u,v) < dist(v)$}pdfTeX warning (ext4): destination 
 with the same identifier (name{ALG@line.12}) has been already used, duplicate i
 gnored
 <to be read again> 
                    \relax 
-l.2074    	    \State
+l.2093    	    \State
                      {negative cycle detected} [41]pdfTeX warning (ext4): desti
 nation with the same identifier (name{ALG@line.1}) has been already used, dupli
 cate ignored
 <to be read again> 
                    \relax 
-l.2108 \ForAll
+l.2127 \ForAll
               {vertices $v$}pdfTeX warning (ext4): destination with the same id
 entifier (name{ALG@line.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2109 	\State
+l.2128 	\State
                $dist(v) \gets \infty$pdfTeX warning (ext4): destination with th
 e same identifier (name{ALG@line.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2110 	\State
+l.2129 	\State
                $visited(v) \gets 0$pdfTeX warning (ext4): destination with the 
 same identifier (name{ALG@line.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2111     \State
+l.2130     \State
                   $prev(v) \gets -1$pdfTeX warning (ext4): destination with the
  same identifier (name{ALG@line.5}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2113 \State
+l.2132 \State
               $dist(src) \gets 0$pdfTeX warning (ext4): destination with the sa
 me identifier (name{ALG@line.6}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2114 \While
+l.2133 \While
              {$\exists v$ s.t. $visited(v)=0$}pdfTeX warning (ext4): destinatio
 n with the same identifier (name{ALG@line.7}) has been already used, duplicate 
 ignored
 <to be read again> 
                    \relax 
-l.2115 	\State
+l.2134 	\State
                $v \equiv v$ s.t. $visited(v)=0$ with min $dist(v)$pdfTeX warnin
 g (ext4): destination with the same identifier (name{ALG@line.8}) has been alre
 ady used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2116     \State
+l.2135     \State
                   $visited(v) \gets 1$pdfTeX warning (ext4): destination with t
 he same identifier (name{ALG@line.9}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2117 	\ForAll
+l.2136 	\ForAll
                {neighbors $u$ of $v$}pdfTeX warning (ext4): destination with th
 e same identifier (name{ALG@line.10}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2118     	\If
+l.2137     	\If
                {$visited(u) = 0$}pdfTeX warning (ext4): destination with the sa
 me identifier (name{ALG@line.11}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2119 			\If
+l.2138 			\If
              {$weight(v, u) < dist(u)$}pdfTeX warning (ext4): destination with 
 the same identifier (name{ALG@line.12}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.2120 				\State
+l.2139 				\State
                   $dist(u) \gets weight(v, u)$pdfTeX warning (ext4): destinatio
 n with the same identifier (name{ALG@line.13}) has been already used, duplicate
  ignored
 <to be read again> 
                    \relax 
-l.2121    	        	\State
+l.2140    	        	\State
                            $prev(u) \gets v$ [42]pdfTeX warning (ext4): destina
 tion with the same identifier (name{ALG@line.1}) has been already used, duplica
 te ignored
 <to be read again> 
                    \relax 
-l.2138 \ForAll
+l.2157 \ForAll
               {edges $(u,v)$ in sorted order}pdfTeX warning (ext4): destination
  with the same identifier (name{ALG@line.2}) has been already used, duplicate i
 gnored
 <to be read again> 
                    \relax 
-l.2139 	\If
+l.2158 	\If
            {$\Call{Find}{u} \not= \Call{Find}{v}$}pdfTeX warning (ext4): destin
 ation with the same identifier (name{ALG@line.3}) has been already used, duplic
 ate ignored
 <to be read again> 
                    \relax 
-l.2140 		\State
+l.2159 		\State
                 add $(u,v)$ to spanning treepdfTeX warning (ext4): destination 
 with the same identifier (name{ALG@line.4}) has been already used, duplicate ig
 nored
 <to be read again> 
                    \relax 
-l.2141 		\State
+l.2160 		\State
                 $\Call{Union}{u,v}$ [43]pdfTeX warning (ext4): destination with
  the same identifier (name{ALG@line.1}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.2164 \Function
+l.2183 \Function
                 {FindTour}{$v$}pdfTeX warning (ext4): destination with the same
  identifier (name{ALG@line.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2165 \While
+l.2184 \While
              {$v$ has a neighbor $u$}pdfTeX warning (ext4): destination with th
 e same identifier (name{ALG@line.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2166 	\State
+l.2185 	\State
                delete edge $(v,u)$pdfTeX warning (ext4): destination with the s
 ame identifier (name{ALG@line.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2167 	\State
+l.2186 	\State
                \Call{FindTour}{$u$}pdfTeX warning (ext4): destination with the 
 same identifier (name{ALG@line.5}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2170 \State
+l.2189 \State
               add $v$ to tour [44] [45] [46
 
 ]
 Chapter 5.
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 2255.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 2274.
 
 [47] [48
 
@@ -1849,15 +1856,15 @@ Chapter 6.
 Chapter 7.
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 2289.
+(hyperref)                removing `math shift' on input line 2308.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@ifnextchar' on input line 2289.
+(hyperref)                removing `\@ifnextchar' on input line 2308.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 2289.
+(hyperref)                removing `math shift' on input line 2308.
 
 [51] [52] [53] [54] [55]
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1866,39 +1873,39 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [57]
-[58] [59] [60] [61]
+[58] [59] [60] [61] [62]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 3868.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `superscript' on input line 3868.
+(hyperref)                removing `math shift' on input line 3910.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 3868.
+(hyperref)                removing `superscript' on input line 3910.
 
-[62] [63] [64]
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 3910.
+
+[63] [64]
 Chapter 8.
 [65
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 3973.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 3973.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 4015.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 4015.
  (./guide.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 3973.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 3973.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 4015.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 4015.
 
 Package rerunfilecheck Info: File `guide.out' has not changed.
 (rerunfilecheck)             Checksum: 3F8504089A156EC1A8FE2197EAA1BC8B;5288.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 3973.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 4015.
  )
 (\end occurred when \iftrue on line 177 was incomplete) 
 Here is how much of TeX's memory you used:
- 34889 strings out of 493117
- 660252 string characters out of 6135433
- 906720 words of memory out of 5000000
+ 34890 strings out of 493117
+ 660259 string characters out of 6135433
+ 906735 words of memory out of 5000000
  37406 multiletter control sequences out of 15000+600000
  19668 words of font info for 121 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1923,10 +1930,10 @@ e1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/p
 ublic/amsfonts/symbols/msbm10.pfb>
-Output written on guide.pdf (65 pages, 482520 bytes).
+Output written on guide.pdf (65 pages, 485697 bytes).
 PDF statistics:
- 1012 PDF objects out of 1200 (max. 8388607)
- 915 compressed objects within 10 object streams
- 294 named destinations out of 1000 (max. 500000)
+ 1014 PDF objects out of 1200 (max. 8388607)
+ 917 compressed objects within 10 object streams
+ 295 named destinations out of 1000 (max. 500000)
  21698 words of extra memory for PDF output out of 24883 (max. 10000000)
 
