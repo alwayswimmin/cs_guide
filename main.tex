@@ -56,7 +56,7 @@
     }
 }
 
-\title{Coding Crash Course Companion}
+\title{Crash Course Coding Companion}
 \author{Samuel Hsiang}
 \date{July 2015}
 
@@ -90,50 +90,48 @@
    frame=single,#1}}
   {\endminipage}
 
+\newcommand\intro[1]{
+ \chapter*{#1}
+ \markboth{\MakeUppercase{#1}}{}
+ \addcontentsline{toc}{chapter}{#1}
+}
+
+
+
 \begin{document}
 
 \maketitle
 
 \thispagestyle{empty}
-\par\vspace*{.35\textheight}{\centering Some cheesy dedication thing to fill out once I'm done. \par}
+\par\vspace*{.35\textheight}{\centering For Rachel \par}
 
 \tableofcontents
 
 \eject
 
-\section*{Preface}
+\intro{Introduction}
 
-You might have heard of \href{https://www.dropbox.com/s/z8qdndxmrmxqsam/Napkin.pdf?oref=e&n=97419869}{Evan Chen's Napkin}, a resource for olympiad math people that serves as a jumping point into higher mathematics. (In fact, I'm using Evan's template right now. Thanks Evan!) The Wikipedia articles on higher mathematics are just so dense in vocabulary and deter many smart young students from learning them before they are formally taught in a course in college. Evan's Napkin aims to provide that background necessary to leap right in.
+You might have heard of \href{https://www.dropbox.com/s/z8qdndxmrmxqsam/Napkin.pdf?oref=e&n=97419869}{Evan Chen's Napkin}, a resource for olympiad math people that serves as a jumping point into higher mathematics.\footnote{In fact, I'm using Evan's template right now. Thanks Evan!} The Wikipedia articles on higher mathematics are just so dense in vocabulary and deter many smart young students from learning them before they are formally taught in a course in college. Evan's Napkin aims to provide that background necessary to leap right in.
 
-I feel the same way about computer science. For most, the ease of the AP Computer Science test means that the AP coursework is often inadequate in teaching the simplest data structures, algorithms, and big ideas necessary to approach even silver USACO problems. On the other hand, even the best reference books, like Sedgewick, are far too dense and unapproachable for someone who just wants to sit down and learn something interesting. The road, for many, stalls here until college.
+I feel the same way about computer science. For most, the ease of the AP Computer Science test means that the AP coursework is often inadequate in teaching the simplest data structures, algorithms, and big ideas necessary to approach even silver USACO problems. On the other hand, even the best reference books, like Sedgewick, are too dense and unapproachable for someone who just wants to sit down and learn something interesting.\footnote{Sedgewick, notably, is getting better. \href{http://algs4.cs.princeton.edu/home/}{Check out his online companion} to \textit{Algorithms, 4th Edition}.} The road, for many, stalls here until college. Everyone should be able to learn the simplest data structures in Java or C++ standard libraries, and someone with problem-solving experience can easily jump right into understanding algorithms and more advanced data structures.
 
-Everyone should be able to learn the simplest data structures in Java or C++ standard libraries reasonably quickly, and someone with problem-solving experience can easily jump right into understanding algorithms and more advanced data structures. So here goes.
+A few important notes, before we begin.
 
-\section*{A Few Important Notes...}
-
-\begin{enumerate}
+\begin{itemize}
 
 \item
 
-I'm assuming some fluency in C-style syntax. If this is your first time seeing code, please look somewhere else for now. I may or may not add an introduction to object-oriented programming later.
+I'm assuming some fluency in C-style syntax. If this is your first time seeing code, please look somewhere else for now.
 
 \item
 
-It is essential that you understand the motivations and the complexities behind everything we cover. I feel that this is not stressed at all in AP Computer Science and lost under the heavy details of rigorous published works.
+It is essential that you understand the motivations and the complexities behind everything we cover. I feel that this is not stressed at all in AP Computer Science and lost under the heavy details of rigorous published works. I'm avoiding what I call the heavy details because they don't focus on the math behind the computer science and lose the bigger picture. My goal is for every mathematician or programmer, after working through this, to be able to code short scripts to solve problems. Once you understand how things work, you can then move on to those details which are necessary for building larger projects. The heavy details become meaningless as languages develop or become phased out. The math and ideas behind the data structures and algorithms will last a lifetime.
 
 \item
 
-I'm avoiding what I call the heavy details because they don't focus on the math behind the computer science and lose the bigger picture. My goal is for every mathematician or programmer, after working through this, to be able to code short scripts to solve problems. Once you understand how things work, you can then move on to those details which are necessary for building larger projects. The heavy details become meaningless as languages develop or become phased out. The math and ideas behind the data structures and algorithms will last a lifetime.
+It is recommended actually code up each data structure with its most important functions or algorithm as you learn them. I truly believe the only way to build a solid foundation is to code. Do not become reliant on using the standard library (\texttt{java.util}, for instance) without understanding how the tool you are using works.
 
-\item
-
-You really should actually code up each data structure with its most important functions or algorithm as you learn them. I truly believe the only way to build a solid foundation is to code. Do not become reliant on using the standard library (\texttt{java.util}, for instance) without understanding how the tool you are using works.
-
-\item
-
-This by no means represents everything you will ever have to know for competitive computer science. Expect this to grow as I learn more.
-
-\end{enumerate}
+\end{itemize}
 
 \chapter{Fundamentals}
 
@@ -982,6 +980,8 @@ Adding an element is also natural. As our tree represents a set, it will not con
 
 Deleting an element is the annoying part. Unfortunately, there's not much we can do besides casework.
 
+Removing a leaf, like \texttt{"a"}, from the tree is very easy. Removing a node with only once child, like \texttt{"t"}, is also relatively straightforward.
+
 \begin{center}
 \begin{tikzpicture}[very thick,level/.style={sibling distance=70mm/#1}]
 \node [vertex] (r){\texttt{"m"}}
@@ -1016,7 +1016,7 @@ Deleting an element is the annoying part. Unfortunately, there's not much we can
 \end{tikzpicture}
 \end{center}
 
-Removing a leaf, like \texttt{"a"}, from the tree is very easy. Removing a node with only once child, like \texttt{"t"}, is also relatively straightforward.
+Now, removing an element with two children is tricky. We'll try to remove \texttt{"g"}. Consider the least element in the right subtree of \texttt{"g"}, which in this case is \texttt{"h"}. We find \texttt{"h"} by always choosing the left child on the right subtree until we cannot go any further. This must be the least element.
 
 \begin{center}
 \begin{tikzpicture}[very thick,level/.style={sibling distance=70mm/#1}]
@@ -1045,8 +1045,6 @@ Removing a leaf, like \texttt{"a"}, from the tree is very easy. Removing a node 
   };
 \end{tikzpicture}
 \end{center}
-
-Now, removing an element with two children is tricky. We'll try to remove \texttt{"g"}. Consider the least element in the right subtree of \texttt{"g"}, which in this case is \texttt{"h"}. We find \texttt{"h"} by always choosing the left child on the right subtree until we cannot go any further. This must be the least element.
 
 Note that \texttt{"h"} has either no children or only one child, and that nodes like these are easy to remove. We then change the value of the node containing \texttt{"g"} to \texttt{"h"}, which is legal since \texttt{"h"} is the least element, and remove \texttt{"h"} from the right subtree, and we are done.
 
@@ -1154,7 +1152,7 @@ A standard BST has $O(\log{n})$ operations if the tree is ``nice'', but each ope
 
 The red-black tree is a self-balancing BST that guarantees $O(\log{n})$ operations. It is implemented in Java's TreeSet, so while the BST I described above does not guarantee nice time bounds, Java's implementation does.
 
-I don't think learning exactly how a red-black tree works is particularly useful for the beginning programmer. Feel free to skip this section and come back to it later.
+I don't think learning exactly how a red-black tree works is particularly useful for the beginning programmer. Feel free to skip this section and come back to it later. Some more balanced binary search trees which are useful on the competitive scene are covered in a later chapter.
 
 \subsection{HashSet}
 
@@ -1248,16 +1246,14 @@ All useful Set functions have a Map counterpart. The following additional functi
 
 \section{BigInteger}
 
-BigInteger is in \texttt{java.math} for times when int and long just aren't large enough.
+BigInteger is in \texttt{java.math} for times when int and long just aren't large enough. The way BigInteger works is it stores a number as an array of ints. Each value in the array represents a digit in some very large base. Addition and subtraction can be done in the standard way. Generally multiplying two BigIntegers is not necessary on contests, but it can be sped up using Karatsuba or the FFT.
 
 \section{C++ Analogs}
-
-For transferring to STL.
 
 \begin{itemize}
 
 \item \texttt{ArrayList} -- \texttt{vector}
-\item \texttt{LinkedList} -- \texttt{list}
+\item \texttt{LinkedList} -- \texttt{list} or \texttt{deque}
 \item \texttt{Stack} -- \texttt{stack}
 \item \texttt{Queue} -- \texttt{queue}
 \item \texttt{PriorityQueue} -- \texttt{priority\_queue}, but note that \texttt{priority\_queue} pops \textit{max} element first
@@ -2147,6 +2143,40 @@ Prim's algorithm for finding the minimum spanning tree is very similar to Dijkst
 
 The proof of correctness is left as an exercise. The complexity of this algorithm depends on how the minimum unvisited vertex is calculated. Using the same approaches as Dijkstra, we can achieve $O(V^2)$ or $O(E \log{V})$.
 
+\begin{enumerate}
+
+\item
+(USACO March 2014, irrigation)
+Due to a lack of rain, Farmer John wants to build an irrigation system to
+send water between his $N$ fields ($1 \le N \le 2000$).
+
+Each field $i$ is described by a distinct point $(x_i, y_i)$ in the 2D plane,
+with 0 <= xi, yi <= 1000.  The cost of building a water pipe between two
+fields $i$ and $j$ is equal to the squared Euclidean distance between them: 
+
+\[(x_i - x_j)^2 + (y_i - y_j)^2\]
+
+FJ would like to build a minimum-cost system of pipes so that all of his
+fields are linked together -- so that water in any field can follow a
+sequence of pipes to reach any other field.  
+
+Unfortunately, the contractor who is helping FJ install his irrigation
+system refuses to install any pipe unless its cost (squared Euclidean
+length) is at least $C$ ($1 \le C \le 1,000,000$).  
+
+Please help FJ compute the minimum amount he will need pay to connect all
+his fields with a network of pipes.
+
+\item
+(USACO February 2015, superbull)
+Bessie and her friends are playing hoofball in the annual Superbull championship, and Farmer John is in charge of making the tournament as exciting as possible. A total of $N$ ($1 \le N \le 2000$) teams are playing in the Superbull. Each team is assigned a distinct integer team ID in the range $[1,2^{30}-1]$ to distinguish it from the other teams. The Superbull is an elimination tournament -- after every game, Farmer John chooses which team to eliminate from the Superbull, and the eliminated team can no longer play in any more games. The Superbull ends when only one team remains.
+
+Farmer John notices a very unusual property about the scores in matches! In any game, the combined score of the two teams always ends up being the bitwise exclusive OR ($XOR$) of the two team IDs. For example, if teams 12 and 20 were to play, then 24 points would be scored in that game, since $01100 XOR 10100 = 11000$.
+
+Farmer John believes that the more points are scored in a game, the more exciting the game is. Because of this, he wants to choose a series of games to be played such that the total number of points scored in the Superbull is maximized. Please help Farmer John organize the matches.
+
+\end{enumerate}
+
 \subsection{Kruskal}
 
 While Prim greedily adds vertices to the tree, Kruskal's algorithm greedily adds edges. It iterates over all the edges, sorted by weight. We need to watch out for adding a cycle, breaking the tree structure, which means we need to keep track of each vertex's connected component. If an edge connects two vertices from the same connected component, we don't want to add it to our tree. However, we have a union-find algorithm that works perfectly for this.
@@ -2792,7 +2822,8 @@ If we wanted to change the third element to 2, we would have to update the highl
 
 Updating is also $O(\log{n})$ as we need to change the values of at most one node in each level in the tree.
 
-I cheated with my example by using a nice power of two, $n=16$, as the number of elements in the sequence. Of course, the size is not always this nice. One solution is to simply pad the back of the sequence with enough 0s and pretend that the number of elements in the sequence is actually a power of two. For the segment tree, this is not necessary -- if the root vertex is associated with the range $[1,n]$, we can simply split this range into two, $\left[1, \floor{\frac{n}{2}}\right]$ and $\left[\floor{\frac{n}{2}}+1,n\right]$. We then recursively apply this pattern except for when the lower bound of the range is equal to the upper bound. If $n=12$, the resulting tree would have the following structure.
+I cheated with my example by using a nice power of two, $n=16$, as the number of elements in the sequence. Of course, the size is not always this nice. One solution is to simply pad the back of the sequence with enough 0s and pretend that the number of elements in the sequence is actually a power of two. For the segment tree, this is not necessary -- if a vertex is associated with the range $[a,b]$, we can simply split this range into two,
+$\left[a,\floor{\frac{a+b-1}{2}}\right]$ and $\left[\floor{\frac{a+b-1}{2}}+1,b\right]$. We then recursively apply this pattern except for when the lower bound of the range is equal to the upper bound. If $n=12$, the resulting tree would have the following structure.
 
 \begin{center}
 {
@@ -2859,7 +2890,7 @@ I cheated with my example by using a nice power of two, $n=16$, as the number of
 }
 \end{center}
 
-I prefer this approach over padding the sequence with zeros. We see that the segment tree structure does not have to resemble a complete tree at all. However, with this approach, it is still quite balanced, so we can store a segment tree within an array as we would a heap.
+For this reason, while I used the concept of ``building up'' on top of our array to introduce the segment tree, any operation we implement will start at the root and recursively trickle down the tree. We see that the segment tree structure does not have to resemble a complete tree at all. However, with this approach, it is still quite balanced, so we can store a segment tree within an array as we would a heap.
 
 \subsection{Fenwick Tree}
 
@@ -2867,7 +2898,7 @@ A \textit{Fenwick tree}, or \textit{binary indexed tree (BIT)}, is simply a fast
 
 As discussed earlier, the $+$ operator has an inverse, $-$. Therefore, there is an inherent redundancy, for example, in keeping track of the sum of the first $\frac{n}{2}$ elements, the sum of all $n$ elements, and the sum of the last $\frac{n}{2}$ elements, as we do in the segment tree. If we are given only $\sum_{k=1}^{n/2} a_k$ and $\sum_{k=1}^n a_k$, we can find $\sum_{k=n/2+1}^{n} a_k$ easily using subtraction.
 
-With this in mind, let's pretend every right child in the tree. We'll mark them as black in the diagram. After that, we'll write out the tree nodes in postfix traversal order, without writing anything whenever we encounter a black node.
+With this in mind, let's ignore every right child in the tree. We'll mark them as black in the diagram. After that, we'll write out the tree nodes in postfix traversal order, without writing anything whenever we encounter a black node.
 
 \begin{center}
 {
