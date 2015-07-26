@@ -15,18 +15,16 @@
 \contentsline {section}{\numberline {2.3}PriorityQueue}{16}{section.2.3}
 \contentsline {section}{\numberline {2.4}Set}{20}{section.2.4}
 \contentsline {subsection}{\numberline {2.4.1}TreeSet}{20}{subsection.2.4.1}
-\contentsline {subsubsection}{Binary Search Tree (BST)}{20}{section*.3}
-\contentsline {subsubsection}{Red-Black Tree}{23}{section*.4}
-\contentsline {subsection}{\numberline {2.4.2}HashSet}{24}{subsection.2.4.2}
+\contentsline {subsection}{\numberline {2.4.2}HashSet}{23}{subsection.2.4.2}
 \contentsline {section}{\numberline {2.5}Map}{25}{section.2.5}
-\contentsline {section}{\numberline {2.6}BigInteger}{26}{section.2.6}
-\contentsline {section}{\numberline {2.7}C++ Analogs}{26}{section.2.7}
+\contentsline {section}{\numberline {2.6}BigInteger}{25}{section.2.6}
+\contentsline {section}{\numberline {2.7}C++ Analogs}{25}{section.2.7}
 \contentsline {chapter}{\numberline {3}Big Ideas}{27}{chapter.3}
 \contentsline {section}{\numberline {3.1}Search Techniques}{27}{section.3.1}
 \contentsline {subsection}{\numberline {3.1.1}Complete Search}{27}{subsection.3.1.1}
-\contentsline {subsubsection}{Depth-First Search}{27}{section*.5}
-\contentsline {subsubsection}{Breadth-First Search}{28}{section*.6}
-\contentsline {subsubsection}{Depth-First Search with Iterative Deepening}{28}{section*.7}
+\contentsline {subsubsection}{Depth-First Search}{27}{section*.3}
+\contentsline {subsubsection}{Breadth-First Search}{28}{section*.4}
+\contentsline {subsubsection}{Depth-First Search with Iterative Deepening}{28}{section*.5}
 \contentsline {subsection}{\numberline {3.1.2}Greedy Algorithm}{28}{subsection.3.1.2}
 \contentsline {subsection}{\numberline {3.1.3}Binary Searching on the Answer}{29}{subsection.3.1.3}
 \contentsline {section}{\numberline {3.2}Dynamic Programming}{31}{section.3.2}
@@ -51,9 +49,9 @@
 \contentsline {subsection}{\numberline {4.5.4}Max-Flow Min-Cut}{48}{subsection.4.5.4}
 \contentsline {chapter}{\numberline {5}Computational Geometry}{49}{chapter.5}
 \contentsline {section}{\numberline {5.1}Basic Tools}{49}{section.5.1}
-\contentsline {subsubsection}{Cross Product}{49}{section*.8}
-\contentsline {subsubsection}{Dot Product}{49}{section*.9}
-\contentsline {subsubsection}{$\qopname \relax o{tan}^{-1}$, \texttt {atan2}}{49}{section*.10}
+\contentsline {subsubsection}{Cross Product}{49}{section*.6}
+\contentsline {subsubsection}{Dot Product}{49}{section*.7}
+\contentsline {subsubsection}{$\qopname \relax o{tan}^{-1}$, \texttt {atan2}}{49}{section*.8}
 \contentsline {section}{\numberline {5.2}Formulas}{49}{section.5.2}
 \contentsline {subsection}{\numberline {5.2.1}Area}{49}{subsection.5.2.1}
 \contentsline {subsection}{\numberline {5.2.2}Distance}{49}{subsection.5.2.2}
@@ -72,26 +70,28 @@
 \contentsline {section}{\numberline {7.2}Segment Tree}{54}{section.7.2}
 \contentsline {subsection}{\numberline {7.2.1}Fenwick Tree}{57}{subsection.7.2.1}
 \contentsline {subsection}{\numberline {7.2.2}Lazy Propagation}{61}{subsection.7.2.2}
-\contentsline {subsubsection}{Some Motivation: $\sqrt {n}$ Blocking}{61}{section*.11}
-\contentsline {subsubsection}{Lazy Propagation on a Segment Tree}{62}{section*.12}
+\contentsline {subsubsection}{Some Motivation: $\sqrt {n}$ Blocking}{61}{section*.9}
+\contentsline {subsubsection}{Lazy Propagation on a Segment Tree}{62}{section*.10}
 \contentsline {subsection}{\numberline {7.2.3}2D Segment Tree}{64}{subsection.7.2.3}
 \contentsline {subsection}{\numberline {7.2.4}3D Segment Tree}{64}{subsection.7.2.4}
 \contentsline {subsection}{\numberline {7.2.5}Persistent Segment Tree}{64}{subsection.7.2.5}
 \contentsline {section}{\numberline {7.3}Queue with Minimum Query}{64}{section.7.3}
 \contentsline {section}{\numberline {7.4}Balanced Binary Search Tree}{65}{section.7.4}
-\contentsline {subsection}{\numberline {7.4.1}Splay Tree}{65}{subsection.7.4.1}
-\contentsline {subsection}{\numberline {7.4.2}Treap}{65}{subsection.7.4.2}
-\contentsline {section}{\numberline {7.5}Euler Tour Technique}{65}{section.7.5}
-\contentsline {section}{\numberline {7.6}$2^n$ Jump Pointers}{65}{section.7.6}
-\contentsline {section}{\numberline {7.7}Fractional Cascading}{65}{section.7.7}
-\contentsline {section}{\numberline {7.8}Heavy-Light Decomposition}{65}{section.7.8}
-\contentsline {section}{\numberline {7.9}Link-Cut Tree}{66}{section.7.9}
-\contentsline {section}{\numberline {7.10}Top Tree}{66}{section.7.10}
-\contentsline {section}{\numberline {7.11}Link-Cut Cactus}{66}{section.7.11}
-\contentsline {chapter}{\numberline {8}Math}{67}{chapter.8}
-\contentsline {section}{\numberline {8.1}Games}{67}{section.8.1}
-\contentsline {section}{\numberline {8.2}Karatsuba}{67}{section.8.2}
-\contentsline {section}{\numberline {8.3}Matrices}{67}{section.8.3}
-\contentsline {section}{\numberline {8.4}Fast Fourier Transform}{67}{section.8.4}
-\contentsline {subsection}{\numberline {8.4.1}Number Theoretic Transform}{67}{subsection.8.4.1}
-\contentsline {section}{\numberline {8.5}Primes}{67}{section.8.5}
+\contentsline {subsection}{\numberline {7.4.1}Tree Rotation}{65}{subsection.7.4.1}
+\contentsline {subsection}{\numberline {7.4.2}Red-Black Tree}{66}{subsection.7.4.2}
+\contentsline {subsection}{\numberline {7.4.3}Splay Tree}{66}{subsection.7.4.3}
+\contentsline {subsection}{\numberline {7.4.4}Treap}{66}{subsection.7.4.4}
+\contentsline {section}{\numberline {7.5}Euler Tour Technique}{66}{section.7.5}
+\contentsline {section}{\numberline {7.6}$2^n$ Jump Pointers}{66}{section.7.6}
+\contentsline {section}{\numberline {7.7}Fractional Cascading}{66}{section.7.7}
+\contentsline {section}{\numberline {7.8}Heavy-Light Decomposition}{66}{section.7.8}
+\contentsline {section}{\numberline {7.9}Link-Cut Tree}{67}{section.7.9}
+\contentsline {section}{\numberline {7.10}Top Tree}{67}{section.7.10}
+\contentsline {section}{\numberline {7.11}Link-Cut Cactus}{67}{section.7.11}
+\contentsline {chapter}{\numberline {8}Math}{69}{chapter.8}
+\contentsline {section}{\numberline {8.1}Games}{69}{section.8.1}
+\contentsline {section}{\numberline {8.2}Karatsuba}{69}{section.8.2}
+\contentsline {section}{\numberline {8.3}Matrices}{69}{section.8.3}
+\contentsline {section}{\numberline {8.4}Fast Fourier Transform}{69}{section.8.4}
+\contentsline {subsection}{\numberline {8.4.1}Number Theoretic Transform}{69}{subsection.8.4.1}
+\contentsline {section}{\numberline {8.5}Primes}{69}{section.8.5}

@@ -69,19 +69,21 @@
 \BOOKMARK [2][-]{subsection.7.2.5}{Persistent Segment Tree}{section.7.2}% 69
 \BOOKMARK [1][-]{section.7.3}{Queue with Minimum Query}{chapter.7}% 70
 \BOOKMARK [1][-]{section.7.4}{Balanced Binary Search Tree}{chapter.7}% 71
-\BOOKMARK [2][-]{subsection.7.4.1}{Splay Tree}{section.7.4}% 72
-\BOOKMARK [2][-]{subsection.7.4.2}{Treap}{section.7.4}% 73
-\BOOKMARK [1][-]{section.7.5}{Euler Tour Technique}{chapter.7}% 74
-\BOOKMARK [1][-]{section.7.6}{2n Jump Pointers}{chapter.7}% 75
-\BOOKMARK [1][-]{section.7.7}{Fractional Cascading}{chapter.7}% 76
-\BOOKMARK [1][-]{section.7.8}{Heavy-Light Decomposition}{chapter.7}% 77
-\BOOKMARK [1][-]{section.7.9}{Link-Cut Tree}{chapter.7}% 78
-\BOOKMARK [1][-]{section.7.10}{Top Tree}{chapter.7}% 79
-\BOOKMARK [1][-]{section.7.11}{Link-Cut Cactus}{chapter.7}% 80
-\BOOKMARK [0][-]{chapter.8}{Math}{}% 81
-\BOOKMARK [1][-]{section.8.1}{Games}{chapter.8}% 82
-\BOOKMARK [1][-]{section.8.2}{Karatsuba}{chapter.8}% 83
-\BOOKMARK [1][-]{section.8.3}{Matrices}{chapter.8}% 84
-\BOOKMARK [1][-]{section.8.4}{Fast Fourier Transform}{chapter.8}% 85
-\BOOKMARK [2][-]{subsection.8.4.1}{Number Theoretic Transform}{section.8.4}% 86
-\BOOKMARK [1][-]{section.8.5}{Primes}{chapter.8}% 87
+\BOOKMARK [2][-]{subsection.7.4.1}{Tree Rotation}{section.7.4}% 72
+\BOOKMARK [2][-]{subsection.7.4.2}{Red-Black Tree}{section.7.4}% 73
+\BOOKMARK [2][-]{subsection.7.4.3}{Splay Tree}{section.7.4}% 74
+\BOOKMARK [2][-]{subsection.7.4.4}{Treap}{section.7.4}% 75
+\BOOKMARK [1][-]{section.7.5}{Euler Tour Technique}{chapter.7}% 76
+\BOOKMARK [1][-]{section.7.6}{2n Jump Pointers}{chapter.7}% 77
+\BOOKMARK [1][-]{section.7.7}{Fractional Cascading}{chapter.7}% 78
+\BOOKMARK [1][-]{section.7.8}{Heavy-Light Decomposition}{chapter.7}% 79
+\BOOKMARK [1][-]{section.7.9}{Link-Cut Tree}{chapter.7}% 80
+\BOOKMARK [1][-]{section.7.10}{Top Tree}{chapter.7}% 81
+\BOOKMARK [1][-]{section.7.11}{Link-Cut Cactus}{chapter.7}% 82
+\BOOKMARK [0][-]{chapter.8}{Math}{}% 83
+\BOOKMARK [1][-]{section.8.1}{Games}{chapter.8}% 84
+\BOOKMARK [1][-]{section.8.2}{Karatsuba}{chapter.8}% 85
+\BOOKMARK [1][-]{section.8.3}{Matrices}{chapter.8}% 86
+\BOOKMARK [1][-]{section.8.4}{Fast Fourier Transform}{chapter.8}% 87
+\BOOKMARK [2][-]{subsection.8.4.1}{Number Theoretic Transform}{section.8.4}% 88
+\BOOKMARK [1][-]{section.8.5}{Primes}{chapter.8}% 89

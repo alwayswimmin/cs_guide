@@ -40,6 +40,14 @@
   positioning,
   shapes.callouts,
   shapes.arrows,
+  shapes.geometric,
+  decorations.shapes,
+  shapes,
+  fit,
+  arrows,
+  positioning,
+  trees,
+  mindmap,
   calc}
 
 \tikzset{
@@ -900,8 +908,6 @@ A Set is a collection of objects with no duplicate elements. Set is a Java inter
 
 \subsection{TreeSet}
 
-\subsubsection{Binary Search Tree (BST)}
-
 A TreeSet is Java's implementation of a \textit{binary search tree} (BST). A binary search tree is a tree where every node is greater than every node in its left subtree and less than every node in its right subtree. As with a heap, to use a BST, we need to impose some kind of ordering on the elements stored.
 
 \begin{center}
@@ -1105,6 +1111,12 @@ Note that \texttt{"h"} has either no children or only one child, and that nodes 
 \end{tikzpicture}
 \end{center}
 
+A standard BST has $O(\log{n})$ operations if the tree is ``nice'', but each operation can be $O(n)$ in the worst case. We need to find a way to automatically balance the BST such that we avoid linear time complexities.
+
+A red-black tree is a self-balancing BST that guarantees $O(\log{n})$ operations by making sure the height of the tree grows logarithmically. It is implemented in Java's TreeSet, so while the BST I described above does not guarantee nice time bounds, Java's implementation does.
+
+I don't think learning exactly how a red-black tree works is particularly useful for the beginning programmer. How exactly a red-black tree works, together with some more balanced binary search trees which are useful on the competitive scene, are covered in a later chapter.
+
 Here are some notable functions TreeSet implements. You don't need to implement everything -- \texttt{add()}, \texttt{remove()}, and \texttt{contains()} are the most important.
 
 \begin{itemize}
@@ -1145,14 +1157,6 @@ Here are some notable functions TreeSet implements. You don't need to implement 
 \end{itemize}
 
 Since the TreeSet is ordered, iterating over a TreeSet will also be in order.
-
-\subsubsection{Red-Black Tree}
-
-A standard BST has $O(\log{n})$ operations if the tree is ``nice'', but each operation can be $O(n)$ in the worst case. We need to find a way to automatically balance the BST such that we avoid linear time complexities.
-
-The red-black tree is a self-balancing BST that guarantees $O(\log{n})$ operations. It is implemented in Java's TreeSet, so while the BST I described above does not guarantee nice time bounds, Java's implementation does.
-
-I don't think learning exactly how a red-black tree works is particularly useful for the beginning programmer. Feel free to skip this section and come back to it later. Some more balanced binary search trees which are useful on the competitive scene are covered in a later chapter.
 
 \subsection{HashSet}
 
@@ -3928,11 +3932,80 @@ This seems like it obviously doesn't work -- one of the stacks keeps growing, wh
 
 \section{Balanced Binary Search Tree}
 
-Recall the red-black tree from earlier. These are pretty nasty to code and don't really have very nice properties, so on programming contests, we generally refer to other kinds of balanced binary search trees. Many problems which can be solved using splay trees and treaps can, however, still be solved using red-black trees, though doing so is generally not preferred unless your name is Sreenath Are.
+Recall that a normal binary search tree is not guaranteed to be balanced. Many data structures have been invented to self-balance the binary search tree.
+
+The \textit{red-black tree} was an early development that represents the ``just do it'' approach, using casework to balance a tree. This results in a simple mathematical proof for the maximum depth of the tree. Unfortunately, coding these up are quite nasty do to the casework involved, so doing so is generally not preferred unless your name is Sreenath Are.
+
+The \textit{splay tree} is a data structure that guarantees amortized logarithmic performance; this means that any single operation is not necessarily linear, but over \textit{any} sequence of length $m$ for $m \ge n$, the performance for all $m$ operations is $O(m \log{n})$. Though the proof of the splay tree's complexity is necessarily more complicated than the red-black tree's complexity, as it requires amortized analysis, coding the splay tree is much easier than coding the red-black tree. In addition, the splay tree grants us more flexibility than the red-black tree provides, allowing us to build more complicated structures like link-cut trees using splay trees.
+
+The \textit{treap} is a probabilistic data structure that combines the BST with a heap to usually create a balanced tree. Just as quicksort is not guaranteed to run in $O(n\log{n})$, so too does the treap not guarantee $O(\log{n})$ operation performance, but will usually result be logarithmic.
+
+\subsection{Tree Rotation}
+
+The key idea behind all of these data structures is the use of the \textit{tree rotation}, which is used to change the structure of the tree but will not change the order of the elements (inorder). Maintaining the order of the elements is important, of course, if we wish our tree to remain a binary search tree.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level/.style={sibling distance=35mm/#1}, auto, bend left]
+
+\node [vertex, fill=mysalmon] (r){$Q$}
+  child {
+  	node[vertex, fill=mysalmon] {$P$}
+  	child {
+  		node[vertex] {$A$} {
+  		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.35cm, shape border rotate=90, yshift=-1.45cm] {} }
+  	}
+  	child {
+  		node[vertex] {$B$} {
+  		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.35cm, shape border rotate=90, yshift=-1.45cm] {} }
+  	}
+  }
+  child {
+  		node[vertex] (r3) {$C$} {
+  		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.35cm, shape border rotate=90, yshift=-1.45cm] {} }
+};
+
+\node[vertex, fill=mysalmon] [right=8cm of r] (r2) {$P$}
+  child {
+  		node[vertex] (r4) {$A$} {
+  		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.35cm, shape border rotate=90, yshift=-1.45cm] {} }
+  }
+  child {
+  	node[vertex, fill=mysalmon] {$Q$}
+	child {
+  		node[vertex] {$B$} {
+  		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.35cm, shape border rotate=90, yshift=-1.45cm] {} }
+  	}
+	child {
+  		node[vertex] {$C$} {
+  		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.35cm, shape border rotate=90, yshift=-1.45cm] {} }
+	}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\coordinate[below=of a] (c);
+\coordinate[below=of b] (d);
+
+\draw[->] (a) to node {rotate right} (b);
+\draw[->] (d) to node {rotate left} (c);
+
+\end{tikzpicture}
+\end{center}
+
+Here, the triangles represent subtrees, as $A$, $B$, and $C$ could very well have children of our own, but they are not shown in the diagram. Note that the inorder ordering of the nodes has not been changed.
+
+When we rotate right, we literally take the edge connecting $P$ and $Q$ and rotate it clockwise. Then $P$ becomes the parent of $Q$ where before $P$ was the child of $Q$. However, this definition of rotation is somewhat cumbersome, as we have different terms for the highly symmetrical rotating right and rotating left. The key characteristic a rotation is we move the lower node up one level. Thus, I prefer to think of tree rotation as whatever tree rotation, either left or right, will \textit{rotate up} a node. In the diagram, rotating right is analogous to rotating $P$ up, and rotating left is analogous to rotating $Q$ up. Rotating a node up will change the tree such that its former parent is now its child.
+
+The other notable change in the tree structure is the subtree associated with $B$ passes between $P$ and $Q$ upon tree rotation. Finally, tree rotation can happen at any place in the tree, not just at the root. When we rotate $P$ up, we must update the parent of $Q$ to change its child to $P$.
+
+\subsection{Red-Black Tree}
 
 \subsection{Splay Tree}
 
 \subsection{Treap}
+
+
 
 \section{Euler Tour Technique}
 
