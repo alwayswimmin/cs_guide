@@ -28,11 +28,12 @@
 \definecolor{mywhite}{RGB}{255,255,255}
 
 \usepackage{tikz}
+
 \usetikzlibrary{calc,shapes.multipart,chains,arrows,positioning}
+
 \tikzstyle{vertex}=[draw,fill=myseagreen,circle,minimum size=24pt,inner sep=0pt]
 
 \tikzstyle{splitvertex}=[draw,fill=myseagreen,circle split,minimum size=24pt]
-
 
 \usetikzlibrary{
   shapes.multipart,
@@ -99,12 +100,10 @@
   {\endminipage}
 
 \newcommand\intro[1]{
- \chapter*{#1}
+ \section*{#1}
  \markboth{\MakeUppercase{#1}}{}
  \addcontentsline{toc}{chapter}{#1}
 }
-
-
 
 \begin{document}
 
@@ -117,7 +116,11 @@
 
 \eject
 
-\intro{Introduction}
+\intro{Acknowledgements}
+
+I am truly thankful for all my school teachers and USACO instructors, who gave me the knowledge which I wish to pass on through this text. I am grateful for Shankar and Ross, Evan, and Dr. Osborne, who separately made me believe such a task was possible. I must credit Valerie, for she was the one who drove me to really dive into and come to love computer science. Finally, I'd like to thank all my friends and avid programmers in the TJ community. This work is for all of you, and I hope you find it useful in your studies.
+
+\intro{Preface}
 
 You might have heard of \href{https://www.dropbox.com/s/z8qdndxmrmxqsam/Napkin.pdf?oref=e&n=97419869}{Evan Chen's Napkin}, a resource for olympiad math people that serves as a jumping point into higher mathematics.\footnote{In fact, I'm using Evan's template right now. Thanks Evan!} The Wikipedia articles on higher mathematics are just so dense in vocabulary and deter many smart young students from learning them before they are formally taught in a course in college. Evan's Napkin aims to provide that background necessary to leap right in.
 
@@ -3952,32 +3955,32 @@ The key idea behind all of these data structures is the use of the \textit{tree 
   	node[vertex, fill=mysalmon] {$P$}
   	child {
   		node[vertex] {$A$} {
-  		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.35cm, shape border rotate=90, yshift=-1.45cm] {} }
+		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
   	}
   	child {
   		node[vertex] {$B$} {
-  		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.35cm, shape border rotate=90, yshift=-1.45cm] {} }
+		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
   	}
   }
   child {
   		node[vertex] (r3) {$C$} {
-  		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.35cm, shape border rotate=90, yshift=-1.45cm] {} }
+		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
 };
 
 \node[vertex, fill=mysalmon] [right=8cm of r] (r2) {$P$}
   child {
   		node[vertex] (r4) {$A$} {
-  		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.35cm, shape border rotate=90, yshift=-1.45cm] {} }
+		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
   }
   child {
   	node[vertex, fill=mysalmon] {$Q$}
 	child {
   		node[vertex] {$B$} {
-  		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.35cm, shape border rotate=90, yshift=-1.45cm] {} }
+		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
   	}
 	child {
   		node[vertex] {$C$} {
-  		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.35cm, shape border rotate=90, yshift=-1.45cm] {} }
+		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
 	}
 };
 
@@ -3999,7 +4002,729 @@ When we rotate right, we literally take the edge connecting $P$ and $Q$ and rota
 
 The other notable change in the tree structure is the subtree associated with $B$ passes between $P$ and $Q$ upon tree rotation. Finally, tree rotation can happen at any place in the tree, not just at the root. When we rotate $P$ up, we must update the parent of $Q$ to change its child to $P$.
 
+\begin{center}
+\begin{tikzpicture}[very thick,level 2/.style={sibling distance=35mm}, level 3/.style={sibling distance=35mm/2}, level 4/.style={sibling distance=35mm/3}, level 1/.style={sibling distance=50mm}, auto, bend left]
+
+\node [vertex] (r) {$D$}
+	child{node[vertex, fill=mysalmon] {$Q$}
+  child {
+  	node[vertex, fill=mysalmon] {$P$}
+  	child {
+  		node[vertex] {$A$} 
+  		child [missing]
+  		child{
+  			node [vertex] {$E$}
+  		}
+  	}
+  	child {
+  		node[vertex] {$B$}
+  } }
+  child {
+  		node[vertex] (r3) {$C$}
+}} 
+  		child [missing];
+
+\node[vertex] [right=8cm of r] (r2) {$D$}
+	child{node[vertex, fill=mysalmon] {$P$}
+  child {
+  		node[vertex] (r4) {$A$} 
+  		child [missing]
+  		child{
+  			node [vertex] {$E$}
+  		}
+  }
+  child {
+  	node[vertex, fill=mysalmon] {$Q$}
+	child {
+  		node[vertex] {$B$} 
+  	}
+	child {
+  		node[vertex] {$C$} 
+	}
+}}
+child[missing];
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\coordinate[below=of a] (c);
+\coordinate[below=of b] (d);
+
+\draw[->] (a) to node {rotate $P$} (b);
+\draw[->] (d) to node {rotate $Q$} (c);
+
+\end{tikzpicture}
+\end{center}
+
+Note that in this example, rotating up $P$ decreases the total height of the tree. We want to somehow systematically rotate up nodes to accomplish this. The following data structures provide such a system.
+
 \subsection{Red-Black Tree}
+
+As stated earlier, the red-black tree represents the ``just do it'' approach. We want to somehow bound the maximum length from the root to any leaf node by applying a constraint on the tree. In this case, our constraint is a coloring of the nodes (red or black) such certain properties are satisfied. For the red-black tree, the only nodes storing data are non-leaf nodes, and all leaf nodes store ``null.'' The number of null nodes, then, is $n+1$, where $n$ is the number of non-null nodes. We do this so that any node storing useful information has two children.
+
+We want our tree to satisfy the following properties:
+
+\begin{enumerate}
+
+\item
+The root is black.
+
+\item
+All leaf nodes (null) are black.
+
+\item
+Every red node has two black children. Consequently, a red node has a black parent.
+
+\item
+Any path from the root to a null node contains the same number of black elements.
+
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+%level 1/.style={sibling distance=80mm},
+%level 2/.style={sibling distance=50mm},
+%level 3/.style={sibling distance=30mm},
+%level 4/.style={sibling distance=20mm},
+%level 5/.style={sibling distance=10mm},
+%level 6/.style={sibling distance=10mm},
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+}
+]
+
+\node[bv] {$M$} [sibling distance=80mm]
+	child {
+		node[bv] {$D$} [sibling distance=50mm]
+			child {
+				node[bv] {$A$} [sibling distance=15mm]
+					child {
+						node[br] {null}
+					}
+					child {
+						node[rv] {$C$} [sibling distance=10mm]
+							child {
+								node[br] {null}
+							}
+							child {
+								node[br] {null}
+							}
+					}
+			}
+			child {
+				node[rv]{$K$} [sibling distance=30mm]
+					child {
+						node[bv]{$G$} [sibling distance=20mm]
+							child {
+								node[rv]{$E$} [sibling distance=10mm]
+									child{
+										node[br]{null}
+									}
+									child{
+										node[br]{null}
+									}
+							}
+							child {
+								node[rv]{$I$} [sibling distance=10mm]
+									child {
+										node[br]{null}
+									}
+									child {
+										node[br]{null}
+									}
+							}
+					}
+					child {
+						node[bv]{$L$} [sibling distance=10mm]
+							child {
+								node[br]{null}
+							}
+							child {
+								node[br]{null}
+							}
+					}
+			}
+	}
+	child {
+		node[bv]{$T$} [sibling distance=40mm]
+			child {
+				node[bv] {$Q$} [sibling distance=15mm]
+					child {
+						node[br] {null}
+					}
+					child {
+						node[rv]{$R$} [sibling distance=10mm]
+							child{
+								node[br]{null}
+							}
+							child{
+								node[br]{null}
+							}
+					}
+			}
+			child {
+				node[rv] {$X$} [sibling distance=20mm]
+					child {
+						node[bv] {$V$} [sibling distance=10mm]
+							child{
+								node[br]{null}
+							}
+							child{
+								node[br]{null}
+							}
+					}
+					child {
+						node[bv] {$Z$} [sibling distance=10mm]
+							child{
+								node[br]{null}
+							}
+							child{
+								node[br]{null}
+							}
+					}
+			}
+	}
+;
+
+\end{tikzpicture}
+\end{center}
+
+Note that every path from the root to a null node contains four black nodes.
+
+The proof of $O(\log{n})$ search follows immediately. The shortest possible path contains only black nodes, and the longest possible path contains black and red nodes alternating. Since the number of black nodes in both must be the same, any path is at most twice as long as any other path. As the number of nodes in the tree is $2n+1$, the number of black nodes $m$ in any path is then bounded below by $2^{2m} - 1 \ge 2n + 1$ and above by $2^{m} - 1 \le 2n + 1$. Thus the height of the tree is on the order $O(\log{n})$, and we are done.
+
+Thus if our tree maintains its red-black coloring and satisfies the necessary properties, we can guarantee that our tree is balanced. We then consider the two ways we change the state of the tree, insertion and deletion. We can insert and delete in the normal way, but we might need to make changes to the tree after that to restore the red-black properties. We do this through a small number of color flips and tree rotations, which we can handle through casework.
+
+Let's handle insertion first. When we insert a node, it takes the place of a black null leaf node. To maintain property 4, we must color the new node red, as it has two black null children. However, we may have violated some of the other properties, specifically 1 and 3.
+
+We'll call the new node $N$, its parent $P$, its uncle (parent's sibling) $U$, and its grandparent $G$, if they exist.
+
+We consider the following five cases.
+
+\begin{enumerate}
+
+\item
+$N$ is the root node. That is, $N$ is the first node added to the tree.
+
+It is easy to just change the color of $N$ to red to restore property 1, and we are done.
+
+\item
+$P$ is black.
+
+Then property 3 is not violated, and we are done.
+
+\item
+$P$ is red, and $U$ is red ($G$ and $U$ exist since $P$ cannot be the root, as the root is black).
+
+As $P$ and $U$ are red, $G$ is black. We simply color $P$ and $U$ black and $G$ red to restore property 3.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[bv] (r) {$G$}
+child {
+	node[rv] {$P$}
+	child {
+		node[rv] {$N$}
+	}
+	child [missing]
+}
+child {
+	node[rv] (r3) {$U$} 
+};
+
+\node[rv] [right=8cm of r] (r2) {$G$}
+child {
+	node[bv] (r4) {$P$}
+	child {
+		node[rv] {$N$}
+	}
+	child[missing]
+}
+child {
+	node[bv] {$U$}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\item
+$P$ is red, $U$ is black, and $N$ is on the same side of $P$ as $P$ is of $G$.
+
+$G$ must be black. We rotate up $P$ and color $P$ black and $G$ red.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[bv] (r) {$G$}
+child {
+	node[rv] {$P$}
+	child {
+		node[rv] {$N$}
+	}
+	child [missing]
+}
+child {
+	node[bv] (r3) {$U$} 
+};
+
+\node[bv] [right=8cm of r] (r2) {$P$}
+child {
+	node[rv] (r4) {$N$} 
+}
+child {
+	node[rv] {$G$}
+	child[missing]
+	child {
+		node[bv] {$U$}
+	}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\item
+$P$ is red, $U$ is black, and $N$ is on the opposite side of $P$ as $P$ is of $G$.
+
+$G$ must be black. We rotate up $N$, and this reduces to case 4.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[bv] (r) {$G$}
+child {
+	node[rv] {$P$} 
+	child[missing]
+	child {
+		node[rv] {$N$} 
+	}
+}
+child {
+	node[bv] (r3) {$U$}
+};
+
+\node[bv] [right=8cm of r] (r2) {$G$}
+child {
+	node[rv] (r4) {$N$}
+	child {
+		node[rv] {$P$}
+	}
+	child[missing]
+}
+child {
+	node[bv] {$U$} 
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\end{enumerate}
+
+Thus after we insert, we can always restructure the tree using a constant number of operations to restore the necessary red-black tree properties.
+
+Now we need to work on deletion. Recall how deletion works on a normal binary search tree. If the node we need to replace has two children, we swap the node with the least element in its right subtree, which does not have two children. We then are able to remove that node more easily.
+
+We can do the same thing with the red-black tree. If a node has two non-null children, we swap its value with the least non-null node in its right subtree and remove that node. Thus we reduce the deletion problem to the case where the node we need to remove has at least one null child.
+
+Two cases are very easy.
+
+\begin{enumerate}
+
+\item
+The node we wish to remove is red.
+
+Then the node must have two null leaf nodes as children. Then we remove the node by replacing it and its children with a single null node.
+
+\item
+The node is black and has a red child.
+
+We replace the node with its child and paint its child red.
+
+\end{enumerate}
+
+The remaining case is the node black with two black null children. We'll first replace the node with a null node $N$. Then, all paths passing through $N$ are one black node short compared to all other paths.
+
+We denote the parent of $N$ as $P$, its sibling $S$, and its sibling's children $C$ and $F$, such that $C$ is on the same side of $S$ as $N$ is of $P$, if they exist. We now describe a six-case balancing procedure on the black node $N$ that fixes our problem.
+
+\begin{enumerate}
+
+\item
+$N$ is the root.
+
+We are done, as every path possible must pass through $N$, so all paths are balanced.
+
+\item
+$P$ is red and $S$, $C$, and $F$ are black.
+
+Then we simply trade the colors of $P$ and $S$. The number of black nodes for paths passing through $S$ stays the same, but the number of black nodes for paths passing through $N$ increases, so we are done.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[rv] (r) {$P$}
+child {
+	node[bv] {$N$} 
+}
+child {
+	node[bv] (r3) {$S$}
+	child {
+		node[bv] {$C$}
+	}
+	child {
+		node[bv] {$F$}
+	}
+};
+
+\node[bv] [right=8cm of r] (r2) {$P$}
+child {
+	node[bv] (r4) {$N$} 
+}
+child {
+	node[rv] {$S$}
+	child {
+		node[bv] {$C$}
+	}
+	child {
+		node[bv] {$F$}
+	}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\item
+$S$ is black and $F$ is red.
+
+Then we color $F$ black and rotate up $S$, before swapping the colors of $P$ and $S$. Then paths passing through $N$ gain a black vertex, while paths passing through $C$ and $F$ stay the same.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[vertex] (r) {$P$}
+child {
+	node[bv] {$N$} 
+}
+child {
+	node[bv] (r3) {$S$}
+	child {
+		node[vertex] {$C$}
+	}
+	child {
+		node[rv] {$F$}
+	}
+};
+
+\node[vertex] [right=8cm of r] (r2) {$S$}
+child {
+	node[bv] (r4) {$P$} 
+	child {
+		node[bv] {$N$}
+	}
+	child {
+		node[vertex] {$C$}
+	}
+}
+child {
+	node[bv] {$F$}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\item
+$S$ is black, $F$ is black, and $C$ is red.
+
+Then we rotate up $C$ and swap the colors of $S$ and $C$. Then this reduces to case 3.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[vertex] (r) {$P$}
+child {
+	node[bv] {$N$} 
+}
+child {
+	node[bv] (r3) {$S$}
+	child {
+		node[rv] {$C$}
+	}
+	child {
+		node[bv] {$F$}
+	}
+};
+
+\node[vertex] [right=8cm of r] (r2) {$P$}
+child {
+	node[bv] (r4) {$N$} 
+}
+child {
+	node[bv] {$C$}
+		child [missing]
+		child {
+			node[rv] {$S$}
+				child [missing]
+				child {
+					node[bv] {$F$}
+				}
+		}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\item
+$S$ is red.
+
+Then $P$ must be black. We rotate $S$ up and swap the colors of $P$ and $S$. The new sibling of $N$ is black, so this then reduces to one of cases 2, 3, or 4.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[bv] (r) {$P$}
+child {
+	node[bv] {$N$} 
+}
+child {
+	node[rv] (r3) {$S$}
+	child {
+		node[bv] {$C$}
+	}
+	child {
+		node[bv] {$F$}
+	}
+};
+
+\node[bv] [right=8cm of r] (r2) {$S$}
+child {
+	node[rv] (r4) {$P$} 
+		child {
+			node[bv] {$N$}
+		}
+		child {
+			node[bv] {$C$}
+		}
+}
+child {
+	node[bv] {$F$}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\item
+$P$, $S$, $C$, and $F$ are all black.
+
+Then we recolor $S$ red. Now, all paths through $P$ have the same number of black nodes, but each path through $P$ has one less black node than each path not passing through $P$. Since $P$ is black, and this procedure did not require that $N$ be a leaf node, we can repeat this entire balancing procedure on $P$.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[bv] (r) {$P$}
+child {
+	node[bv] {$N$} 
+}
+child {
+	node[bv] (r3) {$S$}
+	child {
+		node[bv] {$C$}
+	}
+	child {
+		node[bv] {$F$}
+	}
+};
+
+\node[bv] [right=8cm of r] (r2) {$P$}
+child {
+	node[bv] (r4) {$N$} 
+}
+child {
+	node[rv] {$S$}
+	child {
+		node[bv] {$C$}
+	}
+	child {
+		node[bv] {$F$}
+	}
+};
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\end{enumerate}
+
+Unlike the balancing for insertions, the balancing for deletions has the potential to call itself on the parent node $P$. However, balancing following a deletion is still $O(\log{n})$ worst case. It is possible prove that it is $O(1)$ amortized. Regardless, we now have a deletion algorithm that runs in $O(\log{n})$ time.
+
+Thus the red-black tree supports all standard binary search tree operations in $O(\log{n})$, guaranteed.
 
 \subsection{Splay Tree}
 
