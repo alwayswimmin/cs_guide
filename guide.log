@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  26 JUL 2015 17:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  26 JUL 2015 21:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1926,43 +1926,53 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [57]
-[58] [59] [60] [61] [62] [63] [64] [65] [66] [67] [68]
+[58] [59] [60] [61] [62] [63] [64] [65] [66] [67] [68] [69]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [70]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [71]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 4739.
+(hyperref)                removing `math shift' on input line 4984.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `superscript' on input line 4739.
+(hyperref)                removing `superscript' on input line 4984.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 4739.
+(hyperref)                removing `math shift' on input line 4984.
 
-[69] [70]
-Chapter 8.
-[71
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [72]
+[73] [74
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 4844.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 4844.
+Chapter 8.
+[75]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 5089.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 5089.
  (./guide.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 4844.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 4844.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 5089.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 5089.
 
 Package rerunfilecheck Info: File `guide.out' has not changed.
 (rerunfilecheck)             Checksum: 65D8688208740052B95C5B540F4D2C6B;5520.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 4844.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 5089.
  )
 (\end occurred when \iftrue on line 177 was incomplete) 
 Here is how much of TeX's memory you used:
- 36485 strings out of 493117
- 706271 string characters out of 6135433
+ 36529 strings out of 493117
+ 706959 string characters out of 6135433
  954125 words of memory out of 5000000
- 38927 multiletter control sequences out of 15000+600000
- 22228 words of font info for 133 fonts, out of 8000000 for 9000
+ 38963 multiletter control sequences out of 15000+600000
+ 22444 words of font info for 135 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 74i,16n,72p,10394b,1733s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 74i,18n,72p,10394b,1861s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2014
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2014/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2014/t
@@ -1985,10 +1995,10 @@ ublic/amsfonts/cm/cmti9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/pub
 lic/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/publ
 ic/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public
 /amsfonts/symbols/msbm10.pfb>
-Output written on guide.pdf (71 pages, 543484 bytes).
+Output written on guide.pdf (75 pages, 555863 bytes).
 PDF statistics:
- 1085 PDF objects out of 1200 (max. 8388607)
- 980 compressed objects within 10 object streams
- 317 named destinations out of 1000 (max. 500000)
+ 1104 PDF objects out of 1200 (max. 8388607)
+ 995 compressed objects within 10 object streams
+ 321 named destinations out of 1000 (max. 500000)
  24290 words of extra memory for PDF output out of 24883 (max. 10000000)
 

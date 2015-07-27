@@ -81,18 +81,18 @@
 \contentsline {subsection}{\numberline {7.4.1}Tree Rotation}{63}{subsection.7.4.1}
 \contentsline {subsection}{\numberline {7.4.2}Red-Black Tree}{64}{subsection.7.4.2}
 \contentsline {subsection}{\numberline {7.4.3}Splay Tree}{69}{subsection.7.4.3}
-\contentsline {subsection}{\numberline {7.4.4}Treap}{69}{subsection.7.4.4}
-\contentsline {section}{\numberline {7.5}Euler Tour Technique}{69}{section.7.5}
-\contentsline {section}{\numberline {7.6}$2^n$ Jump Pointers}{69}{section.7.6}
-\contentsline {section}{\numberline {7.7}Fractional Cascading}{69}{section.7.7}
-\contentsline {section}{\numberline {7.8}Heavy-Light Decomposition}{69}{section.7.8}
-\contentsline {section}{\numberline {7.9}Link-Cut Tree}{70}{section.7.9}
-\contentsline {section}{\numberline {7.10}Top Tree}{70}{section.7.10}
-\contentsline {section}{\numberline {7.11}Link-Cut Cactus}{70}{section.7.11}
-\contentsline {chapter}{\numberline {8}Math}{71}{chapter.8}
-\contentsline {section}{\numberline {8.1}Games}{71}{section.8.1}
-\contentsline {section}{\numberline {8.2}Karatsuba}{71}{section.8.2}
-\contentsline {section}{\numberline {8.3}Matrices}{71}{section.8.3}
-\contentsline {section}{\numberline {8.4}Fast Fourier Transform}{71}{section.8.4}
-\contentsline {subsection}{\numberline {8.4.1}Number Theoretic Transform}{71}{subsection.8.4.1}
-\contentsline {section}{\numberline {8.5}Primes}{71}{section.8.5}
+\contentsline {subsection}{\numberline {7.4.4}Treap}{72}{subsection.7.4.4}
+\contentsline {section}{\numberline {7.5}Euler Tour Technique}{72}{section.7.5}
+\contentsline {section}{\numberline {7.6}$2^n$ Jump Pointers}{72}{section.7.6}
+\contentsline {section}{\numberline {7.7}Fractional Cascading}{72}{section.7.7}
+\contentsline {section}{\numberline {7.8}Heavy-Light Decomposition}{72}{section.7.8}
+\contentsline {section}{\numberline {7.9}Link-Cut Tree}{73}{section.7.9}
+\contentsline {section}{\numberline {7.10}Top Tree}{73}{section.7.10}
+\contentsline {section}{\numberline {7.11}Link-Cut Cactus}{73}{section.7.11}
+\contentsline {chapter}{\numberline {8}Math}{75}{chapter.8}
+\contentsline {section}{\numberline {8.1}Games}{75}{section.8.1}
+\contentsline {section}{\numberline {8.2}Karatsuba}{75}{section.8.2}
+\contentsline {section}{\numberline {8.3}Matrices}{75}{section.8.3}
+\contentsline {section}{\numberline {8.4}Fast Fourier Transform}{75}{section.8.4}
+\contentsline {subsection}{\numberline {8.4.1}Number Theoretic Transform}{75}{subsection.8.4.1}
+\contentsline {section}{\numberline {8.5}Primes}{75}{section.8.5}

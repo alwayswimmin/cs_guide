@@ -118,7 +118,7 @@
 
 \intro{Acknowledgements}
 
-I am truly thankful for all my school teachers and USACO instructors, who gave me the knowledge which I wish to pass on through this text. I am grateful for Shankar and Ross, Evan, and Dr. Osborne, who separately made me believe such a task was possible. I must credit Valerie, for she was the one who drove me to really dive into and come to love computer science. Finally, I'd like to thank all my friends and avid programmers in the TJ community. This work is for all of you, and I hope you find it useful in your studies.
+I am truly thankful for all my school teachers and USACO instructors, who gave me the knowledge which I wish to pass on through this text. I am grateful for Shankar and Ross, Evan, and Dr. Osborne, who separately made me believe such a task was possible. I must credit Valerie, for she was the one who drove me to really dive into and come to love computer science. Alex and Shwetark were extremely helpful with writing this text, as they provided input and helped me find problems to supplement my work. Finally, I'd like to thank all my friends and avid programmers in the TJ community. This is for all of you, and I hope you find it useful in your studies.
 
 \intro{Preface}
 
@@ -4724,13 +4724,258 @@ child {
 
 Unlike the balancing for insertions, the balancing for deletions has the potential to call itself on the parent node $P$. However, balancing following a deletion is still $O(\log{n})$ worst case. It is possible prove that it is $O(1)$ amortized. Regardless, we now have a deletion algorithm that runs in $O(\log{n})$ time.
 
-Thus the red-black tree supports all standard binary search tree operations in $O(\log{n})$, guaranteed.
+Thus the red-black tree supports standard binary search tree operations, all in $O(\log{n})$.
 
 \subsection{Splay Tree}
 
+The idea behind a splay tree is to apply a sequence of rotations that rotate a node all the way up to the root. Along the way, we bring nodes on the path from the node to the root closer to the root. This process is called \textit{splaying} the node. Whenever we access, add, or delete a node, we'll splay it up to the root.
+
+Simply repeatedly rotating up the tree doesn't exactly do the task. Consider a tree that looks liked a linked list, and repeatedly accessing each end.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level 2/.style={sibling distance=35mm}, level 3/.style={sibling distance=35mm/2}, level 4/.style={sibling distance=35mm/3}, level 1/.style={sibling distance=50mm}, auto]
+
+\node [vertex] (r) {$D$}
+child {
+	node [vertex] (r3) {$C$}
+		child {
+			node [vertex] {$B$}
+				child {
+					node[vertex] {$A$}
+				}
+				child[missing]
+		}
+		child[missing]
+}
+child[missing];
+
+\node[vertex] [right=4cm of r] (r2) {$A$}
+child[missing]
+child {
+	node [vertex] (r4) {$D$}
+		child {
+			node [vertex] {$C$}
+				child {
+					node[vertex] {$B$}
+				}
+				child[missing]
+		}
+		child[missing]
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\coordinate[below=of a] (c);
+\coordinate[below=of b] (d);
+
+\draw[->] (a) to node {access $A$, $O(n)$} ($(b) + (-1.5cm, 0cm)$);
+\draw[->] ($(d) + (-1.5cm, 0cm)$) to node {access $D$, $O(n)$} (c);
+
+\end{tikzpicture}
+\end{center}
+
+The standard rotation clearly does not suffice. Rotating a node to the root doesn't seem to change the depth of the tree. However, if we simply make one small change, magic happens. We'll use two compound rotations, and depending on the structure of the tree, we'll use a different one accordingly, to rotate a node to the root.
+
+When a node is a left child and its parent is a left child, or the node is a right child and its parent is a right child, we first rotate up the parent, and then rotate up the node.
+
+\begin{center}
+\begin{tikzpicture}[very thick,sibling distance=25mm, auto]
+
+\node [vertex] (r) {$Z$}
+	child {
+		node [vertex] {$Y$}
+			child {
+				node [vertex] {$X$}
+				  	child {
+  		node [vertex] {$A$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+				  	child {
+  		node [vertex] {$B$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+			}
+  	child {
+  		node [vertex] {$C$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+	}
+  	child {
+  		node [vertex] (r3) {$D$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	};
+
+\node[vertex] [right=6cm of r] (r2) {$X$}
+  	child {
+  		node [vertex] (r4) {$A$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+child {
+	node [vertex] {$Y$}
+  	child {
+  		node [vertex] {$B$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+		child {
+			node [vertex] {$Z$}
+	  	child {
+  		node [vertex] {$C$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+	child {
+  		node [vertex] {$D$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+		}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to node {rotate $Y$, rotate $X$} (b);
+
+\end{tikzpicture}
+\end{center}
+
+When a node is a left child and its parent is a left child, or the node is a right child and its parent is a right child, we rotate the node up twice.
+
+\begin{center}
+\begin{tikzpicture}[very thick, auto]
+
+\node [vertex] (r) {$Z$} [sibling distance=25mm]
+	child {
+		node [vertex] {$Y$}
+			child {
+  		node [vertex] {$A$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+			child {
+				node [vertex] {$X$}
+				  	child {
+  		node [vertex] {$B$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+				  	child {
+  		node [vertex] {$C$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+			}
+	}
+  	child {
+  		node [vertex] (r3) {$D$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	};
+
+\node[vertex] [right=7cm of r] (r2) {$X$} [sibling distance=30mm]
+child {
+	node [vertex] (r4) {$Y$} [sibling distance=15mm]
+  	child {
+  		node [vertex] {$A$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+  	child {
+  		node [vertex] {$B$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+  	}
+	child {
+			node [vertex] {$Z$} [sibling distance=15mm]
+	  	child {
+  		node [vertex] {$C$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+	child {
+  		node [vertex] {$D$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to node {rotate $X$, rotate $X$} (b);
+
+\end{tikzpicture}
+\end{center}
+
+Finally, when a node's parent is the root, so it has no grandparent, we simply rotate up the normal way.
+
+Rotating a node to the root in this way is called splaying the node. Splaying seems too simple to lead to an amortized $O(\log{n})$ solution. To get a better idea of how splaying works, let's see what it does to a tree that looks like a linked list.
+
+\begin{center}
+\begin{tikzpicture}[very thick,sibling distance=15mm, auto]
+
+\node [vertex] (r) {$G$}
+		child {
+		node [vertex] {$F$}
+		child {
+		node [vertex] (r3) {$E$}
+		child {
+		node [vertex] {$D$}
+		child {
+		node [vertex] {$C$}
+		child {
+		node [vertex] {$B$}
+		child {
+		node [vertex] {$A$}
+		}
+		child [missing]
+		}
+		child [missing]
+		}
+		child [missing]
+		}
+		child [missing]
+		}
+		child [missing]
+		}
+		child [missing]
+;
+
+\node[vertex] [right=6cm of r] (r2) {$A$}
+child[missing]
+child {
+	node[vertex] {$F$}
+	child {
+		node[vertex] (r4) {$D$}
+		child {
+		node[vertex] {$B$}
+		child [missing]
+	child {
+		node[vertex] {$C$}
+	}
+	}
+	child {
+		node[vertex] {$E$}
+	}
+	}
+	child {
+		node[vertex] {$G$}
+	}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to node {splay $A$} (b);
+
+\end{tikzpicture}
+\end{center}
+
+Splaying here cuts the height of the tree in half -- a huge improvement. Splaying is not guaranteed to decrease the height of the tree, and it is possible for a sequence of splays to even result in a linked-list-like structure. However, given a number $m$ at least equal to the maximum number of nodes $n$ ever in the tree, \textit{any} sequence of $m$ splays runs in $O(m \log{n})$. Splaying is then $O(\log{n})$, amortized.
+
+Then, whenever we access a node, even in insertion and deletion, we splay that node to the top. This makes access, insert, and delete all $O(\log{n})$ amortized.
+
+Since splay trees need not satisfy a restrictive coloring, as red-black trees do, we have the freedom to completely change the structure of the tree at a whim. For this reason, we define the split and join functions for splay trees.
+
+Given two trees $S$ and $T$, such that every element in $S$ is less than every element in $T$, we \textit{join} $S$ and $T$ into one tree by splaying the largest element in $S$ and setting its right child to the root of $T$.
+
+Given a tree and a value $v$, we \textit{split} the tree in two by splaying the greatest element not greater than $v$ to the root and detaching the right subtree from the rest. This results in two trees, one containing all elements at most $v$, and the other containing all elements greater than $v$.
+
+Both of these operations are $O(\log{n})$. It is possible to implement insert and delete using split and join.
+
 \subsection{Treap}
-
-
 
 \section{Euler Tour Technique}
 
