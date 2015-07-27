@@ -54,37 +54,39 @@
 \BOOKMARK [2][-]{subsection.5.2.4}{Intersection}{section.5.2}% 54
 \BOOKMARK [1][-]{section.5.3}{Convex Hull}{chapter.5}% 55
 \BOOKMARK [0][-]{chapter.6}{Strings}{}% 56
-\BOOKMARK [1][-]{section.6.1}{Rabin-Karp}{chapter.6}% 57
-\BOOKMARK [1][-]{section.6.2}{Knuth-Morris-Pratt}{chapter.6}% 58
-\BOOKMARK [1][-]{section.6.3}{Aho-Corasick}{chapter.6}% 59
+\BOOKMARK [1][-]{section.6.1}{String Hashing}{chapter.6}% 57
+\BOOKMARK [1][-]{section.6.2}{Rabin-Karp}{chapter.6}% 58
+\BOOKMARK [1][-]{section.6.3}{Knuth-Morris-Pratt}{chapter.6}% 59
 \BOOKMARK [1][-]{section.6.4}{Trie}{chapter.6}% 60
-\BOOKMARK [1][-]{section.6.5}{Suffix Tree}{chapter.6}% 61
-\BOOKMARK [1][-]{section.6.6}{Suffix Array}{chapter.6}% 62
-\BOOKMARK [0][-]{chapter.7}{More Stuff}{}% 63
-\BOOKMARK [1][-]{section.7.1}{n Bucketing}{chapter.7}% 64
-\BOOKMARK [1][-]{section.7.2}{Segment Tree}{chapter.7}% 65
-\BOOKMARK [2][-]{subsection.7.2.1}{Fenwick Tree}{section.7.2}% 66
-\BOOKMARK [2][-]{subsection.7.2.2}{Lazy Propagation}{section.7.2}% 67
-\BOOKMARK [2][-]{subsection.7.2.3}{2D Segment Tree}{section.7.2}% 68
-\BOOKMARK [2][-]{subsection.7.2.4}{3D Segment Tree}{section.7.2}% 69
-\BOOKMARK [2][-]{subsection.7.2.5}{Persistent Segment Tree}{section.7.2}% 70
-\BOOKMARK [1][-]{section.7.3}{Queue with Minimum Query}{chapter.7}% 71
-\BOOKMARK [1][-]{section.7.4}{Balanced Binary Search Tree}{chapter.7}% 72
-\BOOKMARK [2][-]{subsection.7.4.1}{Tree Rotation}{section.7.4}% 73
-\BOOKMARK [2][-]{subsection.7.4.2}{Red-Black Tree}{section.7.4}% 74
-\BOOKMARK [2][-]{subsection.7.4.3}{Splay Tree}{section.7.4}% 75
-\BOOKMARK [2][-]{subsection.7.4.4}{Treap}{section.7.4}% 76
-\BOOKMARK [1][-]{section.7.5}{Euler Tour Technique}{chapter.7}% 77
-\BOOKMARK [1][-]{section.7.6}{2n Jump Pointers}{chapter.7}% 78
-\BOOKMARK [1][-]{section.7.7}{Fractional Cascading}{chapter.7}% 79
-\BOOKMARK [1][-]{section.7.8}{Heavy-Light Decomposition}{chapter.7}% 80
-\BOOKMARK [1][-]{section.7.9}{Link-Cut Tree}{chapter.7}% 81
-\BOOKMARK [1][-]{section.7.10}{Top Tree}{chapter.7}% 82
-\BOOKMARK [1][-]{section.7.11}{Link-Cut Cactus}{chapter.7}% 83
-\BOOKMARK [0][-]{chapter.8}{Math}{}% 84
-\BOOKMARK [1][-]{section.8.1}{Games}{chapter.8}% 85
-\BOOKMARK [1][-]{section.8.2}{Karatsuba}{chapter.8}% 86
-\BOOKMARK [1][-]{section.8.3}{Matrices}{chapter.8}% 87
-\BOOKMARK [1][-]{section.8.4}{Fast Fourier Transform}{chapter.8}% 88
-\BOOKMARK [2][-]{subsection.8.4.1}{Number Theoretic Transform}{section.8.4}% 89
-\BOOKMARK [1][-]{section.8.5}{Primes}{chapter.8}% 90
+\BOOKMARK [1][-]{section.6.5}{Suffix Data Structures}{chapter.6}% 61
+\BOOKMARK [2][-]{subsection.6.5.1}{Suffix Tree}{section.6.5}% 62
+\BOOKMARK [2][-]{subsection.6.5.2}{Suffix Array}{section.6.5}% 63
+\BOOKMARK [1][-]{section.6.6}{Aho-Corasick}{chapter.6}% 64
+\BOOKMARK [0][-]{chapter.7}{More Stuff}{}% 65
+\BOOKMARK [1][-]{section.7.1}{n Bucketing}{chapter.7}% 66
+\BOOKMARK [1][-]{section.7.2}{Segment Tree}{chapter.7}% 67
+\BOOKMARK [2][-]{subsection.7.2.1}{Fenwick Tree}{section.7.2}% 68
+\BOOKMARK [2][-]{subsection.7.2.2}{Lazy Propagation}{section.7.2}% 69
+\BOOKMARK [2][-]{subsection.7.2.3}{Higher Dimensions}{section.7.2}% 70
+\BOOKMARK [2][-]{subsection.7.2.4}{Persistent Segment Tree}{section.7.2}% 71
+\BOOKMARK [1][-]{section.7.3}{Queue with Minimum Query}{chapter.7}% 72
+\BOOKMARK [1][-]{section.7.4}{Balanced Binary Search Tree}{chapter.7}% 73
+\BOOKMARK [2][-]{subsection.7.4.1}{Tree Rotation}{section.7.4}% 74
+\BOOKMARK [2][-]{subsection.7.4.2}{Red-Black Tree}{section.7.4}% 75
+\BOOKMARK [2][-]{subsection.7.4.3}{Splay Tree}{section.7.4}% 76
+\BOOKMARK [2][-]{subsection.7.4.4}{Treap}{section.7.4}% 77
+\BOOKMARK [1][-]{section.7.5}{Euler Tour Technique}{chapter.7}% 78
+\BOOKMARK [2][-]{subsection.7.5.1}{Euler Tour Tree}{section.7.5}% 79
+\BOOKMARK [1][-]{section.7.6}{2n Jump Pointers}{chapter.7}% 80
+\BOOKMARK [1][-]{section.7.7}{Fractional Cascading}{chapter.7}% 81
+\BOOKMARK [1][-]{section.7.8}{Heavy-Light Decomposition}{chapter.7}% 82
+\BOOKMARK [1][-]{section.7.9}{Link-Cut Tree}{chapter.7}% 83
+\BOOKMARK [1][-]{section.7.10}{Top Tree}{chapter.7}% 84
+\BOOKMARK [1][-]{section.7.11}{Link-Cut Cactus}{chapter.7}% 85
+\BOOKMARK [0][-]{chapter.8}{Math}{}% 86
+\BOOKMARK [1][-]{section.8.1}{Games}{chapter.8}% 87
+\BOOKMARK [1][-]{section.8.2}{Karatsuba}{chapter.8}% 88
+\BOOKMARK [1][-]{section.8.3}{Matrices}{chapter.8}% 89
+\BOOKMARK [1][-]{section.8.4}{Fast Fourier Transform}{chapter.8}% 90
+\BOOKMARK [2][-]{subsection.8.4.1}{Number Theoretic Transform}{section.8.4}% 91
+\BOOKMARK [1][-]{section.8.5}{Primes}{chapter.8}% 92

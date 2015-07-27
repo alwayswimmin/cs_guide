@@ -105,6 +105,8 @@
  \addcontentsline{toc}{chapter}{#1}
 }
 
+\raggedbottom
+
 \begin{document}
 
 \maketitle
@@ -2324,19 +2326,23 @@ These essentially cover anything I would want to say in this chapter anyway, so 
 
 \chapter{Strings}
 
+\section{String Hashing}
+
 \section{Rabin-Karp}
 
 \section{Knuth-Morris-Pratt}
 
 \url{https://activities.tjhsst.edu/sct/lectures/1415/stringmatching_10_3_14.pdf}
 
-\section{Aho-Corasick}
-
 \section{Trie}
 
-\section{Suffix Tree}
+\section{Suffix Data Structures}
 
-\section{Suffix Array}
+\subsection{Suffix Tree}
+
+\subsection{Suffix Array}
+
+\section{Aho-Corasick}
 
 \chapter{More Stuff}
 
@@ -2901,7 +2907,7 @@ For this reason, while I used the concept of ``building up'' on top of our array
 
 \subsection{Fenwick Tree}
 
-A \textit{Fenwick tree}, or \textit{binary indexed tree (BIT)}, is simply a faster and easier to code segment tree when the operator in question has an inverse. Unfortunately, it's not at all intuitive, so bear with me at first and let the magic of the Fenwick tree reveal itself later. In fact, it is so magical that Richard Peng hates it. This is a fair sentiment, because it is rather gimmicky. The key idea is to compress the data stored within a segment tree in a crazy way that ends up having a really slick implementation using some bit operation tricks.
+A \textit{Fenwick tree}, or \textit{binary indexed tree (BIT)}, is simply a faster and easier to code segment tree when the operator in question has an inverse. Unfortunately, it's not at all intuitive, so bear with me at first and let the magic of the Fenwick tree reveal itself later. In fact, it is so magical that Richard Peng hates it because it is too gimmicky. The key idea is to compress the data stored within a segment tree in a crazy way that ends up having a really slick implementation using some bit operation tricks.
 
 As discussed earlier, the $+$ operator has an inverse, $-$. Therefore, there is an inherent redundancy, for example, in keeping track of the sum of the first $\frac{n}{2}$ elements, the sum of all $n$ elements, and the sum of the last $\frac{n}{2}$ elements, as we do in the segment tree. If we are given only $\sum_{k=1}^{n/2} a_k$ and $\sum_{k=1}^n a_k$, we can find $\sum_{k=n/2+1}^{n} a_k$ easily using subtraction.
 
@@ -3891,9 +3897,7 @@ $query(7,13)$ requires access to the nodes for the ranges $[7,8]$, $[9,12]$, and
 
 Now, the nodes that we need are all up to date, and we can perform our query. This process is necessary whenever we are performing an operation on an interval that intersects but does not contain the range associated with a lazy node. Since this can only happen for two such nodes (one at either end of the interval in question), both updating and querying change values of at most four nodes per level, so both operations are $O(\log{n})$.
 
-\subsection{2D Segment Tree}
-
-\subsection{3D Segment Tree}
+\subsection{Higher Dimensions}
 
 \subsection{Persistent Segment Tree}
 
@@ -4415,7 +4419,7 @@ We replace the node with its child and paint its child red.
 
 The remaining case is the node black with two black null children. We'll first replace the node with a null node $N$. Then, all paths passing through $N$ are one black node short compared to all other paths.
 
-We denote the parent of $N$ as $P$, its sibling $S$, and its sibling's children $C$ and $F$, such that $C$ is on the same side of $S$ as $N$ is of $P$, if they exist. We now describe a six-case balancing procedure on the black node $N$ that fixes our problem.
+We denote the parent of $N$ as $P$, its sibling $S$, and its sibling's children $C$ and $F$, such that $C$ is on the same side of $S$ as $N$ is of $P$, if they exist. That is, $C$ is the ``closer nephew'' child, while $F$ is the farther. We now describe a six-case balancing procedure on the black node $N$ that fixes our problem.
 
 \begin{enumerate}
 
@@ -4606,7 +4610,7 @@ child {
 \item
 $S$ is red.
 
-Then $P$ must be black. We rotate $S$ up and swap the colors of $P$ and $S$. The new sibling of $N$ is black, so this then reduces to one of cases 2, 3, or 4.
+Then $P$, $C$, and $F$ must be black. We rotate $S$ up and swap the colors of $P$ and $S$. $C$, the new sibling of $N$ is black, so this then reduces to one of cases 2, 3, or 4.
 
 \begin{center}
 \begin{tikzpicture}[very thick,
@@ -4777,7 +4781,7 @@ child {
 
 The standard rotation clearly does not suffice. Rotating a node to the root doesn't seem to change the depth of the tree. However, if we simply make one small change, magic happens. We'll use two compound rotations, and depending on the structure of the tree, we'll use a different one accordingly, to rotate a node to the root.
 
-When a node is a left child and its parent is a left child, or the node is a right child and its parent is a right child, we first rotate up the parent, and then rotate up the node.
+When a node is a left child and its parent is a left child, or the node is a right child and its parent is a right child, we first rotate up the parent, and then rotate up the node. This sequence of rotations is the only difference between splaying and rotating a node to the root using standard rotation.
 
 \begin{center}
 \begin{tikzpicture}[very thick,sibling distance=25mm, auto]
@@ -4851,7 +4855,7 @@ When a node is a left child and its parent is a left child, or the node is a rig
 		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
   	}
 			child {
-				node [vertex] {$X$}
+				node [vertex] {$X$} [sibling distance=15mm]
 				  	child {
   		node [vertex] {$B$} {
 		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
@@ -4963,7 +4967,7 @@ child {
 \end{tikzpicture}
 \end{center}
 
-Splaying here cuts the height of the tree in half -- a huge improvement. Splaying is not guaranteed to decrease the height of the tree, and it is possible for a sequence of splays to even result in a linked-list-like structure. However, given a number $m$ at least equal to the maximum number of nodes $n$ ever in the tree, \textit{any} sequence of $m$ splays runs in $O(m \log{n})$. Splaying is then $O(\log{n})$, amortized.
+Splaying here cuts the height of the tree in half -- a huge improvement. Splaying is not guaranteed to decrease the height of the tree, and it is possible for a sequence of splays to even result in a linked-list-like structure. However, given a number $m$ at least equal to the maximum number of nodes $n$ ever in the tree, \textit{any} sequence of $m$ splays runs in $O(m \log{n})$. Splaying is then $O(\log{n})$, amortized.\footnote{If you're curious to see the proof of this, a rather in depth explanation can be found here: \url{http://www.cs.cmu.edu/afs/cs/academic/class/15859-f05/www/documents/splay-trees.txt}}
 
 Then, whenever we access a node, even in insertion and deletion, we splay that node to the top. This makes access, insert, and delete all $O(\log{n})$ amortized.
 
@@ -4973,13 +4977,125 @@ Given two trees $S$ and $T$, such that every element in $S$ is less than every e
 
 Given a tree and a value $v$, we \textit{split} the tree in two by splaying the greatest element not greater than $v$ to the root and detaching the right subtree from the rest. This results in two trees, one containing all elements at most $v$, and the other containing all elements greater than $v$.
 
-Both of these operations are $O(\log{n})$. It is possible to implement insert and delete using split and join.
+Both of these operations are $O(\log{n})$ amortized. It is possible to implement insert and delete using split and join.
 
 \subsection{Treap}
 
 \section{Euler Tour Technique}
 
-The \textit{Euler tour technique} is a method of representing a tree as a list. The idea is a tree is uniquely determined by its DFS traversal order, both going down the tree and going up.
+The \textit{Euler tour technique} is a method of representing a tree as a list. The idea is a tree is uniquely determined by its DFS traversal order, going both down and up the tree. We'll keep track of the order in which we traverse the edges. Since each edge is traversed twice, each edge will appear in our list twice. We'll also name each edge by the child vertex in the parent-child pair.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level 1/.style={sibling distance=50mm}, level 2/.style={sibling distance=50mm}, level 3/.style={sibling distance=40mm}, level distance=3cm, auto]
+
+\node[vertex] (a) {$A$}
+child {
+	node[vertex] (b) {$B$} 
+	child {
+		node[vertex] (e) {$E$} 
+		child {
+			node[vertex] (h) {$H$} 
+			edge from parent node [swap] {$h$}
+		}
+		child {
+			node[vertex] (i) {$I$} 
+			edge from parent node {$i$}
+		}
+		edge from parent node {$e$}
+	}
+	edge from parent node [swap] {$b$}
+}
+child {
+	node[vertex] (c) {$C$}
+	edge from parent node {$c$}
+}
+child {
+	node[vertex] (d) {$D$} 
+	child {
+		node[vertex] (f) {$F$} 
+		edge from parent node [swap] {$f$}
+	}
+	child {
+		node[vertex] (g) {$G$} 
+		edge from parent node {$g$}
+	}
+	edge from parent node {$d$}
+};
+
+\path[->] (a) edge [bend right=20] node [swap] {1} (b);
+\path[->] (b) edge [bend right] node [swap] {2} (e) ;
+\path[->] (e) edge [bend right] node [swap] {3} (h) ;
+\path[->] (h) edge [bend right] node [swap] {4} (e) ;
+\path[->] (e) edge [bend right] node [swap] {5} (i) ;
+\path[->] (i) edge [bend right] node [swap] {6} (e) ;
+\path[->] (e) edge [bend right] node [swap] {7} (b) ;
+\path[->] (b) edge [bend right=20] node [swap] {8} (a) ;
+\path[->] (a) edge [bend right] node [swap] {9} (c) ;
+\path[->] (c) edge [bend right] node [swap] {10} (a) ;
+\path[->] (a) edge [bend right=20] node [swap] {11} (d) ;
+\path[->] (d) edge [bend right] node [swap] {12} (f) ;
+\path[->] (f) edge [bend right] node [swap] {13} (d) ;
+\path[->] (d) edge [bend right] node [swap] {14} (g) ;
+\path[->] (g) edge [bend right] node [swap] {15} (d) ;
+\path[->] (d) edge [bend right=20] node [swap] {16} (a);
+
+\end{tikzpicture}
+\end{center}
+
+The edge traversal order is then described by the ordered list below.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=16]
+  (array1)
+  {
+  					\strut $b$
+  \nodepart{two}	\strut $e$
+  \nodepart{three}	\strut $h$
+  \nodepart{four}	\strut $h$
+  \nodepart{five}	\strut $i$
+  \nodepart{six}	\strut $i$
+  \nodepart{seven}	\strut $e$
+  \nodepart{eight}	\strut $b$
+  \nodepart{nine}	\strut $c$
+  \nodepart{ten}	\strut $c$
+  \nodepart{eleven}	\strut $d$
+  \nodepart{twelve}	\strut $f$
+  \nodepart{thirteen}	\strut $f$
+  \nodepart{fourteen}	\strut $g$
+  \nodepart{fifteen}	\strut $g$
+  \nodepart{sixteen}	\strut $d$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array1.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+
+\subsection{Euler Tour Tree}
 
 \section{$2^n$ Jump Pointers}
 
