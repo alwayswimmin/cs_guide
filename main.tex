@@ -1629,7 +1629,7 @@ Finding the connected components of an undirected graph is a straightforward pro
 
 Really any kind of search method solves the undirected graph connected components problem. We could use recursion with a depth-first search. To avoid using the run-time stack, we could use a queue to perform a breadth-first search. Both of these run in $O(E+V)$ time. I would recommend in general to use the BFS.
 
-\subsection{Union-Find}
+\subsection{Union-Find (Disjoint Set Union)}
 
 The union-find data structure is another way for us to solve the connected components problem. Union-find is unique from the other search techniques in that it can process input as it is presented, edge by edge. This also means it is possible to add more edges at the end, therefore changing the graph, while still running quickly. An algorithm that works like this is an \textit{online algorithm}, while an algorithm that requires all the input data presented at the beginning is an \textit{offline algorithm}.
 
@@ -4971,11 +4971,11 @@ Splaying here cuts the height of the tree in half -- a huge improvement. Splayin
 
 Then, whenever we access a node, even in insertion and deletion, we splay that node to the top. This makes access, insert, and delete all $O(\log{n})$ amortized.
 
-Since splay trees need not satisfy a restrictive coloring, as red-black trees do, we have the freedom to completely change the structure of the tree at a whim. For this reason, we define the split and join functions for splay trees.
+Since splay trees need not satisfy a restrictive coloring, as red-black trees do, we have the freedom to completely change the structure of the tree at a whim. For this reason, we define the \textit{split} and \textit{join} functions for splay trees.
 
-Given two trees $S$ and $T$, such that every element in $S$ is less than every element in $T$, we \textit{join} $S$ and $T$ into one tree by splaying the largest element in $S$ and setting its right child to the root of $T$.
+Given two trees $S$ and $T$, such that every element in $S$ is less than every element in $T$, we join $S$ and $T$ into one tree by splaying the largest element in $S$ and setting its right child to the root of $T$.
 
-Given a tree and a value $v$, we \textit{split} the tree in two by splaying the greatest element not greater than $v$ to the root and detaching the right subtree from the rest. This results in two trees, one containing all elements at most $v$, and the other containing all elements greater than $v$.
+Given a tree and a value $v$, we split the tree in two by splaying the greatest element not greater than $v$ to the root and detaching the right subtree from the rest. This results in two trees, one containing all elements at most $v$, and the other containing all elements greater than $v$.
 
 Both of these operations are $O(\log{n})$ amortized. It is possible to implement insert and delete using split and join.
 
@@ -5070,22 +5070,22 @@ The edge traversal order is then described by the ordered list below.
 \node[myrect=16]
   (array1)
   {
-  					\strut $b$
-  \nodepart{two}	\strut $e$
-  \nodepart{three}	\strut $h$
-  \nodepart{four}	\strut $h$
-  \nodepart{five}	\strut $i$
-  \nodepart{six}	\strut $i$
-  \nodepart{seven}	\strut $e$
-  \nodepart{eight}	\strut $b$
-  \nodepart{nine}	\strut $c$
-  \nodepart{ten}	\strut $c$
-  \nodepart{eleven}	\strut $d$
-  \nodepart{twelve}	\strut $f$
-  \nodepart{thirteen}	\strut $f$
-  \nodepart{fourteen}	\strut $g$
-  \nodepart{fifteen}	\strut $g$
-  \nodepart{sixteen}	\strut $d$
+  					\strut $b_1$
+  \nodepart{two}	\strut $e_1$
+  \nodepart{three}	\strut $h_1$
+  \nodepart{four}	\strut $h_2$
+  \nodepart{five}	\strut $i_1$
+  \nodepart{six}	\strut $i_2$
+  \nodepart{seven}	\strut $e_2$
+  \nodepart{eight}	\strut $b_2$
+  \nodepart{nine}	\strut $c_1$
+  \nodepart{ten}	\strut $c_2$
+  \nodepart{eleven}	\strut $d_1$
+  \nodepart{twelve}	\strut $f_1$
+  \nodepart{thirteen}	\strut $f_2$
+  \nodepart{fourteen}	\strut $g_1$
+  \nodepart{fifteen}	\strut $g_2$
+  \nodepart{sixteen}	\strut $d_2$
   };
 \foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
   \node[below] at (array1.\Valor south) {\Valori};
@@ -5094,8 +5094,407 @@ The edge traversal order is then described by the ordered list below.
 }
 \end{center}
 
+We see a pattern in this list -- the subtree of a node is contained between the two edges representing that node in the list, inclusive. For example, from the first $e$ to the second $e$, the entire subtree of $E$ is contained within the range $[2,7]$.
 
 \subsection{Euler Tour Tree}
+
+The \textit{Euler tour tree} uses this idea. Because we see the relationship between the list and the subtrees of the tree, we'll just have the list store the vertex names. To complete this pattern for the subtree of $A$, which is the entire tree, we'll simply add that letter to the beginning and end of the list.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3.5ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=18]
+  (array1)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $E_1$
+  \nodepart{four}	\strut $H_1$
+  \nodepart{five}	\strut $H_2$
+  \nodepart{six}	\strut $I_1$
+  \nodepart{seven}	\strut $I_2$
+  \nodepart{eight}	\strut $E_2$
+  \nodepart{nine}	\strut $B_2$
+  \nodepart{ten}	\strut $C_1$
+  \nodepart{eleven}	\strut $C_2$
+  \nodepart{twelve}	\strut $D_1$
+  \nodepart{thirteen}	\strut $F_1$
+  \nodepart{fourteen}	\strut $F_2$
+  \nodepart{fifteen}	\strut $G_1$
+  \nodepart{sixteen}	\strut $G_2$
+  \nodepart{seventeen}	\strut $D_2$
+  \nodepart{eighteen}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen , seventeen , eighteen }
+  \node[below] at (array1.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+Now suppose we wanted to perform some operations on a forest, or collection of trees. The first operation is to \textit{find} the root of the tree containing a vertex $v$. The second is to \textit{link} the trees of two vertices $u$, $v$ together by making $v$ the parent of $u$. The third is to \textit{cut} the subtree of $v$ away from the rest of the tree by deleting the edge from $v$ to its parent.
+
+Note that, without the cut operation, this is simply union-find. However, because of the cut operation, we have to maintain the structure of the original forest, as otherwise we lose track of the actual parent of any given node.
+
+We see that all operations are not simply on a single vertex but on an entire subtree. However, if we look at what each of the operations does to the Euler tour lists representing our forest, find returns the first element in the list, link places one ordered list within another, and cut removes a large contiguous section of one ordered list.
+
+To cut $E$ from the tree, we need to split the list in two:
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=18]
+  (array1)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $E_1$
+  \nodepart{four}	\strut $H_1$
+  \nodepart{five}	\strut $H_2$
+  \nodepart{six}	\strut $I_1$
+  \nodepart{seven}	\strut $I_2$
+  \nodepart{eight}	\strut $E_2$
+  \nodepart{nine}	\strut $B_2$
+  \nodepart{ten}	\strut $C_1$
+  \nodepart{eleven}	\strut $C_2$
+  \nodepart{twelve}	\strut $D_1$
+  \nodepart{thirteen}	\strut $F_1$
+  \nodepart{fourteen}	\strut $F_2$
+  \nodepart{fifteen}	\strut $G_1$
+  \nodepart{sixteen}	\strut $G_2$
+  \nodepart{seventeen}	\strut $D_2$
+  \nodepart{eighteen}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen , seventeen , eighteen }
+  \node[below] at (array1.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+\node[myrect=2]
+  (array2)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two  }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\node[myrect=6, fill=mysalmon] [right=of array2]
+  (array3)
+  {	
+  					\strut $E_1$
+  \nodepart{two}	\strut $H_1$
+  \nodepart{three}	\strut $H_2$
+  \nodepart{four}	\strut $I_1$
+  \nodepart{five}	\strut $I_2$
+  \nodepart{six}	\strut $E_2$
+  };
+\foreach \Valor [count=\Valori from 3] in {one ,two ,three , four , five , six }
+  \node[below] at (array3.\Valor south) {\Valori};
+
+\node[myrect=10] [right=of array3]
+  (array4)
+  {
+  					\strut $B_2$
+  \nodepart{two}	\strut $C_1$
+  \nodepart{three}	\strut $C_2$
+  \nodepart{four}	\strut $D_1$
+  \nodepart{five}	\strut $F_1$
+  \nodepart{six}	\strut $F_2$
+  \nodepart{seven}	\strut $G_1$
+  \nodepart{eight}	\strut $G_2$
+  \nodepart{nine}	\strut $D_2$
+  \nodepart{ten}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 9] in {one ,two ,three , four , five , six , seven , eight , nine , ten }
+  \node[below] at (array4.\Valor south) {\Valori};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+\node[myrect=12]
+  (array5)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $B_2$
+  \nodepart{four}	\strut $C_1$
+  \nodepart{five}	\strut $C_2$
+  \nodepart{six}	\strut $D_1$
+  \nodepart{seven}	\strut $F_1$
+  \nodepart{eight}	\strut $F_2$
+  \nodepart{nine}	\strut $G_1$
+  \nodepart{ten}	\strut $G_2$
+  \nodepart{eleven}	\strut $D_2$
+  \nodepart{twelve}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve }
+  \node[below] at (array5.\Valor south) {\Valori};
+
+\node[myrect=6, fill=mysalmon] [right=of array5]
+  (array6)
+  {	
+  					\strut $E_1$
+  \nodepart{two}	\strut $H_1$
+  \nodepart{three}	\strut $H_2$
+  \nodepart{four}	\strut $I_1$
+  \nodepart{five}	\strut $I_2$
+  \nodepart{six}	\strut $E_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
+  \node[below] at (array6.\Valor south) {\Valori};
+\end{tikzpicture}
+\end{center}
+
+Let's see what happens when we link $E$ to $D$. We need to split the first list immediately after $D_1$.
+
+\begin{center}
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+\node[myrect=12]
+  (array5)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $B_2$
+  \nodepart{four}	\strut $C_1$
+  \nodepart{five}	\strut $C_2$
+  \nodepart{six}	\strut $D_1$
+  \nodepart{seven}	\strut $F_1$
+  \nodepart{eight}	\strut $F_2$
+  \nodepart{nine}	\strut $G_1$
+  \nodepart{ten}	\strut $G_2$
+  \nodepart{eleven}	\strut $D_2$
+  \nodepart{twelve}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve }
+  \node[below] at (array5.\Valor south) {\Valori};
+
+\node[myrect=6, fill=mysalmon] [right=of array5]
+  (array6)
+  {	
+  					\strut $E_1$
+  \nodepart{two}	\strut $H_1$
+  \nodepart{three}	\strut $H_2$
+  \nodepart{four}	\strut $I_1$
+  \nodepart{five}	\strut $I_2$
+  \nodepart{six}	\strut $E_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
+  \node[below] at (array6.\Valor south) {\Valori};
+\end{tikzpicture}
+
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+\node[myrect=6]
+  (array2)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $B_2$
+  \nodepart{four}	\strut $C_1$
+  \nodepart{five}	\strut $C_2$
+  \nodepart{six}	\strut $D_1$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\node[myrect=6] [right=of array2]
+  (array4)
+  {
+  	\strut $F_1$
+  \nodepart{two}	\strut $F_2$
+  \nodepart{three}	\strut $G_1$
+  \nodepart{four}	\strut $G_2$
+  \nodepart{five}	\strut $D_2$
+  \nodepart{six}	\strut $A_2$
+  };
+  
+  \node[myrect=6, fill=mysalmon] [right=of array4]
+  (array3)
+  {	
+  					\strut $E_1$
+  \nodepart{two}	\strut $H_1$
+  \nodepart{three}	\strut $H_2$
+  \nodepart{four}	\strut $I_1$
+  \nodepart{five}	\strut $I_2$
+  \nodepart{six}	\strut $E_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
+  \node[below] at (array3.\Valor south) {\Valori};
+\foreach \Valor [count=\Valori from 7] in {one ,two ,three , four , five , six }
+  \node[below] at (array4.\Valor south) {\Valori};
+\end{tikzpicture}
+
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=18]
+  (array1)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $B_2$
+  \nodepart{four}	\strut $C_1$
+  \nodepart{five}	\strut $C_2$
+  \nodepart{six}	\strut $D_1$
+  \nodepart{seven}	\strut $E_1$
+  \nodepart{eight}	\strut $H_1$
+  \nodepart{nine}	\strut $H_2$
+  \nodepart{ten}	\strut $I_1$
+  \nodepart{eleven}	\strut $I_2$
+  \nodepart{twelve}	\strut $E_2$
+  \nodepart{thirteen}	\strut $F_1$
+  \nodepart{fourteen}	\strut $F_2$
+  \nodepart{fifteen}	\strut $G_1$
+  \nodepart{sixteen}	\strut $G_2$
+  \nodepart{seventeen}	\strut $D_2$
+  \nodepart{eighteen}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen , seventeen , eighteen }
+  \node[below] at (array1.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+
+\end{center}
+
+We just learned about a data structure that maintains a set of ordered elements that can split and merge quickly. Splay trees can maintain an ordered list, and the split and join operations on splay trees can easily implement link and cut. Each tree of our forest is then represented by a splay tree maintaining that tree's Euler tour list, and we can support each of the three necessary operations in $O(\log{n})$ amortized time.
 
 \section{$2^n$ Jump Pointers}
 

@@ -33,7 +33,7 @@
 \contentsline {chapter}{\numberline {4}Graph Algorithms}{35}{chapter.4}
 \contentsline {section}{\numberline {4.1}Connected Components}{35}{section.4.1}
 \contentsline {subsection}{\numberline {4.1.1}Flood Fill}{36}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}Union-Find}{36}{subsection.4.1.2}
+\contentsline {subsection}{\numberline {4.1.2}Union-Find (Disjoint Set Union)}{36}{subsection.4.1.2}
 \contentsline {subsection}{\numberline {4.1.3}Tarjan}{38}{subsection.4.1.3}
 \contentsline {section}{\numberline {4.2}Shortest Path}{38}{section.4.2}
 \contentsline {subsection}{\numberline {4.2.1}Dijkstra}{38}{subsection.4.2.1}
@@ -84,17 +84,17 @@
 \contentsline {subsection}{\numberline {7.4.3}Splay Tree}{71}{subsection.7.4.3}
 \contentsline {subsection}{\numberline {7.4.4}Treap}{74}{subsection.7.4.4}
 \contentsline {section}{\numberline {7.5}Euler Tour Technique}{74}{section.7.5}
-\contentsline {subsection}{\numberline {7.5.1}Euler Tour Tree}{75}{subsection.7.5.1}
-\contentsline {section}{\numberline {7.6}$2^n$ Jump Pointers}{75}{section.7.6}
-\contentsline {section}{\numberline {7.7}Fractional Cascading}{75}{section.7.7}
-\contentsline {section}{\numberline {7.8}Heavy-Light Decomposition}{75}{section.7.8}
-\contentsline {section}{\numberline {7.9}Link-Cut Tree}{76}{section.7.9}
-\contentsline {section}{\numberline {7.10}Top Tree}{76}{section.7.10}
-\contentsline {section}{\numberline {7.11}Link-Cut Cactus}{76}{section.7.11}
-\contentsline {chapter}{\numberline {8}Math}{77}{chapter.8}
-\contentsline {section}{\numberline {8.1}Games}{77}{section.8.1}
-\contentsline {section}{\numberline {8.2}Karatsuba}{77}{section.8.2}
-\contentsline {section}{\numberline {8.3}Matrices}{77}{section.8.3}
-\contentsline {section}{\numberline {8.4}Fast Fourier Transform}{77}{section.8.4}
-\contentsline {subsection}{\numberline {8.4.1}Number Theoretic Transform}{77}{subsection.8.4.1}
-\contentsline {section}{\numberline {8.5}Primes}{77}{section.8.5}
+\contentsline {subsection}{\numberline {7.5.1}Euler Tour Tree}{74}{subsection.7.5.1}
+\contentsline {section}{\numberline {7.6}$2^n$ Jump Pointers}{76}{section.7.6}
+\contentsline {section}{\numberline {7.7}Fractional Cascading}{76}{section.7.7}
+\contentsline {section}{\numberline {7.8}Heavy-Light Decomposition}{76}{section.7.8}
+\contentsline {section}{\numberline {7.9}Link-Cut Tree}{77}{section.7.9}
+\contentsline {section}{\numberline {7.10}Top Tree}{77}{section.7.10}
+\contentsline {section}{\numberline {7.11}Link-Cut Cactus}{77}{section.7.11}
+\contentsline {chapter}{\numberline {8}Math}{79}{chapter.8}
+\contentsline {section}{\numberline {8.1}Games}{79}{section.8.1}
+\contentsline {section}{\numberline {8.2}Karatsuba}{79}{section.8.2}
+\contentsline {section}{\numberline {8.3}Matrices}{79}{section.8.3}
+\contentsline {section}{\numberline {8.4}Fast Fourier Transform}{79}{section.8.4}
+\contentsline {subsection}{\numberline {8.4.1}Number Theoretic Transform}{79}{subsection.8.4.1}
+\contentsline {section}{\numberline {8.5}Primes}{79}{section.8.5}

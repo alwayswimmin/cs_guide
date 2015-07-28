@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  27 JUL 2015 12:57
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  28 JUL 2015 19:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1914,41 +1914,41 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 2351.
 
 [53] [54] [55] [56] [57] [58] [59] [60] [61] [62] [63] [64] [65] [66] [67]
-[68] [69] [70] [71] [72] [73]
+[68] [69] [70] [71] [72] [73] [74]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 5100.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `superscript' on input line 5100.
+(hyperref)                removing `math shift' on input line 5499.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 5100.
+(hyperref)                removing `superscript' on input line 5499.
 
-[74] [75] [76]
-Chapter 8.
-[77
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 5499.
+
+[75] [76] [77] [78
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 5205.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 5205.
+Chapter 8.
+[79]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 5604.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 5604.
  (./guide.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 5205.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 5205.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 5604.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 5604.
 
 Package rerunfilecheck Info: File `guide.out' has not changed.
-(rerunfilecheck)             Checksum: 4A06138BBCAC6B5C90F3E4AFA0D3E8D8;5666.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 5205.
+(rerunfilecheck)             Checksum: 8EDF7CDBF9915BCB84269390696F0457;5689.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 5604.
  )
 (\end occurred when \iftrue on line 177 was incomplete) 
 Here is how much of TeX's memory you used:
- 36565 strings out of 493117
- 707619 string characters out of 6135433
- 954144 words of memory out of 5000000
- 38992 multiletter control sequences out of 15000+600000
- 22495 words of font info for 136 fonts, out of 8000000 for 9000
+ 36596 strings out of 493117
+ 708213 string characters out of 6135433
+ 955983 words of memory out of 5000000
+ 39019 multiletter control sequences out of 15000+600000
+ 22603 words of font info for 137 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  74i,18n,72p,10394b,1861s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2014
@@ -1973,10 +1973,10 @@ ublic/amsfonts/cm/cmti9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/pub
 lic/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/publ
 ic/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public
 /amsfonts/symbols/msbm10.pfb>
-Output written on guide.pdf (77 pages, 564006 bytes).
+Output written on guide.pdf (79 pages, 575097 bytes).
 PDF statistics:
- 1129 PDF objects out of 1200 (max. 8388607)
- 1017 compressed objects within 11 object streams
- 326 named destinations out of 1000 (max. 500000)
+ 1138 PDF objects out of 1200 (max. 8388607)
+ 1024 compressed objects within 11 object streams
+ 328 named destinations out of 1000 (max. 500000)
  24306 words of extra memory for PDF output out of 24883 (max. 10000000)
 
