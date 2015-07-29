@@ -3945,7 +3945,7 @@ The \textit{red-black tree} was an early development that represents the ``just 
 
 The \textit{splay tree} is a data structure that guarantees amortized logarithmic performance; this means that any single operation is not necessarily linear, but over \textit{any} sequence of length $m$ for $m \ge n$, the performance for all $m$ operations is $O(m \log{n})$. Though the proof of the splay tree's complexity is necessarily more complicated than the red-black tree's complexity, as it requires amortized analysis, coding the splay tree is much easier than coding the red-black tree. In addition, the splay tree grants us more flexibility than the red-black tree provides, allowing us to build more complicated structures like link-cut trees using splay trees.
 
-The \textit{treap} is a probabilistic data structure that combines the BST with a heap to usually create a balanced tree. Just as quicksort is not guaranteed to run in $O(n\log{n})$, so too does the treap not guarantee $O(\log{n})$ operation performance, but will usually result be logarithmic.
+The \textit{treap} is a probabilistic data structure that combines the BST with a heap to usually create a balanced tree. Just as quicksort is not guaranteed to run in $O(n\log{n})$, so too does the treap not guarantee $O(\log{n})$ operations, but will usually result in logarithmic performance.
 
 \subsection{Tree Rotation}
 
@@ -4732,12 +4732,12 @@ Thus the red-black tree supports standard binary search tree operations, all in 
 
 \subsection{Splay Tree}
 
-The idea behind a splay tree is to apply a sequence of rotations that rotate a node all the way up to the root. Along the way, we bring nodes on the path from the node to the root closer to the root. This process is called \textit{splaying} the node. Whenever we access, add, or delete a node, we'll splay it up to the root.
+Remember that rotating a node brings it one level closer to the root. The idea behind a splay tree is to apply a sequence of rotations that rotate a node all the way up to the root. The intuition for doing this is once we access a node, it is easy to perform other operations on it since it will simply be the root of the tree.
 
-Simply repeatedly rotating up the tree doesn't exactly do the task. Consider a tree that looks liked a linked list, and repeatedly accessing each end.
+It is not at all clear that rotating nodes to the root will somehow improve the average performance of the tree. That's because rotating the normal way doesn't! To improve the performance of the tree, we expect that our balancing procedure tends to decrease the height of the tree. Unfortunately, simply repeatedly rotating a node up the tree doesn't exactly do that task. Consider a tree that looks liked a linked list, and rotating the nodes in the order $A$, $B$, $C$, $D$, as shown in the diagram. The height of the tree remains linear in magnitude, as at its smallest stage the tree is around $\frac{n}{2}$ in height, so accessing elements remains $O(n)$ on average.
 
 \begin{center}
-\begin{tikzpicture}[very thick,level 2/.style={sibling distance=35mm}, level 3/.style={sibling distance=35mm/2}, level 4/.style={sibling distance=35mm/3}, level 1/.style={sibling distance=50mm}, auto]
+\begin{tikzpicture}[very thick,sibling distance=15mm, auto]
 
 \node [vertex] (r) {$D$}
 child {
@@ -4753,7 +4753,7 @@ child {
 }
 child[missing];
 
-\node[vertex] [right=4cm of r] (r2) {$A$}
+\node[vertex] [right=0.8cm of r] (r2) {$A$}
 child[missing]
 child {
 	node [vertex] (r4) {$D$}
@@ -4767,19 +4767,65 @@ child {
 		child[missing]
 };
 
-\coordinate[right=of r3] (a);
-\coordinate[left=of r4] (b);
+\node[vertex] [right=2.8cm of r2] (r6) {$B$}
+child {
+	node [vertex] (r5) {$A$}
+}
+child {
+	node [vertex] (r7) {$D$}
+		child {
+			node[vertex] {$C$}
+		}
+		child[missing]
+};
 
-\coordinate[below=of a] (c);
-\coordinate[below=of b] (d);
+\node [vertex] [right=2.8 of r6] (r8) {$C$}
+child {
+			node [vertex] (r9) {$B$}
+				child {
+					node[vertex] {$A$}
+				}
+				child[missing]
+}
+child{
+	node [vertex] (r10) {$D$}
+};
 
-\draw[->] (a) to node {access $A$, $O(n)$} ($(b) + (-1.5cm, 0cm)$);
-\draw[->] ($(d) + (-1.5cm, 0cm)$) to node {access $D$, $O(n)$} (c);
+\node [vertex] [right=2.8cm of r8] (r11) {$D$}
+child {
+	node [vertex] (r12) {$C$}
+		child {
+			node [vertex] {$B$}
+				child {
+					node[vertex] {$A$}
+				}
+				child[missing]
+		}
+		child[missing]
+}
+child[missing];
+
+\coordinate[right=0.25cm of r3] (a);
+\coordinate[left=0.25cm of r4] (b);
+\coordinate[right=0.25cm of r4] (c);
+\coordinate[left=0.25cm of r5] (d);
+\coordinate[right=0.25cm of r7] (e);
+\coordinate[left=0.25cm of r9] (f);
+\coordinate[right=0.25cm of r10] (g);
+\coordinate[left=0.25cm of r12] (h);
+
+\draw[->] (a) to node {rot. $A$} (b);
+
+\draw[->] (c) to node {rot. $B$} (d);
+
+\draw[->] (e) to node {rot. $C$} (f);
+
+\draw[->] (g) to node {rot. $D$} (h);
 
 \end{tikzpicture}
 \end{center}
 
-The standard rotation clearly does not suffice. Rotating a node to the root doesn't seem to change the depth of the tree. However, if we simply make one small change, magic happens. We'll use two compound rotations, and depending on the structure of the tree, we'll use a different one accordingly, to rotate a node to the root.
+As discussed earlier, simply repeatedly applying the standard rotation clearly is not guaranteed to reduce the height of the tree on average. However, if we simply make one small change, magic happens. The trick of the splay tree is to rotate a node to the root in such a way that the tree has a tendency to decrease in height. We'll use two compound rotations, and depending on the structure of the tree, we'll use a different one accordingly, to rotate a node to the root.
 
 When a node is a left child and its parent is a left child, or the node is a right child and its parent is a right child, we first rotate up the parent, and then rotate up the node. This sequence of rotations is the only difference between splaying and rotating a node to the root using standard rotation.
 
@@ -4842,7 +4888,7 @@ child {
 \end{tikzpicture}
 \end{center}
 
-When a node is a left child and its parent is a left child, or the node is a right child and its parent is a right child, we rotate the node up twice.
+When a node is a left child and its parent is a right child, or the node is a right child and its parent is a left child, we rotate the node up twice, the normal way.
 
 \begin{center}
 \begin{tikzpicture}[very thick, auto]
@@ -4905,7 +4951,7 @@ child {
 
 Finally, when a node's parent is the root, so it has no grandparent, we simply rotate up the normal way.
 
-Rotating a node to the root in this way is called splaying the node. Splaying seems too simple to lead to an amortized $O(\log{n})$ solution. To get a better idea of how splaying works, let's see what it does to a tree that looks like a linked list.
+Rotating a node to the root in this way is called \textit{splaying} the node. Thus, splaying a node brings it to the root of the tree. Splaying seems too simple to lead to an amortized $O(\log{n})$ solution. To get a better idea of how splaying works, let's see what it does to a tree that looks like a linked list.
 
 \begin{center}
 \begin{tikzpicture}[very thick,sibling distance=15mm, auto]
@@ -4971,13 +5017,19 @@ Splaying here cuts the height of the tree in half -- a huge improvement. Splayin
 
 Then, whenever we access a node, even in insertion and deletion, we splay that node to the top. This makes access, insert, and delete all $O(\log{n})$ amortized.
 
-Since splay trees need not satisfy a restrictive coloring, as red-black trees do, we have the freedom to completely change the structure of the tree at a whim. For this reason, we define the \textit{split} and \textit{join} functions for splay trees.
+Since splay trees need not satisfy a restrictive coloring, as red-black trees do, we have the freedom to completely change the structure of the tree at a whim. Recall how tedious the casework was to simply add or remove one node at a time in a red-black tree. Because the splay tree is simply a normal binary search tree that rotates nodes up upon access, we can detach an entire subtree from the tree and not worry about any properties of our tree no longer being satisfied.
 
-Given two trees $S$ and $T$, such that every element in $S$ is less than every element in $T$, we join $S$ and $T$ into one tree by splaying the largest element in $S$ and setting its right child to the root of $T$.
+For this reason, we define the \textit{split} and \textit{join} functions for splay trees.
+
+Given two trees $S$ and $T$, such that every element in $S$ is less than every element in $T$, we join $S$ and $T$ into one tree by splaying the largest element in $S$, so that the root, which is the largest element has no right child. Then, we set its right child to the root of $T$, resulting in a single tree with elements from both $S$ and $T$.
 
 Given a tree and a value $v$, we split the tree in two by splaying the greatest element not greater than $v$ to the root and detaching the right subtree from the rest. This results in two trees, one containing all elements at most $v$, and the other containing all elements greater than $v$.
 
 Both of these operations are $O(\log{n})$ amortized. It is possible to implement insert and delete using split and join.
+
+Since a binary search tree stores an ordered set, it is incredibly useful for storing a dynamic list of elements where the length can change and elements need to be added or removed from any point in the list, not just the beginning or the end. Splay trees are incredibly useful because of the split and join operations, as they allow us to remove consecutive elements from the list represented by our tree.
+
+For example, to remove elements indexed in the range $[i, j]$, we split at index $i$ and split at index $j+1$ to get three splay trees, one representing $[1, i-1]$, another $[i,j]$, and the last $[j+1,n]$. We can then merge the first and third trees together, to get two trees, one representing $[i,j]$ and the other representing the original list with $[i,j]$ removed. A similar procedure can insert a list within another list as as contiguous block. Both of these operations can be completed in $O(\log{n})$ amortized using a splay tree.
 
 \subsection{Treap}
 

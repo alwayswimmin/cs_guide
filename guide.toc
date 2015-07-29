@@ -84,7 +84,7 @@
 \contentsline {subsection}{\numberline {7.4.3}Splay Tree}{71}{subsection.7.4.3}
 \contentsline {subsection}{\numberline {7.4.4}Treap}{74}{subsection.7.4.4}
 \contentsline {section}{\numberline {7.5}Euler Tour Technique}{74}{section.7.5}
-\contentsline {subsection}{\numberline {7.5.1}Euler Tour Tree}{74}{subsection.7.5.1}
+\contentsline {subsection}{\numberline {7.5.1}Euler Tour Tree}{75}{subsection.7.5.1}
 \contentsline {section}{\numberline {7.6}$2^n$ Jump Pointers}{76}{section.7.6}
 \contentsline {section}{\numberline {7.7}Fractional Cascading}{76}{section.7.7}
 \contentsline {section}{\numberline {7.8}Heavy-Light Decomposition}{76}{section.7.8}
