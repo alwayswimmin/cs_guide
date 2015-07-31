@@ -5021,7 +5021,7 @@ Since splay trees need not satisfy a restrictive coloring, as red-black trees do
 
 For this reason, we define the \textit{split} and \textit{join} functions for splay trees.
 
-Given two trees $S$ and $T$, such that every element in $S$ is less than every element in $T$, we join $S$ and $T$ into one tree by splaying the largest element in $S$, so that the root, which is the largest element has no right child. Then, we set its right child to the root of $T$, resulting in a single tree with elements from both $S$ and $T$.
+Given two trees $S$ and $T$, such that every element in $S$ is less than every element in $T$, we join $S$ and $T$ into one tree by splaying the largest element in $S$, so that the root, which is now the largest element, has no right child. Then, we set its right child to the root of $T$, resulting in a single tree with elements from both $S$ and $T$.
 
 Given a tree and a value $v$, we split the tree in two by splaying the greatest element not greater than $v$ to the root and detaching the right subtree from the rest. This results in two trees, one containing all elements at most $v$, and the other containing all elements greater than $v$.
 
@@ -5035,7 +5035,7 @@ For example, to remove elements indexed in the range $[i, j]$, we split at index
 
 \section{Euler Tour Technique}
 
-The \textit{Euler tour technique} is a method of representing a tree as a list. The idea is a tree is uniquely determined by its DFS traversal order, going both down and up the tree. We'll keep track of the order in which we traverse the edges. Since each edge is traversed twice, each edge will appear in our list twice. We'll also name each edge by the child vertex in the parent-child pair.
+The \textit{Euler tour technique} is a method of representing a tree (not necessarily binary) as a list. The idea is that a tree is uniquely determined by its DFS traversal order, going both down and up the tree. We'll keep track of the order in which we traverse the edges. Since each edge is traversed twice, each edge will appear in our list twice. We'll also name each edge by the child vertex in the parent-child pair.
 
 \begin{center}
 \begin{tikzpicture}[very thick,level 1/.style={sibling distance=50mm}, level 2/.style={sibling distance=50mm}, level 3/.style={sibling distance=40mm}, level distance=3cm, auto]
