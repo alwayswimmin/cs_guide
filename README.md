@@ -20,5 +20,7 @@ pdflatex -jobname=guide main.tex
 Contact Me
 --------------
 Samuel Hsiang
+
 Thomas Jefferson High School for Science and Technology
+
 samuel.c.hsiang@gmail.com
