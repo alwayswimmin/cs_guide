@@ -1234,7 +1234,7 @@ A Map is simply an extension of a Set. It stores a mapping that takes a key to a
 
 \begin{mylstlisting}
 Map<String, String> email = new TreeMap<String, String>();
-m.put("Samuel Hsiang", "samuel.c.hsiang@gmail.com");
+email.put("Samuel Hsiang", "samuel.c.hsiang@gmail.com");
 \end{mylstlisting}
 
 The keys of a Map form a Set, though the Values need not be unique.
@@ -1244,6 +1244,9 @@ The TreeMap is the Map variant of the TreeSet; similarly, the HashMap is the Map
 All useful Set functions have a Map counterpart. The following additional functions are of use.
 
 \begin{itemize}
+
+\item
+\texttt{String get(Object k)} -- return the value assigned to \texttt{k}.
 
 \item
 \texttt{Set<String> keySet()} -- returns the set of keys.
