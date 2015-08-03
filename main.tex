@@ -65,10 +65,6 @@
     }
 }
 
-\title{Crash Course Coding Companion}
-\author{Samuel Hsiang}
-\date{July 2015}
-
 \lstset{language=Java}
  
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -108,6 +104,10 @@
 \raggedbottom
 
 \begin{document}
+
+\title{Crash Course Coding Companion}
+\author{Samuel Hsiang \\ Thomas Jefferson High School for Science and Technology \\ \href{mailto:samuel.c.hsiang@gmail.com}{\texttt{\textup{samuel.c.hsiang@gmail.com}}} }
+\date{\today}
 
 \maketitle
 
@@ -1801,8 +1801,6 @@ $C$, determine the number of neighborhoods and the number of cows in the largest
 
 Tarjan's algorithm for strongly connected components
 
-Strongly connected components are a reasonably advanced topic, and they are explicitly banned on IOI. Feel free to skip this section for now.
-
 \section{Shortest Path}
 
 A classic. Assign nonnegative weights to each of the edges, where the weight of the edge $(u,v)$ represents the distance from $u$ to $v$. This graph can be either directed or undirected.
@@ -2216,7 +2214,7 @@ tree.
 
 An \textit{Eulerian tour} of a graph is a path that traverses every edge exactly once. If the tour ends exactly where it started, it is called an \textit{Eulerian circuit}. A graph has an Eulerian circuit if it is connected and every vertex has even degree. A graph has an Eulerian path if it is connected and all vertices but exactly two have even degrees. The mathematical proofs for these graph properties hinge on the idea that removing a cycle from the graph maintains the Eulerian property. We construct an Eulerian tour by appealing to this idea.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Eulerian Tour}
 \begin{algorithmic}
 \Function{FindTour}{$v$}
@@ -2252,11 +2250,26 @@ Given $N$ ($2 \le N \le 15$), find the minimum length sequence of cows such that
 
 \section{Maximum Flow}
 
-We are given a directed connected graph with weighted edges, a source node, and a sink node. Each edge weight represents the maximum capacity of that edge in the ``flow." For every node besides the source and the sink node, total flow in is equal to total flow out. Our goal is to maximize total flow from source to sink.
+We are given a directed graph with weighted edges, a source node, and a sink node. A \textit{flow} is sent from the source to the sink. Each edge weight represents the maximum capacity of that edge. For every node besides the source and the sink node, total flow in is equal to total flow out. We can think of a flow network as a series of pipes through which water travels from an entrance to an exit in the network. The edge capacities represent pipe thickness. At any node, the total rate at which water enters the node must equal the total rate at which it exits the node, and along any path, the rate at which water flows is bottlenecked by the thinnest pipe.
 
-A natural approach to ``solving'' this problem would be to use the greedy algorithm:
+More formally, for a graph $G(V,E)$, where $c(u,v)$ represents the capacity of the edge from $u$ to $v$, the flow $f(u,v)$ from a source $s$ to a sink $t$ satisfies
 
-Find a path from the source to the sink with the maximum flow; that is, the path with the largest capacity of the minimum of the edges along this path. ``Send flow" along this path from the source to the sink by decreasing each edge along this path by the capacity of the path. We repeat, and this is guaranteed to terminate since on any given move, we ``remove" an edge.
+\begin{align*}
+f(u,v) &\le c(u,v) \forall (u,v) \in E \\
+f(u,v) &= -f(v,u) \forall (u,v) \in E \\
+\sum_{v \in V} f(u,v) &= 0 \forall u \in V \setminus \{s,t\} \\
+\sum_{v \in V} f(s,v) &= \sum_{v \in V} f(v,t) = f,
+\end{align*}
+
+where $f$ represents the total flow from the source to the sink.
+
+A \textit{maximum flow} is one that maximizes the total flow $f$ from $s$ to $t$, or in our example, maximizes the rate at which water can flow through our network.
+
+We'll also define the residual capacity $c_f(u,v) = c(u,v) - f(u,v)$. Note that $c_f(u,v) \ge 0$ by the conditions imposed on $f$. The residual capacity of an edge represents how much capacity is left after a certain amount of flow has already been sent. We therefore have the residual graph $G_f(V,E_f)$, where $E_f$ is the graph of residual edges, or all edges $(u,v) \in V^2$ satisfying $c_f(u,v) > 0$.
+
+A natural approach to ``solving'' this problem would be to simply greedily add flow.
+
+Find a path from the source to the sink in which all the edges have positive weight in the residual graph. Send flow along this path; that is, find the max flow across this path, which is the minimum weight of any edge on this particular path. Call this value $cap$. Then subtract $cap$ from the residual capacity of every edge in the path. We repeat, and this is guaranteed to terminate since on any given move, we remove an edge from our residual graph.
 
 What is wrong with our greedy approach? Consider the following graph:
 
@@ -2274,23 +2287,138 @@ What is wrong with our greedy approach? Consider the following graph:
 \end{tikzpicture}
 \end{center}
 
-The max flow from vertex 1 to vertex 4 is 3, but greedy gives only 2.
+The max flow from vertex 1 to vertex 4 is 3, but greedy gives only 2. This is because the best possible single path from the source to the sink may not be included the best possible overall flow.
 
 \subsection{Ford-Fulkerson}
 
-Find a path from the source to the sink in which all the edges have positive weight. Find the max flow across this path, which is the minimum weight of any edge on this particular path. Call this value $cap$. Then subtract $cap$ from the weight of every edge along the path and \textit{increment the reverse edge} (the edge connecting the same two vertices but running in the opposite direction) by $cap$.
+We somehow need a way to fix the inclusion of any suboptimal paths in our greedy approach, or to ``send flow back'' in case we sent it through a suboptimal path. We do this by introducing the \textit{reverse edge} to our residual graph.
 
-The difference between this algorithm and the greedy approach from earlier is that the paths we now allow may run along a reverse path, essentially undoing any suboptimal flow from earlier. These more general paths are called \textit{augmenting paths}.
+Find a path from the source to the sink in which all the edges have positive weight in the residual graph. Find the max flow across this path, which is the minimum weight of any edge on this particular path. Call this value $cap$. Then subtract $cap$ from the residual capacity of every edge along the path and \textit{increment the residual capacity of the reverse edge} (the edge connecting the same two vertices but running in the opposite direction) by $cap$. We call this operation on the path \textit{augmenting the path}. We simply choose an augmenting path until no such paths exist.
 
-This algorithm is guaranteed to terminate for graphs with integral weights. However, it is not guaranteed to terminate for graphs with non-integral capacities. For graphs with integral weights, the run time is $O(Ef)$, where $f$ is the maximum flow and $E$ is the number of edges. In practice, run time tends to be much faster since the algorithm still greedily adds the most flow it can at each step.
+\begin{algorithm}[H]
+\caption{Ford-Fulkerson}
+\begin{algorithmic}
+\Function{AugmentPath}{path $p=\{v_i\}_{i=1}^m$, where $(v_i,v_{i+1}) \in E_f$, $v_1=s$, $v_m=t$}
+\State $cap \gets \min_{i=1}^{m-1}(c(v_i,v_{i+1}))$
+\For{$i \equiv 1, m-1$}
+	\State $f(v_i,v_{i+1}) \gets f(v_i,v_{i+1}) + cap$
+	\State $c_f(v_i,v_{i+1}) \gets c_f(v_i,v_{i+1}) + cap$
+	\State $f(v_{i+1},v_i) \gets f(v_{i+1},v_i) - cap$
+	\State $c_f(v_{i+1},v_i) \gets c_f(v_{i+1},v_i) + cap$
+	\Comment incrementing reverse edge
+\EndFor
+\EndFunction
+\Function{MaxFlow}{$G(V,E)$, $s,t \in V$}
+	\ForAll{$(u,v) \in V^2$}
+		\State $f(u,v) \gets 0$
+		\State $c_f(u,v) \gets c(u,v)$
+	\EndFor
+	\State $f \gets 0$
+	\While{$\exists p=\{v_i\}_{i=1}^m$, where $(v_i,v_{i+1}) \in E_f$, $v_1=s$, $v_m=t$}
+		\State $cap \gets \min_{i=1}^{m-1}(c(v_i,v_{i+1}))$
+		\State $f \gets f + cap$
+		\State \Call{AugmentPath}{$p$}
+	\EndWhile
+	\Return $f$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+The difference between this algorithm and the greedy approach from earlier is that the paths we now allow may run along a reverse path, essentially undoing any suboptimal flow from earlier. These more general paths in our residual graph are called \textit{augmenting paths}.
+
+This algorithm is guaranteed to terminate for graphs with integral weights. Its performance is bounded by $O(Ef)$, where $f$ is the maximum flow and $E$ is the number of edges, as finding a path from $s$ to $t$ takes $O(E)$ and increments the total flow $f$ by at least 1. The concept of removing edges can't be used to produce a stricter bound because while an edge in one direction may be removed from the residual graph, doing so creates an edge in the other direction.
+
+In its crudest form, Ford-Fulkerson does not specify on which path to push flow if multiple paths exist. It simply states that as long as such a path exists, push flow onto it. In addition to being slow, Ford-Fulkerson, as it is stated, is not guaranteed to terminate for graphs with non-integral capacities. In fact, it might not even converge to the maximum flow for irrational capacities. However, these problems can be fixed by simply specifying how the algorithm chooses the next path on which to push flow. Nonetheless, the Ford-Fulkerson algorithm is formulated beautifully mathematically and such is useful from a math perspective, as we will see with the Max-Flow Min-Cut Theorem.
 
 \subsection{Edmonds-Karp}
 
-Edmonds-Karp is a slight refinement of Ford-Fulkerson.
+Edmonds-Karp is a refinement of Ford-Fulkerson. As stated earlier, Ford-Fulkerson is limited by not specifying on which path to push flow. Edmonds-Karp fixes this by simply choosing the augmenting path of shortest unweighted length. This can be done easily using a BFS.
+
+\begin{algorithm}[H]
+\caption{Edmonds-Karp}
+\begin{algorithmic}
+\Function{ChoosePath}{$G_f(V,E_f)$, $s,t \in V$}
+	\Comment{BFS}
+	\State $visited(v)$ denotes $v$ has been added to queue
+	\State $prev(v)$ denotes vertex preceding $v$ in BFS
+	\State push $s$ on queue $q$
+	\State $visited(s) \gets 1$
+	\While{$q$ is not empty}
+		\State $u \gets $ top of $q$
+		\ForAll{neighbors $v$ of $u$ in $G_f$ where $visited(v)=0$}
+			\State push $v$ on $q$
+			\State $visited(v) \gets 1$
+			\State $prev(v) \gets u$
+		\EndFor
+	\EndWhile
+	\State pointer $curr \gets t$
+	\While{$curr \not= s$}
+		\State add $curr$ to beginning of path $p$
+		\State $curr \gets prev(curr)$
+	\EndWhile
+	\State add $s$ to beginning of $p$
+	\State \Return $p$
+\EndFunction
+\Function{MaxFlow}{$G(V,E)$, $s,t \in V$}
+	\ForAll{$(u,v) \in V^2$}
+		\State $f(u,v) \gets 0$
+		\State $c_f(u,v) \gets c(u,v)$
+	\EndFor
+	\State $f \gets 0$
+	\While{$t$ can be reached from $s$}
+		\State $p \gets \Call{ChoosePath}{G_f,s,t}$
+		\State $cap \gets \min_{i=1}^{m-1}(c(v_i,v_{i+1}))$
+		\State $f \gets f + cap$
+		\State \Call{AugmentPath}{$p$}
+	\EndWhile
+	\Return $f$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+The BFS is clearly $O(E)$. To complete our analysis, we must somehow bound the number of times we need to perform the BFS. To do this, we'll look at what pushing flow on a path does to our residual graph; in particular, how it affects our BFS traversal tree. Note that each vertex is on some level $i$ in the BFS tree, characterized by the distance from the source $s$. For example, $L_0 = \{s\}$, $L_1$ contains all the neighbors of $s$, $L_2$ contains neighbors of neighbors not in $L_0$ or $L_1$, and so on.
+
+We first claim that the level of any vertex in the graph is nondecreasing following an augment on a path $p$. If the augment saturates an edge, it may remove it from $G_f$, which cannot decrease the distance of any vertex from $s$. If the augment creates an edge $e=(u,v)$, that means we sent flow from $v$ to $u$ on the path $p$. Therefore, if $v$ was originally level $i$, $u$ must have been level $i+1$. The level of $u$ does not change by adding $(u,v)$, and the level of $v$ can either be $i$ or $i+2$, depending on whether edge $(v,u)$ was deleted in the process. Either way, the level of all vertices is nondecreasing.
+
+Now consider the bottleneck edge $e=(u,v)$ of an augmenting path $p$, where the level of $u$ is $i$ and the level of $v$ is $i+1$. The push operation deletes the edge $e$, but the level of $v$ must stay at least $i+1$. Now for the edge $e$ to reappear in the graph $G_f$, flow must have been sent on the reverse edge $e'=(v,u)$ on some augmenting path $p'$. But on path $p'$, $u$ comes after $v$, which must be at least level $i+1$. Therefore, $u$ must be at least level $i$. But since the maximum level of a node that is connected to $s$ is $V-1$, an edge $e$ can only be chosen as the bottleneck edge $\frac{V}{2}$ times, or $O(V)$.
+
+There are $E$ edges, each of which can be the bottleneck edge for $O(V)$ different augmenting paths, each of which takes $O(E)$ to process. Therefore, the Edmonds-Karp algorithm runs in $O(VE^2)$.
+
+\subsection{Max-Flow Min-Cut Theorem}
+
+On a graph $G(V,E)$, an \textit{s-t cut} $C=(S,T)$ splits the partitions $V$ into $S$ and $T$ satisfying $s \in S$ and $t \in T$. The \textit{cut-set} of $C$ is the set of edges $\{(u,v) \in E : u \in S, v \in T\}$. The \textit{capacity} of an s-t cut is given by
+
+\[c(S,T) = \sum_{(u,v) \in S \times T}c(u,v).\]
+
+A \textit{minimum cut} is an s-t cut that minimizes $c(S,T)$.
+
+A cut represents a set of edges that, once removed, separates $s$ from $t$. A minimum cut is therefore a set of edges that does this but minimizes the total capacity of the edges necessary to disconnect $s$ from $t$.
+
+The max-flow min-cut theorem states that the maximum value of any s-t flow is equal to the minimum capacity of any s-t cut.
+
+First, the capacity of any cut must be at least the total flow. This is true by contradiction. Any path from $s$ to $t$ has an edge in the cut-set, so therefore any flow from $s$ to $t$ is upper bounded by the capacity of the cut. Therefore, we need only construct one flow and one cut such that the capacity of the cut is equal to the flow.
+
+We consider the residual graph $G_f$ produced at the completion of the Ford-Fulkerson augmenting path algorithm, which will terminate for some choice of paths; for example, by Edmonds-Karp. Let the set $S$ be all nodes reachable from $s$ and $T$ be $V \setminus S$. We wish to show that $C=(S,T)$ is a cut satisfying $f=c(S,T)=\sum_{(u,v) \in S \times T} c(u,v)$. This is true when the following is satisfied:
+
+\begin{enumerate}
+
+\item
+All edges $(u,v) \in S \times T$ are fully saturated by the flow. That is, $c_f(u,v) = 0$.
+
+\item
+All reverse edges $(v, u) \in T \times S$ have zero flow. That is, $f(v,u) = 0$, or $c_f(v,u) = c(v,u)$.
+
+\end{enumerate}
+
+The first condition is true by the way we constructed $S$ and $T$, as if there existed a $(u,v)$ where $c_f(u,v) > 0$, then $v$ is accessible to $s$ and ought to have been in $S$.
+
+The second condition is true by the way the Ford-Fulkerson algorithm constructed reverse edges. If net flow was sent from $v$ to $u$, then a reverse edge was constructed from $u$ to $v$, so again, $v$ is accessible to $s$, which is a contradiction.
+
+Therefore, we have the flow
+\[f=\sum_{(u,v) \in S \times T} c(u,v) - \sum_{(v,u) \in T \times S} 0 = c(S,T),\]
+so we constructed a flow and a cut such that the flow $f$ is equal to the cut capacity $c(S,T)$, and we are done.
 
 \subsection{Push-Relabel}
-
-\subsection{Max-Flow Min-Cut}
 
 \chapter{Computational Geometry}
 
@@ -2298,9 +2426,9 @@ For actual geometry problems, and not graph theory problems hiding in the plane.
 
 I'm too lazy to actually write this section right now so here are some useful links from the USACO Training Pages.
 
-\url{https://www.dropbox.com/s/nqzk63bjby1iaq9/Computational%20Geometry.pdf?dl=0}
+\url{https://www.dropbox.com/s/nqzk63bjby1iaq9/Computational\%20Geometry.pdf?dl=0}
 
-\url{https://www.dropbox.com/s/ykf65dk6sefb6zk/2-D%20Convex%20Hull.pdf?dl=0}
+\url{https://www.dropbox.com/s/ykf65dk6sefb6zk/2-D\%20Convex\%20Hull.pdf?dl=0}
 
 These essentially cover anything I would want to say in this chapter anyway, so I'll likely fill this chapter out last.
 
