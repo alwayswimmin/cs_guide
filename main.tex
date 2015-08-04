@@ -1,4 +1,7 @@
 \documentclass[11pt]{book}
+
+\usepackage{emptypage}
+
 \usepackage[utf8x]{inputenc}
 \usepackage{listings}
 \usepackage{hyperref}
@@ -95,15 +98,11 @@
    frame=single,#1}}
   {\endminipage}
 
-\newcommand\intro[1]{
- \section*{#1}
- \markboth{\MakeUppercase{#1}}{}
- \addcontentsline{toc}{chapter}{#1}
-}
-
 \raggedbottom
 
 \begin{document}
+
+\frontmatter
 
 \title{Crash Course Coding Companion}
 \author{Samuel Hsiang \\ Thomas Jefferson High School for Science and Technology \\ \href{mailto:samuel.c.hsiang@gmail.com}{\texttt{\textup{samuel.c.hsiang@gmail.com}}} }
@@ -111,18 +110,37 @@
 
 \maketitle
 
+\newpage
+~\vfill
+\thispagestyle{empty}
+
+% \noindent Copyright \copyright\ 2013 John Smith\\ % Copyright notice
+
+\noindent Feel free to use this material however you see fit.
+
+% \noindent \textsc{Published by Publisher}\\ % Publisher
+
+% \noindent \textsc{book-website.com}\\ % URL
+
+\noindent \url{https://www.dropbox.com/s/z2lur71042pjaet/guide.pdf?dl=0}
+
+\noindent \url{https://github.com/alwayswimmin/cs_guide}
+
+% \noindent Licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License (the ``License''). You may not use this file except in compliance with the License. You may obtain a copy of the License at \url{http://creativecommons.org/licenses/by-nc/3.0}. Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \textsc{``as is'' basis, without warranties or conditions of any kind}, either express or implied. See the License for the specific language governing permissions and limitations under the License.\\ % License information
+
+% \noindent \textit{First printing, March 2013} % Printing/edition date
+
+\newpage
 \thispagestyle{empty}
 \par\vspace*{.35\textheight}{\centering For Rachel \par}
 
-\tableofcontents
-
-\eject
-
-\intro{Acknowledgements}
+\chapter{Acknowledgements}
 
 I am truly thankful for all my school teachers and USACO instructors, who gave me the knowledge which I wish to pass on through this text. I am grateful for Shankar and Ross, Evan, and Dr. Osborne, who separately made me believe such a task was possible. I must credit Valerie, for she was the one who drove me to really dive into and come to love computer science. Alex and Shwetark were extremely helpful with writing this text, as they provided input and helped me find problems to supplement my work. Finally, I'd like to thank all my friends and avid programmers in the TJ community. This is for all of you, and I hope you find it useful in your studies.
 
-\intro{Preface}
+\tableofcontents
+
+\chapter{Preface}
 
 You might have heard of \href{https://www.dropbox.com/s/z8qdndxmrmxqsam/Napkin.pdf?oref=e&n=97419869}{Evan Chen's Napkin}, a resource for olympiad math people that serves as a jumping point into higher mathematics.\footnote{In fact, I'm using Evan's template right now. Thanks Evan!} The Wikipedia articles on higher mathematics are just so dense in vocabulary and deter many smart young students from learning them before they are formally taught in a course in college. Evan's Napkin aims to provide that background necessary to leap right in.
 
@@ -145,6 +163,8 @@ It is essential that you understand the motivations and the complexities behind 
 It is recommended actually code up each data structure with its most important functions or algorithm as you learn them. I truly believe the only way to build a solid foundation is to code. Do not become reliant on using the standard library (\texttt{java.util}, for instance) without understanding how the tool you are using works.
 
 \end{itemize}
+
+\mainmatter
 
 \chapter{Fundamentals}
 
@@ -2261,12 +2281,12 @@ More formally, for a graph $G(V,E)$, where $c(u,v)$ represents the capacity of t
 f(u,v) &\le c(u,v) \forall (u,v) \in E \\
 f(u,v) &= -f(v,u) \forall (u,v) \in E \\
 \sum_{v \in V} f(u,v) &= 0 \forall u \in V \setminus \{s,t\} \\
-\sum_{v \in V} f(s,v) &= \sum_{v \in V} f(v,t) = f,
+\sum_{v \in V} f(s,v) &= \sum_{v \in V} f(v,t) = |f|,
 \end{align*}
 
-where $f$ represents the total flow from the source to the sink.
+where $|f|$ represents the total flow from the source to the sink.
 
-A \textit{maximum flow} is one that maximizes the total flow $f$ from $s$ to $t$, or in our example, maximizes the rate at which water can flow through our network.
+A \textit{maximum flow} is one that maximizes the total flow $|f|$ from $s$ to $t$, or in our example, maximizes the rate at which water can flow through our network.
 
 We'll also define the residual capacity $c_f(u,v) = c(u,v) - f(u,v)$. Note that $c_f(u,v) \ge 0$ by the conditions imposed on $f$. The residual capacity of an edge represents how much capacity is left after a certain amount of flow has already been sent. We therefore have the residual graph $G_f(V,E_f)$, where $E_f$ is the graph of residual edges, or all edges $(u,v) \in V^2$ satisfying $c_f(u,v) > 0$.
 
@@ -2302,7 +2322,7 @@ Find a path from the source to the sink in which all the edges have positive wei
 \caption{Ford-Fulkerson}
 \begin{algorithmic}
 \Function{AugmentPath}{path $p=\{v_i\}_{i=1}^m$, where $(v_i,v_{i+1}) \in E_f$, $v_1=s$, $v_m=t$}
-\State $cap \gets \min_{i=1}^{m-1}(c(v_i,v_{i+1}))$
+\State $cap \gets \min_{i=1}^{m-1}(c_f(v_i,v_{i+1}))$
 \For{$i \equiv 1, m-1$}
 	\State $f(v_i,v_{i+1}) \gets f(v_i,v_{i+1}) + cap$
 	\State $c_f(v_i,v_{i+1}) \gets c_f(v_i,v_{i+1}) + cap$
@@ -2316,20 +2336,20 @@ Find a path from the source to the sink in which all the edges have positive wei
 		\State $f(u,v) \gets 0$
 		\State $c_f(u,v) \gets c(u,v)$
 	\EndFor
-	\State $f \gets 0$
+	\State $|f| \gets 0$
 	\While{$\exists p=\{v_i\}_{i=1}^m$, where $(v_i,v_{i+1}) \in E_f$, $v_1=s$, $v_m=t$}
-		\State $cap \gets \min_{i=1}^{m-1}(c(v_i,v_{i+1}))$
-		\State $f \gets f + cap$
+		\State $cap \gets \min_{i=1}^{m-1}(c_f(v_i,v_{i+1}))$
+		\State $|f| \gets |f| + cap$
 		\State \Call{AugmentPath}{$p$}
 	\EndWhile
-	\Return $f$
+	\Return $|f|$
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
 
 The difference between this algorithm and the greedy approach from earlier is that the paths we now allow may run along a reverse path, essentially undoing any suboptimal flow from earlier. These more general paths in our residual graph are called \textit{augmenting paths}.
 
-This algorithm is guaranteed to terminate for graphs with integral weights. Its performance is bounded by $O(Ef)$, where $f$ is the maximum flow and $E$ is the number of edges, as finding a path from $s$ to $t$ takes $O(E)$ and increments the total flow $f$ by at least 1. The concept of removing edges can't be used to produce a stricter bound because while an edge in one direction may be removed from the residual graph, doing so creates an edge in the other direction.
+This algorithm is guaranteed to terminate for graphs with integral weights. Its performance is bounded by $O(E|f|)$, where $|f|$ is the maximum flow and $E$ is the number of edges, as finding a path from $s$ to $t$ takes $O(E)$ and increments the total flow $|f|$ by at least 1. The concept of removing edges can't be used to produce a stricter bound because while an edge in one direction may be removed from the residual graph, doing so creates an edge in the other direction.
 
 In its crudest form, Ford-Fulkerson does not specify on which path to push flow if multiple paths exist. It simply states that as long as such a path exists, push flow onto it. In addition to being slow, Ford-Fulkerson, as it is stated, is not guaranteed to terminate for graphs with non-integral capacities. In fact, it might not even converge to the maximum flow for irrational capacities. However, these problems can be fixed by simply specifying how the algorithm chooses the next path on which to push flow. Nonetheless, the Ford-Fulkerson algorithm is formulated beautifully mathematically and such is useful from a math perspective, as we will see with the Max-Flow Min-Cut Theorem.
 
@@ -2367,14 +2387,14 @@ Edmonds-Karp is a refinement of Ford-Fulkerson. As stated earlier, Ford-Fulkerso
 		\State $f(u,v) \gets 0$
 		\State $c_f(u,v) \gets c(u,v)$
 	\EndFor
-	\State $f \gets 0$
+	\State $|f| \gets 0$
 	\While{$t$ can be reached from $s$}
 		\State $p \gets \Call{ChoosePath}{G_f,s,t}$
-		\State $cap \gets \min_{i=1}^{m-1}(c(v_i,v_{i+1}))$
-		\State $f \gets f + cap$
+		\State $cap \gets \min_{i=1}^{m-1}(c_f(v_i,v_{i+1}))$
+		\State $|f| \gets |f| + cap$
 		\State \Call{AugmentPath}{$p$}
 	\EndWhile
-	\Return $f$
+	\Return $|f|$
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
@@ -2401,7 +2421,7 @@ The max-flow min-cut theorem states that the maximum value of any s-t flow is eq
 
 First, the capacity of any cut must be at least the total flow. This is true by contradiction. Any path from $s$ to $t$ has an edge in the cut-set, so therefore any flow from $s$ to $t$ is upper bounded by the capacity of the cut. Therefore, we need only construct one flow and one cut such that the capacity of the cut is equal to the flow.
 
-We consider the residual graph $G_f$ produced at the completion of the Ford-Fulkerson augmenting path algorithm, which will terminate for some choice of paths; for example, by Edmonds-Karp. Let the set $S$ be all nodes reachable from $s$ and $T$ be $V \setminus S$. We wish to show that $C=(S,T)$ is a cut satisfying $f=c(S,T)=\sum_{(u,v) \in S \times T} c(u,v)$. This is true when the following is satisfied:
+We consider the residual graph $G_f$ produced at the completion of the Ford-Fulkerson augmenting path algorithm, which will terminate for some choice of paths; for example, by Edmonds-Karp. Let the set $S$ be all nodes reachable from $s$ and $T$ be $V \setminus S$. We wish to show that $C=(S,T)$ is a cut satisfying $|f|=c(S,T)=\sum_{(u,v) \in S \times T} c(u,v)$. This is true when the following is satisfied:
 
 \begin{enumerate}
 
@@ -2418,10 +2438,80 @@ The first condition is true by the way we constructed $S$ and $T$, as if there e
 The second condition is true by the way the Ford-Fulkerson algorithm constructed reverse edges. If net flow was sent from $v$ to $u$, then a reverse edge was constructed from $u$ to $v$, so again, $v$ is accessible to $s$, which is a contradiction.
 
 Therefore, we have the flow
-\[f=\sum_{(u,v) \in S \times T} c(u,v) - \sum_{(v,u) \in T \times S} 0 = c(S,T),\]
-so we constructed a flow and a cut such that the flow $f$ is equal to the cut capacity $c(S,T)$, and we are done.
+\[|f|=\sum_{(u,v) \in S \times T} c(u,v) - \sum_{(v,u) \in T \times S} 0 = c(S,T),\]
+so we constructed a flow and a cut such that the flow $|f|$ is equal to the cut capacity $c(S,T)$, and we are done.
 
 \subsection{Push-Relabel}
+
+Unfortunately, even the much-improved bounds of the $O(VE^2)$ Edmonds-Karp are admittedly bad. While the push-relabel method for solving the max flow problem does not have the fastest theoretical bounds, two of its implementations in $O(V^3)$ and $O(V^2\sqrt{E})$ are regarded as the benchmark for network flow.
+
+Ford-Fulkerson and its variants all deal with global augmentations of paths from $s$ to $t$. Push-relabel takes a different perspective, introducing the concept of a \textit{preflow} and a \textit{height} to make local optimizations that ultimately result in the maximum flow.
+
+A preflow maintains the same properties as a flow but modifies the conservation of flow condition. Instead of total flow in equalling total flow out, flow in must be at least, and therefore can exceed, flow out. We denote the difference between flow in and flow out as the \textit{excess} $e(v)$.
+
+\begin{align*}
+f(u,v) &\le c(u,v) \forall (u,v) \in E \\
+f(u,v) &= -f(v,u) \forall (u,v) \in E \\
+e(v) &= \sum_{u \in V} f(u,v) \ge 0 \forall v \in V \setminus \{s\} \\
+e(s) &= \infty.
+\end{align*}
+
+We call a vertex $v \in V \setminus \{s, t\}$ \textit{active} if $e(v) > 0$.
+
+Since a preflow need not be conserved, it simply represents flow out of $s$, but does not necessarily represent flow into $t$.
+
+The definitions of the residual capacity $c_f(u,v)$, edge set $E_f$, and graph $G_f$ are the same as they were defined before, except with a preflow $f$ instead of a normal flow.
+
+\begin{algorithm}[H]
+\caption{Push-Relabel (Generic)}
+\begin{algorithmic}
+\Function{Push}{edge $(u,v)$}
+	\If{$e(u) > 0$ and $h(u) = h(v) + 1$}
+		\Comment push condition
+		\State $\delta \gets \min(e(u), c_f(u,v))$
+		\Comment $c_f(u,v) = c(u,v) - f(u,v)$
+		\State $f(u,v) \gets f(u,v) + \delta$
+		\State $f(v,u) \gets f(v,y) - \delta$
+		\State $e(u) \gets e(u) - \delta$
+		\State $e(v) \gets e(v) + \delta$
+	\EndIf
+\EndFunction
+\Function{Relabel}{vertex $v$}
+	\If{$e(u)>0$ and $h(u) \le h(v) \forall v | (u,v) \in E_f$}
+		\Comment relabel condition
+		\State $h(u) \gets \min_{v | (u,v) \in E_f}(h(v)) + 1$
+		\Comment $(u,v) \in E_f \iff c_f(u,v) = c(u,v) - f(u,v) > 0$
+	\EndIf
+\EndFunction
+\Function{MaxFlow}{$G(V,E)$, $s,t \in V$}
+	\ForAll{$v \in V \setminus \{s\}$}
+		\Comment initialize excess
+		\State $e(v) \gets 0$
+	\EndFor
+	\State $e(s) \gets \infty$
+	\ForAll{$(u,v) \in V^2$}
+		\Comment initialize preflow
+		\State $f(u,v) \gets 0$
+	\EndFor
+	\ForAll{neighbors $v \not= s$ of $s$}
+		\Comment push preflow to all neighbors of $s$
+		\State $f(s,v) \gets c(s,v)$
+		\State $f(v,s) \gets -c(s,v)$
+		\State $e(v) \gets c(s,v)$
+	\EndFor
+	\ForAll{$v \in V \setminus \{s\}$}
+		\Comment preflow now has valid height function; initialize height
+		\State $h(v) \gets 0$
+	\EndFor
+	\State $h(s) \gets |V|$
+	\While{we can still \Call{Push}{} or \Call{Relabel}{}}
+		\State \Call{Push}{} or \Call{Relabel}{}
+	\EndWhile
+	\State \Return $e(t)$
+	\Comment $e(t)=|f|$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 \chapter{Computational Geometry}
 
@@ -5783,6 +5873,10 @@ Beautiful.
 \subsection{Number Theoretic Transform}
 
 \section{Primes}
+
+\appendix
+
+\listofalgorithms
 
 \end{document}
 
