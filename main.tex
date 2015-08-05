@@ -2349,13 +2349,13 @@ Find a path from the source to the sink in which all the edges have positive wei
 
 The difference between this algorithm and the greedy approach from earlier is that the paths we now allow may run along a reverse path, essentially undoing any suboptimal flow from earlier. These more general paths in our residual graph are called \textit{augmenting paths}.
 
-This algorithm is guaranteed to terminate for graphs with integral weights. Its performance is bounded by $O(E|f|)$, where $|f|$ is the maximum flow and $E$ is the number of edges, as finding a path from $s$ to $t$ takes $O(E)$ and increments the total flow $|f|$ by at least 1. The concept of removing edges can't be used to produce a stricter bound because while an edge in one direction may be removed from the residual graph, doing so creates an edge in the other direction.
+This algorithm is guaranteed to terminate for graphs with integral weights. Its performance is bounded by $O(Ef)$, where $f$ is the maximum flow and $E$ is the number of edges, as finding a path from $s$ to $t$ takes $O(E)$ and increments the total flow $f$ by at least 1. The concept of removing edges can't be used to produce a stricter bound because while an edge in one direction may be removed from the residual graph, doing so creates an edge in the other direction.
 
 In its crudest form, Ford-Fulkerson does not specify on which path to push flow if multiple paths exist. It simply states that as long as such a path exists, push flow onto it. In addition to being slow, Ford-Fulkerson, as it is stated, is not guaranteed to terminate for graphs with non-integral capacities. In fact, it might not even converge to the maximum flow for irrational capacities. However, these problems can be fixed by simply specifying how the algorithm chooses the next path on which to push flow. Nonetheless, the Ford-Fulkerson algorithm is formulated beautifully mathematically and such is useful from a math perspective, as we will see with the Max-Flow Min-Cut Theorem.
 
 \subsection{Edmonds-Karp}
 
-Edmonds-Karp is a refinement of Ford-Fulkerson. As stated earlier, Ford-Fulkerson is limited by not specifying on which path to push flow. Edmonds-Karp fixes this by simply choosing the augmenting path of shortest unweighted length. This can be done easily using a BFS.
+Edmonds-Karp is a refinement of Ford-Fulkerson. As stated earlier, Ford-Fulkerson is limited by not specifying on which path to push flow. There are many algorithms that resolve this issue in different ways; Edmonds-Karp fixes this by simply choosing the augmenting path of shortest unweighted length. This can be done easily using a BFS.
 
 \begin{algorithm}[H]
 \caption{Edmonds-Karp}
@@ -2452,15 +2452,65 @@ A preflow maintains the same properties as a flow but modifies the conservation 
 \begin{align*}
 f(u,v) &\le c(u,v) \forall (u,v) \in E \\
 f(u,v) &= -f(v,u) \forall (u,v) \in E \\
-e(v) &= \sum_{u \in V} f(u,v) \ge 0 \forall v \in V \setminus \{s\} \\
+e(v) = \sum_{u \in V} f(u,v) &\ge 0 \forall v \in V \setminus \{s\} \\
 e(s) &= \infty.
 \end{align*}
 
-We call a vertex $v \in V \setminus \{s, t\}$ \textit{active} if $e(v) > 0$.
-
-Since a preflow need not be conserved, it simply represents flow out of $s$, but does not necessarily represent flow into $t$.
-
 The definitions of the residual capacity $c_f(u,v)$, edge set $E_f$, and graph $G_f$ are the same as they were defined before, except with a preflow $f$ instead of a normal flow.
+
+We call a vertex $v \in V \setminus \{s, t\}$ \textit{active} if $e(v) > 0$. Therefore, a vertex besides the source or sink is active if more flows into the vertex than flows out. $s$ and $t$ are \textit{never} active. A preflow with no active vertices is simply a flow, at which point the excess of the sink $e(t)$ represents the value $|f|$ of the flow.
+
+We can \textit{push} flow from a node $u$ to a node $v$ by moving as much of the excess $e(u)$ to $v$ as the capacity of the edge $c_f(u,v)$ will allow.
+
+\begin{algorithmic}
+\Function{Push}{edge $(u,v)$}
+	\State $\delta \gets \min(e(u), c_f(u,v))$
+	\Comment $c_f(u,v) = c(u,v) - f(u,v)$
+	\State $f(u,v) \gets f(u,v) + \delta$
+	\State $f(v,u) \gets f(v,y) - \delta$
+	\State $e(u) \gets e(u) - \delta$
+	\State $e(v) \gets e(v) + \delta$
+\EndFunction
+\end{algorithmic}
+
+The idea of the push-relabel algorithm is to first push as much preflow as possible through local optimizations in the direction the sink. When a node can no longer push flow to the sink, it pushes the excess back towards the source to turn the preflow into a flow.
+
+However, the difficulty here lies in establishing this sense of ``direction'' from the source to the sink. Remember that we simply push preflow along a single edge in the graph at a time, not along a whole path. Moving flow from the source to the sink along a path that goes from the source to the sink is easy; moving flow from the source to the sink through local pushes without the knowledge of the graph structure as a whole is indeed a much harder problem.
+
+To resolve this issue, we introduce a \textit{label} to each of the nodes. The label $h(u)$ represents the ``height'' of $u$. In real life, water flows from higher to lower ground. We want $s$ to represent that high ground and $t$ to represent the low ground. As we push preflow from $s$ to $t$, vertices along the way represent height values between those of $s$ and $t$. However, eventually we have to push preflow back to handle both excesses in flow and suboptimal previous pushes, \`{a} la Ford-Fulkerson, but this contradicts the concept of height as we can't flow both downhill and uphill. Therefore, we'll need to be able to \textit{relabel} a node, changing the height $h(u)$ to something that allows preflow to flow back towards $s$. We will relabel $h$ in a systematic way that allows us to direct the preflow through the graph.
+
+For this labeling to be useful for us, we'll need to impose some more constraints that must be satisfied no matter how we change the graph $G_f$ or the height function $h$.
+
+\begin{align*}
+h(u) &\le h(v) + 1 \forall (u,v) \in E_f \\
+h(s) &= |V| \\
+h(t) &= 0.
+\end{align*}
+
+What does this mean? For our algorithm, we can push preflow along the edge from $u$ to $v$ only if $c_f(u,v) > 0$ and $h(u) > h(v)$, so $h(u) = h(v) + 1$. We call such an edge $(u,v) \in E_f$ \textit{admissible}. Furthermore, for all vertices $v$ that can reach $t$ in $E_f$, $h(v)$ represents the lower bound for the length of any unweighted path from $v$ to $t$ in $G_f$, and for all vertices that cannot reach $t$, then $h(v)-|V|$ is a lower bound for the unweighted distance from $s$ to $v$.
+
+$t$ will always represent the lowest node, so $h(t)=0$ is a natural constraint. We'll first set the preflow values of all vertices $v$ that can be immediately reached from $s$ to $c(s,v)$, saturating all the out-edges of $s$. For any vertex $v$ from which $t$ can be reached, $h(v)$ represents the lower bound of the unweighted distance to $t$ from $v$ in the residual graph.
+
+We want $h(s)$ to be a number large enough that will indicate that $s$ has been disconnected to $t$, as we have already sent as much preflow possible from $s$ in the direction of $t$ by saturating all outgoing edges. Therefore, setting $h(s)=|V|$ is also natural. Since $h(s)$ represents the lower bound of the distance from $s$ to $t$ in $G_f$, and there are no paths from $s$ to $t$ in the residual graph, $|V|$ is a natural choice, since the longest possible path is $|V|-1$.
+
+Furthermore, we don't want any preflow sent back to $s$ from a vertex $v$ unless it is impossible to send any more preflow from $v$ to $t$. If preflow is pushed from $v$ to $s$, then $h(v) = |V| + 1$. If there existed a path $v$ to $t$ such that every edge is admissible, the path must have $|V| + 2$ vertices. This is true because for any two consecutive vertices $v_i,v_{i+1}$ in the path, $h(v_i) = h(v_{i+1}) + 1$, but no path can have $|V|+2$ distinct vertices.
+
+This leads to the fact that the only nodes that can possibly continue to contribute to the final flow are active vertices $v$ for which $h(v) < |V|$. A node with height at least $|V|$ does not have a valid path to $t$, and a node that is not active doesn't have any excess flow to push.
+
+Now that I've explained the general idea behind the labeling constraints, it's time to actually describe what our relabeling process is. At first, the labels of all vertices besides the source start at 0. We only relabel a node $v$ if it is active (therefore, it has excess flow it needs to push; $e(u) > 0$) but has no admissible out-edges in $G_f$ (so it has no adjacent vertex on which it can push that excess flow). If a node has no admissible out-edges in $G_f$, every neighbor of $u$ has a height label at least equal to $h(u)$. When we relabel a node, we always then \textit{increase} the value of $h(u)$ to the least value where it can push flow onto another node.
+
+\begin{algorithmic}
+\Function{Relabel}{vertex $u$}
+		\State $h(u) \gets \min_{v | (u,v) \in E_f}(h(v)) + 1$
+		\Comment $(u,v) \in E_f \iff c_f(u,v) = c(u,v) - f(u,v) > 0$
+\EndFunction
+\end{algorithmic}
+
+Since we take the minimum height of all neighbors in the graph, we first try adjusting the height of $u$ so that we can push flow from $u$ to its neighbors that can possibly still reach $t$; that is, neighbors $v$ satisfying $h(v) < |V|$. Once we try all these neighbors, we then increase the height of $u$ to begin to push flow back towards $s$. We can always find such an edge, as any preflow pushed onto $u$ must have also incremented the reverse edge from $u$ back towards $s$.
+
+Note that neither pushing on a admissible edge nor relabeling a vertex with no admissible out-edges changes the fact that $h$ remains a valid labeling function.
+
+The generic push-relabel algorithm simply pushes and relabels vertices until there are no active vertices and the preflow becomes a flow. This algorithm works because throughout the process, $h$ remained a valid height function, and at the end, the preflow was converted into a flow. Since $h(s) = |V|$ and $h(t) = 0$, there is no augmenting path from $s$ to $t$, so our flow is maximal.
 
 \begin{algorithm}[H]
 \caption{Push-Relabel (Generic)}
@@ -2476,8 +2526,8 @@ The definitions of the residual capacity $c_f(u,v)$, edge set $E_f$, and graph $
 		\State $e(v) \gets e(v) + \delta$
 	\EndIf
 \EndFunction
-\Function{Relabel}{vertex $v$}
-	\If{$e(u)>0$ and $h(u) \le h(v) \forall v | (u,v) \in E_f$}
+\Function{Relabel}{vertex $u$}
+	\If{$u \not= s,t$ and $e(u)>0$ and $h(u) \le h(v) \forall v | (u,v) \in E_f$}
 		\Comment relabel condition
 		\State $h(u) \gets \min_{v | (u,v) \in E_f}(h(v)) + 1$
 		\Comment $(u,v) \in E_f \iff c_f(u,v) = c(u,v) - f(u,v) > 0$
@@ -2494,7 +2544,7 @@ The definitions of the residual capacity $c_f(u,v)$, edge set $E_f$, and graph $
 		\State $f(u,v) \gets 0$
 	\EndFor
 	\ForAll{neighbors $v \not= s$ of $s$}
-		\Comment push preflow to all neighbors of $s$
+		\Comment saturate edges to all neighbors of $s$
 		\State $f(s,v) \gets c(s,v)$
 		\State $f(v,s) \gets -c(s,v)$
 		\State $e(v) \gets c(s,v)$
