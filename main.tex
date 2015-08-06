@@ -116,7 +116,7 @@
 
 % \noindent Copyright \copyright\ 2013 John Smith\\ % Copyright notice
 
-\noindent Feel free to use this material however you see fit.
+\noindent Copyright, publishing, and licensing information should go here. I don't have anything fancy like that. It is of my (na\"{i}ve, privileged teenager) belief that knowledge should be free and easily accessible to ambitious high schoolers, but it is paramount to respect intellectual property and someone else's work. I respectfully ask that you use this material to its fullest potential, however you like, provided it doesn't completely butcher the philosophy with which I embarked on this project.
 
 % \noindent \textsc{Published by Publisher}\\ % Publisher
 
@@ -245,7 +245,7 @@ ArrayList<Integer> al = new ArrayList<Integer>();
 \end{verbatim}
 This means that \texttt{al} is an ArrayList of Integers. We can only add Integers into the ArrayList, and anything removed from the ArrayList is guaranteed to be an Integer. I don't think the beginning programmer needs to know how to necessarily code a class that supports generics. However, you are going to use the standard library, so you should know how to use a class that does support generics. I think standard classes are relatively straightforward to use but can be annoying to actually implement.
 
-\textbf{For simplicity, all data structures will store Strings.}
+\textit{For simplicity, all data structures in this chapter will store Strings.}
 
 \section{List}
 
@@ -1250,7 +1250,7 @@ However, one problem quickly arises. Two Strings may map to the same index in th
 
 \section{Map}
 
-A Map is simply an extension of a Set. It stores a mapping that takes a key to a value. Map is a Java Interface. Generics for Maps therefore have two arguments. Consider the following Map from Strings to Integers.
+A Map is simply an extension of a Set. It stores a mapping that takes a key to a value. Map is a Java Interface. Generics for Maps therefore have two arguments. Consider the following Map from Strings to Strings.
 
 \begin{mylstlisting}
 Map<String, String> email = new TreeMap<String, String>();
@@ -1571,6 +1571,7 @@ When greedy fails, the next strategy we look at is dynamic programming. To decid
 
 This leads to a $O(N 2^N)$ solution. This seems like a pain to code iteratively, but there is a nice fact about subsets: there is a cute bijection from the subsets of $\{0,1,2, \ldots, N-1\}$ to the integers from 0 to $2^N - 1$. That is, the subset $\{0,2,5,7\}$ maps to $2^0 + 2^2 + 2^5 + 2^7 = 165$ in the bijection. We call this technique \textit{masking}. We require all the subsets of $S$ to be processed before $S$ is processed, but that property is also handled by our bijection, since subtracting a power of 2 from a number decreases it. With a little knowledge of bit operators, this can be handled easily.
 
+\noindent \begin{minipage}{\textwidth}
 \begin{algorithmic}
 \For{$i\gets 0, 2^N-1$}
 	\Comment $i$ represents the subset $S$
@@ -1584,6 +1585,7 @@ This leads to a $O(N 2^N)$ solution. This seems like a pain to code iteratively,
 	\EndFor
 \EndFor
 \end{algorithmic}
+\end{minipage}
 
 \texttt{\&} is the bitwise and function, while \texttt{<<} is the left shift operator.
 
@@ -2353,6 +2355,40 @@ This algorithm is guaranteed to terminate for graphs with integral weights. Its 
 
 In its crudest form, Ford-Fulkerson does not specify on which path to push flow if multiple paths exist. It simply states that as long as such a path exists, push flow onto it. In addition to being slow, Ford-Fulkerson, as it is stated, is not guaranteed to terminate for graphs with non-integral capacities. In fact, it might not even converge to the maximum flow for irrational capacities. However, these problems can be fixed by simply specifying how the algorithm chooses the next path on which to push flow. Nonetheless, the Ford-Fulkerson algorithm is formulated beautifully mathematically and such is useful from a math perspective, as we will see with the Max-Flow Min-Cut Theorem.
 
+\subsection{Max-Flow Min-Cut Theorem}
+
+On a graph $G(V,E)$, an \textit{s-t cut} $C=(S,T)$ splits the partitions $V$ into $S$ and $T$ satisfying $s \in S$ and $t \in T$. The \textit{cut-set} of $C$ is the set of edges $\{(u,v) \in E : u \in S, v \in T\}$. The \textit{capacity} of an s-t cut is given by
+
+\[c(S,T) = \sum_{(u,v) \in S \times T}c(u,v).\]
+
+A \textit{minimum cut} is an s-t cut that minimizes $c(S,T)$.
+
+A cut represents a set of edges that, once removed, separates $s$ from $t$. A minimum cut is therefore a set of edges that does this but minimizes the total capacity of the edges necessary to disconnect $s$ from $t$.
+
+The max-flow min-cut theorem states that the maximum value of any s-t flow is equal to the minimum capacity of any s-t cut.
+
+First, the capacity of any cut must be at least the total flow. This is true by contradiction. Any path from $s$ to $t$ has an edge in the cut-set, so therefore any flow from $s$ to $t$ is upper bounded by the capacity of the cut. Therefore, we need only construct one flow and one cut such that the capacity of the cut is equal to the flow.
+
+We consider the residual graph $G_f$ produced at the completion of the Ford-Fulkerson augmenting path algorithm.\footnote{If you're concerned that the Ford-Fulkerson algorithm will never terminate, there always exists a sequence of paths chosen such that it will. Edmonds-Karp is one example that always terminates.} Let the set $S$ be all nodes reachable from $s$ and $T$ be $V \setminus S$. We wish to show that $C=(S,T)$ is a cut satisfying $|f|=c(S,T)=\sum_{(u,v) \in S \times T} c(u,v)$. This is true when the following is satisfied:
+
+\begin{enumerate}
+
+\item
+All edges $(u,v) \in S \times T$ are fully saturated by the flow. That is, $c_f(u,v) = 0$.
+
+\item
+All reverse edges $(v, u) \in T \times S$ have zero flow. That is, $f(v,u) = 0$, or $c_f(v,u) = c(v,u)$.
+
+\end{enumerate}
+
+The first condition is true by the way we constructed $S$ and $T$, as if there existed a $(u,v)$ where $c_f(u,v) > 0$, then $v$ is accessible to $s$ and ought to have been in $S$.
+
+The second condition is true by the way the Ford-Fulkerson algorithm constructed reverse edges. If net flow was sent from $v$ to $u$, then a reverse edge was constructed from $u$ to $v$, so again, $v$ is accessible to $s$, which is a contradiction.
+
+Therefore, we have the flow
+\[|f|=\sum_{(u,v) \in S \times T} c(u,v) - \sum_{(v,u) \in T \times S} 0 = c(S,T),\]
+so we constructed a flow and a cut such that the flow $|f|$ is equal to the cut capacity $c(S,T)$, and we are done.
+
 \subsection{Edmonds-Karp}
 
 Edmonds-Karp is a refinement of Ford-Fulkerson. As stated earlier, Ford-Fulkerson is limited by not specifying on which path to push flow. There are many algorithms that resolve this issue in different ways; Edmonds-Karp fixes this by simply choosing the augmenting path of shortest unweighted length. This can be done easily using a BFS.
@@ -2407,43 +2443,15 @@ Now consider the bottleneck edge $e=(u,v)$ of an augmenting path $p$, where the 
 
 There are $E$ edges, each of which can be the bottleneck edge for $O(V)$ different augmenting paths, each of which takes $O(E)$ to process. Therefore, the Edmonds-Karp algorithm runs in $O(VE^2)$.
 
-\subsection{Max-Flow Min-Cut Theorem}
+\subsection{Dinic}
 
-On a graph $G(V,E)$, an \textit{s-t cut} $C=(S,T)$ splits the partitions $V$ into $S$ and $T$ satisfying $s \in S$ and $t \in T$. The \textit{cut-set} of $C$ is the set of edges $\{(u,v) \in E : u \in S, v \in T\}$. The \textit{capacity} of an s-t cut is given by
-
-\[c(S,T) = \sum_{(u,v) \in S \times T}c(u,v).\]
-
-A \textit{minimum cut} is an s-t cut that minimizes $c(S,T)$.
-
-A cut represents a set of edges that, once removed, separates $s$ from $t$. A minimum cut is therefore a set of edges that does this but minimizes the total capacity of the edges necessary to disconnect $s$ from $t$.
-
-The max-flow min-cut theorem states that the maximum value of any s-t flow is equal to the minimum capacity of any s-t cut.
-
-First, the capacity of any cut must be at least the total flow. This is true by contradiction. Any path from $s$ to $t$ has an edge in the cut-set, so therefore any flow from $s$ to $t$ is upper bounded by the capacity of the cut. Therefore, we need only construct one flow and one cut such that the capacity of the cut is equal to the flow.
-
-We consider the residual graph $G_f$ produced at the completion of the Ford-Fulkerson augmenting path algorithm, which will terminate for some choice of paths; for example, by Edmonds-Karp. Let the set $S$ be all nodes reachable from $s$ and $T$ be $V \setminus S$. We wish to show that $C=(S,T)$ is a cut satisfying $|f|=c(S,T)=\sum_{(u,v) \in S \times T} c(u,v)$. This is true when the following is satisfied:
-
-\begin{enumerate}
-
-\item
-All edges $(u,v) \in S \times T$ are fully saturated by the flow. That is, $c_f(u,v) = 0$.
-
-\item
-All reverse edges $(v, u) \in T \times S$ have zero flow. That is, $f(v,u) = 0$, or $c_f(v,u) = c(v,u)$.
-
-\end{enumerate}
-
-The first condition is true by the way we constructed $S$ and $T$, as if there existed a $(u,v)$ where $c_f(u,v) > 0$, then $v$ is accessible to $s$ and ought to have been in $S$.
-
-The second condition is true by the way the Ford-Fulkerson algorithm constructed reverse edges. If net flow was sent from $v$ to $u$, then a reverse edge was constructed from $u$ to $v$, so again, $v$ is accessible to $s$, which is a contradiction.
-
-Therefore, we have the flow
-\[|f|=\sum_{(u,v) \in S \times T} c(u,v) - \sum_{(v,u) \in T \times S} 0 = c(S,T),\]
-so we constructed a flow and a cut such that the flow $|f|$ is equal to the cut capacity $c(S,T)$, and we are done.
+Dinic's algorithm is another refinement of Ford-Fulkerson.
 
 \subsection{Push-Relabel}
 
-Unfortunately, even the much-improved bounds of the $O(VE^2)$ Edmonds-Karp are admittedly bad. While the push-relabel method for solving the max flow problem does not have the fastest theoretical bounds, two of its implementations in $O(V^3)$ and $O(V^2\sqrt{E})$ are regarded as the benchmark for network flow.
+Unfortunately, even the much-improved bounds of the $O(VE^2)$ Edmonds-Karp are admittedly bad. While the push-relabel method for solving the max flow problem does not have the fastest theoretical bounds, two of its implementations have complexities $O(V^3)$ and $O(V^2\sqrt{E})$ and are among the fastest in practice.
+
+\subsubsection{Generic Push-Relabel}
 
 Ford-Fulkerson and its variants all deal with global augmentations of paths from $s$ to $t$. Push-relabel takes a different perspective, introducing the concept of a \textit{preflow} and a \textit{height} to make local optimizations that ultimately result in the maximum flow.
 
@@ -2462,6 +2470,7 @@ We call a vertex $v \in V \setminus \{s, t\}$ \textit{active} if $e(v) > 0$. The
 
 We can \textit{push} flow from a node $u$ to a node $v$ by moving as much of the excess $e(u)$ to $v$ as the capacity of the edge $c_f(u,v)$ will allow.
 
+\noindent \begin{minipage}{\textwidth}
 \begin{algorithmic}
 \Function{Push}{edge $(u,v)$}
 	\State $\delta \gets \min(e(u), c_f(u,v))$
@@ -2472,6 +2481,7 @@ We can \textit{push} flow from a node $u$ to a node $v$ by moving as much of the
 	\State $e(v) \gets e(v) + \delta$
 \EndFunction
 \end{algorithmic}
+\end{minipage}
 
 The idea of the push-relabel algorithm is to first push as much preflow as possible through local optimizations in the direction the sink. When a node can no longer push flow to the sink, it pushes the excess back towards the source to turn the preflow into a flow.
 
@@ -2499,12 +2509,14 @@ This leads to the fact that the only nodes that can possibly continue to contrib
 
 Now that I've explained the general idea behind the labeling constraints, it's time to actually describe what our relabeling process is. At first, the labels of all vertices besides the source start at 0. We only relabel a node $v$ if it is active (therefore, it has excess flow it needs to push; $e(u) > 0$) but has no admissible out-edges in $G_f$ (so it has no adjacent vertex on which it can push that excess flow). If a node has no admissible out-edges in $G_f$, every neighbor of $u$ has a height label at least equal to $h(u)$. When we relabel a node, we always then \textit{increase} the value of $h(u)$ to the least value where it can push flow onto another node.
 
+\noindent \begin{minipage}{\textwidth}
 \begin{algorithmic}
 \Function{Relabel}{vertex $u$}
 		\State $h(u) \gets \min_{v | (u,v) \in E_f}(h(v)) + 1$
 		\Comment $(u,v) \in E_f \iff c_f(u,v) = c(u,v) - f(u,v) > 0$
 \EndFunction
 \end{algorithmic}
+\end{minipage}
 
 Since we take the minimum height of all neighbors in the graph, we first try adjusting the height of $u$ so that we can push flow from $u$ to its neighbors that can possibly still reach $t$; that is, neighbors $v$ satisfying $h(v) < |V|$. Once we try all these neighbors, we then increase the height of $u$ to begin to push flow back towards $s$. We can always find such an edge, as any preflow pushed onto $u$ must have also incremented the reverse edge from $u$ back towards $s$.
 
@@ -2562,6 +2574,64 @@ The generic push-relabel algorithm simply pushes and relabels vertices until the
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
+
+We can argue that this algorithm runs in $O(V^2E)$, which is already an improvement from Edmonds-Karp. However, just as Ford-Fulkerson could be sped up by specifying which augmenting paths to choose, we can do the same with the push-relabel algorithm, speeding it up by specifying a systematic method to choose an edge to push or a vertex to relabel.
+
+\subsubsection{Discharge}
+
+We first describe an auxiliary operation. For each vertex $u$, we'll need a way to visit in- and out-neighbors of $u$ in a static cyclic order. This is easy with just a pointer; for vertex $u$, we'll call that pointer $curr(u)$. When the pointer passes through every element in the list of neighbors, we'll just reset it back to the first element.
+
+\noindent \begin{minipage}{\textwidth}
+\begin{algorithmic}
+\Function{Discharge}{vertex $u$}
+	\While{$e(u)>0$}
+		\Comment{perform an operation as long as $u$ is active}
+		\If{$curr(u)$ is at end of list of neighbors}
+			\State \Call{Relabel}{$u$}
+			\State reset $curr(u)$
+		\Else
+			\If{$(u,curr(u))$ is an admissible edge}
+				\State \Call{Push}{$(u,curr(u))$}
+			\Else
+				\State move $curr(u)$ to next neighbor of $u$
+			\EndIf
+		\EndIf
+	\EndWhile
+\EndFunction
+\end{algorithmic}
+\end{minipage}
+
+\subsubsection{FIFO Selection}
+
+FIFO selection simply maintains a list of active vertices in a FIFO queue. We pop off the first vertex in the queue and discharge it, adding any newly-activated vertices to the end of the queue. This runs in $O(V^3)$.
+
+\subsubsection{Highest Label Selection}
+
+Highest label selection discharges the active vertex with the greatest height. This runs in $O(V^2\sqrt{E})$.
+
+\subsubsection{Improvements with Heuristics}
+
+Heuristics are meant to help relabel vertices in a smarter way. Bad relabelings are the slowest part of the algorithm, and improving the process can speed up max flow.
+
+The \textit{gap heuristic} takes advantage of ``gaps'' in the height function. Since a path of admissible edges consists of vertices whose heights decrease by exactly 1, the presence of a gap in height precludes the possibility of such a path. If there exists a value $h'$ such that no vertex $v$ exists such that $h(v)=h'$, then for every vertex $v$ satisfying $h' < h(v) < |V|$, $v$ has been disconnected from $t$, so we can immediately relabel $h(v)=|V| + 1$.
+
+The \textit{global relabeling heuristic} performs a backwards BFS from $t$ every now and then to compute the heights of the vertices in the graph exactly.
+
+Some dude on Codeforces\footnote{\url{http://codeforces.com/blog/entry/14378}} didn't have much luck improving performance with the global relabeling heuristic. I'd suggest sticking to the gap heuristic only.
+
+\subsection{Other Problems with Flow Solutions}
+
+\subsubsection{Bipartite Matching}
+
+\begin{enumerate}
+
+\item Prove Hall's Marriage Theorem.
+
+\end{enumerate}
+
+\subsubsection{Edge-Disjoint Paths}
+
+\subsubsection{Sports Playoff Chances}
 
 \chapter{Computational Geometry}
 
