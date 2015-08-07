@@ -217,18 +217,6 @@ $find(4)$, optimized:
 \end{algorithmic}
 \end{algorithm}
 
-\begin{enumerate}
-\item
-(USACO Open 2008, nabor)
-Farmer John has $N$ ($1 \le N 
-\le 100,000$) cows who group themselves into ``Cow
-Neighborhoods''. Each cow is at a unique rectilinear coordinate, on a pasture whose $x$ and $y$ coordinates are
-in the range $1\ldots1,000,000,000$. Two cows are neighbors if at least one of two criteria is met: (1) If the cows are
-no further than some integer Manhattan distance $C$ ($1 \le C \le 1,000,000,000$) apart. (2) If cow $A$ and $B$ are
-both neighbors of cow $Z$, then cow $A$ is a neighbor of cow $B$. Given the locations of the cows and the distance
-$C$, determine the number of neighborhoods and the number of cows in the largest neighborhood.
-\end{enumerate}
-
 \subsection{Tarjan}
 
 Tarjan's algorithm for strongly connected components
@@ -397,84 +385,6 @@ Now, we continue choosing the closest unvisited node, mark it as visited, and an
 
 The slow part of the $O(V^2)$ formulation is the linear search for the vertex $v$ with the minimum $dist(v)$. We happen to have a data structure that resolves this problem -- a binary heap. The main problem with using the standard library heap is having repeated vertices in the heap. We could just ignore this problem and discard visited vertices as they come out of the heap. Alternatively, we could choose never to have repeated vertices in the heap. To do this, we need to be able to change the value of the distances once they are already in the heap, or \textit{decrease-key}. This is a pretty simple function to add, however, if you have a heap already coded. Either way, we achieve $O(E \log{V})$, as we do $E+V$ updates to our heap, each costing $O(V)$.
 
-\begin{enumerate}
-
-\item
-(USACO Training Pages, butter)
-Farmer John owns a collection of pastures with weighted edges between some
-pairs of locations. Each pasture is inhabited by a cow, and the cows wish to all congregate at one of the
-pastures. Find the pasture at which the cows should meet in order to minimize combined travel distance.
-
-\item
-(USACO February 2012, relocate)
-FJ is moving! He is trying to find the best place to build a new farm so as to
-minimize his daily travel time.
-
-The region to which FJ plans to move has $N$ towns ($1 \le N \le 10, 000$). There are $M$ bi-directional roads
-($1 \le M \le 50, 000$) connecting certain pairs of towns. All towns are reachable from each-other via some
-combination of roads. FJ needs your help selecting the best town as the home for his new farm.
-
-There are markets in $K$ of the towns ($1 \le K \le 5$) that FJ wants to visit every day. In particular, every day
-he plans to leave his new farm, visit the $K$ towns with markets, and then return to his farm. FJ can visit the
-markets in any order he wishes. When selecting a town in which to build his new farm, FJ wants to choose
-only from the $N - K$ towns that do not have markets, since housing prices are lower in those towns.
-
-Please help FJ compute the minimum distance he will need to travel during his daily schedule, if he builds his
-farm in an optimal location and chooses his travel schedule to the markets as smartly as possible.
-
-\item
-(USACO December 2012, mroute)
-Farmer John's farm has an outdated network of $M$ pipes ($1 \le M \le 500$) for
-pumping milk from the barn to his milk storage tank.  He wants to remove
-and update most of these over the next year, but he wants to leave exactly
-one path worth of pipes intact, so that he can still pump milk from the
-barn to the storage tank.
-
-The pipe network is described by $N$ junction points ($1 \le N \le 500$), each of
-which can serve as the endpoint of a set of pipes.  Junction point 1 is the
-barn, and junction point $N$ is the storage tank.  Each of the $M$
-bi-directional pipes runs between a pair of junction points, and has an
-associated latency (the amount of time it takes milk to reach one end of
-the pipe from the other) and capacity (the amount of milk per unit time
-that can be pumped through the pipe in steady state).  Multiple pipes
-can connect between the same pair of junction points.
-
-For a path of pipes connecting from the barn to the tank, the latency
-of the path is the sum of the latencies of the pipes along the path,
-and the capacity of the path is the minimum of the capacities of the
-pipes along the path (since this is the ``bottleneck'' constraining the
-overall rate at which milk can be pumped through the path).  If FJ
-wants to send a total of $X$ units of milk through a path of pipes with
-latency $L$ and capacity $C$, the time this takes is therefore $L + \frac{X}{C}$.
-
-Given the structure of FJ's pipe network, please help him select a single
-path from the barn to the storage tank that will allow him to pump $X$ units
-of milk in a minimum amount of total time.
-
-\item
-(IOI 1999, Traffic Lights)
-In the city of Dingilville the traffic is arranged in an unusual way. There are junctions
-and roads connecting the junctions. There is at most one road between any two different junctions. There is no
-road connecting a junction to itself. Travel time for a road is the same for both directions. At every junction
-there is a single traffic light that is either blue or purple at any moment. The color of each light alternates
-periodically: blue for certain duration and then purple for another duration. Traffic is permitted to travel
-down the road between any two junctions, if and only if the lights at both junctions are the same color at the
-moment of departing from one junction for the other. If a vehicle arrives at a junction just at the moment the
-lights switch it must consider the new colors of lights. Vehicles are allowed to wait at the junctions. You are
-given the city map which shows
-\begin{itemize}
-\item
-the travel times for all roads (integers),
-\item
-the durations of the two colors at each junction (integers)
-\item
-the initial color of the light and the remaining time (integer) for this color to change at each junction.
-\end{itemize}
-Your task is to find a path which takes the minimum time from a given source junction to a given destination
-junction for a vehicle when the traffic starts. In case more than one such path exists you are required to report
-only one of them.
-\end{enumerate}
-
 \subsection{Floyd-Warshall}
 
 Dijkstra is nice when we are dealing with edges with nonnegative weights and are looking for the distances from one vertex to all the others. Floyd-Warshall solves the shortest path problem for all pairs of vertices in $O(V^3)$ time, which is faster than $V$ single-source Dijkstra runs on a dense graph. Floyd-Warshall works even if some edge weights are negative but not if the graph has a negative cycle.
@@ -582,40 +492,6 @@ Prim's algorithm for finding the minimum spanning tree is very similar to Dijkst
 
 The proof of correctness is left as an exercise. The complexity of this algorithm depends on how the minimum unvisited vertex is calculated. Using the same approaches as Dijkstra, we can achieve $O(V^2)$ or $O(E \log{V})$.
 
-\begin{enumerate}
-
-\item
-(USACO March 2014, irrigation)
-Due to a lack of rain, Farmer John wants to build an irrigation system to
-send water between his $N$ fields ($1 \le N \le 2000$).
-
-Each field $i$ is described by a distinct point $(x_i, y_i)$ in the 2D plane,
-with 0 <= xi, yi <= 1000.  The cost of building a water pipe between two
-fields $i$ and $j$ is equal to the squared Euclidean distance between them: 
-
-\[(x_i - x_j)^2 + (y_i - y_j)^2\]
-
-FJ would like to build a minimum-cost system of pipes so that all of his
-fields are linked together -- so that water in any field can follow a
-sequence of pipes to reach any other field.  
-
-Unfortunately, the contractor who is helping FJ install his irrigation
-system refuses to install any pipe unless its cost (squared Euclidean
-length) is at least $C$ ($1 \le C \le 1,000,000$).  
-
-Please help FJ compute the minimum amount he will need pay to connect all
-his fields with a network of pipes.
-
-\item
-(USACO February 2015, superbull)
-Bessie and her friends are playing hoofball in the annual Superbull championship, and Farmer John is in charge of making the tournament as exciting as possible. A total of $N$ ($1 \le N \le 2000$) teams are playing in the Superbull. Each team is assigned a distinct integer team ID in the range $[1,2^{30}-1]$ to distinguish it from the other teams. The Superbull is an elimination tournament -- after every game, Farmer John chooses which team to eliminate from the Superbull, and the eliminated team can no longer play in any more games. The Superbull ends when only one team remains.
-
-Farmer John notices a very unusual property about the scores in matches! In any game, the combined score of the two teams always ends up being the bitwise exclusive OR ($XOR$) of the two team IDs. For example, if teams 12 and 20 were to play, then 24 points would be scored in that game, since $01100 XOR 10100 = 11000$.
-
-Farmer John believes that the more points are scored in a game, the more exciting the game is. Because of this, he wants to choose a series of games to be played such that the total number of points scored in the Superbull is maximized. Please help Farmer John organize the matches.
-
-\end{enumerate}
-
 \subsection{Kruskal}
 
 While Prim greedily adds vertices to the tree, Kruskal's algorithm greedily adds edges. It iterates over all the edges, sorted by weight. We need to watch out for adding a cycle, breaking the tree structure, which means we need to keep track of each vertex's connected component. If an edge connects two vertices from the same connected component, we don't want to add it to our tree. However, we have a union-find algorithm that works perfectly for this.
@@ -633,14 +509,6 @@ While Prim greedily adds vertices to the tree, Kruskal's algorithm greedily adds
 \end{algorithm}
 
 This algorithm requires a sort of the edges and thus has complexity $O(E \log{E}) = O(E \log{V})$.
-
-\begin{enumerate}
-\item
-(SPOJ, INVENT)
-Given tree with $N$ ($1 \le N \le 15,000$) vertices, find the minimum possible weight of a complete
-graph (a graph where every pair of vertices is connected) such that the given tree is its unique minimum spanning
-tree.
-\end{enumerate}
 
 \section{Eulerian Tour}
 
@@ -663,22 +531,6 @@ An \textit{Eulerian tour} of a graph is a path that traverses every edge exactly
 It is not preferable to use the run-time stack; we can use our own stack if necessary.
 
 If the graph contains an Eulerian circuit, we call this function on any vertex we like. If it contains an Eulerian path, we call this function on one of the vertices with odd degree.
-
-\begin{enumerate}
-
-\item
-(USACO Training, Airplane Hopping)
-Given a collection of cities, along with the flights between those cities, determine if there is a sequence of flights such that you take every flight exactly once, and end up at the place you started. (In other words, find an Eulerian circuit on a directed graph.)
-
-\item
-(USACO Training, Cows on Parade)
-Farmer John has two types of cows: black Angus and white Jerseys. While marching 19 of their cows to market the other day, John's wife Farmeress Joanne, noticed that all 16 possibilities of four successive black and white cows (e.g., $bbbb$, $bbbw$, $bbwb$, $bbww$, \ldots, $wwww$) were present. Of course, some of the combinations overlapped others.
-
-Given $N$ ($2 \le N \le 15$), find the minimum length sequence of cows such that every combination of $N$ successive black and white cows occurs in that sequence.
-
-(The answer is not hard to guess, but use Eulerian circuits to prove that it is correct.)
-
-\end{enumerate}
 
 \section{Maximum Flow}
 
@@ -1030,13 +882,5 @@ Some dude on Codeforces\footnote{\url{http://codeforces.com/blog/entry/14378}} d
 
 \subsubsection{Bipartite Matching}
 
-\begin{enumerate}
-
-\item Prove Hall's Marriage Theorem.
-
-\end{enumerate}
-
 \subsubsection{Edge-Disjoint Paths}
-
-\subsubsection{Sports Playoff Chances}
 
