@@ -1,0 +1,339 @@
+\chapter{Problems}
+
+Problems, to be worked through as you progress through the text.
+
+\section{Bronze}
+
+USACO bronze is quite ad hoc. Knowing basic data structures in the standard library helps.
+
+\section{Silver}
+
+USACO silver tends to have the most standard problems. Silver tests knowledge of basic algorithms and coding ideas. Silver questions also sometimes require knowledge of the language, like familiarity with standard library data structures.
+
+\subsection{Complete Search}
+
+\subsection{Greedy}
+
+\subsection{Standard Dynamic Programming}
+
+\begin{enumerate}
+
+\item
+(USACO Training)
+There is a long list of stalls, some of which need to be covered with boards. You can use up to $N$ ($1 \le N \le 50$) boards, each of which may cover any number of consecutive stalls. Cover all the necessary stalls, while covering as few total stalls as possible.
+
+\item
+(IOI 1996)
+You are given a three-valued (1, 2, or 3) sequence of length up to 1000. Find a minimum set of exchanges to put the sequence in sorted order.
+
+\item
+(Samir Khuller)
+We are given $N$ jobs, each of which requires one unit of time to complete. The $i$th job opens at some time $t_i$ and must be completed by some deadline $d_i$, where $t_i,d_i\in \mathbb{Z}$. Given that only one job can be completed at a time, determine if all $N$ can be completed by their deadlines.
+
+\end{enumerate}
+
+\subsection{Standard Graph Theory}
+
+\subsubsection{Flood Fill}
+
+\subsubsection{Shortest Path}
+
+\begin{enumerate}
+
+\item
+(USACO Training Pages, butter)
+Farmer John owns a collection of pastures with weighted edges between some
+pairs of locations. Each pasture is inhabited by a cow, and the cows wish to all congregate at one of the
+pastures. Find the pasture at which the cows should meet in order to minimize combined travel distance.
+
+\item
+(USACO February 2012, relocate)
+FJ is moving! He is trying to find the best place to build a new farm so as to
+minimize his daily travel time.
+
+The region to which FJ plans to move has $N$ towns ($1 \le N \le 10, 000$). There are $M$ bi-directional roads
+($1 \le M \le 50, 000$) connecting certain pairs of towns. All towns are reachable from each-other via some
+combination of roads. FJ needs your help selecting the best town as the home for his new farm.
+
+There are markets in $K$ of the towns ($1 \le K \le 5$) that FJ wants to visit every day. In particular, every day
+he plans to leave his new farm, visit the $K$ towns with markets, and then return to his farm. FJ can visit the
+markets in any order he wishes. When selecting a town in which to build his new farm, FJ wants to choose
+only from the $N - K$ towns that do not have markets, since housing prices are lower in those towns.
+
+Please help FJ compute the minimum distance he will need to travel during his daily schedule, if he builds his
+farm in an optimal location and chooses his travel schedule to the markets as smartly as possible.
+
+\item
+(USACO December 2012, mroute)
+Farmer John's farm has an outdated network of $M$ pipes ($1 \le M \le 500$) for
+pumping milk from the barn to his milk storage tank.  He wants to remove
+and update most of these over the next year, but he wants to leave exactly
+one path worth of pipes intact, so that he can still pump milk from the
+barn to the storage tank.
+
+The pipe network is described by $N$ junction points ($1 \le N \le 500$), each of
+which can serve as the endpoint of a set of pipes.  Junction point 1 is the
+barn, and junction point $N$ is the storage tank.  Each of the $M$
+bi-directional pipes runs between a pair of junction points, and has an
+associated latency (the amount of time it takes milk to reach one end of
+the pipe from the other) and capacity (the amount of milk per unit time
+that can be pumped through the pipe in steady state).  Multiple pipes
+can connect between the same pair of junction points.
+
+For a path of pipes connecting from the barn to the tank, the latency
+of the path is the sum of the latencies of the pipes along the path,
+and the capacity of the path is the minimum of the capacities of the
+pipes along the path (since this is the ``bottleneck'' constraining the
+overall rate at which milk can be pumped through the path).  If FJ
+wants to send a total of $X$ units of milk through a path of pipes with
+latency $L$ and capacity $C$, the time this takes is therefore $L + \frac{X}{C}$.
+
+Given the structure of FJ's pipe network, please help him select a single
+path from the barn to the storage tank that will allow him to pump $X$ units
+of milk in a minimum amount of total time.
+
+\item
+(IOI 1999, Traffic Lights)
+In the city of Dingilville the traffic is arranged in an unusual way. There are junctions
+and roads connecting the junctions. There is at most one road between any two different junctions. There is no
+road connecting a junction to itself. Travel time for a road is the same for both directions. At every junction
+there is a single traffic light that is either blue or purple at any moment. The color of each light alternates
+periodically: blue for certain duration and then purple for another duration. Traffic is permitted to travel
+down the road between any two junctions, if and only if the lights at both junctions are the same color at the
+moment of departing from one junction for the other. If a vehicle arrives at a junction just at the moment the
+lights switch it must consider the new colors of lights. Vehicles are allowed to wait at the junctions. You are
+given the city map which shows
+\begin{itemize}
+\item
+the travel times for all roads (integers),
+\item
+the durations of the two colors at each junction (integers)
+\item
+the initial color of the light and the remaining time (integer) for this color to change at each junction.
+\end{itemize}
+Your task is to find a path which takes the minimum time from a given source junction to a given destination
+junction for a vehicle when the traffic starts. In case more than one such path exists you are required to report
+only one of them.
+\end{enumerate}
+
+\subsubsection{Minimal Spanning Tree}
+
+\begin{enumerate}
+
+\item
+(USACO March 2014, irrigation)
+Due to a lack of rain, Farmer John wants to build an irrigation system to
+send water between his $N$ fields ($1 \le N \le 2000$).
+
+Each field $i$ is described by a distinct point $(x_i, y_i)$ in the 2D plane,
+with 0 <= xi, yi <= 1000.  The cost of building a water pipe between two
+fields $i$ and $j$ is equal to the squared Euclidean distance between them: 
+
+\[(x_i - x_j)^2 + (y_i - y_j)^2\]
+
+FJ would like to build a minimum-cost system of pipes so that all of his
+fields are linked together -- so that water in any field can follow a
+sequence of pipes to reach any other field.  
+
+Unfortunately, the contractor who is helping FJ install his irrigation
+system refuses to install any pipe unless its cost (squared Euclidean
+length) is at least $C$ ($1 \le C \le 1,000,000$).  
+
+Please help FJ compute the minimum amount he will need pay to connect all
+his fields with a network of pipes.
+
+\item
+(USACO February 2015, superbull)
+Bessie and her friends are playing hoofball in the annual Superbull championship, and Farmer John is in charge of making the tournament as exciting as possible. A total of $N$ ($1 \le N \le 2000$) teams are playing in the Superbull. Each team is assigned a distinct integer team ID in the range $[1,2^{30}-1]$ to distinguish it from the other teams. The Superbull is an elimination tournament -- after every game, Farmer John chooses which team to eliminate from the Superbull, and the eliminated team can no longer play in any more games. The Superbull ends when only one team remains.
+
+Farmer John notices a very unusual property about the scores in matches! In any game, the combined score of the two teams always ends up being the bitwise exclusive OR ($XOR$) of the two team IDs. For example, if teams 12 and 20 were to play, then 24 points would be scored in that game, since $01100 XOR 10100 = 11000$.
+
+Farmer John believes that the more points are scored in a game, the more exciting the game is. Because of this, he wants to choose a series of games to be played such that the total number of points scored in the Superbull is maximized. Please help Farmer John organize the matches.
+
+\item
+(SPOJ, INVENT)
+Given tree with $N$ ($1 \le N \le 15,000$) vertices, find the minimum possible weight of a complete
+graph (a graph where every pair of vertices is connected) such that the given tree is its unique minimum spanning
+tree.
+\end{enumerate}
+
+\subsubsection{Union-Find}
+
+\begin{enumerate}
+
+\item
+(USACO February 2013, tractor)
+One of Farmer John's fields is particularly hilly, and he wants to purchase
+a new tractor to drive around on it.  The field is described by an $N \times N$
+grid of non-negative integer elevations ($1 \le N \le 500$).  A tractor capable
+of moving from one grid cell to an adjacent cell (one step north, east,
+south, or west) of height difference $D$ costs exactly $D$ units of money.
+
+FJ would like to pay enough for his tractor so that, starting from some
+grid cell in his field, he can successfully drive the tractor around to
+visit at least half the grid cells in the field (if the number of total
+cells in the field is odd, he wants to visit at least half the cells
+rounded up).  Please help him compute the minimum cost necessary for buying
+a tractor capable of this task.
+
+\item
+(CF 266E)
+There are $n$ ($1 \le n \le 10^5$) employees working in company ``X'' (let's number them from 1 to $n$ for convenience). Initially the employees didn't have any relationships among each other. On each of $m$ ($1 \le m \le 10^5$) next days one of the following events took place:
+
+\begin{itemize}
+\item
+either employee $y$ became the boss of employee $x$ (at that, employee $x$ didn't have a boss before);
+\item
+or employee $x$ gets a packet of documents and signs them; then he gives the packet to his boss. The boss signs the documents and gives them to his boss and so on (the last person to sign the documents sends them to the archive);
+\item
+or comes a request of type ``determine whether employee $x$ signs certain documents''.
+\end{itemize}
+
+Your task is to write a program that will, given the events, answer the queries of the described type. At that, it is guaranteed that throughout the whole working time the company didn't have cyclic dependencies.
+
+\end{enumerate}
+
+\subsubsection{Euler Tour}
+
+\begin{enumerate}
+
+\item
+(USACO Training, Airplane Hopping)
+Given a collection of cities, along with the flights between those cities, determine if there is a sequence of flights such that you take every flight exactly once, and end up at the place you started. (In other words, find an Eulerian circuit on a directed graph.)
+
+\item
+(USACO Training, Cows on Parade)
+Farmer John has two types of cows: black Angus and white Jerseys. While marching 19 of their cows to market the other day, John's wife Farmeress Joanne, noticed that all 16 possibilities of four successive black and white cows (e.g., $bbbb$, $bbbw$, $bbwb$, $bbww$, \ldots, $wwww$) were present. Of course, some of the combinations overlapped others.
+
+Given $N$ ($2 \le N \le 15$), find the minimum length sequence of cows such that every combination of $N$ successive black and white cows occurs in that sequence.
+
+(The answer is not hard to guess, but use Eulerian circuits to prove that it is correct.)
+
+\end{enumerate}
+
+\subsection{Easy Computational Geometry}
+
+\section{Gold}
+
+USACO gold problems generally fall into two families; the first tests knowledge of more complex data structures not in the standard library, and the second tests cleverness with more nonstandard greedy or dynamic programming strategies.
+
+\subsection{$2^n$ Dynamic Programming}
+
+\subsection{Binary Search}
+
+\begin{enumerate}
+
+\item
+(USACO March 2014, sabotage)
+Farmer John's arch-nemesis, Farmer Paul, has decided to sabotage Farmer
+John's milking equipment!
+
+The milking equipment consists of a row of $N$ ($3 \le N \le 100,000$)
+milking machines, where the $i$th machine produces $M_i$ units of milk ($1 \le M_i \le 10,000$).  Farmer Paul plans to disconnect a contiguous block
+of these machines -- from the $i$th machine up to the $j$th machine ($2 \le i \le j \le N-1$); note that Farmer Paul does not want to disconnect
+either the first or the last machine, since this will make his plot
+too easy to discover.  Farmer Paul's goal is to minimize the average
+milk production of the remaining machines.  Farmer Paul plans to
+remove at least 1 cow, even if it would be better for him to avoid
+sabotage entirely.
+
+Fortunately, Farmer John has learned of Farmer Paul's evil plot, and
+he is wondering how bad his milk production will suffer if the plot
+succeeds.  Please help Farmer John figure out the minimum average milk
+production of the remaining machines if Farmer Paul does succeed.
+
+\item
+(Matthew Savage)
+Ashley's journey through Unova is just beginning, and she has just picked her first Pok\'{e}mon! Unfortunately, not knowing much about them, she picked a Snivy, and a particularly stubborn and unfriendly one at that.
+
+Being Ashley, she decides to try to win over the Snivy in the only way she knows how -- baked goods.
+
+Ashley knows $r$ $(0 \le r \le 1000$) recipes for Pok\'{e}puffs. Each recipe $r_i$ has a deliciousness rating $d_i$ ($0 \le d_i \le 1000$) and requires some combination of the $I$ ($0 \le I \le 1000$) available ingredients. (More specifically, the recipe $r_i$ uses the quantity $I_{ij}$ ($0 \le I_{ij} \le 1000$) of ingredient $I_j$.)
+
+Ashley has some amount of each ingredient $I_j$ on hand $A_j$ ($0 \le A_j \le 10^9$) and can buy more from the nearby store for a price of $c_j$ ($1 \le c_j \le 10^9$) dollars per unit using the $M$ ($0 \le M \le 10^{12}$) dollars she currently has.
+
+Of course, Ashley also has limited supplies and therefore can only produce Pok\'{e}puffs from a single recipe. However, she can make as many as she wants, in integer increments.
+
+We define ``total deliciousness'' ($D$) to be the sum of the deliciousnesses of the individual Poképuffs that Ashley has baked.
+
+Ashley wants to have the best chance possible with Snivy, and therefore would like to know - what is the maximum possible deliciousness ($\max(D)$) that she can produce?
+
+Note: there is a ``just do it'' solution that is faster than the binary search by a log factor. It is also \textit{much} more annoying to code; so annoying that I was unable to debug my ``just do it'' solution in the actual contest environment. I included this problem as an exercise to demonstrate how easy binary searching on the answer can be.
+
+\item
+(CF 287B)
+Vova, the Ultimate Thule new shaman, wants to build a pipeline. As there are exactly $n$ ($1 \le n \le 10^{18}$) houses in Ultimate Thule, Vova wants the city to have exactly $n$ pipes, each such pipe should be connected to the water supply. A pipe can be connected to the water supply if there's water flowing out of it. Initially Vova has only one pipe with flowing water. Besides, Vova has several splitters.
+
+A splitter is a construction that consists of one input (it can be connected to a water pipe) and $x$ output pipes. When a splitter is connected to a water pipe, water flows from each output pipe. You can assume that the output pipes are ordinary pipes. For example, you can connect water supply to such pipe if there's water flowing out from it. At most one splitter can be connected to any water pipe.
+
+Vova has one splitter of each kind: with $2, 3, 4, \ldots, k$ ($2 \le k \le 10^9$) outputs. Help Vova use the minimum number of splitters to build the required pipeline or otherwise state that it's impossible.
+
+Vova needs the pipeline to have exactly n pipes with flowing out water. Note that some of those pipes can be the output pipes of the splitters.
+
+\item
+(IOI 2009)
+Mecho the bear has found a little treasure - the bees' secret honeypot, which is full of honey! He was happily eating his newfound treasure until suddenly one bee saw him and sounded the bee alarm. He knows that at this very moment hordes of bees will emerge from their hives and start spreading around trying to catch him. He knows he has to leave the honeypot and go home quickly, but the honey is so sweet that Mecho doesn't want to leave too soon. Help Mecho determine the latest possible moment when he can leave.
+
+Mecho's forest is represented by a square grid of $N$ by $N$ ($1 \le N \le 800$) unit cells, whose sides are parallel to the north-south and east-west directions. Each cell is occupied by a tree, by a patch of grass, by a hive or by Mecho's home. Two cells are considered adjacent if one of them is immediately to the north, south, east or west of the other (but not on a diagonal). Mecho is a clumsy bear, so every time he makes a step, it has to be to an adjacent cell. Mecho can only walk on grass and cannot go through trees or hives, and he can make at most $S$ ($1 \le S \le 1000$) steps per minute. At the moment when the bee alarm is sounded, Mecho is in the grassy cell containing the honeypot, and the bees are in every cell containing a hive (there may be more than one hive in the forest). During each minute from this time onwards, the following events happen in the following order:
+\begin{itemize}
+\item
+If Mecho is still eating honey, he decides whether to keep eating or to leave. If he continues eating, he does not move for the whole minute. Otherwise, he leaves immediately and takes up to $S$ steps through the forest as described above. Mecho cannot take any of the honey with him, so once he has moved he cannot eat honey again.
+\item
+After Mecho is done eating or moving for the whole minute, the bees spread one unit further across the grid, moving only into the grassy cells. Specifically, the swarm of bees spreads into every grassy cell that is adjacent to any cell already containing bees. Furthermore, once a cell contains bees it will always contain bees (that is, the swarm does not move, but it grows).
+\end{itemize}
+In other words, the bees spread as follows: When the bee alarm is sounded, the bees only occupy the cells where the hives are located. At the end of the first minute, they occupy all grassy cells adjacent to hives (and still the hives themselves). At the end of the second minute, they additionally occupy all grassy cells adjacent to grassy cells adjacent to hives, and so on. Given enough time, the bees will end up simultaneously occupying all grassy cells in the forest that are within their reach.
+
+Neither Mecho nor the bees can go outside the forest. Also, note that according to the rules above, Mecho will always eat honey for an integer number of minutes.
+
+The bees catch Mecho if at any point in time Mecho finds himself in a cell occupied by bees.
+
+Write a program that, given a map of the forest, determines the largest number of minutes that Mecho can continue eating honey at his initial location, while still being able to get to his home before any of the bees catch him.
+
+\end{enumerate}
+
+\subsection{Segment Tree}
+
+\subsection{More Standard Graph Theory}
+
+\subsubsection{Maximum Flow and Variants}
+
+\subsubsection{Strongly Connected Components}
+
+\subsubsection{Other Graph Theory}
+
+\begin{enumerate}
+\item
+(USACO Open 2008, nabor)
+Farmer John has $N$ ($1 \le N 
+\le 100,000$) cows who group themselves into ``Cow
+Neighborhoods''. Each cow is at a unique rectilinear coordinate, on a pasture whose $x$ and $y$ coordinates are
+in the range $1\ldots1,000,000,000$. Two cows are neighbors if at least one of two criteria is met: (1) If the cows are
+no further than some integer Manhattan distance $C$ ($1 \le C \le 1,000,000,000$) apart. (2) If cow $A$ and $B$ are
+both neighbors of cow $Z$, then cow $A$ is a neighbor of cow $B$. Given the locations of the cows and the distance
+$C$, determine the number of neighborhoods and the number of cows in the largest neighborhood.
+
+\item
+(CF 260C) Andrew plays a game called ``Civilization''. Dima helps him.
+
+The game has $n$ ($1 \le n \le 3 \cdot 10^5$) cities and $m$ ($0 \le m < n$) bidirectional roads. The cities are numbered from 1 to $n$. Between any pair of cities there either is a single (unique) path, or there is no path at all. A path is such a sequence of distinct cities $v_1, v_2, \ldots, v_k$, that there is a road between any contiguous cities $v_i$ and $v_{i + 1}$ ($1 \le i < k$). The length of the described path equals to $k - 1$. We assume that two cities lie in the same region if and only if, there is a path connecting these two cities.
+
+During the game events of two types take place:
+
+\begin{itemize}
+\item
+Andrew asks Dima about the length of the longest path in the region where city $x$ lies.
+\item
+Andrew asks Dima to merge the region where city $x$ lies with the region where city $y$ lies. If the cities lie in the same region, then no merging is needed. Otherwise, you need to merge the regions as follows: choose a city from the first region, a city from the second region and connect them by a road so as to minimize the length of the longest path in the resulting region. If there are multiple ways to do so, you are allowed to choose any of them.
+\end{itemize}
+
+Dima finds it hard to execute Andrew's $q$ ($1 \le q \le 3 \cdot 10^5$) queries, so he asks you to help him. Help Dima.
+
+\end{enumerate}
+
+\subsection{Standard Computational Geometry}
+
+\subsection{Less Standard Problems}
+
+\section{Beyond}
+
+\subsection{Data Structure Nonsense}

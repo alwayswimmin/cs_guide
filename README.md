@@ -5,9 +5,9 @@ Usage Notes
 --------------
 It is of my (na&iuml;ve, privileged teenager) belief that knowledge should be free and easily
 accessible to ambitious high schoolers, but it is paramount to respect intellectual property
-and someone else's work. I respectfully ask that you use this material to its fullest potential,
-however you like, provided it doesn't completely butcher the philosophy with which I embarked
-on this project.
+and someone else's work. I ask that you use this material to its fullest potential, however
+you like, provided it doesn't completely butcher the philosophy with which I embarked on this
+project.
 
 For Learners
 --------------
