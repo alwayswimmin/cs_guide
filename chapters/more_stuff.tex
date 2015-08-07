@@ -1,0 +1,3291 @@
+\chapter{More Stuff}
+
+Here are some more tools to stuff in the toolbox. This chapter introduces more complex ideas that are useful for solving USACO Gold problems and beyond.
+
+\section{$\sqrt{n}$ Bucketing}
+
+$\sqrt{n}$ bucketing is a relatively straightforward idea -- given $n$ elements $\{a_i\}_{i=1}^n$ in a sequence, we group them into $\sqrt{n}$ equal-sized buckets. The motivation for arranging elements like this is to support an operation called a \textit{range query}.
+
+Let's take a concrete example. Suppose we want to support two operations:
+
+\begin{itemize}
+\item
+$update(i, x)$ -- increment the value of $a_i$ by $x$
+
+\item
+$query(i, j)$ -- return $\sum_{k=i}^j a_k$.
+\end{itemize}
+
+Suppose we simply stored the sequence in an array. $update$ then becomes an $O(1)$ operation, but $query$ is $O(n)$.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+
+\node[myrect=16]
+  (array)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-5$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 6
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+Another natural approach would be to store in a separate array the sum of the first $i$ terms in the sequence for every index $i$, or store the \textit{prefix sums}.
+
+\begin{center}
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+
+\node[myrect=17]
+  (array)
+  {
+  					\strut 0
+  \nodepart{two}	\strut 2
+  \nodepart{three}	\strut 6
+  \nodepart{four}	\strut 13
+  \nodepart{five}	\strut 8
+  \nodepart{six}	\strut 11
+  \nodepart{seven}	\strut 17
+  \nodepart{eight}	\strut 14
+  \nodepart{nine}	\strut 15
+  \nodepart{ten}	\strut 13
+  \nodepart{eleven}	\strut 9
+  \nodepart{twelve}	\strut 3
+  \nodepart{thirteen}	\strut 5
+  \nodepart{fourteen}	\strut 13
+  \nodepart{fifteen}	\strut 19
+  \nodepart{sixteen}	\strut 19
+  \nodepart{seventeen}	\strut 12
+  };
+\foreach \Valor [count=\Valori from 0] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen , seventeen }
+  \node[below] at (array.\Valor south) {\Valori};
+
+\end{tikzpicture}
+
+\end{center}
+
+Now $query$ becomes an $O(1)$ operation, as we can simply subtract two elements in the array to answer a query. Unfortunately, $update$ becomes $O(n)$, as changing the value of an element in the beginning of the sequence forces us to change almost all the values in the prefix sum array.
+
+We can still use this idea, though... what we are looking for is some way to group values into sums such that we only need to change a small number of the sums to $update$ and only require a small number of them to $query$.
+
+This leads us directly to a $\sqrt{n}$ bucketing solution. Let's group the 16 elements into 4 groups.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+
+\node[myrect=16]
+  (array2)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-5$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 6
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\node[myrect=4, text width=21.2ex] [below=of array2]
+  (array)
+  {
+  					\strut 8
+  \nodepart{two}	\strut 7
+  \nodepart{three}	\strut $-10$
+  \nodepart{four}	\strut 7
+  };
+
+\node[below] at (array.one south) {$[1,4]$};
+\node[below] at (array.two south) {$[5,8]$};
+\node[below] at (array.three south) {$[9,12]$};
+\node[below] at (array.four south) {$[13,16]$};
+\end{tikzpicture}
+}
+\end{center}
+
+We'll keep track of the total sum of each group. Now, if we want to update a value, we need to change only two values -- the value of that element in the original array and the total sum of the bucket it is in. When we query a range, we'll take advantage of the sum of the bucket when we can. Highlighted are the numbers we'll need for $query(7,15)$.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+
+\node[myrect=16, rectangle split part fill={myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, mysalmon, myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, mysalmon, mysalmon, myseagreen}]
+  (array2)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-5$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 6
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\node[myrect=4, text width=21.2ex, rectangle split part fill={myseagreen, myseagreen, mysalmon, myseagreen}] [below=of array2]
+  (array)
+  {
+  					\strut 8
+  \nodepart{two}	\strut 7
+  \nodepart{three}	\strut $-10$
+  \nodepart{four}	\strut 7
+  };
+
+\node[below] at (array.one south) {$[1,4]$};
+\node[below] at (array.two south) {$[5,8]$};
+\node[below] at (array.three south) {$[9,12]$};
+\node[below] at (array.four south) {$[13,16]$};
+
+\end{tikzpicture}
+}
+\end{center}
+
+Querying requires access to at most $\sqrt{n}$ bucket sums and $2(\sqrt{n}-1)$ individual values. Therefore we have $O(\sqrt{n})$ query and $O(1)$ update. We are able to improve $O(\sqrt{n})$ update to $O(1)$ because of nice properties of the $+$ operator. This is not always the case for range queries: suppose, for instance, we needed to find the minimum element on a range.
+
+It is often the case that $O(\sqrt{n})$ bounds can be improved to $O(\log{n})$ using more complex data structures like segment trees and more complex ideas like $2^n$ jump pointers, both of which are covered in this chapter. These are, however, more complicated to implement and as such are often comparable in runtime in the contest environment. Steven Hao is notorious for using crude $\sqrt{n}$ bucketing algorithms to solve problems that should have required tighter algorithm complexities. $\sqrt{n}$ bucketing is a crude yet powerful idea; always keep it in the back of your mind.
+
+\section{Segment Tree}
+
+It turns out for our specific sum problem that we can do as good as $O(\log{n})$ with a \textit{segment tree}, or \textit{range tree}, or \textit{augmented static BBST}. The essential idea is still the same -- we want to group elements in some way that allows us to update and query efficiently.
+
+As the name ``tree'' suggests, we draw inspiration from a binary structure. Let's build a tree on top of the array, where each node keeps track of the sum of the numbers associated with its children.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  very thick,
+  level 1/.style={sibling distance=76mm},
+  level 2/.style={sibling distance=38.5mm},
+  level 3/.style={sibling distance=19mm},
+  level 4/.style={sibling distance=9.5mm},
+  myrect/.style={
+    draw,
+    thick,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+\node [vertex] (r){$12$}
+  child {
+    node [vertex] (a) {15}
+    child {
+      node [vertex] {8}
+      child {
+        node [vertex] {6}
+        child {node [vertex] {2}}
+        child {node [vertex] {4}}
+      } 
+      child {
+        node [vertex] {2}
+        child {node [vertex] {7}}
+        child {node [vertex] {$-5$}}
+      }
+    }
+    child {
+      node [vertex] {7}
+      child {node [vertex] {9}
+              child {node [vertex] {3}}
+        child {node [vertex] {6}}
+      }
+      child {node [vertex] {$-2$}
+              child {node [vertex] {$-3$}}
+        child {node [vertex] {1}}
+      }
+    }
+  }
+  child {
+    node [vertex] {$-3$}
+    child {
+      node [vertex] {$-10$}
+      child {node [vertex] {$-6$}
+              child {node [vertex] {$-2$}}
+        child {node [vertex] {$-4$}}}
+      child {node [vertex] {$-4$}
+              child {node [vertex] {$-6$}}
+        child {node [vertex] {$2$}}}
+    }
+    child {
+      node [vertex] {7}
+      child {node [vertex] {14}
+              child {node [vertex] {8}}
+        child {node [vertex] {6}}}
+      child {node [vertex] {$-7$}
+              child {node [vertex] {0}}
+        child {node [vertex] {$-7$}}}
+    }
+  };
+
+\node[myrect=16] [below=7cm of r]
+  (array)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-5$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 6
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+Highlighted are the nodes we'll need to access for $query(7,15)$. Notice how the subtrees associated with each of these nodes neatly covers the entire range $[7,15]$.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  very thick,
+  level 1/.style={sibling distance=76mm},
+  level 2/.style={sibling distance=38.5mm},
+  level 3/.style={sibling distance=19mm},
+  level 4/.style={sibling distance=9.5mm},
+  myrect/.style={
+    draw,
+    thick,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+\node [vertex] (r){$12$}
+  child {
+    node [vertex] (a) {15}
+    child {
+      node [vertex] {8}
+      child {
+        node [vertex] {6}
+        child {node [vertex] {2}}
+        child {node [vertex] {4}}
+      } 
+      child {
+        node [vertex] {2}
+        child {node [vertex] {7}}
+        child {node [vertex] {$-5$}}
+      }
+    }
+    child {
+      node [vertex] {7}
+      child {node [vertex] {9}
+              child {node [vertex] {3}}
+        child {node [vertex] {6}}
+      }
+      child {node [vertex, fill=mysalmon] {$-2$}
+              child {node [vertex] {$-3$}}
+        child {node [vertex] {1}}
+      }
+    }
+  }
+  child {
+    node [vertex] {$-3$}
+    child {
+      node [vertex, fill=mysalmon] {$-10$}
+      child {node [vertex] {$-6$}
+              child {node [vertex] {$-2$}}
+        child {node [vertex] {$-4$}}}
+      child {node [vertex] {$-4$}
+              child {node [vertex] {$-6$}}
+        child {node [vertex] {$2$}}}
+    }
+    child {
+      node [vertex] {7}
+      child {node [vertex, fill=mysalmon] {14}
+              child {node [vertex] {8}}
+        child {node [vertex] {6}}}
+      child {node [vertex] {$-7$}
+              child {node [vertex, fill=mysalmon] {0}}
+        child {node [vertex] {$-7$}}}
+    }
+  };
+
+\end{tikzpicture}
+}
+\end{center}
+
+Again, the key idea is if the the interval associated with a node is completely contained within the interval we are querying, we simply return the sum associated with that node. Otherwise, we recurse on the two children. This process is $O(\log{n})$ because each level in the tree can have at most two highlighted nodes.
+
+If we wanted to change the third element to 2, we would have to update the highlighted nodes in the following diagram. This process is more straightforward than the querying.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  very thick,
+  level 1/.style={sibling distance=76mm},
+  level 2/.style={sibling distance=38.5mm},
+  level 3/.style={sibling distance=19mm},
+  level 4/.style={sibling distance=9.5mm},
+  myrect/.style={
+    draw,
+    thick,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+\node [vertex, fill=mysalmon] (r){7}
+  child {
+    node [vertex, fill=mysalmon] (a) {10}
+    child {
+      node [vertex, fill=mysalmon] {3}
+      child {
+        node [vertex] {6}
+        child {node [vertex] {2}}
+        child {node [vertex] {4}}
+      } 
+      child {
+        node [vertex, fill=mysalmon] {$-3$}
+        child {node [vertex, fill=mysalmon] {2}}
+        child {node [vertex] {$-5$}}
+      }
+    }
+    child {
+      node [vertex] {7}
+      child {node [vertex] {9}
+              child {node [vertex] {3}}
+        child {node [vertex] {6}}
+      }
+      child {node [vertex] {$-2$}
+              child {node [vertex] {$-3$}}
+        child {node [vertex] {1}}
+      }
+    }
+  }
+  child {
+    node [vertex] {$-3$}
+    child {
+      node [vertex] {$-10$}
+      child {node [vertex] {$-6$}
+              child {node [vertex] {$-2$}}
+        child {node [vertex] {$-4$}}}
+      child {node [vertex] {$-4$}
+              child {node [vertex] {$-6$}}
+        child {node [vertex] {$2$}}}
+    }
+    child {
+      node [vertex] {7}
+      child {node [vertex] {14}
+              child {node [vertex] {8}}
+        child {node [vertex] {6}}}
+      child {node [vertex] {$-7$}
+              child {node [vertex] {0}}
+        child {node [vertex] {$-7$}}}
+    }
+  };
+
+\end{tikzpicture}
+}
+\end{center}
+
+Updating is also $O(\log{n})$ as we need to change the values of at most one node in each level in the tree.
+
+I cheated with my example by using a nice power of two, $n=16$, as the number of elements in the sequence. Of course, the size is not always this nice. One solution is to simply pad the back of the sequence with enough 0s and pretend that the number of elements in the sequence is actually a power of two. For the segment tree, this is not necessary -- if a vertex is associated with the range $[a,b]$, we can simply split this range into two,
+$\left[a,\floor{\frac{a+b-1}{2}}\right]$ and $\left[\floor{\frac{a+b-1}{2}}+1,b\right]$. We then recursively apply this pattern except for when the lower bound of the range is equal to the upper bound. If $n=12$, the resulting tree would have the following structure.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  very thick,
+  level 1/.style={sibling distance=80mm},
+  level 2/.style={sibling distance=40mm},
+  level 3/.style={sibling distance=18mm},
+  level 4/.style={sibling distance=15mm},
+]
+\node [vertex, minimum size=38pt] (r){$[1,12]$}
+  child {
+    node [vertex, minimum size=38pt] (a) {$[1,6]$}
+    	child {
+        	node[vertex, minimum size=38pt] {$[1,3]$}
+            	child {
+                	node[vertex, minimum size=38pt] {$[1,1]$}
+                }
+                child {
+                	node[vertex, minimum size=38pt] {$[2,3]$}
+                    	child {node [vertex, minimum size=38pt] {$[2,2]$}}
+                    	child {node [vertex, minimum size=38pt] {$[3,3]$}}
+                }
+        }
+    	child {
+        	node[vertex, minimum size=38pt] {$[4,6]$}
+            	child {
+                	node[vertex, minimum size=38pt] {$[4,4]$}
+                }
+                child {
+                	node[vertex, minimum size=38pt] {$[5,6]$}
+                    	child {node [vertex, minimum size=38pt] {$[5,5]$}}
+                    	child {node [vertex, minimum size=38pt] {$[6,6]$}}
+                }
+        }
+  }
+  child {
+    node [vertex, minimum size=38pt] {$[7,12]$}
+    	child {
+        	node[vertex, minimum size=38pt] {$[7,9]$}
+            	child {
+                	node[vertex, minimum size=38pt] {$[7,7]$}
+                }
+                child {
+                	node[vertex, minimum size=38pt] {$[8,9]$}
+                    	child {node [vertex, minimum size=38pt] {$[8,8]$}}
+                    	child {node [vertex, minimum size=38pt] {$[9,9]$}}
+                }
+        }
+    	child {
+        	node[vertex, minimum size=38pt] {$[10,12]$}
+            	child {
+                	node[vertex, minimum size=38pt] {$[10,10]$}
+                }
+                child {
+                	node[vertex, minimum size=38pt] {$[11,12]$}
+                    	child {node [vertex, minimum size=38pt] {$[11,11]$}}
+                    	child {node [vertex, minimum size=38pt] {$[12,12]$}}
+                }
+        }
+  };
+
+\end{tikzpicture}
+}
+\end{center}
+
+For this reason, while I used the concept of ``building up'' on top of our array to introduce the segment tree, any operation we implement will start at the root and recursively trickle down the tree. We see that the segment tree structure does not have to resemble a complete tree at all. However, with this approach, it is still quite balanced, so we can store a segment tree within an array as we would a heap.
+
+\subsection{Fenwick Tree}
+
+A \textit{Fenwick tree}, or \textit{binary indexed tree (BIT)}, is simply a faster and easier to code segment tree when the operator in question has an inverse. Unfortunately, it's not at all intuitive, so bear with me at first and let the magic of the Fenwick tree reveal itself later. In fact, it is so magical that Richard Peng hates it because it is too gimmicky. The key idea is to compress the data stored within a segment tree in a crazy way that ends up having a really slick implementation using some bit operation tricks.
+
+As discussed earlier, the $+$ operator has an inverse, $-$. Therefore, there is an inherent redundancy, for example, in keeping track of the sum of the first $\frac{n}{2}$ elements, the sum of all $n$ elements, and the sum of the last $\frac{n}{2}$ elements, as we do in the segment tree. If we are given only $\sum_{k=1}^{n/2} a_k$ and $\sum_{k=1}^n a_k$, we can find $\sum_{k=n/2+1}^{n} a_k$ easily using subtraction.
+
+With this in mind, let's ignore every right child in the tree. We'll mark them as black in the diagram. After that, we'll write out the tree nodes in postfix traversal order, without writing anything whenever we encounter a black node.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  very thick,
+  level 1/.style={sibling distance=76mm},
+  level 2/.style={sibling distance=38.5mm},
+  level 3/.style={sibling distance=19mm},
+  level 4/.style={sibling distance=9.5mm},
+  myrect/.style={
+    draw,
+    thick,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+\node [vertex] (r){$12$}
+  child {
+    node [vertex] (a) {15}
+    child {
+      node [vertex] {8}
+      child {
+        node [vertex] {6}
+        child {node [vertex] {2}}
+        child {node [vertex, text=mywhite, fill=myblack] {4}}
+      } 
+      child {
+        node [vertex, text=mywhite, fill=myblack] {2}
+        child {node [vertex] {7}}
+        child {node [vertex, text=mywhite, fill=myblack] {$-5$}}
+      }
+    }
+    child {
+      node [vertex, text=mywhite, fill=myblack] {7}
+      child {node [vertex] {9}
+              child {node [vertex] {3}}
+        child {node [vertex, text=mywhite, fill=myblack] {6}}
+      }
+      child {node [vertex, text=mywhite, fill=myblack] {$-2$}
+              child {node [vertex] {$-3$}}
+        child {node [vertex, text=mywhite, fill=myblack] {1}}
+      }
+    }
+  }
+  child {
+    node [vertex, text=mywhite, fill=myblack] {$-3$}
+    child {
+      node [vertex] {$-10$}
+      child {node [vertex] {$-6$}
+              child {node [vertex] {$-2$}}
+        child {node [vertex, text=mywhite, fill=myblack] {$-4$}}}
+      child {node [vertex, text=mywhite, fill=myblack] {$-4$}
+              child {node [vertex] {$-6$}}
+        child {node [vertex, text=mywhite, fill=myblack] {$2$}}}
+    }
+    child {
+      node [vertex, text=mywhite, fill=myblack] {7}
+      child {node [vertex] {14}
+              child {node [vertex] {8}}
+        child {node [vertex, text=mywhite, fill=myblack] {6}}}
+      child {node [vertex, text=mywhite, fill=myblack] {$-7$}
+              child {node [vertex] {0}}
+        child {node [vertex, text=mywhite, fill=myblack] {$-7$}}}
+    }
+  };
+
+\node[myrect=16] [below=7cm of r]
+  (array)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-5$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 6
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array.\Valor south) {\Valori};
+
+\node[myrect=16] [below=of array]
+  (array2)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 6
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut 8
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 9
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 15
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-6$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut $-10$
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 14
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut 12
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+Our Fenwick tree is simply this last array. This should be quite confusing -- it is not at all clear why this array resembles a tree, and the numbers in the array make no sense whatsoever right now.
+
+Notice that the final position of every unblackened node is just the rightmost black child in its subtree. This leads to the fact that the $i$th element in the Fenwick tree array is the sum
+
+\[b_k = \sum_{k=i-2^{v_2(i)}+1}^i a_k, \]
+
+where $2^{v_2(i)}$ is simply the greatest power of 2 that divides $i$. Let's look at a new diagram that hopefully will better illustrate this key property of the random array we just came up with.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  very thick,
+  myrect/.style={
+    draw,
+    thick,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    },
+  onesided/.style={
+        text width=4ex,
+        draw=none,
+        append after command={
+            [shorten <= -0.5\pgflinewidth] 
+            ([shift={( 0.5\pgflinewidth,-0.5\pgflinewidth)}]\tikzlastnode.north west)
+        edge([shift={( 0.5\pgflinewidth,+0.5\pgflinewidth)}]\tikzlastnode.south west)            
+        }
+    }
+]
+
+\node[myrect=16]
+  (array)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-5$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 6
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array.\Valor south) {\Valori};
+
+\node[myrect=1, above=5mm] at (array.one north) (n1) {2};
+\node[myrect=1, above=15mm] at (array.two north) (n2) {6};
+\node[myrect=1, above=5mm] at (array.three north) (n3) {7};
+\node[myrect=1, above=25mm] at (array.four north) (n4) {8};
+\node[myrect=1, above=5mm] at (array.five north) (n5) {3};
+\node[myrect=1, above=15mm] at (array.six north) (n6) {9};
+\node[myrect=1, above=5mm] at (array.seven north) (n7) {$-3$};
+\node[myrect=1, above=35mm] at (array.eight north) (n8) {15};
+\node[myrect=1, above=5mm] at (array.nine north) (n9) {$-2$};
+\node[myrect=1, above=15mm] at (array.ten north) (n10) {$-6$};
+\node[myrect=1, above=5mm] at (array.eleven north) (n11) {$-6$};
+\node[myrect=1, above=25mm] at (array.twelve north) (n12) {$-10$};
+\node[myrect=1, above=5mm] at (array.thirteen north) (n13) {8};
+\node[myrect=1, above=15mm] at (array.fourteen north) (n14) {14};
+\node[myrect=1, above=5mm] at (array.fifteen north) (n15) {0};
+\node[myrect=1, above=45mm] at (array.sixteen north) (n16) {12};
+
+\node[onesided, above=15mm] at (array.one north) (m2) { \phantom{0} };
+\node[onesided, above=25mm] at (array.one north) (m4) { \phantom{0} };
+\node[onesided, above=15mm] at (array.five north) (m6) { \phantom{0} };
+\node[onesided, above=35mm] at (array.one north) (m8) { \phantom{0} };
+\node[onesided, above=15mm] at (array.nine north) (m10) { \phantom{0} };
+\node[onesided, above=25mm] at (array.nine north) (m12) { \phantom{0} };
+\node[onesided, above=15mm] at (array.thirteen north) (m14) { \phantom{0} };
+\node[onesided, above=45mm] at (array.one north) (m16) { \phantom{0} };
+
+\draw (m2.west) -- (n2.west);
+\draw (m4.west) -- (n4.west);
+\draw (m6.west) -- (n6.west);
+\draw (m8.west) -- (n8.west);
+\draw (m10.west) -- (n10.west);
+\draw (m12.west) -- (n12.west);
+\draw (m14.west) -- (n14.west);
+\draw (m16.west) -- (n16.west);
+
+\node[myrect=16] [below=of array]
+  (array2)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 6
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut 8
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 9
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 15
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-6$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut $-10$
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 14
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut 12
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+All the framework is now in place. Now we need to find out how to query and update the Fenwick tree.
+
+Suppose we wanted to find the sum $\sum_{k=1}^{11} a_k$. Let's take a look at the diagram to see which elements we need.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  very thick,
+  myrect2/.style={
+    draw,
+    thick,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    },
+  myrect/.style={
+    draw,
+    thick,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    fill=myseagreen,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered,
+  	fill=myseagreen
+  },
+  onesided/.style={
+        text width=4ex,
+        draw=none,
+        append after command={
+            [shorten <= -0.5\pgflinewidth] 
+            ([shift={( 0.5\pgflinewidth,-0.5\pgflinewidth)}]\tikzlastnode.north west)
+        edge([shift={( 0.5\pgflinewidth,+0.5\pgflinewidth)}]\tikzlastnode.south west)            
+        }
+    }
+]
+
+\node[myrect=16]
+  (array)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-5$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 6
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array.\Valor south) {\Valori};
+
+\node[myrect=1, above=5mm] at (array.one north) (n1) {2};
+\node[myrect=1, above=15mm] at (array.two north) (n2) {6};
+\node[myrect=1, above=5mm] at (array.three north) (n3) {7};
+\node[myrect=1, above=25mm] at (array.four north) (n4) {8};
+\node[myrect=1, above=5mm] at (array.five north) (n5) {3};
+\node[myrect=1, above=15mm] at (array.six north) (n6) {9};
+\node[myrect=1, above=5mm] at (array.seven north) (n7) {$-3$};
+\node[myrect=1, above=35mm, fill=mysalmon] at (array.eight north) (n8) {15};
+\node[myrect=1, above=5mm] at (array.nine north) (n9) {$-2$};
+\node[myrect=1, above=15mm, fill=mysalmon] at (array.ten north) (n10) {$-6$};
+\node[myrect=1, above=5mm, fill=mysalmon] at (array.eleven north) (n11) {$-6$};
+\node[myrect=1, above=25mm] at (array.twelve north) (n12) {$-10$};
+\node[myrect=1, above=5mm] at (array.thirteen north) (n13) {8};
+\node[myrect=1, above=15mm] at (array.fourteen north) (n14) {14};
+\node[myrect=1, above=5mm] at (array.fifteen north) (n15) {0};
+\node[myrect=1, above=45mm] at (array.sixteen north) (n16) {12};
+
+\node[onesided, above=15mm] at (array.one north) (m2) { \phantom{0} };
+\node[onesided, above=25mm] at (array.one north) (m4) { \phantom{0} };
+\node[onesided, above=15mm] at (array.five north) (m6) { \phantom{0} };
+\node[onesided, above=35mm] at (array.one north) (m8) { \phantom{0} };
+\node[onesided, above=15mm] at (array.nine north) (m10) { \phantom{0} };
+\node[onesided, above=25mm] at (array.nine north) (m12) { \phantom{0} };
+\node[onesided, above=15mm] at (array.thirteen north) (m14) { \phantom{0} };
+\node[onesided, above=45mm] at (array.one north) (m16) { \phantom{0} };
+
+\draw (m2.west) -- (n2.west);
+\draw (m4.west) -- (n4.west);
+\draw (m6.west) -- (n6.west);
+\draw (m8.west) -- (n8.west);
+\draw (m10.west) -- (n10.west);
+\draw (m12.west) -- (n12.west);
+\draw (m14.west) -- (n14.west);
+\draw (m16.west) -- (n16.west);
+
+\node[myrect2=16, rectangle split part fill={myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, myseagreen, mysalmon, mysalmon, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen}] [below=of array]
+  (array2)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 6
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut 8
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 9
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 15
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-6$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut $-10$
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 14
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut 12
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+We see that the sum $\sum_{k=1}^{11}a_k=b_8+b_{10}+b_{11}$. If we look at 11 in binary, we have $11=01011_2$. Let's see if we can find a pattern in these numbers in binary:
+
+\begin{align*}
+11 &= 01011_2, \\
+10 = 11-2^{v_2(11)} &= 01010_2, \\
+8 = 10-2^{v_2(10)} &= 01000_2, \\
+0=8-2^{v_2(8)}&=00000_2.
+\end{align*}
+
+So, we can simply subtract $11-2^{v_2(11)}=10=01010_2$, find the sum of the first 10 elements, and add $b_{11}$ to that sum to get the sum of the first 11 elements. We see that repeating this process takes off the last 1 in the binary representation of the number $i$, and since there are at most $\log{n}+1$ 1s in the binary representation $\forall i \in [1,n]$, the query operation is $O(\log{n})$.
+
+And now for the update operation. Suppose we want to change the value of $a_{11}$ from $-6$ to $-3$. Which numbers will we have to change?
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  very thick,
+  myrect2/.style={
+    draw,
+    thick,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    },
+  myrect/.style={
+    draw,
+    thick,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    fill=myseagreen,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered,
+  	fill=myseagreen
+  },
+  onesided/.style={
+        text width=4ex,
+        draw=none,
+        append after command={
+            [shorten <= -0.5\pgflinewidth] 
+            ([shift={( 0.5\pgflinewidth,-0.5\pgflinewidth)}]\tikzlastnode.north west)
+        edge([shift={( 0.5\pgflinewidth,+0.5\pgflinewidth)}]\tikzlastnode.south west)            
+        }
+    }
+]
+
+\node[myrect=16]
+  (array)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-5$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-3$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 6
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array.\Valor south) {\Valori};
+
+\node[myrect=1, above=5mm] at (array.one north) (n1) {2};
+\node[myrect=1, above=15mm] at (array.two north) (n2) {6};
+\node[myrect=1, above=5mm] at (array.three north) (n3) {7};
+\node[myrect=1, above=25mm] at (array.four north) (n4) {8};
+\node[myrect=1, above=5mm] at (array.five north) (n5) {3};
+\node[myrect=1, above=15mm] at (array.six north) (n6) {9};
+\node[myrect=1, above=5mm] at (array.seven north) (n7) {$-3$};
+\node[myrect=1, above=35mm] at (array.eight north) (n8) {15};
+\node[myrect=1, above=5mm] at (array.nine north) (n9) {$-2$};
+\node[myrect=1, above=15mm] at (array.ten north) (n10) {$-6$};
+\node[myrect=1, above=5mm, fill=mysalmon] at (array.eleven north) (n11) {$-3$};
+\node[myrect=1, above=25mm, fill=mysalmon] at (array.twelve north) (n12) {$-7$};
+\node[myrect=1, above=5mm] at (array.thirteen north) (n13) {8};
+\node[myrect=1, above=15mm] at (array.fourteen north) (n14) {14};
+\node[myrect=1, above=5mm] at (array.fifteen north) (n15) {0};
+\node[myrect=1, above=45mm, fill=mysalmon] at (array.sixteen north) (n16) {15};
+
+\node[onesided, above=15mm] at (array.one north) (m2) { \phantom{0} };
+\node[onesided, above=25mm] at (array.one north) (m4) { \phantom{0} };
+\node[onesided, above=15mm] at (array.five north) (m6) { \phantom{0} };
+\node[onesided, above=35mm] at (array.one north) (m8) { \phantom{0} };
+\node[onesided, above=15mm] at (array.nine north) (m10) { \phantom{0} };
+\node[onesided, above=25mm] at (array.nine north) (m12) { \phantom{0} };
+\node[onesided, above=15mm] at (array.thirteen north) (m14) { \phantom{0} };
+\node[onesided, above=45mm] at (array.one north) (m16) { \phantom{0} };
+
+\draw (m2.west) -- (n2.west);
+\draw (m4.west) -- (n4.west);
+\draw (m6.west) -- (n6.west);
+\draw (m8.west) -- (n8.west);
+\draw (m10.west) -- (n10.west);
+\draw (m12.west) -- (n12.west);
+\draw (m14.west) -- (n14.west);
+\draw (m16.west) -- (n16.west);
+
+\node[myrect2=16, rectangle split part fill={myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, mysalmon, myseagreen, myseagreen, myseagreen, mysalmon}] [below=of array]
+  (array2)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 6
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut 8
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 9
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 15
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-6$
+  \nodepart{eleven}	\strut $-3$
+  \nodepart{twelve}	\strut $-7$
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 14
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut 15
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+We needed to increment the highlighted values, $b_{11}$, $b_{12}$, and $b_{16}$, by 3. Once again we'll look at 11, 12, and 16 in base 2.
+
+\begin{align*}
+11 &= 01011_2, \\
+12 &= 01100_2 = 11 + 2^{v_2(11)}, \\
+16 &= 10000_2 = 12 + 2^{v_2(12)}.
+\end{align*}
+
+It appears that instead of subtracting the largest dividing power of 2, we are adding. Once again this is an $O(\log{n})$ operation.
+
+The real magic in the Fenwick tree is how quickly it can be coded. The only tricky part is finding exactly what $2^{v_2(i)}$ is. But it turns out, by the way bits are arranged in negative numbers, this is just \texttt{i \& -i}. With this in mind, here's all the code that's necessary to code a Fenwick tree.
+
+\begin{mylstlisting}
+int[] b = new int[MAXN]; // Fenwick tree stored as array
+void update(int i, int x) {
+	for( ; i < MAXN; i += i & -i)
+		b[i] += x;
+}
+int prefixSum(int i) {
+	int sum = 0;
+	for( ; i > 0; i -= i & -i)
+		sum += b[i];
+	return sum;
+}
+int query(int i, int j) {
+	return prefixSum(j) - prefixSum(i - 1);
+}
+\end{mylstlisting}
+
+\subsection{Lazy Propagation}
+
+It is often the case that in addition to performing range queries, we need to be able to perform \textit{range updates}. (Before, we only had to implement point updates.) One extension of our sum problem would require the following two functions:
+
+\begin{itemize}
+\item
+$update(i, j, x)$ -- increment the value of $a_k$ by $x$ for all $k\in [i,j]$
+
+\item
+$query(i, j)$ -- return $\sum_{k=i}^j a_k$.
+\end{itemize}
+
+\subsubsection{Some Motivation: $\sqrt{n}$ Blocking}
+
+Let's go back to our $\sqrt{n}$ blocking solution and see what changes we can make, and hopefully we can extend this idea back to our segment tree. If we're looking for an $O(\sqrt{n})$ implementation for $update$, we clearly can't perform point updates for all values in the range. The way we sped up $query$ was by keeping track of an extra set of data, the sum of all the elements in a bucket, which we used when \textit{the entire bucket was in the query range}.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+
+\node[myrect=16]
+  (array2)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-5$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 6
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\node[myrect=4, text width=21.2ex] [below=of array2]
+  (array)
+  {
+  					\strut 8
+  \nodepart{two}	\strut 7
+  \nodepart{three}	\strut $-10$
+  \nodepart{four}	\strut 7
+  };
+
+\node[below] at (array.one south) {$[1,4]$};
+\node[below] at (array.two south) {$[5,8]$};
+\node[below] at (array.three south) {$[9,12]$};
+\node[below] at (array.four south) {$[13,16]$};
+\end{tikzpicture}
+}
+\end{center}
+
+What can we do with this idea for $update$? Let's see what we can do if an entire bucket were included in the update range. Again, we don't want to touch the original array $a$ at all since that makes the operation linear. Let's try storing some information separately. This other information we're storing is the key idea behind lazy propagation.
+
+With this in mind, highlighted are the elements we'll need for $update(4,14,3)$.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+
+\node[myrect=16, rectangle split part fill={myseagreen, myseagreen, myseagreen, mysalmon, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, mysalmon, myseagreen, myseagreen}]
+  (array2)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-2$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 11
+  \nodepart{fourteen}	\strut 9
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\node[myrect=4, text width=21.2ex, rectangle split part fill={mysalmon, mysalmon, mysalmon, mysalmon}] [below=of array2]
+  (array)
+  {
+  					\strut 11
+  \nodepart{two}	\strut 19
+  \nodepart{three}	\strut 2
+  \nodepart{four}	\strut 13
+  };
+
+\node[below] at (array.one south) {$[1,4]$};
+\node[below] at (array.two south) {$[5,8]$};
+\node[below] at (array.three south) {$[9,12]$};
+\node[below] at (array.four south) {$[13,16]$};
+
+\node[myrect=4, text width=21.2ex, rectangle split part fill={myseagreen, mysalmon, mysalmon, myseagreen}] [below=of array]
+  (array3)
+  {
+  					\strut 0
+  \nodepart{two}	\strut 3
+  \nodepart{three}	\strut 3
+  \nodepart{four}	\strut 0
+  };
+
+\node[below] at (array3.one south) {$[1,4]$};
+\node[below] at (array3.two south) {$[5,8]$};
+\node[below] at (array3.three south) {$[9,12]$};
+\node[below] at (array3.four south) {$[13,16]$};
+\end{tikzpicture}
+}
+\end{center}
+
+Note that the sums associated with each bucket must adjust appropriately. In the example, there are four elements per bucket, so when an entire bucket needs to be incremented by 3, a single bucket can increment its sum by $4 \cdot 3 = 12$ easily.
+
+To reiterate, we not storing the actual values of the elements where they were stored in solving the original formulation of the problem. Despite this fact, we are able to calculate what any single value is supposed to be. $a_i$ is simply equal to the $\ceiling{\frac{i}{\sqrt{n}}}$th value stored in the newest third array added to the $i$th value stored in the first array. Because of this, querying a range works in almost exactly the same way as it did in the original formulation.
+
+Highlighted are the values necessary for $query(7,15)$.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+
+\node[myrect=16, rectangle split part fill={myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, mysalmon, myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, mysalmon, mysalmon, myseagreen}]
+  (array2)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-2$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 11
+  \nodepart{fourteen}	\strut 9
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\node[myrect=4, text width=21.2ex, rectangle split part fill={myseagreen, myseagreen, mysalmon, myseagreen}] [below=of array2]
+  (array)
+  {
+  					\strut 11
+  \nodepart{two}	\strut 19
+  \nodepart{three}	\strut 2
+  \nodepart{four}	\strut 13
+  };
+
+\node[below] at (array.one south) {$[1,4]$};
+\node[below] at (array.two south) {$[5,8]$};
+\node[below] at (array.three south) {$[9,12]$};
+\node[below] at (array.four south) {$[13,16]$};
+
+\node[myrect=4, text width=21.2ex, rectangle split part fill={myseagreen, mysalmon, myseagreen, mysalmon}] [below=of array]
+  (array3)
+  {
+  					\strut 0
+  \nodepart{two}	\strut 3
+  \nodepart{three}	\strut 3
+  \nodepart{four}	\strut 0
+  };
+
+\node[below] at (array3.one south) {$[1,4]$};
+\node[below] at (array3.two south) {$[5,8]$};
+\node[below] at (array3.three south) {$[9,12]$};
+\node[below] at (array3.four south) {$[13,16]$};
+\end{tikzpicture}
+}
+\end{center}
+
+Thus we have achieved $O(\sqrt{n})$ for both range updates and and range queries.
+
+\subsubsection{Lazy Propagation on a Segment Tree}
+
+Motivated by how we fixed our $O(\sqrt{n})$ solution, let's try adding a similar extra piece of information to our segment tree to try to get an $O(\log{n})$ solution. Let's call this extra number the ``lazy'' number.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  very thick,
+  level 1/.style={sibling distance=80mm},
+  level 2/.style={sibling distance=40mm},
+  level 3/.style={sibling distance=20mm},
+  level 4/.style={sibling distance=10mm},
+  myrect/.style={
+    draw,
+    thick,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split parts=2,
+    rectangle split part align=left,
+    text width=3.5ex,
+    text centered
+    }
+]
+\node [myrect] (r){$12$\nodepart{two}0}
+  child {
+    node [myrect] (a) {15\nodepart{two}0}
+    child {
+      node [myrect] {8\nodepart{two}0}
+      child {
+        node [myrect] {6\nodepart{two}0}
+        child {node [myrect] {2\nodepart{two}0}}
+        child {node [myrect] {4\nodepart{two}0}}
+      } 
+      child {
+        node [myrect] {2\nodepart{two}0}
+        child {node [myrect] {7\nodepart{two}0}}
+        child {node [myrect] {$-5$\nodepart{two}0}}
+      }
+    }
+    child {
+      node [myrect] {7\nodepart{two}0}
+      child {node [myrect] {9\nodepart{two}0}
+              child {node [myrect] {3\nodepart{two}0}}
+        child {node [myrect] {6\nodepart{two}0}}
+      }
+      child {node [myrect] {$-2$\nodepart{two}0}
+              child {node [myrect] {$-3$\nodepart{two}0}}
+        child {node [myrect] {1\nodepart{two}0}}
+      }
+    }
+  }
+  child {
+    node [myrect] {$-3$\nodepart{two}0}
+    child {
+      node [myrect, text width=4ex] {$-10$\nodepart{two}0}
+      child {node [myrect] {$-6$\nodepart{two}0}
+              child {node [myrect] {$-2$\nodepart{two}0}}
+        child {node [myrect] {$-4$\nodepart{two}0}}}
+      child {node [myrect] {$-4$\nodepart{two}0}
+              child {node [myrect] {$-6$\nodepart{two}0}}
+        child {node [myrect] {$2$\nodepart{two}0}}}
+    }
+    child {
+      node [myrect] {7\nodepart{two}0}
+      child {node [myrect] {14\nodepart{two}0}
+              child {node [myrect] {8\nodepart{two}0}}
+        child {node [myrect] {6\nodepart{two}0}}}
+      child {node [myrect] {$-7$\nodepart{two}0}
+              child {node [myrect] {0\nodepart{two}0}}
+        child {node [myrect] {$-7$\nodepart{two}0}}}
+    }
+  };
+
+\end{tikzpicture}
+}
+\end{center}
+
+Once again, if the entire range associated with a node is contained within the update interval, we'll just make a note of it on that particular node and not update any of its children. We'll call such a node ``lazy.''
+
+Here's the status of the tree after $update(3,12,2)$.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  very thick,
+  level 1/.style={sibling distance=80mm},
+  level 2/.style={sibling distance=40mm},
+  level 3/.style={sibling distance=20mm},
+  level 4/.style={sibling distance=10mm},
+  myrect/.style={
+    draw,
+    thick,
+    rectangle split,
+    rectangle split parts=2,
+    rectangle split part fill={myseagreen, myseagreen},
+    rectangle split part align=left,
+    text width=3.5ex,
+    text centered
+    }
+]
+\node [myrect, rectangle split part fill={mysalmon, myseagreen}] (r){$32$\nodepart{two}0}
+  child {
+    node [myrect, rectangle split part fill={mysalmon, myseagreen}] (a) {27\nodepart{two}0}
+    child {
+      node [myrect, rectangle split part fill={mysalmon, myseagreen}] {12\nodepart{two}0}
+      child {
+        node [myrect] {6\nodepart{two}0}
+        child {node [myrect] {2\nodepart{two}0}}
+        child {node [myrect] {4\nodepart{two}0}}
+      } 
+      child {
+        node [myrect, rectangle split part fill={mysalmon, mysalmon}] {6\nodepart{two}2}
+        child {node [myrect] {7\nodepart{two}0}}
+        child {node [myrect] {$-5$\nodepart{two}0}}
+      }
+    }
+    child {
+      node [myrect, rectangle split part fill={mysalmon, mysalmon}] {15\nodepart{two}2}
+      child {node [myrect] {9\nodepart{two}0}
+              child {node [myrect] {3\nodepart{two}0}}
+        child {node [myrect] {6\nodepart{two}0}}
+      }
+      child {node [myrect] {$-2$\nodepart{two}0}
+              child {node [myrect] {$-3$\nodepart{two}0}}
+        child {node [myrect] {1\nodepart{two}0}}
+      }
+    }
+  }
+  child {
+    node [myrect, rectangle split part fill={mysalmon, myseagreen}] {$5$\nodepart{two}0}
+    child {
+      node [myrect, rectangle split part fill={mysalmon, mysalmon}] {$-2$\nodepart{two}2}
+      child {node [myrect] {$-6$\nodepart{two}0}
+              child {node [myrect] {$-2$\nodepart{two}0}}
+        child {node [myrect] {$-4$\nodepart{two}0}}}
+      child {node [myrect] {$-4$\nodepart{two}0}
+              child {node [myrect] {$-6$\nodepart{two}0}}
+        child {node [myrect] {$2$\nodepart{two}0}}}
+    }
+    child {
+      node [myrect] {7\nodepart{two}0}
+      child {node [myrect] {14\nodepart{two}0}
+              child {node [myrect] {8\nodepart{two}0}}
+        child {node [myrect] {6\nodepart{two}0}}}
+      child {node [myrect] {$-7$\nodepart{two}0}
+              child {node [myrect] {0\nodepart{two}0}}
+        child {node [myrect] {$-7$\nodepart{two}0}}}
+    }
+  };
+
+\end{tikzpicture}
+}
+\end{center}
+
+When a node is lazy, it indicates that the sum numbers of every other node in its subtree is no longer accurate. In particular, if a node is lazy, the sum number it keeps track of is not equal to the sum of the sum numbers of its children. This means whenever we need to access any node in that subtree, we'll need to update them then. Numbers in the tree therefore can change even after a query. Let's perform a query to illustrate that point.
+
+$query(7,13)$ requires access to the nodes for the ranges $[7,8]$, $[9,12]$, and $[13,13]$. The nodes for $[9,12]$ and $[13,13]$ are up to date and store the correct sum, but the node for $[7,8]$ does not, as it is a descendent of the node for $[5,8]$, which has a nonzero lazy number. Highlighted are the nodes we'll need to update as we perform the query. Notice how $[5,8]$ simply passes its lazy number onto its children, and they update themselves as necessary.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  very thick,
+  level 1/.style={sibling distance=80mm},
+  level 2/.style={sibling distance=40mm},
+  level 3/.style={sibling distance=20mm},
+  level 4/.style={sibling distance=10mm},
+  myrect/.style={
+    draw,
+    thick,
+    rectangle split,
+    rectangle split parts=2,
+    rectangle split part fill={myseagreen, myseagreen},
+    rectangle split part align=left,
+    text width=3.5ex,
+    text centered
+    }
+]
+\node [myrect] (r){$32$\nodepart{two}0}
+  child {
+    node [myrect] (a) {27\nodepart{two}0}
+    child {
+      node [myrect] {12\nodepart{two}0}
+      child {
+        node [myrect] {6\nodepart{two}0}
+        child {node [myrect] {2\nodepart{two}0}}
+        child {node [myrect] {4\nodepart{two}0}}
+      } 
+      child {
+        node [myrect] {6\nodepart{two}2}
+        child {node [myrect] {7\nodepart{two}0}}
+        child {node [myrect] {$-5$\nodepart{two}0}}
+      }
+    }
+    child {
+      node [myrect, rectangle split part fill={myseagreen, mysalmon}] {15\nodepart{two}0}
+      child {node [myrect, rectangle split part fill={mysalmon, mysalmon}] {13\nodepart{two}2}
+              child {node [myrect] {3\nodepart{two}0}}
+        child {node [myrect] {6\nodepart{two}0}}
+      }
+      child {node [myrect, rectangle split part fill={mysalmon, mysalmon}] {$2$\nodepart{two}2}
+              child {node [myrect] {$-3$\nodepart{two}0}}
+        child {node [myrect] {1\nodepart{two}0}}
+      }
+    }
+  }
+  child {
+    node [myrect] {$5$\nodepart{two}0}
+    child {
+      node [myrect] {$-2$\nodepart{two}2}
+      child {node [myrect] {$-6$\nodepart{two}0}
+              child {node [myrect] {$-2$\nodepart{two}0}}
+        child {node [myrect] {$-4$\nodepart{two}0}}}
+      child {node [myrect] {$-4$\nodepart{two}0}
+              child {node [myrect] {$-6$\nodepart{two}0}}
+        child {node [myrect] {$2$\nodepart{two}0}}}
+    }
+    child {
+      node [myrect] {7\nodepart{two}0}
+      child {node [myrect] {14\nodepart{two}0}
+              child {node [myrect] {8\nodepart{two}0}}
+        child {node [myrect] {6\nodepart{two}0}}}
+      child {node [myrect] {$-7$\nodepart{two}0}
+              child {node [myrect] {0\nodepart{two}0}}
+        child {node [myrect] {$-7$\nodepart{two}0}}}
+    }
+  };
+
+\end{tikzpicture}
+}
+\end{center}
+
+Now, the nodes that we need are all up to date, and we can perform our query. This process is necessary whenever we are performing an operation on an interval that intersects but does not contain the range associated with a lazy node. Since this can only happen for two such nodes (one at either end of the interval in question), both updating and querying change values of at most four nodes per level, so both operations are $O(\log{n})$.
+
+\subsection{Higher Dimensions}
+
+\subsection{Persistent Segment Tree}
+
+\begin{enumerate}
+
+\item
+(SPOJ, CPAIR)
+Given a sequence $A_k$ of $N$ ($1 \le N \le 100, 000$) non-negative integers ($\forall k, A_k < 1000$), Answer $Q$ ($1 \le Q \le
+100, 000$) queries, where each query consists of three integers, $v$, $a$, $b$. The answer is the number of pairs of
+integers $i$ and $j$ such that $1 \le i \le j \le N$, $a \le j - i + 1 \le b$, and $A_k \ge v$ for every integer $k$ between $i$, and
+$j$, inclusive.
+
+\end{enumerate}
+
+\section{Queue with Minimum Query}
+
+Suppose we wanted a list data structure with the following three operations:
+
+\begin{itemize}
+
+\item
+$add(x)$ -- add $x$ to the end of the list.
+
+\item
+$remove()$ -- remove the first element in the list.
+
+\item
+$min()$ -- return the minimum element in the list.
+
+\end{itemize}
+
+This is different from a heap since $remove$ does not remove the minimum element. It's pretty easy to find a $O(\log{n})$ solution using the data structures we already know. However, it is possible to build a data structure that can do any of these operations with complexity $O(1)$.
+
+To solve this problem, we'll first solve an easier problem. Suppose instead of removing the first element of the list, we had remove the last element; in other words, we needed to build a stack with minimum query instead of a queue. This is a simple task; we'll just use a normal stack, but instead of storing single numbers, we'll store pairs. The pairs will each contain the number we're adding and the minimum element up to that point in the stack.
+
+To build a queue given a stack with minimum query, we'll just have two stacks. When we add an element, we push it to the top of the first stack. When we remove an element, we take it off the top of the second stack. The minimum element in the queue is the smaller element between the minima of either stack.
+
+This seems like it obviously doesn't work -- one of the stacks keeps growing, while the other can only shrink. This is not a problem, however; when the second stack runs out of elements, we'll just pop off every element of the first stack and push each onto the second stack. This amounts to one $O(n)$ operation for every $n$ $O(1)$ operations, which averages out to constant time.
+
+\section{Balanced Binary Search Tree}
+
+Recall that a normal binary search tree is not guaranteed to be balanced. Many data structures have been invented to self-balance the binary search tree.
+
+The \textit{red-black tree} was an early development that represents the ``just do it'' approach, using casework to balance a tree. This results in a simple mathematical proof for the maximum depth of the tree. Unfortunately, coding these up are quite nasty do to the casework involved, so doing so is generally not preferred unless your name is Sreenath Are.
+
+The \textit{splay tree} is a data structure that guarantees amortized logarithmic performance; this means that any single operation is not necessarily linear, but over \textit{any} sequence of length $m$ for $m \ge n$, the performance for all $m$ operations is $O(m \log{n})$. Though the proof of the splay tree's complexity is necessarily more complicated than the red-black tree's complexity, as it requires amortized analysis, coding the splay tree is much easier than coding the red-black tree. In addition, the splay tree grants us more flexibility than the red-black tree provides, allowing us to build more complicated structures like link-cut trees using splay trees.
+
+The \textit{treap} is a probabilistic data structure that combines the BST with a heap to usually create a balanced tree. Just as quicksort is not guaranteed to run in $O(n\log{n})$, so too does the treap not guarantee $O(\log{n})$ operations, but will usually result in logarithmic performance.
+
+\subsection{Tree Rotation}
+
+The key idea behind all of these data structures is the use of the \textit{tree rotation}, which is used to change the structure of the tree but will not change the order of the elements (inorder). Maintaining the order of the elements is important, of course, if we wish our tree to remain a binary search tree.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level/.style={sibling distance=35mm/#1}, auto, bend left]
+
+\node [vertex, fill=mysalmon] (r){$Q$}
+  child {
+  	node[vertex, fill=mysalmon] {$P$}
+  	child {
+  		node[vertex] {$A$} {
+		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+  	child {
+  		node[vertex] {$B$} {
+		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+  }
+  child {
+  		node[vertex] (r3) {$C$} {
+		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+};
+
+\node[vertex, fill=mysalmon] [right=8cm of r] (r2) {$P$}
+  child {
+  		node[vertex] (r4) {$A$} {
+		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  }
+  child {
+  	node[vertex, fill=mysalmon] {$Q$}
+	child {
+  		node[vertex] {$B$} {
+		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+	child {
+  		node[vertex] {$C$} {
+		node[draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+	}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\coordinate[below=of a] (c);
+\coordinate[below=of b] (d);
+
+\draw[->] (a) to node {rotate right} (b);
+\draw[->] (d) to node {rotate left} (c);
+
+\end{tikzpicture}
+\end{center}
+
+Here, the triangles represent subtrees, as $A$, $B$, and $C$ could very well have children of our own, but they are not shown in the diagram. Note that the inorder ordering of the nodes has not been changed.
+
+When we rotate right, we literally take the edge connecting $P$ and $Q$ and rotate it clockwise. Then $P$ becomes the parent of $Q$ where before $P$ was the child of $Q$. However, this definition of rotation is somewhat cumbersome, as we have different terms for the highly symmetrical rotating right and rotating left. The key characteristic a rotation is we move the lower node up one level. Thus, I prefer to think of tree rotation as whatever tree rotation, either left or right, will \textit{rotate up} a node. In the diagram, rotating right is analogous to rotating $P$ up, and rotating left is analogous to rotating $Q$ up. Rotating a node up will change the tree such that its former parent is now its child.
+
+The other notable change in the tree structure is the subtree associated with $B$ passes between $P$ and $Q$ upon tree rotation. Finally, tree rotation can happen at any place in the tree, not just at the root. When we rotate $P$ up, we must update the parent of $Q$ to change its child to $P$.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level 2/.style={sibling distance=35mm}, level 3/.style={sibling distance=35mm/2}, level 4/.style={sibling distance=35mm/3}, level 1/.style={sibling distance=50mm}, auto, bend left]
+
+\node [vertex] (r) {$D$}
+	child{node[vertex, fill=mysalmon] {$Q$}
+  child {
+  	node[vertex, fill=mysalmon] {$P$}
+  	child {
+  		node[vertex] {$A$} 
+  		child [missing]
+  		child{
+  			node [vertex] {$E$}
+  		}
+  	}
+  	child {
+  		node[vertex] {$B$}
+  } }
+  child {
+  		node[vertex] (r3) {$C$}
+}} 
+  		child [missing];
+
+\node[vertex] [right=8cm of r] (r2) {$D$}
+	child{node[vertex, fill=mysalmon] {$P$}
+  child {
+  		node[vertex] (r4) {$A$} 
+  		child [missing]
+  		child{
+  			node [vertex] {$E$}
+  		}
+  }
+  child {
+  	node[vertex, fill=mysalmon] {$Q$}
+	child {
+  		node[vertex] {$B$} 
+  	}
+	child {
+  		node[vertex] {$C$} 
+	}
+}}
+child[missing];
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\coordinate[below=of a] (c);
+\coordinate[below=of b] (d);
+
+\draw[->] (a) to node {rotate $P$} (b);
+\draw[->] (d) to node {rotate $Q$} (c);
+
+\end{tikzpicture}
+\end{center}
+
+Note that in this example, rotating up $P$ decreases the total height of the tree. We want to somehow systematically rotate up nodes to accomplish this. The following data structures provide such a system.
+
+\subsection{Red-Black Tree}
+
+As stated earlier, the red-black tree represents the ``just do it'' approach. We want to somehow bound the maximum length from the root to any leaf node by applying a constraint on the tree. In this case, our constraint is a coloring of the nodes (red or black) such certain properties are satisfied. For the red-black tree, the only nodes storing data are non-leaf nodes, and all leaf nodes store ``null.'' The number of null nodes, then, is $n+1$, where $n$ is the number of non-null nodes. We do this so that any node storing useful information has two children.
+
+We want our tree to satisfy the following properties:
+
+\begin{enumerate}
+
+\item
+The root is black.
+
+\item
+All leaf nodes (null) are black.
+
+\item
+Every red node has two black children. Consequently, a red node has a black parent.
+
+\item
+Any path from the root to a null node contains the same number of black elements.
+
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+%level 1/.style={sibling distance=80mm},
+%level 2/.style={sibling distance=50mm},
+%level 3/.style={sibling distance=30mm},
+%level 4/.style={sibling distance=20mm},
+%level 5/.style={sibling distance=10mm},
+%level 6/.style={sibling distance=10mm},
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+}
+]
+
+\node[bv] {$M$} [sibling distance=80mm]
+	child {
+		node[bv] {$D$} [sibling distance=50mm]
+			child {
+				node[bv] {$A$} [sibling distance=15mm]
+					child {
+						node[br] {null}
+					}
+					child {
+						node[rv] {$C$} [sibling distance=10mm]
+							child {
+								node[br] {null}
+							}
+							child {
+								node[br] {null}
+							}
+					}
+			}
+			child {
+				node[rv]{$K$} [sibling distance=30mm]
+					child {
+						node[bv]{$G$} [sibling distance=20mm]
+							child {
+								node[rv]{$E$} [sibling distance=10mm]
+									child{
+										node[br]{null}
+									}
+									child{
+										node[br]{null}
+									}
+							}
+							child {
+								node[rv]{$I$} [sibling distance=10mm]
+									child {
+										node[br]{null}
+									}
+									child {
+										node[br]{null}
+									}
+							}
+					}
+					child {
+						node[bv]{$L$} [sibling distance=10mm]
+							child {
+								node[br]{null}
+							}
+							child {
+								node[br]{null}
+							}
+					}
+			}
+	}
+	child {
+		node[bv]{$T$} [sibling distance=40mm]
+			child {
+				node[bv] {$Q$} [sibling distance=15mm]
+					child {
+						node[br] {null}
+					}
+					child {
+						node[rv]{$R$} [sibling distance=10mm]
+							child{
+								node[br]{null}
+							}
+							child{
+								node[br]{null}
+							}
+					}
+			}
+			child {
+				node[rv] {$X$} [sibling distance=20mm]
+					child {
+						node[bv] {$V$} [sibling distance=10mm]
+							child{
+								node[br]{null}
+							}
+							child{
+								node[br]{null}
+							}
+					}
+					child {
+						node[bv] {$Z$} [sibling distance=10mm]
+							child{
+								node[br]{null}
+							}
+							child{
+								node[br]{null}
+							}
+					}
+			}
+	}
+;
+
+\end{tikzpicture}
+\end{center}
+
+Note that every path from the root to a null node contains four black nodes.
+
+The proof of $O(\log{n})$ search follows immediately. The shortest possible path contains only black nodes, and the longest possible path contains black and red nodes alternating. Since the number of black nodes in both must be the same, any path is at most twice as long as any other path. As the number of nodes in the tree is $2n+1$, the number of black nodes $m$ in any path is then bounded below by $2^{2m} - 1 \ge 2n + 1$ and above by $2^{m} - 1 \le 2n + 1$. Thus the height of the tree is on the order $O(\log{n})$, and we are done.
+
+Thus if our tree maintains its red-black coloring and satisfies the necessary properties, we can guarantee that our tree is balanced. We then consider the two ways we change the state of the tree, insertion and deletion. We can insert and delete in the normal way, but we might need to make changes to the tree after that to restore the red-black properties. We do this through a small number of color flips and tree rotations, which we can handle through casework.
+
+Let's handle insertion first. When we insert a node, it takes the place of a black null leaf node. To maintain property 4, we must color the new node red, as it has two black null children. However, we may have violated some of the other properties, specifically 1 and 3.
+
+We'll call the new node $N$, its parent $P$, its uncle (parent's sibling) $U$, and its grandparent $G$, if they exist.
+
+We consider the following five cases.
+
+\begin{enumerate}
+
+\item
+$N$ is the root node. That is, $N$ is the first node added to the tree.
+
+It is easy to just change the color of $N$ to red to restore property 1, and we are done.
+
+\item
+$P$ is black.
+
+Then property 3 is not violated, and we are done.
+
+\item
+$P$ is red, and $U$ is red ($G$ and $U$ exist since $P$ cannot be the root, as the root is black).
+
+As $P$ and $U$ are red, $G$ is black. We simply color $P$ and $U$ black and $G$ red to restore property 3.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[bv] (r) {$G$}
+child {
+	node[rv] {$P$}
+	child {
+		node[rv] {$N$}
+	}
+	child [missing]
+}
+child {
+	node[rv] (r3) {$U$} 
+};
+
+\node[rv] [right=8cm of r] (r2) {$G$}
+child {
+	node[bv] (r4) {$P$}
+	child {
+		node[rv] {$N$}
+	}
+	child[missing]
+}
+child {
+	node[bv] {$U$}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\item
+$P$ is red, $U$ is black, and $N$ is on the same side of $P$ as $P$ is of $G$.
+
+$G$ must be black. We rotate up $P$ and color $P$ black and $G$ red.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[bv] (r) {$G$}
+child {
+	node[rv] {$P$}
+	child {
+		node[rv] {$N$}
+	}
+	child [missing]
+}
+child {
+	node[bv] (r3) {$U$} 
+};
+
+\node[bv] [right=8cm of r] (r2) {$P$}
+child {
+	node[rv] (r4) {$N$} 
+}
+child {
+	node[rv] {$G$}
+	child[missing]
+	child {
+		node[bv] {$U$}
+	}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\item
+$P$ is red, $U$ is black, and $N$ is on the opposite side of $P$ as $P$ is of $G$.
+
+$G$ must be black. We rotate up $N$, and this reduces to case 4.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[bv] (r) {$G$}
+child {
+	node[rv] {$P$} 
+	child[missing]
+	child {
+		node[rv] {$N$} 
+	}
+}
+child {
+	node[bv] (r3) {$U$}
+};
+
+\node[bv] [right=8cm of r] (r2) {$G$}
+child {
+	node[rv] (r4) {$N$}
+	child {
+		node[rv] {$P$}
+	}
+	child[missing]
+}
+child {
+	node[bv] {$U$} 
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\end{enumerate}
+
+Thus after we insert, we can always restructure the tree using a constant number of operations to restore the necessary red-black tree properties.
+
+Now we need to work on deletion. Recall how deletion works on a normal binary search tree. If the node we need to replace has two children, we swap the node with the least element in its right subtree, which does not have two children. We then are able to remove that node more easily.
+
+We can do the same thing with the red-black tree. If a node has two non-null children, we swap its value with the least non-null node in its right subtree and remove that node. Thus we reduce the deletion problem to the case where the node we need to remove has at least one null child.
+
+Two cases are very easy.
+
+\begin{enumerate}
+
+\item
+The node we wish to remove is red.
+
+Then the node must have two null leaf nodes as children. Then we remove the node by replacing it and its children with a single null node.
+
+\item
+The node is black and has a red child.
+
+We replace the node with its child and paint its child red.
+
+\end{enumerate}
+
+The remaining case is the node black with two black null children. We'll first replace the node with a null node $N$. Then, all paths passing through $N$ are one black node short compared to all other paths.
+
+We denote the parent of $N$ as $P$, its sibling $S$, and its sibling's children $C$ and $F$, such that $C$ is on the same side of $S$ as $N$ is of $P$, if they exist. That is, $C$ is the ``closer nephew'' child, while $F$ is the farther. We now describe a six-case balancing procedure on the black node $N$ that fixes our problem.
+
+\begin{enumerate}
+
+\item
+$N$ is the root.
+
+We are done, as every path possible must pass through $N$, so all paths are balanced.
+
+\item
+$P$ is red and $S$, $C$, and $F$ are black.
+
+Then we simply trade the colors of $P$ and $S$. The number of black nodes for paths passing through $S$ stays the same, but the number of black nodes for paths passing through $N$ increases, so we are done.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[rv] (r) {$P$}
+child {
+	node[bv] {$N$} 
+}
+child {
+	node[bv] (r3) {$S$}
+	child {
+		node[bv] {$C$}
+	}
+	child {
+		node[bv] {$F$}
+	}
+};
+
+\node[bv] [right=8cm of r] (r2) {$P$}
+child {
+	node[bv] (r4) {$N$} 
+}
+child {
+	node[rv] {$S$}
+	child {
+		node[bv] {$C$}
+	}
+	child {
+		node[bv] {$F$}
+	}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\item
+$S$ is black and $F$ is red.
+
+Then we color $F$ black and rotate up $S$, before swapping the colors of $P$ and $S$. Then paths passing through $N$ gain a black vertex, while paths passing through $C$ and $F$ stay the same.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[vertex] (r) {$P$}
+child {
+	node[bv] {$N$} 
+}
+child {
+	node[bv] (r3) {$S$}
+	child {
+		node[vertex] {$C$}
+	}
+	child {
+		node[rv] {$F$}
+	}
+};
+
+\node[vertex] [right=8cm of r] (r2) {$S$}
+child {
+	node[bv] (r4) {$P$} 
+	child {
+		node[bv] {$N$}
+	}
+	child {
+		node[vertex] {$C$}
+	}
+}
+child {
+	node[bv] {$F$}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\item
+$S$ is black, $F$ is black, and $C$ is red.
+
+Then we rotate up $C$ and swap the colors of $S$ and $C$. Then this reduces to case 3.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[vertex] (r) {$P$}
+child {
+	node[bv] {$N$} 
+}
+child {
+	node[bv] (r3) {$S$}
+	child {
+		node[rv] {$C$}
+	}
+	child {
+		node[bv] {$F$}
+	}
+};
+
+\node[vertex] [right=8cm of r] (r2) {$P$}
+child {
+	node[bv] (r4) {$N$} 
+}
+child {
+	node[bv] {$C$}
+		child [missing]
+		child {
+			node[rv] {$S$}
+				child [missing]
+				child {
+					node[bv] {$F$}
+				}
+		}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\item
+$S$ is red.
+
+Then $P$, $C$, and $F$ must be black. We rotate $S$ up and swap the colors of $P$ and $S$. $C$, the new sibling of $N$ is black, so this then reduces to one of cases 2, 3, or 4.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[bv] (r) {$P$}
+child {
+	node[bv] {$N$} 
+}
+child {
+	node[rv] (r3) {$S$}
+	child {
+		node[bv] {$C$}
+	}
+	child {
+		node[bv] {$F$}
+	}
+};
+
+\node[bv] [right=8cm of r] (r2) {$S$}
+child {
+	node[rv] (r4) {$P$} 
+		child {
+			node[bv] {$N$}
+		}
+		child {
+			node[bv] {$C$}
+		}
+}
+child {
+	node[bv] {$F$}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\item
+$P$, $S$, $C$, and $F$ are all black.
+
+Then we recolor $S$ red. Now, all paths through $P$ have the same number of black nodes, but each path through $P$ has one less black node than each path not passing through $P$. Since $P$ is black, and this procedure did not require that $N$ be a leaf node, we can repeat this entire balancing procedure on $P$.
+
+\begin{center}
+\begin{tikzpicture}[very thick,
+rv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, fill=myred
+},
+bv/.style={
+	draw,circle,minimum size=24pt,inner sep=0pt, text=mywhite, fill=myblack
+},
+br/.style={
+	draw,
+    thick,
+    fill=myblack,
+    text width=4ex,
+    text centered,
+    text=mywhite
+},
+level/.style={sibling distance=35mm/#1}, auto]
+
+\node[bv] (r) {$P$}
+child {
+	node[bv] {$N$} 
+}
+child {
+	node[bv] (r3) {$S$}
+	child {
+		node[bv] {$C$}
+	}
+	child {
+		node[bv] {$F$}
+	}
+};
+
+\node[bv] [right=8cm of r] (r2) {$P$}
+child {
+	node[bv] (r4) {$N$} 
+}
+child {
+	node[rv] {$S$}
+	child {
+		node[bv] {$C$}
+	}
+	child {
+		node[bv] {$F$}
+	}
+};
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to (b);
+
+\end{tikzpicture}
+\end{center}
+
+\end{enumerate}
+
+Unlike the balancing for insertions, the balancing for deletions has the potential to call itself on the parent node $P$. However, balancing following a deletion is still $O(\log{n})$ worst case. It is possible prove that it is $O(1)$ amortized. Regardless, we now have a deletion algorithm that runs in $O(\log{n})$ time.
+
+Thus the red-black tree supports standard binary search tree operations, all in $O(\log{n})$.
+
+\subsection{Splay Tree}
+
+Remember that rotating a node brings it one level closer to the root. The idea behind a splay tree is to apply a sequence of rotations that rotate a node all the way up to the root. The intuition for doing this is once we access a node, it is easy to perform other operations on it since it will simply be the root of the tree.
+
+It is not at all clear that rotating nodes to the root will somehow improve the average performance of the tree. That's because rotating the normal way doesn't! To improve the performance of the tree, we expect that our balancing procedure tends to decrease the height of the tree. Unfortunately, simply repeatedly rotating a node up the tree doesn't exactly do that task. Consider a tree that looks liked a linked list, and rotating the nodes in the order $A$, $B$, $C$, $D$, as shown in the diagram. The height of the tree remains linear in magnitude, as at its smallest stage the tree is around $\frac{n}{2}$ in height, so accessing elements remains $O(n)$ on average.
+
+\begin{center}
+\begin{tikzpicture}[very thick,sibling distance=15mm, auto]
+
+\node [vertex] (r) {$D$}
+child {
+	node [vertex] (r3) {$C$}
+		child {
+			node [vertex] {$B$}
+				child {
+					node[vertex] {$A$}
+				}
+				child[missing]
+		}
+		child[missing]
+}
+child[missing];
+
+\node[vertex] [right=0.8cm of r] (r2) {$A$}
+child[missing]
+child {
+	node [vertex] (r4) {$D$}
+		child {
+			node [vertex] {$C$}
+				child {
+					node[vertex] {$B$}
+				}
+				child[missing]
+		}
+		child[missing]
+};
+
+\node[vertex] [right=2.8cm of r2] (r6) {$B$}
+child {
+	node [vertex] (r5) {$A$}
+}
+child {
+	node [vertex] (r7) {$D$}
+		child {
+			node[vertex] {$C$}
+		}
+		child[missing]
+};
+
+\node [vertex] [right=2.8 of r6] (r8) {$C$}
+child {
+			node [vertex] (r9) {$B$}
+				child {
+					node[vertex] {$A$}
+				}
+				child[missing]
+}
+child{
+	node [vertex] (r10) {$D$}
+};
+
+\node [vertex] [right=2.8cm of r8] (r11) {$D$}
+child {
+	node [vertex] (r12) {$C$}
+		child {
+			node [vertex] {$B$}
+				child {
+					node[vertex] {$A$}
+				}
+				child[missing]
+		}
+		child[missing]
+}
+child[missing];
+
+\coordinate[right=0.25cm of r3] (a);
+\coordinate[left=0.25cm of r4] (b);
+\coordinate[right=0.25cm of r4] (c);
+\coordinate[left=0.25cm of r5] (d);
+\coordinate[right=0.25cm of r7] (e);
+\coordinate[left=0.25cm of r9] (f);
+\coordinate[right=0.25cm of r10] (g);
+\coordinate[left=0.25cm of r12] (h);
+
+\draw[->] (a) to node {rot. $A$} (b);
+
+\draw[->] (c) to node {rot. $B$} (d);
+
+\draw[->] (e) to node {rot. $C$} (f);
+
+\draw[->] (g) to node {rot. $D$} (h);
+
+\end{tikzpicture}
+\end{center}
+
+As discussed earlier, simply repeatedly applying the standard rotation clearly is not guaranteed to reduce the height of the tree on average. However, if we simply make one small change, magic happens. The trick of the splay tree is to rotate a node to the root in such a way that the tree has a tendency to decrease in height. We'll use two compound rotations, and depending on the structure of the tree, we'll use a different one accordingly, to rotate a node to the root.
+
+When a node is a left child and its parent is a left child, or the node is a right child and its parent is a right child, we first rotate up the parent, and then rotate up the node. This sequence of rotations is the only difference between splaying and rotating a node to the root using standard rotation.
+
+\begin{center}
+\begin{tikzpicture}[very thick,sibling distance=25mm, auto]
+
+\node [vertex] (r) {$Z$}
+	child {
+		node [vertex] {$Y$}
+			child {
+				node [vertex] {$X$}
+				  	child {
+  		node [vertex] {$A$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+				  	child {
+  		node [vertex] {$B$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+			}
+  	child {
+  		node [vertex] {$C$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+	}
+  	child {
+  		node [vertex] (r3) {$D$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	};
+
+\node[vertex] [right=6cm of r] (r2) {$X$}
+  	child {
+  		node [vertex] (r4) {$A$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+child {
+	node [vertex] {$Y$}
+  	child {
+  		node [vertex] {$B$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+		child {
+			node [vertex] {$Z$}
+	  	child {
+  		node [vertex] {$C$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+	child {
+  		node [vertex] {$D$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+		}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to node {rotate $Y$, rotate $X$} (b);
+
+\end{tikzpicture}
+\end{center}
+
+When a node is a left child and its parent is a right child, or the node is a right child and its parent is a left child, we rotate the node up twice, the normal way.
+
+\begin{center}
+\begin{tikzpicture}[very thick, auto]
+
+\node [vertex] (r) {$Z$} [sibling distance=25mm]
+	child {
+		node [vertex] {$Y$}
+			child {
+  		node [vertex] {$A$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+			child {
+				node [vertex] {$X$} [sibling distance=15mm]
+				  	child {
+  		node [vertex] {$B$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+				  	child {
+  		node [vertex] {$C$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+			}
+	}
+  	child {
+  		node [vertex] (r3) {$D$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	};
+
+\node[vertex] [right=7cm of r] (r2) {$X$} [sibling distance=30mm]
+child {
+	node [vertex] (r4) {$Y$} [sibling distance=15mm]
+  	child {
+  		node [vertex] {$A$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+  	child {
+  		node [vertex] {$B$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+  	}
+	child {
+			node [vertex] {$Z$} [sibling distance=15mm]
+	  	child {
+  		node [vertex] {$C$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+	child {
+  		node [vertex] {$D$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to node {rotate $X$, rotate $X$} (b);
+
+\end{tikzpicture}
+\end{center}
+
+Finally, when a node's parent is the root, so it has no grandparent, we simply rotate up the normal way.
+
+Rotating a node to the root in this way is called \textit{splaying} the node. Thus, splaying a node brings it to the root of the tree. Splaying seems too simple to lead to an amortized $O(\log{n})$ solution. To get a better idea of how splaying works, let's see what it does to a tree that looks like a linked list.
+
+\begin{center}
+\begin{tikzpicture}[very thick,sibling distance=15mm, auto]
+
+\node [vertex] (r) {$G$}
+		child {
+		node [vertex] {$F$}
+		child {
+		node [vertex] (r3) {$E$}
+		child {
+		node [vertex] {$D$}
+		child {
+		node [vertex] {$C$}
+		child {
+		node [vertex] {$B$}
+		child {
+		node [vertex] {$A$}
+		}
+		child [missing]
+		}
+		child [missing]
+		}
+		child [missing]
+		}
+		child [missing]
+		}
+		child [missing]
+		}
+		child [missing]
+;
+
+\node[vertex] [right=6cm of r] (r2) {$A$}
+child[missing]
+child {
+	node[vertex] {$F$}
+	child {
+		node[vertex] (r4) {$D$}
+		child {
+		node[vertex] {$B$}
+		child [missing]
+	child {
+		node[vertex] {$C$}
+	}
+	}
+	child {
+		node[vertex] {$E$}
+	}
+	}
+	child {
+		node[vertex] {$G$}
+	}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to node {splay $A$} (b);
+
+\end{tikzpicture}
+\end{center}
+
+Splaying here cuts the height of the tree in half -- a huge improvement. Splaying is not guaranteed to decrease the height of the tree, and it is possible for a sequence of splays to even result in a linked-list-like structure. However, given a number $m$ at least equal to the maximum number of nodes $n$ ever in the tree, \textit{any} sequence of $m$ splays runs in $O(m \log{n})$. Splaying is then $O(\log{n})$, amortized.\footnote{If you're curious to see the proof of this, a rather in depth explanation can be found here: \url{http://www.cs.cmu.edu/afs/cs/academic/class/15859-f05/www/documents/splay-trees.txt}}
+
+Then, whenever we access a node, even in insertion and deletion, we splay that node to the top. This makes access, insert, and delete all $O(\log{n})$ amortized.
+
+Since splay trees need not satisfy a restrictive coloring, as red-black trees do, we have the freedom to completely change the structure of the tree at a whim. Recall how tedious the casework was to simply add or remove one node at a time in a red-black tree. Because the splay tree is simply a normal binary search tree that rotates nodes up upon access, we can detach an entire subtree from the tree and not worry about any properties of our tree no longer being satisfied.
+
+For this reason, we define the \textit{split} and \textit{join} functions for splay trees.
+
+Given two trees $S$ and $T$, such that every element in $S$ is less than every element in $T$, we join $S$ and $T$ into one tree by splaying the largest element in $S$, so that the root, which is now the largest element, has no right child. Then, we set its right child to the root of $T$, resulting in a single tree with elements from both $S$ and $T$.
+
+Given a tree and a value $v$, we split the tree in two by splaying the greatest element not greater than $v$ to the root and detaching the right subtree from the rest. This results in two trees, one containing all elements at most $v$, and the other containing all elements greater than $v$.
+
+Both of these operations are $O(\log{n})$ amortized. It is possible to implement insert and delete using split and join.
+
+Since a binary search tree stores an ordered set, it is incredibly useful for storing a dynamic list of elements where the length can change and elements need to be added or removed from any point in the list, not just the beginning or the end. Splay trees are incredibly useful because of the split and join operations, as they allow us to remove consecutive elements from the list represented by our tree.
+
+For example, to remove elements indexed in the range $[i, j]$, we split at index $i$ and split at index $j+1$ to get three splay trees, one representing $[1, i-1]$, another $[i,j]$, and the last $[j+1,n]$. We can then merge the first and third trees together, to get two trees, one representing $[i,j]$ and the other representing the original list with $[i,j]$ removed. A similar procedure can insert a list within another list as as contiguous block. Both of these operations can be completed in $O(\log{n})$ amortized using a splay tree.
+
+\subsection{Treap}
+
+\section{Euler Tour Technique}
+
+The \textit{Euler tour technique} is a method of representing a tree (not necessarily binary) as a list. The idea is that a tree is uniquely determined by its DFS traversal order, going both down and up the tree. We'll keep track of the order in which we traverse the edges. Since each edge is traversed twice, each edge will appear in our list twice. We'll also name each edge by the child vertex in the parent-child pair.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level 1/.style={sibling distance=50mm}, level 2/.style={sibling distance=50mm}, level 3/.style={sibling distance=40mm}, level distance=3cm, auto]
+
+\node[vertex] (a) {$A$}
+child {
+	node[vertex] (b) {$B$} 
+	child {
+		node[vertex] (e) {$E$} 
+		child {
+			node[vertex] (h) {$H$} 
+			edge from parent node [swap] {$h$}
+		}
+		child {
+			node[vertex] (i) {$I$} 
+			edge from parent node {$i$}
+		}
+		edge from parent node {$e$}
+	}
+	edge from parent node [swap] {$b$}
+}
+child {
+	node[vertex] (c) {$C$}
+	edge from parent node {$c$}
+}
+child {
+	node[vertex] (d) {$D$} 
+	child {
+		node[vertex] (f) {$F$} 
+		edge from parent node [swap] {$f$}
+	}
+	child {
+		node[vertex] (g) {$G$} 
+		edge from parent node {$g$}
+	}
+	edge from parent node {$d$}
+};
+
+\path[->] (a) edge [bend right=20] node [swap] {1} (b);
+\path[->] (b) edge [bend right] node [swap] {2} (e) ;
+\path[->] (e) edge [bend right] node [swap] {3} (h) ;
+\path[->] (h) edge [bend right] node [swap] {4} (e) ;
+\path[->] (e) edge [bend right] node [swap] {5} (i) ;
+\path[->] (i) edge [bend right] node [swap] {6} (e) ;
+\path[->] (e) edge [bend right] node [swap] {7} (b) ;
+\path[->] (b) edge [bend right=20] node [swap] {8} (a) ;
+\path[->] (a) edge [bend right] node [swap] {9} (c) ;
+\path[->] (c) edge [bend right] node [swap] {10} (a) ;
+\path[->] (a) edge [bend right=20] node [swap] {11} (d) ;
+\path[->] (d) edge [bend right] node [swap] {12} (f) ;
+\path[->] (f) edge [bend right] node [swap] {13} (d) ;
+\path[->] (d) edge [bend right] node [swap] {14} (g) ;
+\path[->] (g) edge [bend right] node [swap] {15} (d) ;
+\path[->] (d) edge [bend right=20] node [swap] {16} (a);
+
+\end{tikzpicture}
+\end{center}
+
+The edge traversal order is then described by the ordered list below.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=16]
+  (array1)
+  {
+  					\strut $b_1$
+  \nodepart{two}	\strut $e_1$
+  \nodepart{three}	\strut $h_1$
+  \nodepart{four}	\strut $h_2$
+  \nodepart{five}	\strut $i_1$
+  \nodepart{six}	\strut $i_2$
+  \nodepart{seven}	\strut $e_2$
+  \nodepart{eight}	\strut $b_2$
+  \nodepart{nine}	\strut $c_1$
+  \nodepart{ten}	\strut $c_2$
+  \nodepart{eleven}	\strut $d_1$
+  \nodepart{twelve}	\strut $f_1$
+  \nodepart{thirteen}	\strut $f_2$
+  \nodepart{fourteen}	\strut $g_1$
+  \nodepart{fifteen}	\strut $g_2$
+  \nodepart{sixteen}	\strut $d_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array1.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+We see a pattern in this list -- the subtree of a node is contained between the two edges representing that node in the list, inclusive. For example, from the first $e$ to the second $e$, the entire subtree of $E$ is contained within the range $[2,7]$.
+
+\subsection{Euler Tour Tree}
+
+The \textit{Euler tour tree} uses this idea. Because we see the relationship between the list and the subtrees of the tree, we'll just have the list store the vertex names. To complete this pattern for the subtree of $A$, which is the entire tree, we'll simply add that letter to the beginning and end of the list.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3.5ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=18]
+  (array1)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $E_1$
+  \nodepart{four}	\strut $H_1$
+  \nodepart{five}	\strut $H_2$
+  \nodepart{six}	\strut $I_1$
+  \nodepart{seven}	\strut $I_2$
+  \nodepart{eight}	\strut $E_2$
+  \nodepart{nine}	\strut $B_2$
+  \nodepart{ten}	\strut $C_1$
+  \nodepart{eleven}	\strut $C_2$
+  \nodepart{twelve}	\strut $D_1$
+  \nodepart{thirteen}	\strut $F_1$
+  \nodepart{fourteen}	\strut $F_2$
+  \nodepart{fifteen}	\strut $G_1$
+  \nodepart{sixteen}	\strut $G_2$
+  \nodepart{seventeen}	\strut $D_2$
+  \nodepart{eighteen}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen , seventeen , eighteen }
+  \node[below] at (array1.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+Now suppose we wanted to perform some operations on a forest, or collection of trees. The first operation is to \textit{find} the root of the tree containing a vertex $v$. The second is to \textit{link} the trees of two vertices $u$, $v$ together by making $v$ the parent of $u$. The third is to \textit{cut} the subtree of $v$ away from the rest of the tree by deleting the edge from $v$ to its parent.
+
+Note that, without the cut operation, this is simply union-find. However, because of the cut operation, we have to maintain the structure of the original forest, as otherwise we lose track of the actual parent of any given node.
+
+We see that all operations are not simply on a single vertex but on an entire subtree. However, if we look at what each of the operations does to the Euler tour lists representing our forest, find returns the first element in the list, link places one ordered list within another, and cut removes a large contiguous section of one ordered list.
+
+To cut $E$ from the tree, we need to split the list in two:
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=18]
+  (array1)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $E_1$
+  \nodepart{four}	\strut $H_1$
+  \nodepart{five}	\strut $H_2$
+  \nodepart{six}	\strut $I_1$
+  \nodepart{seven}	\strut $I_2$
+  \nodepart{eight}	\strut $E_2$
+  \nodepart{nine}	\strut $B_2$
+  \nodepart{ten}	\strut $C_1$
+  \nodepart{eleven}	\strut $C_2$
+  \nodepart{twelve}	\strut $D_1$
+  \nodepart{thirteen}	\strut $F_1$
+  \nodepart{fourteen}	\strut $F_2$
+  \nodepart{fifteen}	\strut $G_1$
+  \nodepart{sixteen}	\strut $G_2$
+  \nodepart{seventeen}	\strut $D_2$
+  \nodepart{eighteen}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen , seventeen , eighteen }
+  \node[below] at (array1.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+\node[myrect=2]
+  (array2)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two  }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\node[myrect=6, fill=mysalmon] [right=of array2]
+  (array3)
+  {	
+  					\strut $E_1$
+  \nodepart{two}	\strut $H_1$
+  \nodepart{three}	\strut $H_2$
+  \nodepart{four}	\strut $I_1$
+  \nodepart{five}	\strut $I_2$
+  \nodepart{six}	\strut $E_2$
+  };
+\foreach \Valor [count=\Valori from 3] in {one ,two ,three , four , five , six }
+  \node[below] at (array3.\Valor south) {\Valori};
+
+\node[myrect=10] [right=of array3]
+  (array4)
+  {
+  					\strut $B_2$
+  \nodepart{two}	\strut $C_1$
+  \nodepart{three}	\strut $C_2$
+  \nodepart{four}	\strut $D_1$
+  \nodepart{five}	\strut $F_1$
+  \nodepart{six}	\strut $F_2$
+  \nodepart{seven}	\strut $G_1$
+  \nodepart{eight}	\strut $G_2$
+  \nodepart{nine}	\strut $D_2$
+  \nodepart{ten}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 9] in {one ,two ,three , four , five , six , seven , eight , nine , ten }
+  \node[below] at (array4.\Valor south) {\Valori};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+\node[myrect=12]
+  (array5)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $B_2$
+  \nodepart{four}	\strut $C_1$
+  \nodepart{five}	\strut $C_2$
+  \nodepart{six}	\strut $D_1$
+  \nodepart{seven}	\strut $F_1$
+  \nodepart{eight}	\strut $F_2$
+  \nodepart{nine}	\strut $G_1$
+  \nodepart{ten}	\strut $G_2$
+  \nodepart{eleven}	\strut $D_2$
+  \nodepart{twelve}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve }
+  \node[below] at (array5.\Valor south) {\Valori};
+
+\node[myrect=6, fill=mysalmon] [right=of array5]
+  (array6)
+  {	
+  					\strut $E_1$
+  \nodepart{two}	\strut $H_1$
+  \nodepart{three}	\strut $H_2$
+  \nodepart{four}	\strut $I_1$
+  \nodepart{five}	\strut $I_2$
+  \nodepart{six}	\strut $E_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
+  \node[below] at (array6.\Valor south) {\Valori};
+\end{tikzpicture}
+\end{center}
+
+Let's see what happens when we link $E$ to $D$. We need to split the first list immediately after $D_1$.
+
+\begin{center}
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+\node[myrect=12]
+  (array5)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $B_2$
+  \nodepart{four}	\strut $C_1$
+  \nodepart{five}	\strut $C_2$
+  \nodepart{six}	\strut $D_1$
+  \nodepart{seven}	\strut $F_1$
+  \nodepart{eight}	\strut $F_2$
+  \nodepart{nine}	\strut $G_1$
+  \nodepart{ten}	\strut $G_2$
+  \nodepart{eleven}	\strut $D_2$
+  \nodepart{twelve}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve }
+  \node[below] at (array5.\Valor south) {\Valori};
+
+\node[myrect=6, fill=mysalmon] [right=of array5]
+  (array6)
+  {	
+  					\strut $E_1$
+  \nodepart{two}	\strut $H_1$
+  \nodepart{three}	\strut $H_2$
+  \nodepart{four}	\strut $I_1$
+  \nodepart{five}	\strut $I_2$
+  \nodepart{six}	\strut $E_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
+  \node[below] at (array6.\Valor south) {\Valori};
+\end{tikzpicture}
+
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+\node[myrect=6]
+  (array2)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $B_2$
+  \nodepart{four}	\strut $C_1$
+  \nodepart{five}	\strut $C_2$
+  \nodepart{six}	\strut $D_1$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\node[myrect=6] [right=of array2]
+  (array4)
+  {
+  	\strut $F_1$
+  \nodepart{two}	\strut $F_2$
+  \nodepart{three}	\strut $G_1$
+  \nodepart{four}	\strut $G_2$
+  \nodepart{five}	\strut $D_2$
+  \nodepart{six}	\strut $A_2$
+  };
+  
+  \node[myrect=6, fill=mysalmon] [right=of array4]
+  (array3)
+  {	
+  					\strut $E_1$
+  \nodepart{two}	\strut $H_1$
+  \nodepart{three}	\strut $H_2$
+  \nodepart{four}	\strut $I_1$
+  \nodepart{five}	\strut $I_2$
+  \nodepart{six}	\strut $E_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
+  \node[below] at (array3.\Valor south) {\Valori};
+\foreach \Valor [count=\Valori from 7] in {one ,two ,three , four , five , six }
+  \node[below] at (array4.\Valor south) {\Valori};
+\end{tikzpicture}
+
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=18]
+  (array1)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $B_2$
+  \nodepart{four}	\strut $C_1$
+  \nodepart{five}	\strut $C_2$
+  \nodepart{six}	\strut $D_1$
+  \nodepart{seven}	\strut $E_1$
+  \nodepart{eight}	\strut $H_1$
+  \nodepart{nine}	\strut $H_2$
+  \nodepart{ten}	\strut $I_1$
+  \nodepart{eleven}	\strut $I_2$
+  \nodepart{twelve}	\strut $E_2$
+  \nodepart{thirteen}	\strut $F_1$
+  \nodepart{fourteen}	\strut $F_2$
+  \nodepart{fifteen}	\strut $G_1$
+  \nodepart{sixteen}	\strut $G_2$
+  \nodepart{seventeen}	\strut $D_2$
+  \nodepart{eighteen}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen , seventeen , eighteen }
+  \node[below] at (array1.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+
+\end{center}
+
+We just learned about a data structure that maintains a set of ordered elements that can split and merge quickly. Splay trees can maintain an ordered list, and the split and join operations on splay trees can easily implement link and cut. Each tree of our forest is then represented by a splay tree maintaining that tree's Euler tour list, and we can support each of the three necessary operations in $O(\log{n})$ amortized time.
+
+\section{$2^n$ Jump Pointers}
+
+\section{Fractional Cascading}
+
+\section{Heavy-Light Decomposition}
+
+Brute-force algorithms on trees are often fast when the tree is nearly complete, or has small depth. Unfortunately, brute force is far too slow when the tree becomes more and more unbalanced and approximates a linked list.
+
+Certain problems can be solved very nicely in a list with segment trees and similar data structures. Heavy-light decomposition provides us with a way to exploit the fact that long ``chains," which are present in unbalanced trees, might be slow in brute force but can be sped up with other data structures.
+
+\textit{Heavy-light decomposition} provides us a way to dynamically find the lowest common ancestor as well as a way to prove time complexities about tree data structures, like link-cut trees. 
+
+Heavy-light decomposition is a coloring of all the edges in a binary tree either heavy or light. For each vertex $v$, let $s(v)$ denote the number of nodes in the subtree with $v$ as its head. Then, if $u,w$ are the children of $v$, $s(v)=s(u)+s(w)+1$.
+
+We see that the smaller child $u$ or $w$ must have less than half the subtree size as $v$, and so that child exhibits qualities similar to those of a completely balanced tree. We color the edge connecting $v$ to its lesser child \textit{light}. We color the other edge \textit{heavy}.
+
+We see that from any node, the number of light edges needed to reach the head of the tree is at most $\log{n}$, as each light edge doubles the subtree size. Then, the number of ``heavy chains" along the upwards path from any node is also of the order $\log{n}$.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level/.style={sibling distance=70mm/#1}]
+\node [vertex] (a) {17}
+child {
+  node [vertex] (b) {12}
+  child {
+    node [vertex] (c) {6}
+    child {
+      node [vertex] (d) {3}
+      child {
+        node [vertex] (e) {1}
+      } 
+      child {
+        node [vertex] (f) {1}
+      }
+    }
+    child {node [vertex] (g) {2}
+      child {
+      	node[vertex] (h) {1}
+      }
+    }
+    child[missing]
+  }
+  child {
+      node [vertex] (i) {5}
+      child {node [vertex] (j) {1}}
+      child {node [vertex] (k) {1}}
+      child {
+      	node [vertex] (l) {2}
+        child {node[vertex] (m) {1}}
+      }
+  }
+}
+child {
+	node [vertex] (n) {4}
+    child {
+    	node[vertex] (o) {3}
+        child {
+    	    node[vertex] (p) {1}
+        }
+        child {
+	        node[vertex] (q) {1}
+        }
+    }
+};
+\draw[line width=6pt] (a) -- (b);
+\draw[line width=6pt] (b) -- (c);
+\draw[line width=6pt] (c) -- (d);
+\draw[line width=6pt] (d) -- (e);
+\draw[line width=6pt] (g) -- (h);
+\draw[line width=6pt] (i) -- (l);
+\draw[line width=6pt] (l) -- (m);
+\draw[line width=6pt] (n) -- (o);
+\draw[line width=6pt] (o) -- (p);
+\end{tikzpicture}
+\end{center}
+
+\section{Link-Cut Tree}
+
+\section{Top Tree}
+
+Tree representation of a graph. Scary.
+
+\section{Link-Cut Cactus}
+
+A \textit{cactus} is a graph such that any two distinct cycles in the graph share at most one vertex. Graphs that are not trees are somehow hard to characterize; a cactus is a more general kind of graph that still has some nice properties. In particular, certain tree algorithms still run in polynomial time when modified on a cactus where no such generalization to all graphs exists.
+
+Cacti are scary.
+

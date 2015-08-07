@@ -1,0 +1,1042 @@
+\chapter{Graph Algorithms}
+
+In this chapter we explore some famous graph theory results.
+
+\section{Connected Components}
+
+A \textit{connected component} of an undirected graph is a subgraph such that, for any two vertices in the component, there exists a path from one to the other. The diagram illustrates three connected components of a graph, where each vertex is colored togethwer with its associated component.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level/.style={sibling distance=70mm/#1}]
+\draw (0, 0) node [vertex] (n1) {1};
+\draw (2, 1) node [vertex] (n2) {2};
+\draw (2, -1) node  [vertex] (n3) {3};
+\draw (4, 0) node [vertex] (n4) {4};
+\draw (n1) -- (n2);
+\draw (n2) -- (n3);
+\draw (n3) -- (n4);
+\draw (n2) -- (n4);
+\draw (n1) -- (n3);
+\draw (6, -1) node [vertex, fill=mysalmon] (n5) {5};
+\draw (6, 1) node [vertex, fill=mysalmon] (n6) {6};
+\draw (8, 1) node [vertex, fill=mysalmon] (n7) {7};
+\draw (8, -1) node [vertex, fill=mysalmon] (n8) {8};
+\draw (n5) -- (n6) -- (n7) -- (n8) -- (n6);
+\draw (10, 0) node[vertex, fill=mypurple] (n9) {9};
+\draw (12, 0) node[vertex, fill=mypurple] (n10) {10};
+\draw (n9) -- (n10);
+\end{tikzpicture}
+\end{center}
+
+A \textit{strongly connected component} of a directed graph is a subgraph such that every vertex in the component can be reached from any other vertex in the component.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level/.style={sibling distance=70mm/#1}]
+\draw (0, 0) node [vertex] (n1) {5};
+\draw (2, 0) node [vertex] (n2) {6};
+\draw (4, 0) node [vertex, fill=mysalmon] (n3) {7};
+\draw (6, 0) node [vertex, fill=myred] (n4) {8};
+\draw (0, 2) node [vertex] (m1) {1};
+\draw (2, 2) node [vertex] (m2) {2};
+\draw (4, 2) node [vertex, fill=mypurple] (m3) {3};
+\draw (6, 2) node [vertex, fill=mysalmon] (m4) {4};
+\draw[->] (m1) -- (m2);
+\draw[->] (m2) -- (n1);
+\draw[->] (n1) -- (m1);
+\draw[->] (n2) edge [bend left] (m2);
+\draw[->] (m2) edge [bend left] (n2);
+\draw[->] (n2) -- (n3);
+\draw[->] (m2) -- (m3);
+\draw[->] (m2) -- (n3);
+\draw[->] (n3) -- (m3);
+\draw[->] (n3) edge [bend left] (m4);
+\draw[->] (m4) edge [bend left] (n3);
+\draw[->] (n4) -- (m4);
+\end{tikzpicture}
+\end{center}
+
+Finding the connected components of an undirected graph is a straightforward problem, while finding the strongly connected components of a directed graph is more complicated.
+
+\subsection{Flood Fill}
+
+Really any kind of search method solves the undirected graph connected components problem. We could use recursion with a depth-first search. To avoid using the run-time stack, we could use a queue to perform a breadth-first search. Both of these run in $O(E+V)$ time. I would recommend in general to use the BFS.
+
+\subsection{Union-Find (Disjoint Set Union)}
+
+The union-find data structure is another way for us to solve the connected components problem. Union-find is unique from the other search techniques in that it can process input as it is presented, edge by edge. This also means it is possible to add more edges at the end, therefore changing the graph, while still running quickly. An algorithm that works like this is an \textit{online algorithm}, while an algorithm that requires all the input data presented at the beginning is an \textit{offline algorithm}.
+
+A natural idea for solving the connected components problem is for each vertex to maintain a pointer to another vertex it's connected to, forming a \textit{forest}, or collection of trees. To check whether two elements are in the same component, simply trace the tree up to the root by jumping up each pointer.
+
+\begin{center}
+\begin{tikzpicture}[very thick,edge from parent/.style={draw,<-},level/.style={sibling distance=50mm/#1}]
+\node [vertex, fill = mysalmon] (r2) {5}
+  child {
+      node [vertex, fill = mysalmon] {6}
+      child { node [vertex, fill=mysalmon] {7} }
+      child { node [vertex, fill=mysalmon] {8} }
+  };
+
+\node [vertex] [left=6cm of r2] (r1) {1}
+  child {
+    node [vertex] {2}
+    child {
+      node [vertex] {4}
+    }
+  }
+  child {node [vertex] {3} };
+  
+\node [vertex, fill=mypurple] [right=3cm of r2] (r3) {9}
+  child { node [vertex, fill=mypurple] {10} };
+\end{tikzpicture}
+\end{center}
+
+The idea of a pointer can easily be stored within an array.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=5ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=10, rectangle split part fill={myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, mysalmon, mysalmon, mysalmon, mypurple, mypurple}]
+  (array1)
+  {
+  					\strut -1
+  \nodepart{two}	\strut 1
+  \nodepart{three}	\strut 1
+  \nodepart{four}	\strut 2
+  \nodepart{five}	\strut -1
+  \nodepart{six}	\strut 5
+  \nodepart{seven}	\strut 6
+  \nodepart{eight}	\strut 6
+  \nodepart{nine}	\strut -1
+  \nodepart{ten}	\strut 9
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three ,four ,five ,six ,seven ,eight ,nine ,ten }
+  \node[below] at (array1.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+We want to support two operations: $find(v)$, which returns the root of the tree containing $v$, and $union(u,v)$, which merges the components containing $u$ and $v$. This second operation is easy given the first; simply set the pointer of $find(u)$ to be $find(v)$.
+
+$union(4, 6)$, unoptimized:
+
+\begin{center}
+\begin{tikzpicture}[very thick,edge from parent/.style={draw,<-},level/.style={sibling distance=50mm/#1}]
+\node [vertex] (r2) {5}
+	child {
+    node [vertex] (r1) {1}
+	  child {
+ 	   node [vertex] {2}
+  	  child {
+   	   node [vertex] {4}
+  	  }
+	  }
+ 	 child {node [vertex] {3} }
+  }
+  child {
+  node [vertex] {6}
+		child { node [vertex] {7} }
+   		child { node [vertex] {8} }
+    };
+\node [vertex] [right=6cm of r2] (r3) {9}
+  child { node [vertex] {10} };
+\end{tikzpicture}
+\end{center}
+
+A problem quickly arises -- the $find$ operation threatens to become linear. There are two simple things we can do to optimize this.
+
+The first is to always add the shorter tree to the taller tree, as we want to minimize the maximum height. An easy heuristic for the height of the tree is simply the number of elements in that tree. We can keep track of the size of the tree with a second array. This heuristic is obviously not perfect, as a larger tree can be shorter than a smaller tree, but it turns out with our second optimization that this problem doesn't matter.
+
+The second fix is to simply assign the pointer associated with $v$ to be $find(v)$ at the end of the $find$ operation. We can design $find(v)$ to recursively call $find$ on the pointer associated with $v$, so this fix sets pointers associated with nodes along the entire chain from $v$ to $find(v)$ to be $find(v)$. These two optimizations combined make the $union$ and $find$ operations $O(\alpha (V))$, where $\alpha(n)$ is the inverse Ackermann function, and for all practical values of $n$, $\alpha(n) < 5$.
+
+$find(4)$, optimized:
+
+\begin{center}
+\begin{tikzpicture}[very thick,edge from parent/.style={draw,<-},level/.style={sibling distance=30mm/#1}]
+\node [vertex] (r2) {5}
+	child {
+    node [vertex] (r1) {1}
+ 	 child {node [vertex] {3} }
+  }
+  child {
+  node [vertex] {6}
+		child { node [vertex] {7} }
+   		child { node [vertex] {8} }
+    }
+  child {node[vertex] {2}}
+  child {node[vertex] {4}};
+\node [vertex] [right=6cm of r2] (r3) {9}
+  child { node [vertex] {10} };
+\end{tikzpicture}
+\end{center}
+
+\begin{algorithm}[H]
+\caption{Union-Find}
+%\label{}
+\begin{algorithmic}
+\Function{Find}{$v$}
+	\If {$v$ is the root}
+		\State \Return $v$
+    \EndIf
+    \State $parent(v) \gets \Call{Find}{parent(v)}$
+    \State \Return $parent(v)$
+\EndFunction
+\Function{Union}{$u$, $v$}
+	\State $uRoot \gets \Call{Find}{u}$
+	\State $vRoot \gets \Call{Find}{v}$
+    \If {$uRoot = vRoot$}
+		\State \Return
+	\EndIf
+    \If {$size(uRoot)<size(vRoot)$}
+    	\State $parent(uRoot) \gets vRoot$
+        \State $size(vRoot) \gets size(uRoot) + size(vRoot)$
+    \Else
+    	\State $parent(vRoot) \gets uRoot$
+        \State $size(uRoot) \gets size(uRoot) + size(vRoot)$
+    \EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{enumerate}
+\item
+(USACO Open 2008, nabor)
+Farmer John has $N$ ($1 \le N 
+\le 100,000$) cows who group themselves into ``Cow
+Neighborhoods''. Each cow is at a unique rectilinear coordinate, on a pasture whose $x$ and $y$ coordinates are
+in the range $1\ldots1,000,000,000$. Two cows are neighbors if at least one of two criteria is met: (1) If the cows are
+no further than some integer Manhattan distance $C$ ($1 \le C \le 1,000,000,000$) apart. (2) If cow $A$ and $B$ are
+both neighbors of cow $Z$, then cow $A$ is a neighbor of cow $B$. Given the locations of the cows and the distance
+$C$, determine the number of neighborhoods and the number of cows in the largest neighborhood.
+\end{enumerate}
+
+\subsection{Tarjan}
+
+Tarjan's algorithm for strongly connected components
+
+\section{Shortest Path}
+
+A classic. Assign nonnegative weights to each of the edges, where the weight of the edge $(u,v)$ represents the distance from $u$ to $v$. This graph can be either directed or undirected.
+
+\subsection{Dijkstra}
+
+Dijkstra's algorithm solves the single-source shortest path problem. From any vertex, we can compute the shortest path to each of the remaining vertices in the graph. The two formulations of Dijkstra's algorithm run in $O(V^2)$ or $O(E\log{V})$ time, whichever one suits us better. Note that it is possible to do better than $O(E\log{V})$ using a Fibonacci heap. The former works nicely on dense graphs, as $E \approx V^2$, while the latter works better on sparse graphs, as $E \approx V$.
+
+For every vertex $v$ in the graph, we keep track of the shortest known distance $dist(v)$ from the source to $v$, a boolean $visited(v)$ to keep track of which nodes we ``visited,'' and a pointer to the previous node in the shortest known path $prev(v)$ so that we can trace the shortest path once the algorithm finishes.
+
+Dijkstra iteratively ``visits'' the next nearest vertex, updating the distances to that vertex's neighbors if necessary. Therefore, at any step, we have the first however-many nearest vertices to the source, which we call ``visited'' and for which the shortest path is known. We also have the shortest path to all the remaining vertices that stays within the ``visited'' vertices besides for the very last edge, if such a path exists. We claim that the known distance to the closest vertex that has not yet been visited is the shortest distance. We can then ``visit'' that vertex. It shouldn't be hard to prove that this algorithm indeed calculates the shortest path.
+
+The $O(V^2)$ implementation immediately follows.
+
+\begin{algorithm}[H]
+\caption{Dijkstra}
+\begin{algorithmic}
+\ForAll{vertices $v$}
+	\State $dist(v) \gets \infty$
+	\State $visited(v) \gets 0$
+    \State $prev(v) \gets -1$
+\EndFor
+\State $dist(src) \gets 0$
+\While{$\exists v$ s.t. $visited(v)=0$}
+	\State $v \equiv v$ s.t. $visited(v)=0$ with min $dist(v)$
+    \State $visited(v) \gets 1$
+	\ForAll{neighbors $u$ of $v$}
+    	\If{$visited(u) = 0$}
+    		\State $alt \gets dist(v) + weight(v, u)$
+			\If{$alt < dist(u)$}
+				\State $dist(u) \gets alt$
+   	        	\State $prev(u) \gets v$
+			\EndIf
+        \EndIf
+    \EndFor
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
+
+\begin{center}
+\begin{tikzpicture}[very thick,edge from parent/.style={draw,<-},level/.style={sibling distance=30mm/#1}]
+\draw (0, 0) node [vertex] (v1) {1};
+\draw (1, 4) node [vertex] (v2) {2};
+\draw (4, 1) node [vertex] (v3) {3};
+\draw (5, 5) node [vertex] (v4) {4};
+\draw (8, 3) node [vertex] (v5) {5};
+\draw[->] (v1) -- (v2) node[midway, left] {4};
+\draw[->] (v2) -- (v3) node[midway, above right] {2};
+\draw[->] (v1) -- (v3) node[midway, below] {7};
+\draw[->] (v2) -- (v4) node[midway, above] {6};
+\draw[->] (v3) -- (v4) node[midway, right] {3};
+\draw[->] (v3) -- (v5) node[midway, below] {5};
+\draw[->] (v4) -- (v5) node[midway, above] {4};
+\end{tikzpicture}
+\end{center}
+
+Let's run Dijkstra's algorithm on the above graph with vertex 1 as the source. We first set all the distances besides the source to be $\infty$.
+
+\begin{center}
+\begin{tikzpicture}[very thick,edge from parent/.style={draw,<-},level/.style={sibling distance=30mm/#1}]
+\draw (0, 0) node [splitvertex, fill=mysalmon] (v1) {1\nodepart{lower}0};
+\draw (1, 4) node [splitvertex] (v2) {2\nodepart{lower}$\infty$};
+\draw (4, 1) node [splitvertex] (v3) {3\nodepart{lower}$\infty$};
+\draw (5, 5) node [splitvertex] (v4) {4\nodepart{lower}$\infty$};
+\draw (8, 3) node [splitvertex] (v5) {5\nodepart{lower}$\infty$};
+\draw[->] (v1) -- (v2) node[midway, left] {4};
+\draw[->] (v2) -- (v3) node[midway, above right] {2};
+\draw[->] (v1) -- (v3) node[midway, below] {7};
+\draw[->] (v2) -- (v4) node[midway, above] {6};
+\draw[->] (v3) -- (v4) node[midway, right] {3};
+\draw[->] (v3) -- (v5) node[midway, below] {5};
+\draw[->] (v4) -- (v5) node[midway, above] {4};
+\end{tikzpicture}
+\end{center}
+
+Now, we continue choosing the closest unvisited node, mark it as visited, and and update its neighbors.
+
+\begin{center}
+\begin{tikzpicture}[very thick,edge from parent/.style={draw,<-},level/.style={sibling distance=30mm/#1}]
+\draw (0, 0) node [splitvertex, fill=myred] (v1) {1\nodepart{lower}0};
+\draw (1, 4) node [splitvertex, fill=mysalmon] (v2) {2\nodepart{lower}4};
+\draw (4, 1) node [splitvertex, fill=mysalmon] (v3) {3\nodepart{lower}7};
+\draw (5, 5) node [splitvertex] (v4) {4\nodepart{lower}$\infty$};
+\draw (8, 3) node [splitvertex] (v5) {5\nodepart{lower}$\infty$};
+\draw[->] (v1) -- (v2) node[midway, left] {4};
+\draw[->] (v2) -- (v3) node[midway, above right] {2};
+\draw[->] (v1) -- (v3) node[midway, below] {7};
+\draw[->] (v2) -- (v4) node[midway, above] {6};
+\draw[->] (v3) -- (v4) node[midway, right] {3};
+\draw[->] (v3) -- (v5) node[midway, below] {5};
+\draw[->] (v4) -- (v5) node[midway, above] {4};
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}[very thick,edge from parent/.style={draw,<-},level/.style={sibling distance=30mm/#1}]
+\draw (0, 0) node [splitvertex, fill=myred] (v1) {1\nodepart{lower}0};
+\draw (1, 4) node [splitvertex, fill=myred] (v2) {2\nodepart{lower}4};
+\draw (4, 1) node [splitvertex, fill=mysalmon] (v3) {3\nodepart{lower}6};
+\draw (5, 5) node [splitvertex, fill=mysalmon] (v4) {4\nodepart{lower}10};
+\draw (8, 3) node [splitvertex] (v5) {5\nodepart{lower}$\infty$};
+\draw[->] (v1) -- (v2) node[midway, left] {4};
+\draw[->] (v2) -- (v3) node[midway, above right] {2};
+\draw[->] (v1) -- (v3) node[midway, below] {7};
+\draw[->] (v2) -- (v4) node[midway, above] {6};
+\draw[->] (v3) -- (v4) node[midway, right] {3};
+\draw[->] (v3) -- (v5) node[midway, below] {5};
+\draw[->] (v4) -- (v5) node[midway, above] {4};
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}[very thick,edge from parent/.style={draw,<-},level/.style={sibling distance=30mm/#1}]
+\draw (0, 0) node [splitvertex, fill=myred] (v1) {1\nodepart{lower}0};
+\draw (1, 4) node [splitvertex, fill=myred] (v2) {2\nodepart{lower}4};
+\draw (4, 1) node [splitvertex, fill=myred] (v3) {3\nodepart{lower}6};
+\draw (5, 5) node [splitvertex, fill=mysalmon] (v4) {4\nodepart{lower}9};
+\draw (8, 3) node [splitvertex, fill=mysalmon] (v5) {5\nodepart{lower}14};
+\draw[->] (v1) -- (v2) node[midway, left] {4};
+\draw[->] (v2) -- (v3) node[midway, above right] {2};
+\draw[->] (v1) -- (v3) node[midway, below] {7};
+\draw[->] (v2) -- (v4) node[midway, above] {6};
+\draw[->] (v3) -- (v4) node[midway, right] {3};
+\draw[->] (v3) -- (v5) node[midway, below] {5};
+\draw[->] (v4) -- (v5) node[midway, above] {4};
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}[very thick,edge from parent/.style={draw,<-},level/.style={sibling distance=30mm/#1}]
+\draw (0, 0) node [splitvertex, fill=myred] (v1) {1\nodepart{lower}0};
+\draw (1, 4) node [splitvertex, fill=myred] (v2) {2\nodepart{lower}4};
+\draw (4, 1) node [splitvertex, fill=myred] (v3) {3\nodepart{lower}6};
+\draw (5, 5) node [splitvertex, fill=myred] (v4) {4\nodepart{lower}9};
+\draw (8, 3) node [splitvertex, fill=mysalmon] (v5) {5\nodepart{lower}14};
+\draw[->] (v1) -- (v2) node[midway, left] {4};
+\draw[->] (v2) -- (v3) node[midway, above right] {2};
+\draw[->] (v1) -- (v3) node[midway, below] {7};
+\draw[->] (v2) -- (v4) node[midway, above] {6};
+\draw[->] (v3) -- (v4) node[midway, right] {3};
+\draw[->] (v3) -- (v5) node[midway, below] {5};
+\draw[->] (v4) -- (v5) node[midway, above] {4};
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}[very thick,edge from parent/.style={draw,<-},level/.style={sibling distance=30mm/#1}]
+\draw (0, 0) node [splitvertex, fill=myred] (v1) {1\nodepart{lower}0};
+\draw (1, 4) node [splitvertex, fill=myred] (v2) {2\nodepart{lower}4};
+\draw (4, 1) node [splitvertex, fill=myred] (v3) {3\nodepart{lower}6};
+\draw (5, 5) node [splitvertex, fill=myred] (v4) {4\nodepart{lower}9};
+\draw (8, 3) node [splitvertex, fill=myred] (v5) {5\nodepart{lower}14};
+\draw[line width=2mm] (v1) -- (v2) node[midway, left] {4};
+\draw[line width=2mm] (v2) -- (v3) node[midway, above right] {2};
+\draw[->] (v1) -- (v3) node[midway, below] {7};
+\draw[->] (v2) -- (v4) node[midway, above] {6};
+\draw[line width=2mm] (v3) -- (v4) node[midway, right] {3};
+\draw[line width=2mm] (v3) -- (v5) node[midway, below] {5};
+\draw[->] (v4) -- (v5) node[midway, above] {4};
+\end{tikzpicture}
+\end{center}
+
+The slow part of the $O(V^2)$ formulation is the linear search for the vertex $v$ with the minimum $dist(v)$. We happen to have a data structure that resolves this problem -- a binary heap. The main problem with using the standard library heap is having repeated vertices in the heap. We could just ignore this problem and discard visited vertices as they come out of the heap. Alternatively, we could choose never to have repeated vertices in the heap. To do this, we need to be able to change the value of the distances once they are already in the heap, or \textit{decrease-key}. This is a pretty simple function to add, however, if you have a heap already coded. Either way, we achieve $O(E \log{V})$, as we do $E+V$ updates to our heap, each costing $O(V)$.
+
+\begin{enumerate}
+
+\item
+(USACO Training Pages, butter)
+Farmer John owns a collection of pastures with weighted edges between some
+pairs of locations. Each pasture is inhabited by a cow, and the cows wish to all congregate at one of the
+pastures. Find the pasture at which the cows should meet in order to minimize combined travel distance.
+
+\item
+(USACO February 2012, relocate)
+FJ is moving! He is trying to find the best place to build a new farm so as to
+minimize his daily travel time.
+
+The region to which FJ plans to move has $N$ towns ($1 \le N \le 10, 000$). There are $M$ bi-directional roads
+($1 \le M \le 50, 000$) connecting certain pairs of towns. All towns are reachable from each-other via some
+combination of roads. FJ needs your help selecting the best town as the home for his new farm.
+
+There are markets in $K$ of the towns ($1 \le K \le 5$) that FJ wants to visit every day. In particular, every day
+he plans to leave his new farm, visit the $K$ towns with markets, and then return to his farm. FJ can visit the
+markets in any order he wishes. When selecting a town in which to build his new farm, FJ wants to choose
+only from the $N - K$ towns that do not have markets, since housing prices are lower in those towns.
+
+Please help FJ compute the minimum distance he will need to travel during his daily schedule, if he builds his
+farm in an optimal location and chooses his travel schedule to the markets as smartly as possible.
+
+\item
+(USACO December 2012, mroute)
+Farmer John's farm has an outdated network of $M$ pipes ($1 \le M \le 500$) for
+pumping milk from the barn to his milk storage tank.  He wants to remove
+and update most of these over the next year, but he wants to leave exactly
+one path worth of pipes intact, so that he can still pump milk from the
+barn to the storage tank.
+
+The pipe network is described by $N$ junction points ($1 \le N \le 500$), each of
+which can serve as the endpoint of a set of pipes.  Junction point 1 is the
+barn, and junction point $N$ is the storage tank.  Each of the $M$
+bi-directional pipes runs between a pair of junction points, and has an
+associated latency (the amount of time it takes milk to reach one end of
+the pipe from the other) and capacity (the amount of milk per unit time
+that can be pumped through the pipe in steady state).  Multiple pipes
+can connect between the same pair of junction points.
+
+For a path of pipes connecting from the barn to the tank, the latency
+of the path is the sum of the latencies of the pipes along the path,
+and the capacity of the path is the minimum of the capacities of the
+pipes along the path (since this is the ``bottleneck'' constraining the
+overall rate at which milk can be pumped through the path).  If FJ
+wants to send a total of $X$ units of milk through a path of pipes with
+latency $L$ and capacity $C$, the time this takes is therefore $L + \frac{X}{C}$.
+
+Given the structure of FJ's pipe network, please help him select a single
+path from the barn to the storage tank that will allow him to pump $X$ units
+of milk in a minimum amount of total time.
+
+\item
+(IOI 1999, Traffic Lights)
+In the city of Dingilville the traffic is arranged in an unusual way. There are junctions
+and roads connecting the junctions. There is at most one road between any two different junctions. There is no
+road connecting a junction to itself. Travel time for a road is the same for both directions. At every junction
+there is a single traffic light that is either blue or purple at any moment. The color of each light alternates
+periodically: blue for certain duration and then purple for another duration. Traffic is permitted to travel
+down the road between any two junctions, if and only if the lights at both junctions are the same color at the
+moment of departing from one junction for the other. If a vehicle arrives at a junction just at the moment the
+lights switch it must consider the new colors of lights. Vehicles are allowed to wait at the junctions. You are
+given the city map which shows
+\begin{itemize}
+\item
+the travel times for all roads (integers),
+\item
+the durations of the two colors at each junction (integers)
+\item
+the initial color of the light and the remaining time (integer) for this color to change at each junction.
+\end{itemize}
+Your task is to find a path which takes the minimum time from a given source junction to a given destination
+junction for a vehicle when the traffic starts. In case more than one such path exists you are required to report
+only one of them.
+\end{enumerate}
+
+\subsection{Floyd-Warshall}
+
+Dijkstra is nice when we are dealing with edges with nonnegative weights and are looking for the distances from one vertex to all the others. Floyd-Warshall solves the shortest path problem for all pairs of vertices in $O(V^3)$ time, which is faster than $V$ single-source Dijkstra runs on a dense graph. Floyd-Warshall works even if some edge weights are negative but not if the graph has a negative cycle.
+
+\begin{algorithm}[H]
+\caption{Floyd-Warshall}
+\begin{algorithmic}
+\ForAll{vertices $v$}
+	\State $dist(v,v)=0$
+\EndFor
+\ForAll{edges $(u,v)$}
+	\State $dist(u,v)=weight(u,v)$
+\EndFor
+\ForAll{vertices $k$}
+	\ForAll{vertices $i$}
+    	\ForAll{vertices $j$}
+        	\If{$dist(i,j) > dist(i,k)+dist(k,j)$}
+            	\State $dist(i,j) \gets dist(i,k)+dist(k,j)$
+            \EndIf
+        \EndFor
+    \EndFor
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Bellman-Ford}
+
+Bellman-Ford is a single-source $O(VE)$ shortest path algorithm that works when edge weights can be negative. It is preferable to Floyd-Warshall when the graph is sparse and we only need the answer for one source. Like Floyd-Warshall, the algorithm fails if the graph contains a negative cycle, but the algorithm is still useful for detecting negative cycles.
+
+The idea here is the shortest path, assuming no negative cycles, has length at most $V-1$.
+
+\begin{algorithm}[H]
+\caption{Bellman-Ford}
+\begin{algorithmic}
+\ForAll{vertices $v$}
+	\State $dist(v)\gets\infty$
+    \State $prev(v)=\gets -1$
+\EndFor
+\State $dist(src) \gets 0$
+\For{$i\equiv 1,V-1$}
+	\ForAll{edges $(u,v)$}
+		\If{$dist(u)+weight(u,v) < dist(v)$}
+    	    \State $dist(v) \gets dist(u)+weight(u,v)$
+	        \State $prev(v) \gets u$
+        \EndIf
+	\EndFor
+\EndFor
+\ForAll{edges $(u,v)$}
+	\Comment{check for negative cycles}
+	\If{$dist(u)+weight(u,v) < dist(v)$}
+   	    \State{negative cycle detected}
+	\EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\section{Minimum Spanning Tree}
+
+Consider a connected, undirected graph. A \textit{spanning tree} is a subgraph that is a tree and contains every vertex in the original graph. A \textit{minimum spanning tree} is a spanning tree such that the sum of the edge weights of the tree is minimized. Finding the minimum spanning tree uses many of the same ideas discussed earlier.
+
+\begin{center}
+\begin{tikzpicture}[very thick,edge from parent/.style={draw,<-},level/.style={sibling distance=30mm/#1}]
+\draw (0, 0) node [vertex] (v1) {1};
+\draw (1, 4) node [vertex] (v2) {2};
+\draw (4, 1) node [vertex] (v3) {3};
+\draw (5, 5) node [vertex] (v4) {4};
+\draw (8, 3) node [vertex] (v5) {5};
+\draw[line width=2mm] (v1) -- (v2) node[midway, left] {4};
+\draw[line width=2mm] (v2) -- (v3) node[midway, above right] {2};
+\draw (v1) -- (v3) node[midway, below] {7};
+\draw (v2) -- (v4) node[midway, above] {6};
+\draw[line width=2mm] (v3) -- (v4) node[midway, right] {3};
+\draw (v3) -- (v5) node[midway, below] {5};
+\draw[line width=2mm] (v4) -- (v5) node[midway, above] {4};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Prim}
+
+Prim's algorithm for finding the minimum spanning tree is very similar to Dijkstra's algorithm for finding the shortest path. Like Dijkstra, it iteratively adds a new vertex at a time to build a tree. The only difference is $dist(v)$ stores the shortest distance from \textit{any} visited node instead of the source.
+
+\begin{algorithm}[H]
+\caption{Prim}
+\begin{algorithmic}
+\ForAll{vertices $v$}
+	\State $dist(v) \gets \infty$
+	\State $visited(v) \gets 0$
+    \State $prev(v) \gets -1$
+\EndFor
+\State $dist(src) \gets 0$
+\While{$\exists v$ s.t. $visited(v)=0$}
+	\State $v \equiv v$ s.t. $visited(v)=0$ with min $dist(v)$
+    \State $visited(v) \gets 1$
+	\ForAll{neighbors $u$ of $v$}
+    	\If{$visited(u) = 0$}
+			\If{$weight(v, u) < dist(u)$}
+				\State $dist(u) \gets weight(v, u)$
+   	        	\State $prev(u) \gets v$
+			\EndIf
+        \EndIf
+    \EndFor
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
+
+The proof of correctness is left as an exercise. The complexity of this algorithm depends on how the minimum unvisited vertex is calculated. Using the same approaches as Dijkstra, we can achieve $O(V^2)$ or $O(E \log{V})$.
+
+\begin{enumerate}
+
+\item
+(USACO March 2014, irrigation)
+Due to a lack of rain, Farmer John wants to build an irrigation system to
+send water between his $N$ fields ($1 \le N \le 2000$).
+
+Each field $i$ is described by a distinct point $(x_i, y_i)$ in the 2D plane,
+with 0 <= xi, yi <= 1000.  The cost of building a water pipe between two
+fields $i$ and $j$ is equal to the squared Euclidean distance between them: 
+
+\[(x_i - x_j)^2 + (y_i - y_j)^2\]
+
+FJ would like to build a minimum-cost system of pipes so that all of his
+fields are linked together -- so that water in any field can follow a
+sequence of pipes to reach any other field.  
+
+Unfortunately, the contractor who is helping FJ install his irrigation
+system refuses to install any pipe unless its cost (squared Euclidean
+length) is at least $C$ ($1 \le C \le 1,000,000$).  
+
+Please help FJ compute the minimum amount he will need pay to connect all
+his fields with a network of pipes.
+
+\item
+(USACO February 2015, superbull)
+Bessie and her friends are playing hoofball in the annual Superbull championship, and Farmer John is in charge of making the tournament as exciting as possible. A total of $N$ ($1 \le N \le 2000$) teams are playing in the Superbull. Each team is assigned a distinct integer team ID in the range $[1,2^{30}-1]$ to distinguish it from the other teams. The Superbull is an elimination tournament -- after every game, Farmer John chooses which team to eliminate from the Superbull, and the eliminated team can no longer play in any more games. The Superbull ends when only one team remains.
+
+Farmer John notices a very unusual property about the scores in matches! In any game, the combined score of the two teams always ends up being the bitwise exclusive OR ($XOR$) of the two team IDs. For example, if teams 12 and 20 were to play, then 24 points would be scored in that game, since $01100 XOR 10100 = 11000$.
+
+Farmer John believes that the more points are scored in a game, the more exciting the game is. Because of this, he wants to choose a series of games to be played such that the total number of points scored in the Superbull is maximized. Please help Farmer John organize the matches.
+
+\end{enumerate}
+
+\subsection{Kruskal}
+
+While Prim greedily adds vertices to the tree, Kruskal's algorithm greedily adds edges. It iterates over all the edges, sorted by weight. We need to watch out for adding a cycle, breaking the tree structure, which means we need to keep track of each vertex's connected component. If an edge connects two vertices from the same connected component, we don't want to add it to our tree. However, we have a union-find algorithm that works perfectly for this.
+
+\begin{algorithm}[H]
+\caption{Kruskal}
+\begin{algorithmic}
+\ForAll{edges $(u,v)$ in sorted order}
+	\If{$\Call{Find}{u} \not= \Call{Find}{v}$}
+		\State add $(u,v)$ to spanning tree
+		\State $\Call{Union}{u,v}$
+	\EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+This algorithm requires a sort of the edges and thus has complexity $O(E \log{E}) = O(E \log{V})$.
+
+\begin{enumerate}
+\item
+(SPOJ, INVENT)
+Given tree with $N$ ($1 \le N \le 15,000$) vertices, find the minimum possible weight of a complete
+graph (a graph where every pair of vertices is connected) such that the given tree is its unique minimum spanning
+tree.
+\end{enumerate}
+
+\section{Eulerian Tour}
+
+An \textit{Eulerian tour} of a graph is a path that traverses every edge exactly once. If the tour ends exactly where it started, it is called an \textit{Eulerian circuit}. A graph has an Eulerian circuit if it is connected and every vertex has even degree. A graph has an Eulerian path if it is connected and all vertices but exactly two have even degrees. The mathematical proofs for these graph properties hinge on the idea that removing a cycle from the graph maintains the Eulerian property. We construct an Eulerian tour by appealing to this idea.
+
+\begin{algorithm}[H]
+\caption{Eulerian Tour}
+\begin{algorithmic}
+\Function{FindTour}{$v$}
+\While{$v$ has a neighbor $u$}
+	\State delete edge $(v,u)$
+	\State \Call{FindTour}{$u$}
+	\Comment{\Call{FindTour}{$u$} must trace a circuit back to $v$}
+\EndWhile
+\State add $v$ to tour
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+It is not preferable to use the run-time stack; we can use our own stack if necessary.
+
+If the graph contains an Eulerian circuit, we call this function on any vertex we like. If it contains an Eulerian path, we call this function on one of the vertices with odd degree.
+
+\begin{enumerate}
+
+\item
+(USACO Training, Airplane Hopping)
+Given a collection of cities, along with the flights between those cities, determine if there is a sequence of flights such that you take every flight exactly once, and end up at the place you started. (In other words, find an Eulerian circuit on a directed graph.)
+
+\item
+(USACO Training, Cows on Parade)
+Farmer John has two types of cows: black Angus and white Jerseys. While marching 19 of their cows to market the other day, John's wife Farmeress Joanne, noticed that all 16 possibilities of four successive black and white cows (e.g., $bbbb$, $bbbw$, $bbwb$, $bbww$, \ldots, $wwww$) were present. Of course, some of the combinations overlapped others.
+
+Given $N$ ($2 \le N \le 15$), find the minimum length sequence of cows such that every combination of $N$ successive black and white cows occurs in that sequence.
+
+(The answer is not hard to guess, but use Eulerian circuits to prove that it is correct.)
+
+\end{enumerate}
+
+\section{Maximum Flow}
+
+We are given a directed graph with weighted edges, a source node, and a sink node. A \textit{flow} is sent from the source to the sink. Each edge weight represents the maximum capacity of that edge. For every node besides the source and the sink node, total flow in is equal to total flow out. We can think of a flow network as a series of pipes through which water travels from an entrance to an exit in the network. The edge capacities represent pipe thickness. At any node, the total rate at which water enters the node must equal the total rate at which it exits the node, and along any path, the rate at which water flows is bottlenecked by the thinnest pipe.
+
+More formally, for a graph $G(V,E)$, where $c(u,v)$ represents the capacity of the edge from $u$ to $v$, the flow $f(u,v)$ from a source $s$ to a sink $t$ satisfies
+
+\begin{align*}
+f(u,v) &\le c(u,v) \forall (u,v) \in E \\
+f(u,v) &= -f(v,u) \forall (u,v) \in E \\
+\sum_{v \in V} f(u,v) &= 0 \forall u \in V \setminus \{s,t\} \\
+\sum_{v \in V} f(s,v) &= \sum_{v \in V} f(v,t) = |f|,
+\end{align*}
+
+where $|f|$ represents the total flow from the source to the sink.
+
+A \textit{maximum flow} is one that maximizes the total flow $|f|$ from $s$ to $t$, or in our example, maximizes the rate at which water can flow through our network.
+
+We'll also define the residual capacity $c_f(u,v) = c(u,v) - f(u,v)$. Note that $c_f(u,v) \ge 0$ by the conditions imposed on $f$. The residual capacity of an edge represents how much capacity is left after a certain amount of flow has already been sent. We therefore have the residual graph $G_f(V,E_f)$, where $E_f$ is the graph of residual edges, or all edges $(u,v) \in V^2$ satisfying $c_f(u,v) > 0$.
+
+A natural approach to ``solving'' this problem would be to simply greedily add flow.
+
+Find a path from the source to the sink in which all the edges have positive weight in the residual graph. Send flow along this path; that is, find the max flow across this path, which is the minimum weight of any edge on this particular path. Call this value $cap$. Then subtract $cap$ from the residual capacity of every edge in the path. We repeat, and this is guaranteed to terminate since on any given move, we remove an edge from our residual graph.
+
+What is wrong with our greedy approach? Consider the following graph:
+
+\begin{center}
+\begin{tikzpicture}[very thick,level/.style={sibling distance=70mm/#1}]
+\draw (0, 0) node [vertex] (n1) {1};
+\draw (2, 1) node [vertex] (n2) {2};
+\draw (2, -1) node  [vertex] (n3) {3};
+\draw (4, 0) node [vertex] (n4) {4};
+\draw[->] (n1) -- (n2) node[midway, above] {2};
+\draw[->] (n2) -- (n3) node[midway, right] {2};
+\draw[->] (n3) -- (n4) node[midway, below] {2};
+\draw[->] (n2) -- (n4) node[midway, above] {1};
+\draw[->] (n1) -- (n3) node[midway, below] {1};
+\end{tikzpicture}
+\end{center}
+
+The max flow from vertex 1 to vertex 4 is 3, but greedy gives only 2. This is because the best possible single path from the source to the sink may not be included the best possible overall flow.
+
+\subsection{Ford-Fulkerson}
+
+We somehow need a way to fix the inclusion of any suboptimal paths in our greedy approach, or to ``send flow back'' in case we sent it through a suboptimal path. We do this by introducing the \textit{reverse edge} to our residual graph.
+
+Find a path from the source to the sink in which all the edges have positive weight in the residual graph. Find the max flow across this path, which is the minimum weight of any edge on this particular path. Call this value $cap$. Then subtract $cap$ from the residual capacity of every edge along the path and \textit{increment the residual capacity of the reverse edge} (the edge connecting the same two vertices but running in the opposite direction) by $cap$. We call this operation on the path \textit{augmenting the path}. We simply choose an augmenting path until no such paths exist.
+
+\begin{algorithm}[H]
+\caption{Ford-Fulkerson}
+\begin{algorithmic}
+\Function{AugmentPath}{path $p=\{v_i\}_{i=1}^m$, where $(v_i,v_{i+1}) \in E_f$, $v_1=s$, $v_m=t$}
+\State $cap \gets \min_{i=1}^{m-1}(c_f(v_i,v_{i+1}))$
+\For{$i \equiv 1, m-1$}
+	\State $f(v_i,v_{i+1}) \gets f(v_i,v_{i+1}) + cap$
+	\State $c_f(v_i,v_{i+1}) \gets c_f(v_i,v_{i+1}) + cap$
+	\State $f(v_{i+1},v_i) \gets f(v_{i+1},v_i) - cap$
+	\State $c_f(v_{i+1},v_i) \gets c_f(v_{i+1},v_i) + cap$
+	\Comment incrementing reverse edge
+\EndFor
+\EndFunction
+\Function{MaxFlow}{$G(V,E)$, $s,t \in V$}
+	\ForAll{$(u,v) \in V^2$}
+		\State $f(u,v) \gets 0$
+		\State $c_f(u,v) \gets c(u,v)$
+	\EndFor
+	\State $|f| \gets 0$
+	\While{$\exists p=\{v_i\}_{i=1}^m$, where $(v_i,v_{i+1}) \in E_f$, $v_1=s$, $v_m=t$}
+		\State $cap \gets \min_{i=1}^{m-1}(c_f(v_i,v_{i+1}))$
+		\State $|f| \gets |f| + cap$
+		\State \Call{AugmentPath}{$p$}
+	\EndWhile
+	\Return $|f|$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+The difference between this algorithm and the greedy approach from earlier is that the paths we now allow may run along a reverse path, essentially undoing any suboptimal flow from earlier. These more general paths in our residual graph are called \textit{augmenting paths}.
+
+This algorithm is guaranteed to terminate for graphs with integral weights. Its performance is bounded by $O(Ef)$, where $f$ is the maximum flow and $E$ is the number of edges, as finding a path from $s$ to $t$ takes $O(E)$ and increments the total flow $f$ by at least 1. The concept of removing edges can't be used to produce a stricter bound because while an edge in one direction may be removed from the residual graph, doing so creates an edge in the other direction.
+
+In its crudest form, Ford-Fulkerson does not specify on which path to push flow if multiple paths exist. It simply states that as long as such a path exists, push flow onto it. In addition to being slow, Ford-Fulkerson, as it is stated, is not guaranteed to terminate for graphs with non-integral capacities. In fact, it might not even converge to the maximum flow for irrational capacities. However, these problems can be fixed by simply specifying how the algorithm chooses the next path on which to push flow. Nonetheless, the Ford-Fulkerson algorithm is formulated beautifully mathematically and such is useful from a math perspective, as we will see with the Max-Flow Min-Cut Theorem.
+
+\subsection{Max-Flow Min-Cut Theorem}
+
+On a graph $G(V,E)$, an \textit{s-t cut} $C=(S,T)$ splits the partitions $V$ into $S$ and $T$ satisfying $s \in S$ and $t \in T$. The \textit{cut-set} of $C$ is the set of edges $\{(u,v) \in E : u \in S, v \in T\}$. The \textit{capacity} of an s-t cut is given by
+
+\[c(S,T) = \sum_{(u,v) \in S \times T}c(u,v).\]
+
+A \textit{minimum cut} is an s-t cut that minimizes $c(S,T)$.
+
+A cut represents a set of edges that, once removed, separates $s$ from $t$. A minimum cut is therefore a set of edges that does this but minimizes the total capacity of the edges necessary to disconnect $s$ from $t$.
+
+The max-flow min-cut theorem states that the maximum value of any s-t flow is equal to the minimum capacity of any s-t cut.
+
+First, the capacity of any cut must be at least the total flow. This is true by contradiction. Any path from $s$ to $t$ has an edge in the cut-set, so therefore any flow from $s$ to $t$ is upper bounded by the capacity of the cut. Therefore, we need only construct one flow and one cut such that the capacity of the cut is equal to the flow.
+
+We consider the residual graph $G_f$ produced at the completion of the Ford-Fulkerson augmenting path algorithm.\footnote{If you're concerned that the Ford-Fulkerson algorithm will never terminate, there always exists a sequence of paths chosen such that it will. Edmonds-Karp is one example that always terminates.} Let the set $S$ be all nodes reachable from $s$ and $T$ be $V \setminus S$. We wish to show that $C=(S,T)$ is a cut satisfying $|f|=c(S,T)=\sum_{(u,v) \in S \times T} c(u,v)$. This is true when the following is satisfied:
+
+\begin{enumerate}
+
+\item
+All edges $(u,v) \in S \times T$ are fully saturated by the flow. That is, $c_f(u,v) = 0$.
+
+\item
+All reverse edges $(v, u) \in T \times S$ have zero flow. That is, $f(v,u) = 0$, or $c_f(v,u) = c(v,u)$.
+
+\end{enumerate}
+
+The first condition is true by the way we constructed $S$ and $T$, as if there existed a $(u,v)$ where $c_f(u,v) > 0$, then $v$ is accessible to $s$ and ought to have been in $S$.
+
+The second condition is true by the way the Ford-Fulkerson algorithm constructed reverse edges. If net flow was sent from $v$ to $u$, then a reverse edge was constructed from $u$ to $v$, so again, $v$ is accessible to $s$, which is a contradiction.
+
+Therefore, we have the flow
+\[|f|=\sum_{(u,v) \in S \times T} c(u,v) - \sum_{(v,u) \in T \times S} 0 = c(S,T),\]
+so we constructed a flow and a cut such that the flow $|f|$ is equal to the cut capacity $c(S,T)$, and we are done.
+
+\subsection{Edmonds-Karp}
+
+Edmonds-Karp is a refinement of Ford-Fulkerson. As stated earlier, Ford-Fulkerson is limited by not specifying on which path to push flow. There are many algorithms that resolve this issue in different ways; Edmonds-Karp fixes this by simply choosing the augmenting path of shortest unweighted length. This can be done easily using a BFS.
+
+\begin{algorithm}[H]
+\caption{Edmonds-Karp}
+\begin{algorithmic}
+\Function{ChoosePath}{$G_f(V,E_f)$, $s,t \in V$}
+	\Comment{BFS}
+	\State $visited(v)$ denotes $v$ has been added to queue
+	\State $prev(v)$ denotes vertex preceding $v$ in BFS
+	\State push $s$ on queue $q$
+	\State $visited(s) \gets 1$
+	\While{$q$ is not empty}
+		\State $u \gets $ top of $q$
+		\ForAll{neighbors $v$ of $u$ in $G_f$ where $visited(v)=0$}
+			\State push $v$ on $q$
+			\State $visited(v) \gets 1$
+			\State $prev(v) \gets u$
+		\EndFor
+	\EndWhile
+	\State pointer $curr \gets t$
+	\While{$curr \not= s$}
+		\State add $curr$ to beginning of path $p$
+		\State $curr \gets prev(curr)$
+	\EndWhile
+	\State add $s$ to beginning of $p$
+	\State \Return $p$
+\EndFunction
+\Function{MaxFlow}{$G(V,E)$, $s,t \in V$}
+	\ForAll{$(u,v) \in V^2$}
+		\State $f(u,v) \gets 0$
+		\State $c_f(u,v) \gets c(u,v)$
+	\EndFor
+	\State $|f| \gets 0$
+	\While{$t$ can be reached from $s$}
+		\State $p \gets \Call{ChoosePath}{G_f,s,t}$
+		\State $cap \gets \min_{i=1}^{m-1}(c_f(v_i,v_{i+1}))$
+		\State $|f| \gets |f| + cap$
+		\State \Call{AugmentPath}{$p$}
+	\EndWhile
+	\Return $|f|$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+The BFS is clearly $O(E)$. To complete our analysis, we must somehow bound the number of times we need to perform the BFS. To do this, we'll look at what pushing flow on a path does to our residual graph; in particular, how it affects our BFS traversal tree. Note that each vertex is on some level $i$ in the BFS tree, characterized by the distance from the source $s$. For example, $L_0 = \{s\}$, $L_1$ contains all the neighbors of $s$, $L_2$ contains neighbors of neighbors not in $L_0$ or $L_1$, and so on.
+
+We first claim that the level of any vertex in the graph is nondecreasing following an augment on a path $p$. If the augment saturates an edge, it may remove it from $G_f$, which cannot decrease the distance of any vertex from $s$. If the augment creates an edge $e=(u,v)$, that means we sent flow from $v$ to $u$ on the path $p$. Therefore, if $v$ was originally level $i$, $u$ must have been level $i+1$. The level of $u$ does not change by adding $(u,v)$, and the level of $v$ can either be $i$ or $i+2$, depending on whether edge $(v,u)$ was deleted in the process. Either way, the level of all vertices is nondecreasing.
+
+Now consider the bottleneck edge $e=(u,v)$ of an augmenting path $p$, where the level of $u$ is $i$ and the level of $v$ is $i+1$. The push operation deletes the edge $e$, but the level of $v$ must stay at least $i+1$. Now for the edge $e$ to reappear in the graph $G_f$, flow must have been sent on the reverse edge $e'=(v,u)$ on some augmenting path $p'$. But on path $p'$, $u$ comes after $v$, which must be at least level $i+1$. Therefore, $u$ must be at least level $i$. But since the maximum level of a node that is connected to $s$ is $V-1$, an edge $e$ can only be chosen as the bottleneck edge $\frac{V}{2}$ times, or $O(V)$.
+
+There are $E$ edges, each of which can be the bottleneck edge for $O(V)$ different augmenting paths, each of which takes $O(E)$ to process. Therefore, the Edmonds-Karp algorithm runs in $O(VE^2)$.
+
+\subsection{Dinic}
+
+Dinic's algorithm is another refinement of Ford-Fulkerson.
+
+\subsection{Push-Relabel}
+
+Unfortunately, even the much-improved bounds of the $O(VE^2)$ Edmonds-Karp are admittedly bad. While the push-relabel method for solving the max flow problem does not have the fastest theoretical bounds, two of its implementations have complexities $O(V^3)$ and $O(V^2\sqrt{E})$ and are among the fastest in practice.
+
+\subsubsection{Generic Push-Relabel}
+
+Ford-Fulkerson and its variants all deal with global augmentations of paths from $s$ to $t$. Push-relabel takes a different perspective, introducing the concept of a \textit{preflow} and a \textit{height} to make local optimizations that ultimately result in the maximum flow.
+
+A preflow maintains the same properties as a flow but modifies the conservation of flow condition. Instead of total flow in equalling total flow out, flow in must be at least, and therefore can exceed, flow out. We denote the difference between flow in and flow out as the \textit{excess} $e(v)$.
+
+\begin{align*}
+f(u,v) &\le c(u,v) \forall (u,v) \in E \\
+f(u,v) &= -f(v,u) \forall (u,v) \in E \\
+e(v) = \sum_{u \in V} f(u,v) &\ge 0 \forall v \in V \setminus \{s\} \\
+e(s) &= \infty.
+\end{align*}
+
+The definitions of the residual capacity $c_f(u,v)$, edge set $E_f$, and graph $G_f$ are the same as they were defined before, except with a preflow $f$ instead of a normal flow.
+
+We call a vertex $v \in V \setminus \{s, t\}$ \textit{active} if $e(v) > 0$. Therefore, a vertex besides the source or sink is active if more flows into the vertex than flows out. $s$ and $t$ are \textit{never} active. A preflow with no active vertices is simply a flow, at which point the excess of the sink $e(t)$ represents the value $|f|$ of the flow.
+
+We can \textit{push} flow from a node $u$ to a node $v$ by moving as much of the excess $e(u)$ to $v$ as the capacity of the edge $c_f(u,v)$ will allow.
+
+\noindent \begin{minipage}{\textwidth}
+\begin{algorithmic}
+\Function{Push}{edge $(u,v)$}
+	\State $\delta \gets \min(e(u), c_f(u,v))$
+	\Comment $c_f(u,v) = c(u,v) - f(u,v)$
+	\State $f(u,v) \gets f(u,v) + \delta$
+	\State $f(v,u) \gets f(v,y) - \delta$
+	\State $e(u) \gets e(u) - \delta$
+	\State $e(v) \gets e(v) + \delta$
+\EndFunction
+\end{algorithmic}
+\end{minipage}
+
+The idea of the push-relabel algorithm is to first push as much preflow as possible through local optimizations in the direction the sink. When a node can no longer push flow to the sink, it pushes the excess back towards the source to turn the preflow into a flow.
+
+However, the difficulty here lies in establishing this sense of ``direction'' from the source to the sink. Remember that we simply push preflow along a single edge in the graph at a time, not along a whole path. Moving flow from the source to the sink along a path that goes from the source to the sink is easy; moving flow from the source to the sink through local pushes without the knowledge of the graph structure as a whole is indeed a much harder problem.
+
+To resolve this issue, we introduce a \textit{label} to each of the nodes. The label $h(u)$ represents the ``height'' of $u$. In real life, water flows from higher to lower ground. We want $s$ to represent that high ground and $t$ to represent the low ground. As we push preflow from $s$ to $t$, vertices along the way represent height values between those of $s$ and $t$. However, eventually we have to push preflow back to handle both excesses in flow and suboptimal previous pushes, \`{a} la Ford-Fulkerson, but this contradicts the concept of height as we can't flow both downhill and uphill. Therefore, we'll need to be able to \textit{relabel} a node, changing the height $h(u)$ to something that allows preflow to flow back towards $s$. We will relabel $h$ in a systematic way that allows us to direct the preflow through the graph.
+
+For this labeling to be useful for us, we'll need to impose some more constraints that must be satisfied no matter how we change the graph $G_f$ or the height function $h$.
+
+\begin{align*}
+h(u) &\le h(v) + 1 \forall (u,v) \in E_f \\
+h(s) &= |V| \\
+h(t) &= 0.
+\end{align*}
+
+What does this mean? For our algorithm, we can push preflow along the edge from $u$ to $v$ only if $c_f(u,v) > 0$ and $h(u) > h(v)$, so $h(u) = h(v) + 1$. We call such an edge $(u,v) \in E_f$ \textit{admissible}. Furthermore, for all vertices $v$ that can reach $t$ in $E_f$, $h(v)$ represents the lower bound for the length of any unweighted path from $v$ to $t$ in $G_f$, and for all vertices that cannot reach $t$, then $h(v)-|V|$ is a lower bound for the unweighted distance from $s$ to $v$.
+
+$t$ will always represent the lowest node, so $h(t)=0$ is a natural constraint. We'll first set the preflow values of all vertices $v$ that can be immediately reached from $s$ to $c(s,v)$, saturating all the out-edges of $s$. For any vertex $v$ from which $t$ can be reached, $h(v)$ represents the lower bound of the unweighted distance to $t$ from $v$ in the residual graph.
+
+We want $h(s)$ to be a number large enough that will indicate that $s$ has been disconnected to $t$, as we have already sent as much preflow possible from $s$ in the direction of $t$ by saturating all outgoing edges. Therefore, setting $h(s)=|V|$ is also natural. Since $h(s)$ represents the lower bound of the distance from $s$ to $t$ in $G_f$, and there are no paths from $s$ to $t$ in the residual graph, $|V|$ is a natural choice, since the longest possible path is $|V|-1$.
+
+Furthermore, we don't want any preflow sent back to $s$ from a vertex $v$ unless it is impossible to send any more preflow from $v$ to $t$. If preflow is pushed from $v$ to $s$, then $h(v) = |V| + 1$. If there existed a path $v$ to $t$ such that every edge is admissible, the path must have $|V| + 2$ vertices. This is true because for any two consecutive vertices $v_i,v_{i+1}$ in the path, $h(v_i) = h(v_{i+1}) + 1$, but no path can have $|V|+2$ distinct vertices.
+
+This leads to the fact that the only nodes that can possibly continue to contribute to the final flow are active vertices $v$ for which $h(v) < |V|$. A node with height at least $|V|$ does not have a valid path to $t$, and a node that is not active doesn't have any excess flow to push.
+
+Now that I've explained the general idea behind the labeling constraints, it's time to actually describe what our relabeling process is. At first, the labels of all vertices besides the source start at 0. We only relabel a node $v$ if it is active (therefore, it has excess flow it needs to push; $e(u) > 0$) but has no admissible out-edges in $G_f$ (so it has no adjacent vertex on which it can push that excess flow). If a node has no admissible out-edges in $G_f$, every neighbor of $u$ has a height label at least equal to $h(u)$. When we relabel a node, we always then \textit{increase} the value of $h(u)$ to the least value where it can push flow onto another node.
+
+\noindent \begin{minipage}{\textwidth}
+\begin{algorithmic}
+\Function{Relabel}{vertex $u$}
+		\State $h(u) \gets \min_{v | (u,v) \in E_f}(h(v)) + 1$
+		\Comment $(u,v) \in E_f \iff c_f(u,v) = c(u,v) - f(u,v) > 0$
+\EndFunction
+\end{algorithmic}
+\end{minipage}
+
+Since we take the minimum height of all neighbors in the graph, we first try adjusting the height of $u$ so that we can push flow from $u$ to its neighbors that can possibly still reach $t$; that is, neighbors $v$ satisfying $h(v) < |V|$. Once we try all these neighbors, we then increase the height of $u$ to begin to push flow back towards $s$. We can always find such an edge, as any preflow pushed onto $u$ must have also incremented the reverse edge from $u$ back towards $s$.
+
+Note that neither pushing on a admissible edge nor relabeling a vertex with no admissible out-edges changes the fact that $h$ remains a valid labeling function.
+
+The generic push-relabel algorithm simply pushes and relabels vertices until there are no active vertices and the preflow becomes a flow. This algorithm works because throughout the process, $h$ remained a valid height function, and at the end, the preflow was converted into a flow. Since $h(s) = |V|$ and $h(t) = 0$, there is no augmenting path from $s$ to $t$, so our flow is maximal.
+
+\begin{algorithm}[H]
+\caption{Push-Relabel (Generic)}
+\begin{algorithmic}
+\Function{Push}{edge $(u,v)$}
+	\If{$e(u) > 0$ and $h(u) = h(v) + 1$}
+		\Comment push condition
+		\State $\delta \gets \min(e(u), c_f(u,v))$
+		\Comment $c_f(u,v) = c(u,v) - f(u,v)$
+		\State $f(u,v) \gets f(u,v) + \delta$
+		\State $f(v,u) \gets f(v,y) - \delta$
+		\State $e(u) \gets e(u) - \delta$
+		\State $e(v) \gets e(v) + \delta$
+	\EndIf
+\EndFunction
+\Function{Relabel}{vertex $u$}
+	\If{$u \not= s,t$ and $e(u)>0$ and $h(u) \le h(v) \forall v | (u,v) \in E_f$}
+		\Comment relabel condition
+		\State $h(u) \gets \min_{v | (u,v) \in E_f}(h(v)) + 1$
+		\Comment $(u,v) \in E_f \iff c_f(u,v) = c(u,v) - f(u,v) > 0$
+	\EndIf
+\EndFunction
+\Function{MaxFlow}{$G(V,E)$, $s,t \in V$}
+	\ForAll{$v \in V \setminus \{s\}$}
+		\Comment initialize excess
+		\State $e(v) \gets 0$
+	\EndFor
+	\State $e(s) \gets \infty$
+	\ForAll{$(u,v) \in V^2$}
+		\Comment initialize preflow
+		\State $f(u,v) \gets 0$
+	\EndFor
+	\ForAll{neighbors $v \not= s$ of $s$}
+		\Comment saturate edges to all neighbors of $s$
+		\State $f(s,v) \gets c(s,v)$
+		\State $f(v,s) \gets -c(s,v)$
+		\State $e(v) \gets c(s,v)$
+	\EndFor
+	\ForAll{$v \in V \setminus \{s\}$}
+		\Comment preflow now has valid height function; initialize height
+		\State $h(v) \gets 0$
+	\EndFor
+	\State $h(s) \gets |V|$
+	\While{we can still \Call{Push}{} or \Call{Relabel}{}}
+		\State \Call{Push}{} or \Call{Relabel}{}
+	\EndWhile
+	\State \Return $e(t)$
+	\Comment $e(t)=|f|$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+We can argue that this algorithm runs in $O(V^2E)$, which is already an improvement from Edmonds-Karp. However, just as Ford-Fulkerson could be sped up by specifying which augmenting paths to choose, we can do the same with the push-relabel algorithm, speeding it up by specifying a systematic method to choose an edge to push or a vertex to relabel.
+
+\subsubsection{Discharge}
+
+We first describe an auxiliary operation. For each vertex $u$, we'll need a way to visit in- and out-neighbors of $u$ in a static cyclic order. This is easy with just a pointer; for vertex $u$, we'll call that pointer $curr(u)$. When the pointer passes through every element in the list of neighbors, we'll just reset it back to the first element.
+
+\noindent \begin{minipage}{\textwidth}
+\begin{algorithmic}
+\Function{Discharge}{vertex $u$}
+	\While{$e(u)>0$}
+		\Comment{perform an operation as long as $u$ is active}
+		\If{$curr(u)$ is at end of list of neighbors}
+			\State \Call{Relabel}{$u$}
+			\State reset $curr(u)$
+		\Else
+			\If{$(u,curr(u))$ is an admissible edge}
+				\State \Call{Push}{$(u,curr(u))$}
+			\Else
+				\State move $curr(u)$ to next neighbor of $u$
+			\EndIf
+		\EndIf
+	\EndWhile
+\EndFunction
+\end{algorithmic}
+\end{minipage}
+
+\subsubsection{FIFO Selection}
+
+FIFO selection simply maintains a list of active vertices in a FIFO queue. We pop off the first vertex in the queue and discharge it, adding any newly-activated vertices to the end of the queue. This runs in $O(V^3)$.
+
+\subsubsection{Highest Label Selection}
+
+Highest label selection discharges the active vertex with the greatest height. This runs in $O(V^2\sqrt{E})$.
+
+\subsubsection{Improvements with Heuristics}
+
+Heuristics are meant to help relabel vertices in a smarter way. Bad relabelings are the slowest part of the algorithm, and improving the process can speed up max flow.
+
+The \textit{gap heuristic} takes advantage of ``gaps'' in the height function. Since a path of admissible edges consists of vertices whose heights decrease by exactly 1, the presence of a gap in height precludes the possibility of such a path. If there exists a value $h'$ such that no vertex $v$ exists such that $h(v)=h'$, then for every vertex $v$ satisfying $h' < h(v) < |V|$, $v$ has been disconnected from $t$, so we can immediately relabel $h(v)=|V| + 1$.
+
+The \textit{global relabeling heuristic} performs a backwards BFS from $t$ every now and then to compute the heights of the vertices in the graph exactly.
+
+Some dude on Codeforces\footnote{\url{http://codeforces.com/blog/entry/14378}} didn't have much luck improving performance with the global relabeling heuristic. I'd suggest sticking to the gap heuristic only.
+
+\subsection{Other Problems with Flow Solutions}
+
+\subsubsection{Bipartite Matching}
+
+\begin{enumerate}
+
+\item Prove Hall's Marriage Theorem.
+
+\end{enumerate}
+
+\subsubsection{Edge-Disjoint Paths}
+
+\subsubsection{Sports Playoff Chances}
+
