@@ -1,0 +1,63 @@
+\chapter{Fundamentals}
+
+\section{Comparable}
+
+The interface \texttt{Comparable} is how Java can impose an ordering on any object. Implementing \texttt{Comparable} requires support to the method \texttt{int compareTo(Object o)}. If \texttt{a.compareTo(b) < 0}, then \texttt{a} should come before \texttt{b} in the ordering. If \texttt{a.compareTo(b) > 0}, then \texttt{a} should come after \texttt{b} in the ordering. If \texttt{a.compareTo(b)==0}, then \texttt{a} is considered to be equal to \texttt{b}. \texttt{a.compareTo(b) == 0} should be equivalent to \texttt{a.equals(b)}. For example, consider the following \texttt{class MyPair}:
+
+\begin{mylstlisting}
+class MyPair implements Comparable {
+	int x;
+	int y;
+    // sort by x-coordinate first
+	public int compareTo(Object o) {
+		MyPair c = (MyPair) o;
+		if(x < c.x) return -1;
+		if(x > c.x) return 1;
+		// if x-coordinates equal, compare y
+		if(y < c.x) return -1;
+		if(y > c.x) return 1;
+		return 0; // equal
+	}
+}
+\end{mylstlisting}
+
+We can also clean this up a bit using generics:
+
+\begin{mylstlisting}
+class MyPair implements Comparable<MyPair> {
+	int x;
+	int y;
+	public int compareTo(MyPair c) {
+		if(x < c.x) return -1;
+		if(x > c.x) return 1;
+		if(y < c.x) return -1;
+		if(y > c.x) return 1;
+		return 0;
+	}
+}
+\end{mylstlisting}
+
+Note that no casting is required anymore.
+
+\section{Sorts}
+
+\subsection{Merge Sort}
+
+The idea behind merge sort is simple. If we are given two equally sized sorted stacks, we could easily combine them into one sorted stack by comparing the top of the two stacks only, since the smallest element remaining must be one of those two.
+
+From here, we divide and conquer. Simply cut the array in half, recurse on each half, and merge the two back together. This runs in $O(n \log (n))$ time.
+
+\subsection{Quicksort}
+
+Quicksort also uses a divide and conquer strategy to achieve an $O(n \log (n))$ amortized bound. We take a random element from the array, move anything less than it to the left of the array, anything right of it to the right of the array, and recurse.
+
+This was previously implemented by \texttt{Arrays.sort()} and \texttt{Collections.sort()}, but Java now uses either dual-pivot quicksort or timsort.
+
+\section{Binary Search}
+
+Before we begin studying data structures, it is necessary to first understand general search techniques. Given a list, it is straightforward to simply check every element in the list in a linear search.
+
+One way we can make this faster is by imposing an ordering on the list. Then inserting elements becomes slower because we can no longer just pop the element to the the end of the list. However, if we are asked to find an element, we know roughly where in the list to search because we can compare the element to other elements in the list.
+
+Consider an array of sorted elements. The array supports $O(1)$ access to any element in the array. We'll take a look at the middle element in the array. Depending on whether or not the element to be searched is larger, smaller, or equal to the middle element, we can guarantee we can eliminate half of the array. Then finding an element is an $O(\log{n})$ operation on a sorted array. This can be done either iteratively or recursively.
+

@@ -1,0 +1,294 @@
+\chapter{Big Ideas}
+
+In this chapter we'll discuss some general ideas for solving problems. Starting in this chapter I'm going to shift from language-specific terms, like PriorityQueue and TreeMap, to more general terms, like binary heap and binary search tree. Algorithms I present will no longer be in the form of concrete Java code but rather in a more abstract pseudocode.
+
+\section{Search Techniques}
+
+There are many different general strategies for finding the answer to a problem.
+
+\subsection{Complete Search}
+
+Sometimes the best way is simply to try everything. This could be the intended solution (check the complexity of a complete search and compare it against the time limits), or we may be just coding a brute force to squeeze out a few extra points from an intractable problem at the end of a contest. Either way, the order in which we search can make or break the code.
+
+Suppose we wanted to solve the game of chess. The placement of the pieces on the board and a toggle for whether black or white is to move represents a game state. The set of legal moves maps this game state to one set of states and another set of states to this game state.
+
+We can therefore think of the different states as vertices in a very large directed graph. Methods we use for solving chess, or any other problem, are identical to ways of traversing graphs, especially trees.
+
+\subsubsection{Depth-First Search}
+
+\textit{Depth-first search} is the most simple of the searches. A depth-first search called on a vertex $v$ in the search tree recursively calls itself on each of the children of $v$. To go back to the chess example, a DFS would begin with one possible first move, like a3, and test \textit{every possible move sequence} beginning with a3 before moving on to a second possible first move, like a4.
+
+A quick note on recursive processes: The \textit{run-time stack} keeps track of our position and data that go out of scope when we jump into a new function. This stack allows us to call functions within functions safely. Recursion is dangerous in contest programming because the run-time stack is slow and can easily balloon in size, crashing the program. For this reason do not hesitate to use your own stack in an iterative process in practice, though I often describe processes as recursive as they are easier to understand, code, and debug in this form.
+
+Now it is painfully obvious that strictly using a DFS is not preferable in computer chess. The computer would certainly never finish testing every move sequence beginning with a3 and therefore would not consider more standard, and likely better, moves like e4.
+
+\subsubsection{Breadth-First Search}
+
+\textit{Breadth-first search} traverses the search tree level by level. We keep track of a queue that stores each level's state. At each step we pop off the first element in the queue and add the states that it can reach to the end of the queue. In this way, we explore those states only after we explore all the states associated with a lower level. In the chess example, we would store all 20 possible first moves in the queue, and for each first move, we add all possible second moves to the end of the queue.
+
+This means that we search all possible states of a certain depth at roughly the same time, but we need to store the data associated with each of these states, and this can be quite costly in terms of memory.
+
+BFS is the better choice over DFS when we are asked for the ``smallest'' answer, which is often associated with the lowest level.
+
+\subsubsection{Depth-First Search with Iterative Deepening}
+
+\textit{Depth-first search with iterative deepening} is a DFS that only searches up to a certain level in the search tree before stopping and heading back to lower levels. If it turns out the search did not find anything in the first $N$ levels, we broaden the search to the first $N+1$ levels with another DFS, hence iterative deepening. This method of searching is slower than a BFS, but maintains the nice BFS property of finding the ``smallest'' answer first while shedding the memory harness that holds the BFS back.
+
+DFSID is the closest to what we do when analyzing an actual chess game. We make a move in our minds and test its performance against whatever the opponent might make as his move, tracing the game around 3-4 moves deep before testing another possible move.
+
+\subsection{Greedy Algorithm}
+
+The main problem with any of the searches described above is they are exponential in nature. A \textit{greedy algorithm} is one that takes the ``best'' possible option at each step, essentially disregarding any other possible option. To find the best solution for $n=4$, we consider only the best solution for $n=3$ and no other possible solution. The approach of maximizing at each step clearly does not always work, as the locally optimal choice is not necessarily globally optimal. Always moving in the direction of a target, for example, fails if there is a wall in the way. However, if the greedy algorithm can solve a problem, the code runs very quickly.
+
+One problem that cannot be solve using the greedy approach is the integer knapsack problem. It's important to be able to catch an incorrect greedy algorithm, and one classic
+example involves finding the most efficient way to make change. Given a sequence of coin denominations ($d_i$, where $1 \le i \le n$), with $d_1 = 1$, find the smallest number of coins necessary that sum to some value $V$. The greedy approach takes the most valuable coin that doesn't overshoot $V$ and adds it to our set until we achieve $V$. One counterexample is $v_1=1$, $v_2=3$, $v_3=4$ and $V = 6$. The greedy algorithm chooses $4+1+1$, which is worse than $3+3$. Note however that greedy algorithm still always works for some sets of coin values, like United States currency. Don't let the fact that the greedy algorithm works for the most obvious example fool you.
+
+The greedy algorithm combined with ideas from dynamic programming constitute \textit{best-first search}, a category of searches that includes the Dijkstra algorithm for shortest paths.
+
+\begin{enumerate}
+
+\item
+(USACO Training)
+There is a long list of stalls, some of which need to be covered with boards. You can use up to $N$ ($1 \le N \le 50$) boards, each of which may cover any number of consecutive stalls. Cover all the necessary stalls, while covering as few total stalls as possible.
+
+\item
+(IOI 1996)
+You are given a three-valued (1, 2, or 3) sequence of length up to 1000. Find a minimum set of exchanges to put the sequence in sorted order.
+
+\item
+(Samir Khuller)
+We are given $N$ jobs, each of which requires one unit of time to complete. The $i$th job opens at some time $t_i$ and must be completed by some deadline $d_i$, where $t_i,d_i\in \mathbb{Z}$. Given that only one job can be completed at a time, determine if all $N$ can be completed by their deadlines.
+
+\end{enumerate}
+
+\subsection{Binary Searching on the Answer}
+
+Suppose that the problem we need to solve is finding the minimum number $M$ such that some property holds. That is, the property holds for any $x \ge M$ but does not hold for $x < M$. Perhaps the best approach we have so far for finding this $M$ is simply trying all the numbers from 1 to $M$. However, this linear search is clearly inefficient.
+
+The nature of this problem should remind you of some other search technique. Oftentimes, with problems of this property, it is easy to check whether some condition holds for some given $x$. In this case, it is much easier to binary search on $M$ rather than find it some other way.
+
+\begin{enumerate}
+
+\item
+(USACO March 2014, sabotage)
+Farmer John's arch-nemesis, Farmer Paul, has decided to sabotage Farmer
+John's milking equipment!
+
+The milking equipment consists of a row of $N$ ($3 \le N \le 100,000$)
+milking machines, where the $i$th machine produces $M_i$ units of milk ($1 \le M_i \le 10,000$).  Farmer Paul plans to disconnect a contiguous block
+of these machines -- from the $i$th machine up to the $j$th machine ($2 \le i \le j \le N-1$); note that Farmer Paul does not want to disconnect
+either the first or the last machine, since this will make his plot
+too easy to discover.  Farmer Paul's goal is to minimize the average
+milk production of the remaining machines.  Farmer Paul plans to
+remove at least 1 cow, even if it would be better for him to avoid
+sabotage entirely.
+
+Fortunately, Farmer John has learned of Farmer Paul's evil plot, and
+he is wondering how bad his milk production will suffer if the plot
+succeeds.  Please help Farmer John figure out the minimum average milk
+production of the remaining machines if Farmer Paul does succeed.
+
+\item
+(Matthew Savage)
+Ashley's journey through Unova is just beginning, and she has just picked her first Pok\'{e}mon! Unfortunately, not knowing much about them, she picked a Snivy, and a particularly stubborn and unfriendly one at that.
+
+Being Ashley, she decides to try to win over the Snivy in the only way she knows how -- baked goods.
+
+Ashley knows $r$ $(0 \le r \le 1000$) recipes for Pok\'{e}puffs. Each recipe $r_i$ has a deliciousness rating $d_i$ ($0 \le d_i \le 1000$) and requires some combination of the $I$ ($0 \le I \le 1000$) available ingredients. (More specifically, the recipe $r_i$ uses the quantity $I_{ij}$ ($0 \le I_{ij} \le 1000$) of ingredient $I_j$.)
+
+Ashley has some amount of each ingredient $I_j$ on hand $A_j$ ($0 \le A_j \le 10^9$) and can buy more from the nearby store for a price of $c_j$ ($1 \le c_j \le 10^9$) dollars per unit using the $M$ ($0 \le M \le 10^{12}$) dollars she currently has.
+
+Of course, Ashley also has limited supplies and therefore can only produce Pok\'{e}puffs from a single recipe. However, she can make as many as she wants, in integer increments.
+
+We define ``total deliciousness'' ($D$) to be the sum of the deliciousnesses of the individual Poképuffs that Ashley has baked.
+
+Ashley wants to have the best chance possible with Snivy, and therefore would like to know - what is the maximum possible deliciousness ($\max(D)$) that she can produce?
+
+Note: there is a ``just do it'' solution that is faster than the binary search by a log factor. It is also \textit{much} more annoying to code; so annoying that I was unable to debug my ``just do it'' solution in the actual contest environment. I included this problem as an exercise to demonstrate how easy binary searching on the answer can be.
+
+\item
+(CF 287B)
+Vova, the Ultimate Thule new shaman, wants to build a pipeline. As there are exactly $n$ ($1 \le n \le 10^{18}$) houses in Ultimate Thule, Vova wants the city to have exactly $n$ pipes, each such pipe should be connected to the water supply. A pipe can be connected to the water supply if there's water flowing out of it. Initially Vova has only one pipe with flowing water. Besides, Vova has several splitters.
+
+A splitter is a construction that consists of one input (it can be connected to a water pipe) and $x$ output pipes. When a splitter is connected to a water pipe, water flows from each output pipe. You can assume that the output pipes are ordinary pipes. For example, you can connect water supply to such pipe if there's water flowing out from it. At most one splitter can be connected to any water pipe.
+
+Vova has one splitter of each kind: with $2, 3, 4, \ldots, k$ ($2 \le k \le 10^9$) outputs. Help Vova use the minimum number of splitters to build the required pipeline or otherwise state that it's impossible.
+
+Vova needs the pipeline to have exactly n pipes with flowing out water. Note that some of those pipes can be the output pipes of the splitters.
+
+\item
+(IOI 2009)
+Mecho the bear has found a little treasure - the bees' secret honeypot, which is full of honey! He was happily eating his newfound treasure until suddenly one bee saw him and sounded the bee alarm. He knows that at this very moment hordes of bees will emerge from their hives and start spreading around trying to catch him. He knows he has to leave the honeypot and go home quickly, but the honey is so sweet that Mecho doesn't want to leave too soon. Help Mecho determine the latest possible moment when he can leave.
+
+Mecho's forest is represented by a square grid of $N$ by $N$ ($1 \le N \le 800$) unit cells, whose sides are parallel to the north-south and east-west directions. Each cell is occupied by a tree, by a patch of grass, by a hive or by Mecho's home. Two cells are considered adjacent if one of them is immediately to the north, south, east or west of the other (but not on a diagonal). Mecho is a clumsy bear, so every time he makes a step, it has to be to an adjacent cell. Mecho can only walk on grass and cannot go through trees or hives, and he can make at most $S$ ($1 \le S \le 1000$) steps per minute. At the moment when the bee alarm is sounded, Mecho is in the grassy cell containing the honeypot, and the bees are in every cell containing a hive (there may be more than one hive in the forest). During each minute from this time onwards, the following events happen in the following order:
+\begin{itemize}
+\item
+If Mecho is still eating honey, he decides whether to keep eating or to leave. If he continues eating, he does not move for the whole minute. Otherwise, he leaves immediately and takes up to $S$ steps through the forest as described above. Mecho cannot take any of the honey with him, so once he has moved he cannot eat honey again.
+\item
+After Mecho is done eating or moving for the whole minute, the bees spread one unit further across the grid, moving only into the grassy cells. Specifically, the swarm of bees spreads into every grassy cell that is adjacent to any cell already containing bees. Furthermore, once a cell contains bees it will always contain bees (that is, the swarm does not move, but it grows).
+\end{itemize}
+In other words, the bees spread as follows: When the bee alarm is sounded, the bees only occupy the cells where the hives are located. At the end of the first minute, they occupy all grassy cells adjacent to hives (and still the hives themselves). At the end of the second minute, they additionally occupy all grassy cells adjacent to grassy cells adjacent to hives, and so on. Given enough time, the bees will end up simultaneously occupying all grassy cells in the forest that are within their reach.
+
+Neither Mecho nor the bees can go outside the forest. Also, note that according to the rules above, Mecho will always eat honey for an integer number of minutes.
+
+The bees catch Mecho if at any point in time Mecho finds himself in a cell occupied by bees.
+
+Write a program that, given a map of the forest, determines the largest number of minutes that Mecho can continue eating honey at his initial location, while still being able to get to his home before any of the bees catch him.
+
+\end{enumerate}
+
+\section{Dynamic Programming}
+
+The idea behind dynamic programming is to avoid doing the same thing twice. Two nodes in the search tree described in the complete search techniques might very well represent the same state. For example, two different sets of initial moves could result in the same chessboard configuration, and if we already calculated who has the winning or losing position in that configuration, we ought to remember that fact somehow so we don't need to calculate it again. Of course, however, actually keeping track of every possible game state is intractable by memory constraints.
+
+Here's a much more reasonable problem. Given a sequence of $N \le 10,000$ integers, what is the maximum decreasing subsequence? A subsequence does not have to consist of consecutive terms in the original sequence.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=5ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=6]
+  (array)
+  {
+  					\strut 6
+  \nodepart{two}	\strut 9
+  \nodepart{three}	\strut 8
+  \nodepart{four}	\strut 4
+  \nodepart{five}	\strut 7
+  \nodepart{six}	\strut 5
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
+  \node[below] at (array.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+The natural complete search approach would be to use recursion, or DFS. When we process an element in the list, we recursively process all elements that come after it and choose the one that gives the maximum subsequence.
+
+\begin{algorithmic}
+\Function{Process}{$i$}
+\State $max \gets 0$
+\For{$j\equiv i+1,N$}
+	\If{$value(i) > value(j)$}
+		\State $x \gets \Call{Process}{$j$}$
+		\If{$x > max$}
+			\State $max \gets x$
+		\EndIf
+	\EndIf
+\EndFor
+\State \Return $max + 1$
+\EndFunction
+\end{algorithmic}
+
+However, this algorithm is exponential. In the worst case, it is $O(2^N)$. We notice a lot of repetition: processing the 9 in the list above, for example, requires finding the longest subsequences beginning with 8, 4, 7, and 5, while processing 8 requires finding subsequences for 4, 7, and 5. It seems silly to do the same task twice, so we'll keep track of the length of the longest subsequence in a separate array.
+
+\begin{algorithmic}
+\Function{Process}{$i$}
+\If{$i$ has already been processed}
+	\State \Return $dp(i)$
+\EndIf
+\State $max \gets 0$
+\For{$j\equiv i+1,N$}
+	\If{$value(i) > value(j)$}
+		\State $x \gets \Call{Process}{j}$
+		\If{$x > max$}
+			\State $max \gets x$
+		\EndIf
+	\EndIf
+\EndFor
+\State $dp(i) \gets max + 1$
+\State \Return $max + 1$
+\EndFunction
+\end{algorithmic}
+
+This reduces the complexity of the algorithm to $O(n^2)$. Note that to process an index, we must process first all later indices. This imposes a natural ordering in which to process the indices: in reverse. This idea lends itself to a nice iterative solution.
+
+\begin{algorithmic}
+\For{$i \equiv N,1$}
+	\Comment $i$ goes in reverse
+	\State $max \gets 0$
+	\For{$j\equiv i+1,N$}
+		\If{$value(i) > value(j)$}
+			\If{$dp(j) > max$}
+				\State $max \gets dp(j)$
+			\EndIf
+		\EndIf
+	\EndFor
+	\State $dp(i) \gets max + 1$
+\EndFor
+\end{algorithmic}
+
+The answer to the original problem is then the maximum value of $dp(i)$ for all $i$. For this specific problem, it's relatively easy to speed up the algorithm to $O(\log{n})$ by replacing the linear search with something else.
+
+The integer knapsack problem is another example where dynamic programming may be useful. \textit{Knapsack problems} are a family of problems with the following form:
+
+We are given a list of $K$ objects each assigned an availability, a size, and a value. We have a total amount of ``space'' available in our knapsack and need to find the set of objects from our list that maximizes the total the value of objects in the set such that the total size does not exceed the space and the number of times we take one particular object does not exceed its availability.
+
+Dynamic programming yields a straightforward $O(NK)$ solution. See if you can find it. Note, however, if $N$ is very large, this solution is no longer practical. In general, the knapsack problem is NP-complete, so don't think dynamic programming works on everything!
+
+\subsection{Dynamic Programming over Subsets}
+
+Consider the following problem:
+
+(USACO December 2014, guard)
+Farmer John and his herd are playing frisbee.  Bessie throws the
+frisbee down the field, but it's going straight to Mark the field hand
+on the other team!  Mark has height $H$ ($1 \le H \le 1,000,000,000$), but
+there are $N$ cows on Bessie's team gathered around Mark ($2 \le N \le 20$).
+They can only catch the frisbee if they can stack up to be at least as
+high as Mark.  Each of the $N$ cows has a height, weight, and strength.
+A cow's strength indicates the maximum amount of total weight of the
+cows that can be stacked above her.  
+
+Given these constraints, Bessie wants to know if it is possible for
+her team to build a tall enough stack to catch the frisbee, and if so,
+what is the maximum safety factor of such a stack.  The safety factor
+of a stack is the amount of weight that can be added to the top of the
+stack without exceeding any cow's strength.
+
+We can try the $O(N!)$ brute force, trying every permutation of cows possible. However, this is far too slow. $N \le 20$ hints at an exponential solution, so we think of trying every possible subset of the cows. Given a subset $S$ of cows, the height reached is the same, so perhaps we sort the subset by strength, and put the strongest cow on the bottom. We see that this greedy approach fails: suppose that the first cow has weight 1 and strength 3 and the second cow has weight 4 and strength 2. Greedy would tell us to put the first cow on the bottom, but this fails, while putting the second cow on the bottom succeeds.
+
+When greedy fails, the next strategy we look at is dynamic programming. To decide whether $S$ is stable, we have to find whether there exists a cow $j$ in $S$ that can support the weight of all the other cows in $S$. But how do we know whether the set $S \setminus \{j\}$ is stable? This is where dynamic programming comes in.
+
+This leads to a $O(N 2^N)$ solution. This seems like a pain to code iteratively, but there is a nice fact about subsets: there is a cute bijection from the subsets of $\{0,1,2, \ldots, N-1\}$ to the integers from 0 to $2^N - 1$. That is, the subset $\{0,2,5,7\}$ maps to $2^0 + 2^2 + 2^5 + 2^7 = 165$ in the bijection. We call this technique \textit{masking}. We require all the subsets of $S$ to be processed before $S$ is processed, but that property is also handled by our bijection, since subtracting a power of 2 from a number decreases it. With a little knowledge of bit operators, this can be handled easily.
+
+\noindent \begin{minipage}{\textwidth}
+\begin{algorithmic}
+\For{$i\gets 0, 2^N-1$}
+	\Comment $i$ represents the subset $S$
+	\State $dp(i) \gets -1$
+	\ForAll{$j \in S$}
+		\Comment \texttt{i \& (1 << j) != 0}
+		\State $alt \gets \min(dp(i-2^j), strength(j) - \sum_{k \in S \setminus \{j\}} weight(k))$
+		\If{$dp(i) < alt$}
+			\State $dp(i) \gets alt$
+		\EndIf
+	\EndFor
+\EndFor
+\end{algorithmic}
+\end{minipage}
+
+\texttt{\&} is the bitwise and function, while \texttt{<<} is the left shift operator.
+
+Brian Dean compiled some standard dynamic programming problems with animations and analyses. Practice dynamic programming here: \url{http://people.cs.clemson.edu/~bcdean/dp_practice/}
+
