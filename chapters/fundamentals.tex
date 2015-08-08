@@ -2,7 +2,7 @@
 
 \section{Comparable}
 
-The interface \texttt{Comparable} is how Java can impose an ordering on any object. Implementing \texttt{Comparable} requires support to the method \texttt{int compareTo(Object o)}. If \texttt{a.compareTo(b) < 0}, then \texttt{a} should come before \texttt{b} in the ordering. If \texttt{a.compareTo(b) > 0}, then \texttt{a} should come after \texttt{b} in the ordering. If \texttt{a.compareTo(b)==0}, then \texttt{a} is considered to be equal to \texttt{b}. \texttt{a.compareTo(b) == 0} should be equivalent to \texttt{a.equals(b)}. For example, consider the following \texttt{class MyPair}:
+The interface \texttt{Comparable} is how Java can impose an ordering on any object. Implementing \texttt{Comparable} requires support to the method \texttt{int compareTo(Object o)}. If \texttt{a.compareTo(b) < 0}, then \texttt{a} should come before \texttt{b} in the ordering. If \texttt{a.compareTo(b) > 0}, then \texttt{a} should come after \texttt{b} in the ordering. If \texttt{a.compareTo(b) == 0}, then \texttt{a} is considered to be equal to \texttt{b}. \texttt{a.compareTo(b) == 0} should be equivalent to \texttt{a.equals(b)}. For example, consider the following \texttt{class MyPair}:
 
 \begin{mylstlisting}
 class MyPair implements Comparable {

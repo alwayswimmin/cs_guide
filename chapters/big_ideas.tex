@@ -99,6 +99,7 @@ Here's a much more reasonable problem. Given a sequence of $N \le 10,000$ intege
 
 The natural complete search approach would be to use recursion, or DFS. When we process an element in the list, we recursively process all elements that come after it and choose the one that gives the maximum subsequence.
 
+\noindent \begin{minipage}{\textwidth}
 \begin{algorithmic}
 \Function{Process}{$i$}
 \State $max \gets 0$
@@ -113,9 +114,11 @@ The natural complete search approach would be to use recursion, or DFS. When we 
 \State \Return $max + 1$
 \EndFunction
 \end{algorithmic}
+\end{minipage}
 
 However, this algorithm is exponential. In the worst case, it is $O(2^N)$. We notice a lot of repetition: processing the 9 in the list above, for example, requires finding the longest subsequences beginning with 8, 4, 7, and 5, while processing 8 requires finding subsequences for 4, 7, and 5. It seems silly to do the same task twice, so we'll keep track of the length of the longest subsequence in a separate array.
 
+\noindent \begin{minipage}{\textwidth}
 \begin{algorithmic}
 \Function{Process}{$i$}
 \If{$i$ has already been processed}
@@ -134,9 +137,11 @@ However, this algorithm is exponential. In the worst case, it is $O(2^N)$. We no
 \State \Return $max + 1$
 \EndFunction
 \end{algorithmic}
+\end{minipage}
 
 This reduces the complexity of the algorithm to $O(n^2)$. Note that to process an index, we must process first all later indices. This imposes a natural ordering in which to process the indices: in reverse. This idea lends itself to a nice iterative solution.
 
+\noindent \begin{minipage}{\textwidth}
 \begin{algorithmic}
 \For{$i \equiv N,1$}
 	\Comment $i$ goes in reverse
@@ -151,6 +156,7 @@ This reduces the complexity of the algorithm to $O(n^2)$. Note that to process a
 	\State $dp(i) \gets max + 1$
 \EndFor
 \end{algorithmic}
+\end{minipage}
 
 The answer to the original problem is then the maximum value of $dp(i)$ for all $i$. For this specific problem, it's relatively easy to speed up the algorithm to $O(\log{n})$ by replacing the linear search with something else.
 
@@ -160,7 +166,7 @@ We are given a list of $K$ objects each assigned an availability, a size, and a 
 
 Dynamic programming yields a straightforward $O(NK)$ solution. See if you can find it. Note, however, if $N$ is very large, this solution is no longer practical. In general, the knapsack problem is NP-complete, so don't think dynamic programming works on everything!
 
-\subsection{Dynamic Programming over Subsets}
+\subsection{Dynamic Programming over Subsets ($2^n$ DP)}
 
 Consider the following problem:
 
@@ -192,7 +198,7 @@ This leads to a $O(N 2^N)$ solution. This seems like a pain to code iteratively,
 	\Comment $i$ represents the subset $S$
 	\State $dp(i) \gets -1$
 	\ForAll{$j \in S$}
-		\Comment \texttt{i \& (1 << j) != 0}
+		\Comment $j \in S$ satisfy \texttt{i \& (1 << j) != 0}
 		\State $alt \gets \min(dp(i-2^j), strength(j) - \sum_{k \in S \setminus \{j\}} weight(k))$
 		\If{$dp(i) < alt$}
 			\State $dp(i) \gets alt$
