@@ -219,7 +219,149 @@ $find(4)$, optimized:
 
 \subsection{Tarjan}
 
-Tarjan's algorithm for strongly connected components
+Tarjan's algorithm detects strongly connected components in a directed graph. We begin with the DFS traversal of the graph, building a forest (collection of trees). In a DFS, we only traverse each vertex once; this means when we encounter an edge to a vertex we already visited, we move on without calling the DFS on that node. Once we obtain the forest, we can split it into subgraphs that represent our strongly connected components.
+
+Let's work through how we can get the subgraphs representing the strongly connected components from our DFS. Here's the graph from the beginning of this section.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level/.style={sibling distance=70mm/#1}]
+\draw (0, 0) node [vertex] (n1) {5};
+\draw (2, 0) node [vertex] (n2) {6};
+\draw (4, 0) node [vertex] (n3) {7};
+\draw (6, 0) node [vertex] (n4) {8};
+\draw (0, 2) node [vertex] (m1) {1};
+\draw (2, 2) node [vertex] (m2) {2};
+\draw (4, 2) node [vertex] (m3) {3};
+\draw (6, 2) node [vertex] (m4) {4};
+\draw[->] (m1) -- (m2);
+\draw[->] (m2) -- (n1);
+\draw[->] (n1) -- (m1);
+\draw[->] (n2) edge [bend left] (m2);
+\draw[->] (m2) edge [bend left] (n2);
+\draw[->] (n2) -- (n3);
+\draw[->] (m2) -- (m3);
+\draw[->] (m2) -- (n3);
+\draw[->] (n3) -- (m3);
+\draw[->] (n3) edge [bend left] (m4);
+\draw[->] (m4) edge [bend left] (n3);
+\draw[->] (n4) -- (m4);
+\end{tikzpicture}
+\end{center}
+
+It doesn't matter from which node we begin our DFS or the order in which we choose children; in our example, we'll simply choose the node with the minimum label to traverse first. This will result in two trees in our forest, one rooted at 1 and the other rooted at 8.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level/.style={sibling distance=70mm/#1}, edge from parent/.style={draw, ->}]
+\node [vertex] (n1) {1}
+child {
+	node [vertex] (n2) {2}
+	child {
+		node [vertex] (n3) {3}
+	}
+	child {
+		node [vertex] (n5) {5}
+	}
+	child {
+		node [vertex] (n6) {6}
+		child {
+			node [vertex] (n7) {7}
+			child {
+				node [vertex] (n4) {4}
+			}
+		}
+	}
+};
+\node [vertex] [right=5cm of n1] (n8) {8};
+\end{tikzpicture}
+\end{center}
+
+Now this by itself is not very useful, as in order to find strongly connected components, we'll need the edges in the directed graph that aren't included in our tree. Here we add the other edges as dashed pointers.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level/.style={sibling distance=70mm/#1}, edge from parent/.style={draw, ->}]
+\node [vertex] (n1) {1}
+child {
+	node [vertex] (n2) {2}
+	child {
+		node [vertex] (n3) {3}
+	}
+	child {
+		node [vertex] (n5) {5}
+	}
+	child {
+		node [vertex] (n6) {6}
+		child {
+			node [vertex] (n7) {7}
+			child {
+				node [vertex] (n4) {4}
+			}
+		}
+	}
+};
+\node [vertex] [right=5cm of n1] (n8) {8};
+\draw[->, dashed] (n5) edge [bend left] (n1);
+\draw[->, dashed] (n6) edge [bend right] (n2);
+\draw[->, dashed] (n2) edge [bend right] (n7);
+\draw[->, dashed] (n4) edge [bend right] (n7);
+\draw[->, dashed] (n8) edge [bend left] (n4);
+\draw[->, dashed] (n7) edge [bend left] (n3);
+\end{tikzpicture}
+\end{center}
+
+Note that strongly connected components are represented by subtrees in the graph. We call the root of the subtree called the root of the strongly connected component.
+
+One edge here is immediately useless. We already know that 2 can reach 7; 7 is in 2's subtree. The fact that there is an edge from 2 to 7 doesn't change anything. Then we have a crucial observation -- the only possible useful extra edges are those that go up to a previous node in the subtree, like the edge from 5 to 1, or those that go ``left'' to a previously-visited vertex, either to a previous branch in the tree, like from 7 to 3, or to a previous subtree entirely, like from 8 to 4.
+
+If a node $v$ has an edge to a direct ancestor in the tree, that means we immediately have a cycle, and therefore the node, its ancestor, and every vertex along the way must be in the same strongly connected component.
+
+Naturally, the ``left'' case is trickier. Suppose $v$ has a left edge to a vertex $u$. We somehow need a way to find out if $u$ has a path back to $v$. We know that $u$ cannot go down the tree to $v$ as $v$ is not in the subtree of $u$ by the way DFS constructed the tree. Therefore, we want to know whether $u$ has a path back up to some common ancestor with $v$. However, again by the way DFS traverses the graph, the entire subtree of $u$ has already been searched before the DFS reaches $v$. We want to exploit this fact with some kind of memoization.
+
+If vertex $v$ was the $n$th vertex visited in the DFS, we'll mark $v$ with the label $order(v) = n$. We'll also keep track of the ``least'' vertex $link(v)=u$ that we know up to that point that $v$ can visit, or the vertex $u$ with the minimum $order(u)$ that $v$ can reach so far.
+
+As we're using a DFS, we'll use a stack $S$ to keep track of nodes we've visited. In a normal DFS on a tree, once we finish exploring a vertex $v$, we pop off $v$ from the stack. This will not be the case for us. A node remains on the stack iff it has a path to some node earlier in the stack.
+
+This means as we explore the descendents of a vertex $v$, we'll know if $v$ has a path back to a previous vertex. That is, if $link(v) < order(v)$, it stays on the stack. If $link(v) = order(v)$, we take it off the stack.
+
+Now we describe Tarjan's algorithm. Here, $num$ represents a global variable that indicates how many vertices have been visited so far.
+
+\begin{algorithm}[H]
+\caption{Tarjan}
+\begin{algorithmic}
+\Function{StrongConnect}{vertex $u$}
+	\State $num \gets num + 1$		\Comment increment $num$
+	\State $order(u) \gets num$		\Comment set $order(u)$ to smallest unused number
+	\State $link(u) \gets order(u)$	\Comment least $order(v)$ accessible is $u$ itself
+	\State push $u$ on $S$
+	\ForAll{neighbors $v$ of $u$}
+		\If{$order(v)$ is undefined}	\Comment $v$ has not been visited
+			\State \Call{StrongConnect}{$v$}
+			\State $link(u) \gets \min(link(u), link(v))$
+		\ElsIf{$v$ is on stack $S$}		\Comment $v$ is in current component
+			\State $link(u) \gets \min(link(u), order(v))$
+		\EndIf
+	\EndFor
+	\If{$link(u) = order(u)$}			\Comment $u$ is root of component, create SCC
+		\State create new strongly connected component
+		\Repeat
+			\State $v \gets$ top of $S$
+			\State add $v$ to strongly connected component
+			\State pop top from $S$
+		\Until{$u=v$}
+	\EndIf
+\EndFunction
+\Function{Tarjan}{$G(V,E)$}
+	\State $num \gets 0$
+	\State initialize new empty stack $S$
+	\ForAll{vertices $v \in V$}
+		\If{$order(v)$ is undefined}	\Comment $v$ has not been visited
+			\State \Call{StrongConnect}{$v$}
+		\EndIf
+	\EndFor
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+This algorithm runs in $O(V+E)$.
 
 \section{Shortest Path}
 
@@ -648,9 +790,13 @@ Therefore, we have the flow
 \[|f|=\sum_{(u,v) \in S \times T} c(u,v) - \sum_{(v,u) \in T \times S} 0 = c(S,T),\]
 so we constructed a flow and a cut such that the flow $|f|$ is equal to the cut capacity $c(S,T)$, and we are done.
 
-\subsection{Edmonds-Karp}
+\subsection{Refinements of Ford-Fulkerson}
 
-Edmonds-Karp is a refinement of Ford-Fulkerson. As stated earlier, Ford-Fulkerson is limited by not specifying on which path to push flow. There are many algorithms that resolve this issue in different ways; Edmonds-Karp fixes this by simply choosing the augmenting path of shortest unweighted length. This can be done easily using a BFS.
+As stated earlier, Ford-Fulkerson is limited by not specifying on which path to push flow. There are many algorithms that resolve this issue in different ways.
+
+\subsubsection{Edmonds-Karp}
+
+Edmonds-Karp fixes the problem by simply choosing the augmenting path of shortest unweighted length. This can be done easily using a BFS.
 
 \begin{algorithm}[H]
 \caption{Edmonds-Karp}
@@ -659,12 +805,12 @@ Edmonds-Karp is a refinement of Ford-Fulkerson. As stated earlier, Ford-Fulkerso
 	\Comment{BFS}
 	\State $visited(v)$ denotes $v$ has been added to queue
 	\State $prev(v)$ denotes vertex preceding $v$ in BFS
-	\State push $s$ on queue $q$
+	\State push $s$ on queue $Q$
 	\State $visited(s) \gets 1$
-	\While{$q$ is not empty}
-		\State $u \gets $ top of $q$
+	\While{$Q$ is not empty}
+		\State $u \gets $ top of $Q$
 		\ForAll{neighbors $v$ of $u$ in $G_f$ where $visited(v)=0$}
-			\State push $v$ on $q$
+			\State push $v$ on $Q$
 			\State $visited(v) \gets 1$
 			\State $prev(v) \gets u$
 		\EndFor
@@ -702,7 +848,7 @@ Now consider the bottleneck edge $e=(u,v)$ of an augmenting path $p$, where the 
 
 There are $E$ edges, each of which can be the bottleneck edge for $O(V)$ different augmenting paths, each of which takes $O(E)$ to process. Therefore, the Edmonds-Karp algorithm runs in $O(VE^2)$.
 
-\subsection{Dinic}
+\subsubsection{Dinic}
 
 Dinic's algorithm is another refinement of Ford-Fulkerson.
 
