@@ -674,6 +674,116 @@ It is not preferable to use the run-time stack; we can use our own stack if nece
 
 If the graph contains an Eulerian circuit, we call this function on any vertex we like. If it contains an Eulerian path, we call this function on one of the vertices with odd degree.
 
+\section{Tree Algorithms}
+
+Up until now, we have only looked at algorithms that deal with general graphs. However, there is also much to be said about graphs with additional structure. In this section, we'll explore some problems and their solutions on trees. First, some definitions.
+
+An undirected graph $G$ is a \emph{tree} if one of the following equivalent conditions holds: 
+\begin{itemize}
+\item
+$G$ is connected and has no cycles.
+\item
+$G$ is connected with $n$ vertices and $n - 1$ edges.
+\item
+There exists exactly one simple path between any two vertices of $G$.
+\end{itemize}
+A \emph{rooted tree} is a tree where one vertex has been designated as the \emph{root}. This gives each edge a natural direction---whether it leads towards or away from the root. In many problems, it is useful to arbitrarily designate a root. For example, one interpretation of a DFS on a tree is that we start from the root and traverse the tree downwards towards the leaves. (On trees, a \emph{leaf} is a vertex with degree 1.)
+
+We'll define a few more terms for rooted trees. An \emph{ancestor} of a vertex $v$ is another vertex $a$ that lies on the path between $v$ and the root. The \emph{parent} of a vertex is its closest ancestor. The \emph{depth} of a vertex is its distance from the root. We will use $depth(v)$ to denote the depth of a vertex $v$.
+
+\subsection{DFS on Trees}
+
+DFS is a very useful technique for collecting information about the structure of a tree. For example, we can compute in linear time the depth of each node, the size of each subtree or the diameter of the entire tree. This can be done by recursively computing results for each subtree, and then combining this data to obtain the final result. Sometimes, it takes more than one DFS to collect all the necessary information. Calculating node depth and subtree size via DFS is relatively straightforward. Below is a snippet of pseudocode computing these two sets of values.
+
+\begin{algorithm}[H]
+\caption{DFS on a Tree}
+\begin{algorithmic}
+\State $sum(v)$ is size of the subtree rooted at vertex $v$
+\State $depth(v)$ is the depth of vertex $v$
+\Function{DFS}{$v$, $p$}
+  \Comment{$v$ is the current vertex, $p$ is its parent}
+  \State $sum(v) \gets 1$
+  \State $depth(v) \gets depth(p) + 1$
+  \ForAll{vertices $n$ adjacent to $v$}
+    \If{$n \neq p$}
+      \State DFS(n, v)
+      \State $sum(v) \gets sum(v) + sum(n)$
+    \EndIf
+  \EndFor
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+Computing the diameter of a tree is a bit trickier. For a given tree, let $r$ be its root, and let $a$ be a vertex of maximum depth. It turns out that the diameter of the tree is the maximum distance between $a$ and any other vertex in the tree. (Try to prove this!) Thus we can run two DFSes to compute the diameter, calculating the depth of each vertex with each pass.
+
+Depth, subtree size and diameter are only a few of the values we can compute for trees. This style of DFS shows up often in problems and is also fundamental to many more complex tree algorithms.
+
+\subsection{Jump Pointers}
+
+\emph{Jump pointers} are a technique for decomposing paths on rooted trees. The central idea is that we can always take a path and break it into $O(\log n)$ chunks of size $2^i$. By augmenting these smaller chunks with data, we can use jump pointers to quickly answer a variety of queries, including level ancestor and lowest common ancestor.
+
+Let's start with an example. The most fundamental application of jump pointers is to level ancestor queries---for any vertex $v$, we want to be able to find its $k$th ancestor in $O(\log n)$ time.To solve this problem, we precompute for each vertex a pointer to its $2^i$th ancestor for all possible values of $i$. These are the ``jump pointers'' for which this technique is named. If our tree has $n$ vertices, then each vertex has at most $\lfloor \log_2 n \rfloor$ pointers leading out from it. Thus we have at most $O(n \log n)$ jump pointers in total. The following pseudocode shows how to compute jump pointers for a tree in $O(n \log n)$ time.
+
+\begin{algorithm}[H]
+\caption{Jump Pointers}
+\begin{algorithmic}
+\Function{BuildJumpPointers}{$V$, $par$}
+  \Comment{Initially, $par(0, v)$ holds the parent of vertex $v$.}
+  \State $par(i, v)$ denotes the $2^i$th ancestor of vertex $v$
+  \ForAll{i from 1 to $\lfloor \log_2 n \rfloor$}
+    \ForAll{vertices $v$}
+      \State $par(i, v) \gets par(i - 1, par(i - 1, v))$
+    \EndFor
+  \EndFor
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+With jump pointers, we can now finish the level ancestor problem. Let $2^i$ be the largest power of 2 that is at most $k$. We use our jump pointers to obtain $u$, the $2^i$th ancestor of $v$. If $2^i$ is not equal to $k$, we can jump up again from $u$. Continuing recursively, we'll finish in $O(\log n)$ iterations, since we reduce $k$ by at least a factor of 2 each time.
+
+Now we'll tackle lowest common ancestor queries. The lowest common ancestor (LCA), $l$, of two vertices $u$ and $v$ is the deepest vertex that is an ancestor of both $u$ and $v$. LCA queries are especially useful because any path on a rooted tree can be broken into two shorter paths joined at the LCA of its endpoints.
+
+The solution of the LCA problem with jump pointers consists of two steps. The first step involves bringing the two queried vertices to the same depth. If we are looking for the LCA of $u$ and $v$, we can assume that $depth(u) > depth(v)$ without loss of generality. Let $u'$ be the ancestor of $u$ satisfying $depth(u') = depth(v)$. We can compute $u'$ with a single level ancestor query in $O(\log n)$ time. If $u' = v$, then we are done.
+
+Otherwise, if $u' \neq v$, we can find the LCA of $u'$ and $v$ by advancing them towards the root in increments of $2^i$ in a binary-search-like manner. If the $2^i$th ancestors of $u'$ and $v$ are distinct, then the LCA of $u'$ and $v$ is equal to the LCA of the $2^i$th ancestors of $u'$ and $v$. Thus, iterating down from the largest power of 2 less than $n$, we can move $u'$ and $v$ up the tree until they share a parent. This common parent is the LCA of $u$ and $v$. Since jump pointers allow us to access the $2^i$th ancestor of a vertex in $O(1)$, our algorithm runs in $O(\log n)$ time.
+
+\begin{algorithm}[H]
+\caption{Level Ancestor and LCA}
+\begin{algorithmic}
+\Function{LevelAncestor}{$u$, $k$}
+  \ForAll{i from $\lfloor \log_2 n \rfloor$ to 0}
+    \If{$2^i \le k$}
+      \State $u \gets par(i, u)$
+      \State $k \gets k - 2^i$
+    \EndIf
+  \EndFor
+  \State \Return $u$
+\EndFunction
+\Function{LCA}{$u$, $v$}
+  \If{$depth(u) < depth(v)$}
+    \State $swap(u, v)$
+  \EndIf
+  \State $u \gets LevelAncestor(u, depth(v) - depth(u))$
+  \If{$u = v$}
+    \State \Return $u$
+  \EndIf
+  \ForAll{i from $\lfloor \log_2 n \rfloor$ to 0}
+    \If{$par(i, u) \neq par(i, v)$}
+      \State $u \gets par(i, u)$
+      \State $v \gets par(i, v)$
+    \EndIf
+  \EndFor
+  \State \Return $par(0, u)$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+Level ancestor and LCA are the two basic tools to jump pointers. Applying these, we can quickly answer queries about paths, such as the length of the path between two vertices $u$ and $v$. If we augment the jump pointers by storing additional information, we can also compute maximum weight or distance queries on weighted trees. Another important observation that we can make is that we can compute jump pointers on the fly, adding edges and answering queries online.
+
+We now take some time to acknowledge a few limitations of jump pointers. Because each vertex of the tree is covered by $O(n)$ jump pointers on average (including the ones jumping over it), this structure cannot handle updates efficiently. Thus we usually apply jump pointers only if we know that the weights/values stored with the jump pointers will not change after being computed. For example, if we want to both answer maximum weight queries for paths and update edge weights, we should use heavy-light decomposition or link-cut trees to do so.
+
+Overall, however, jump pointers are still a very flexible technique. With some creativity, these ideas can be used to provide elegant and easy-to-code solutions for problems that would otherwise require more complex data structures.
+
 \section{Maximum Flow}
 
 We are given a directed graph with weighted edges, a source node, and a sink node. A \textit{flow} is sent from the source to the sink. Each edge weight represents the maximum capacity of that edge. For every node besides the source and the sink node, total flow in is equal to total flow out. We can think of a flow network as a series of pipes through which water travels from an entrance to an exit in the network. The edge capacities represent pipe thickness. At any node, the total rate at which water enters the node must equal the total rate at which it exits the node, and along any path, the rate at which water flows is bottlenecked by the thinnest pipe.
