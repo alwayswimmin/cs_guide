@@ -2,11 +2,7 @@
 
 In this chapter we'll discuss some general ideas for solving problems. Starting in this chapter I'm going to shift from language-specific terms, like PriorityQueue and TreeMap, to more general terms, like binary heap and binary search tree. Algorithms I present will no longer be in the form of concrete Java code but rather in a more abstract pseudocode.
 
-\section{Search Techniques}
-
-There are many different general strategies for finding the answer to a problem.
-
-\subsection{Complete Search}
+\section{Complete Search}
 
 Sometimes the best way is simply to try everything. This could be the intended solution (check the complexity of a complete search and compare it against the time limits), or we may be just coding a brute force to squeeze out a few extra points from an intractable problem at the end of a contest. Either way, the order in which we search can make or break the code.
 
@@ -14,7 +10,7 @@ Suppose we wanted to solve the game of chess. The placement of the pieces on the
 
 We can therefore think of the different states as vertices in a very large directed graph. Methods we use for solving chess, or any other problem, are identical to ways of traversing graphs, especially trees.
 
-\subsubsection{Depth-First Search}
+\subsection{Depth-First Search}
 
 \textit{Depth-first search} is the most simple of the searches. A depth-first search called on a vertex $v$ in the search tree recursively calls itself on each of the children of $v$. To go back to the chess example, a DFS would begin with one possible first move, like a3, and test \textit{every possible move sequence} beginning with a3 before moving on to a second possible first move, like a4.
 
@@ -22,7 +18,7 @@ A quick note on recursive processes: The \textit{run-time stack} keeps track of 
 
 Now it is painfully obvious that strictly using a DFS is not preferable in computer chess. The computer would certainly never finish testing every move sequence beginning with a3 and therefore would not consider more standard, and likely better, moves like e4.
 
-\subsubsection{Breadth-First Search}
+\subsection{Breadth-First Search}
 
 \textit{Breadth-first search} traverses the search tree level by level. We keep track of a queue that stores each level's state. At each step we pop off the first element in the queue and add the states that it can reach to the end of the queue. In this way, we explore those states only after we explore all the states associated with a lower level. In the chess example, we would store all 20 possible first moves in the queue, and for each first move, we add all possible second moves to the end of the queue.
 
@@ -30,13 +26,13 @@ This means that we search all possible states of a certain depth at roughly the 
 
 BFS is the better choice over DFS when we are asked for the ``smallest'' answer, which is often associated with the lowest level.
 
-\subsubsection{Depth-First Search with Iterative Deepening}
+\subsection{Depth-First Search with Iterative Deepening}
 
 \textit{Depth-first search with iterative deepening} is a DFS that only searches up to a certain level in the search tree before stopping and heading back to lower levels. If it turns out the search did not find anything in the first $N$ levels, we broaden the search to the first $N+1$ levels with another DFS, hence iterative deepening. This method of searching is slower than a BFS, but maintains the nice BFS property of finding the ``smallest'' answer first while shedding the memory harness that holds the BFS back.
 
 DFSID is the closest to what we do when analyzing an actual chess game. We make a move in our minds and test its performance against whatever the opponent might make as his move, tracing the game around 3-4 moves deep before testing another possible move.
 
-\subsection{Greedy Algorithm}
+\section{Greedy Algorithm}
 
 The main problem with any of the searches described above is they are exponential in nature. A \textit{greedy algorithm} is one that takes the ``best'' possible option at each step, essentially disregarding any other possible option. To find the best solution for $n=4$, we consider only the best solution for $n=3$ and no other possible solution. The approach of maximizing at each step clearly does not always work, as the locally optimal choice is not necessarily globally optimal. Always moving in the direction of a target, for example, fails if there is a wall in the way. However, if the greedy algorithm can solve a problem, the code runs very quickly.
 
@@ -45,7 +41,7 @@ example involves finding the most efficient way to make change. Given a sequence
 
 The greedy algorithm combined with ideas from dynamic programming constitute \textit{best-first search}, a category of searches that includes the Dijkstra algorithm for shortest paths.
 
-\subsection{Binary Searching on the Answer}
+\section{Binary Searching on the Answer}
 
 Suppose that the problem we need to solve is finding the minimum number $M$ such that some property holds. That is, the property holds for any $x \ge M$ but does not hold for $x < M$. Perhaps the best approach we have so far for finding this $M$ is simply trying all the numbers from 1 to $M$. However, this linear search is clearly inefficient.
 
@@ -53,7 +49,9 @@ The nature of this problem should remind you of some other search technique. Oft
 
 \section{Dynamic Programming}
 
-The idea behind dynamic programming is to avoid doing the same thing twice. Two nodes in the search tree described in the complete search techniques might very well represent the same state. For example, two different sets of initial moves could result in the same chessboard configuration, and if we already calculated who has the winning or losing position in that configuration, we ought to remember that fact somehow so we don't need to calculate it again. Of course, however, actually keeping track of every possible game state is intractable by memory constraints.
+The idea behind dynamic programming is to avoid doing the same thing twice. Two nodes in the search tree described in the complete search techniques might very well represent the same state. For example, two different sets of initial moves could result in the same chessboard configuration, and if we already calculated who has the winning or losing position in that configuration, we ought to remember that fact somehow so we don't need to calculate it again. Of course, however, actually keeping track of every possible game state is intractable by both time and memory constraints.
+
+\subsection{Standard Dynamic Programming}
 
 Here's a much more reasonable problem. Given a sequence of $N \le 10,000$ integers, what is the maximum decreasing subsequence? A subsequence does not have to consist of consecutive terms in the original sequence.
 
@@ -166,7 +164,7 @@ We are given a list of $K$ objects each assigned an availability, a size, and a 
 
 Dynamic programming yields a straightforward $O(NK)$ solution. See if you can find it. Note, however, if $N$ is very large, this solution is no longer practical. In general, the knapsack problem is NP-complete, so don't think dynamic programming works on everything!
 
-\subsection{Dynamic Programming over Subsets ($2^n$ DP)}
+\subsection{Dynamic Programming over Subsets ($n2^n$ DP)}
 
 Consider the following problem:
 
