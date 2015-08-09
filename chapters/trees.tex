@@ -1,0 +1,699 @@
+\chapter{Tree Algorithms}
+
+Up until now, we have only looked at algorithms that deal with general graphs. However, there is also much to be said about graphs with additional structure. In this section, we'll explore some problems and their solutions on trees. First, some definitions.
+
+An undirected graph $G$ is a \emph{tree} if one of the following equivalent conditions holds: 
+\begin{itemize}
+\item
+$G$ is connected and has no cycles.
+\item
+$G$ is connected with $n$ vertices and $n - 1$ edges.
+\item
+There exists exactly one simple path between any two vertices of $G$.
+\end{itemize}
+A \emph{rooted tree} is a tree where one vertex has been designated as the \emph{root}. This gives each edge a natural direction -- whether it leads towards or away from the root. In many problems, it is useful to arbitrarily designate a root. For example, one interpretation of a DFS on a tree is that we start from the root and traverse the tree downwards towards the leaves. (On trees, a \emph{leaf} is a vertex with degree 1.)
+
+We'll define a few more terms for rooted trees. An \emph{ancestor} of a vertex $v$ is another vertex $a$ that lies on the path between $v$ and the root. The \emph{parent} of a vertex is its closest ancestor. The \emph{depth} of a vertex is its distance from the root. We will use $depth(v)$ to denote the depth of a vertex $v$.
+
+\section{DFS on Trees}
+
+DFS is a very useful technique for collecting information about the structure of a tree. For example, we can compute in linear time the depth of each node, the size of each subtree or the diameter of the entire tree. This can be done by recursively computing results for each subtree, and then combining this data to obtain the final result. Sometimes, it takes more than one DFS to collect all the necessary information. Calculating node depth and subtree size via DFS is relatively straightforward. Below is a snippet of pseudocode computing these two sets of values.
+
+\begin{algorithm}[H]
+\caption{DFS on a Tree}
+\begin{algorithmic}
+\State $sum(v)$ is size of the subtree rooted at vertex $v$
+\State $depth(v)$ is the depth of vertex $v$
+\Function{DFS}{$v$, $p$}
+  \Comment{$v$ is the current vertex, $p$ is its parent}
+  \State $sum(v) \gets 1$
+  \State $depth(v) \gets depth(p) + 1$
+  \ForAll{vertices $n$ adjacent to $v$}
+    \If{$n \neq p$}
+      \State DFS(n, v)
+      \State $sum(v) \gets sum(v) + sum(n)$
+    \EndIf
+  \EndFor
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+Computing the diameter of a tree is a bit trickier. For a given tree, let $r$ be its root, and let $a$ be a vertex of maximum depth. It turns out that the diameter of the tree is the maximum distance between $a$ and any other vertex in the tree. (Try to prove this!) Thus we can run two DFSes to compute the diameter, calculating the depth of each vertex with each pass.
+
+Depth, subtree size and diameter are only a few of the values we can compute for trees. This style of DFS shows up often in problems and is also fundamental to many more complex tree algorithms.
+
+\section{Jump Pointers}
+
+\emph{Jump pointers} are a technique for decomposing paths on rooted trees. The central idea is that we can always take a path and break it into $O(\log n)$ chunks of size $2^i$. By augmenting these smaller chunks with data, we can use jump pointers to quickly answer a variety of queries, including level ancestor and lowest common ancestor.
+
+Let's start with an example. The most fundamental application of jump pointers is to level ancestor queries---for any vertex $v$, we want to be able to find its $k$th ancestor in $O(\log n)$ time.To solve this problem, we precompute for each vertex a pointer to its $2^i$th ancestor for all possible values of $i$. These are the ``jump pointers'' for which this technique is named. If our tree has $n$ vertices, then each vertex has at most $\lfloor \log_2 n \rfloor$ pointers leading out from it. Thus we have at most $O(n \log n)$ jump pointers in total. The following pseudocode shows how to compute jump pointers for a tree in $O(n \log n)$ time.
+
+\begin{algorithm}[H]
+\caption{Jump Pointers}
+\begin{algorithmic}
+\Function{BuildJumpPointers}{$V$, $par$}
+  \Comment{Initially, $par(0, v)$ holds the parent of vertex $v$.}
+  \State $par(i, v)$ denotes the $2^i$th ancestor of vertex $v$
+  \ForAll{i from 1 to $\lfloor \log_2 n \rfloor$}
+    \ForAll{vertices $v$}
+      \State $par(i, v) \gets par(i - 1, par(i - 1, v))$
+    \EndFor
+  \EndFor
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+With jump pointers, we can now finish the level ancestor problem. Let $2^i$ be the largest power of 2 that is at most $k$. We use our jump pointers to obtain $u$, the $2^i$th ancestor of $v$. If $2^i$ is not equal to $k$, we can jump up again from $u$. Continuing recursively, we'll finish in $O(\log n)$ iterations, since we reduce $k$ by at least a factor of 2 each time.
+
+Now we'll tackle lowest common ancestor queries. The lowest common ancestor (LCA), $l$, of two vertices $u$ and $v$ is the deepest vertex that is an ancestor of both $u$ and $v$. LCA queries are especially useful because any path on a rooted tree can be broken into two shorter paths joined at the LCA of its endpoints.
+
+The solution of the LCA problem with jump pointers consists of two steps. The first step involves bringing the two queried vertices to the same depth. If we are looking for the LCA of $u$ and $v$, we can assume that $depth(u) > depth(v)$ without loss of generality. Let $u'$ be the ancestor of $u$ satisfying $depth(u') = depth(v)$. We can compute $u'$ with a single level ancestor query in $O(\log n)$ time. If $u' = v$, then we are done.
+
+Otherwise, if $u' \neq v$, we can find the LCA of $u'$ and $v$ by advancing them towards the root in increments of $2^i$ in a binary-search-like manner. If the $2^i$th ancestors of $u'$ and $v$ are distinct, then the LCA of $u'$ and $v$ is equal to the LCA of the $2^i$th ancestors of $u'$ and $v$. Thus, iterating down from the largest power of 2 less than $n$, we can move $u'$ and $v$ up the tree until they share a parent. This common parent is the LCA of $u$ and $v$. Since jump pointers allow us to access the $2^i$th ancestor of a vertex in $O(1)$, our algorithm runs in $O(\log n)$ time.
+
+\begin{algorithm}[H]
+\caption{Level Ancestor and LCA}
+\begin{algorithmic}
+\Function{LevelAncestor}{$u$, $k$}
+  \ForAll{i from $\lfloor \log_2 n \rfloor$ to 0}
+    \If{$2^i \le k$}
+      \State $u \gets par(i, u)$
+      \State $k \gets k - 2^i$
+    \EndIf
+  \EndFor
+  \State \Return $u$
+\EndFunction
+\Function{LCA}{$u$, $v$}
+  \If{$depth(u) < depth(v)$}
+    \State $swap(u, v)$
+  \EndIf
+  \State $u \gets LevelAncestor(u, depth(v) - depth(u))$
+  \If{$u = v$}
+    \State \Return $u$
+  \EndIf
+  \ForAll{i from $\lfloor \log_2 n \rfloor$ to 0}
+    \If{$par(i, u) \neq par(i, v)$}
+      \State $u \gets par(i, u)$
+      \State $v \gets par(i, v)$
+    \EndIf
+  \EndFor
+  \State \Return $par(0, u)$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+Level ancestor and LCA are the two basic tools to jump pointers. Applying these, we can quickly answer queries about paths, such as the length of the path between two vertices $u$ and $v$. If we augment the jump pointers by storing additional information, we can also compute maximum weight or distance queries on weighted trees. Another important observation that we can make is that we can compute jump pointers on the fly, adding edges and answering queries online.
+
+We now take some time to acknowledge a few limitations of jump pointers. Because each vertex of the tree is covered by $O(n)$ jump pointers on average (including the ones jumping over it), this structure cannot handle updates efficiently. Thus we usually apply jump pointers only if we know that the weights/values stored with the jump pointers will not change after being computed. For example, if we want to both answer maximum weight queries for paths and update edge weights, we should use heavy-light decomposition or link-cut trees to do so.
+
+Overall, however, jump pointers are still a very flexible technique. With some creativity, these ideas can be used to provide elegant and easy-to-code solutions for problems that would otherwise require more complex data structures.
+
+\section{Euler Tour Technique}
+
+The \textit{Euler tour technique} is a method of representing a tree (not necessarily binary) as a list. The idea is that a tree is uniquely determined by its DFS traversal order, going both down and up the tree. We'll keep track of the order in which we traverse the edges. Since each edge is traversed twice, each edge will appear in our list twice. We'll also name each edge by the child vertex in the parent-child pair.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level 1/.style={sibling distance=50mm}, level 2/.style={sibling distance=50mm}, level 3/.style={sibling distance=40mm}, level distance=3cm, auto]
+
+\node[vertex] (a) {$A$}
+child {
+	node[vertex] (b) {$B$} 
+	child {
+		node[vertex] (e) {$E$} 
+		child {
+			node[vertex] (h) {$H$} 
+			edge from parent node [swap] {$h$}
+		}
+		child {
+			node[vertex] (i) {$I$} 
+			edge from parent node {$i$}
+		}
+		edge from parent node {$e$}
+	}
+	edge from parent node [swap] {$b$}
+}
+child {
+	node[vertex] (c) {$C$}
+	edge from parent node {$c$}
+}
+child {
+	node[vertex] (d) {$D$} 
+	child {
+		node[vertex] (f) {$F$} 
+		edge from parent node [swap] {$f$}
+	}
+	child {
+		node[vertex] (g) {$G$} 
+		edge from parent node {$g$}
+	}
+	edge from parent node {$d$}
+};
+
+\path[->] (a) edge [bend right=20] node [swap] {1} (b);
+\path[->] (b) edge [bend right] node [swap] {2} (e) ;
+\path[->] (e) edge [bend right] node [swap] {3} (h) ;
+\path[->] (h) edge [bend right] node [swap] {4} (e) ;
+\path[->] (e) edge [bend right] node [swap] {5} (i) ;
+\path[->] (i) edge [bend right] node [swap] {6} (e) ;
+\path[->] (e) edge [bend right] node [swap] {7} (b) ;
+\path[->] (b) edge [bend right=20] node [swap] {8} (a) ;
+\path[->] (a) edge [bend right] node [swap] {9} (c) ;
+\path[->] (c) edge [bend right] node [swap] {10} (a) ;
+\path[->] (a) edge [bend right=20] node [swap] {11} (d) ;
+\path[->] (d) edge [bend right] node [swap] {12} (f) ;
+\path[->] (f) edge [bend right] node [swap] {13} (d) ;
+\path[->] (d) edge [bend right] node [swap] {14} (g) ;
+\path[->] (g) edge [bend right] node [swap] {15} (d) ;
+\path[->] (d) edge [bend right=20] node [swap] {16} (a);
+
+\end{tikzpicture}
+\end{center}
+
+The edge traversal order is then described by the ordered list below.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=16]
+  (array1)
+  {
+  					\strut $b_1$
+  \nodepart{two}	\strut $e_1$
+  \nodepart{three}	\strut $h_1$
+  \nodepart{four}	\strut $h_2$
+  \nodepart{five}	\strut $i_1$
+  \nodepart{six}	\strut $i_2$
+  \nodepart{seven}	\strut $e_2$
+  \nodepart{eight}	\strut $b_2$
+  \nodepart{nine}	\strut $c_1$
+  \nodepart{ten}	\strut $c_2$
+  \nodepart{eleven}	\strut $d_1$
+  \nodepart{twelve}	\strut $f_1$
+  \nodepart{thirteen}	\strut $f_2$
+  \nodepart{fourteen}	\strut $g_1$
+  \nodepart{fifteen}	\strut $g_2$
+  \nodepart{sixteen}	\strut $d_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array1.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+We see a pattern in this list -- the subtree of a node is contained between the two edges representing that node in the list, inclusive. For example, from the first $e$ to the second $e$, the entire subtree of $E$ is contained within the range $[2,7]$.
+
+\subsection{Euler Tour Tree}
+
+The \textit{Euler tour tree} uses this idea. Because we see the relationship between the list and the subtrees of the tree, we'll just have the list store the vertex names. To complete this pattern for the subtree of $A$, which is the entire tree, we'll simply add that letter to the beginning and end of the list.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3.5ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=18]
+  (array1)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $E_1$
+  \nodepart{four}	\strut $H_1$
+  \nodepart{five}	\strut $H_2$
+  \nodepart{six}	\strut $I_1$
+  \nodepart{seven}	\strut $I_2$
+  \nodepart{eight}	\strut $E_2$
+  \nodepart{nine}	\strut $B_2$
+  \nodepart{ten}	\strut $C_1$
+  \nodepart{eleven}	\strut $C_2$
+  \nodepart{twelve}	\strut $D_1$
+  \nodepart{thirteen}	\strut $F_1$
+  \nodepart{fourteen}	\strut $F_2$
+  \nodepart{fifteen}	\strut $G_1$
+  \nodepart{sixteen}	\strut $G_2$
+  \nodepart{seventeen}	\strut $D_2$
+  \nodepart{eighteen}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen , seventeen , eighteen }
+  \node[below] at (array1.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+Now suppose we wanted to perform some operations on a forest, or collection of trees. The first operation is to \textit{find} the root of the tree containing a vertex $v$. The second is to \textit{link} the trees of two vertices $u$, $v$ together by making $v$ the parent of $u$. The third is to \textit{cut} the subtree of $v$ away from the rest of the tree by deleting the edge from $v$ to its parent.
+
+Note that, without the cut operation, this is simply union-find. However, because of the cut operation, we have to maintain the structure of the original forest, as otherwise we lose track of the actual parent of any given node.
+
+We see that all operations are not simply on a single vertex but on an entire subtree. However, if we look at what each of the operations does to the Euler tour lists representing our forest, find returns the first element in the list, link places one ordered list within another, and cut removes a large contiguous section of one ordered list.
+
+To cut $E$ from the tree, we need to split the list in two:
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=18]
+  (array1)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $E_1$
+  \nodepart{four}	\strut $H_1$
+  \nodepart{five}	\strut $H_2$
+  \nodepart{six}	\strut $I_1$
+  \nodepart{seven}	\strut $I_2$
+  \nodepart{eight}	\strut $E_2$
+  \nodepart{nine}	\strut $B_2$
+  \nodepart{ten}	\strut $C_1$
+  \nodepart{eleven}	\strut $C_2$
+  \nodepart{twelve}	\strut $D_1$
+  \nodepart{thirteen}	\strut $F_1$
+  \nodepart{fourteen}	\strut $F_2$
+  \nodepart{fifteen}	\strut $G_1$
+  \nodepart{sixteen}	\strut $G_2$
+  \nodepart{seventeen}	\strut $D_2$
+  \nodepart{eighteen}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen , seventeen , eighteen }
+  \node[below] at (array1.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+\node[myrect=2]
+  (array2)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two  }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\node[myrect=6, fill=mysalmon] [right=of array2]
+  (array3)
+  {	
+  					\strut $E_1$
+  \nodepart{two}	\strut $H_1$
+  \nodepart{three}	\strut $H_2$
+  \nodepart{four}	\strut $I_1$
+  \nodepart{five}	\strut $I_2$
+  \nodepart{six}	\strut $E_2$
+  };
+\foreach \Valor [count=\Valori from 3] in {one ,two ,three , four , five , six }
+  \node[below] at (array3.\Valor south) {\Valori};
+
+\node[myrect=10] [right=of array3]
+  (array4)
+  {
+  					\strut $B_2$
+  \nodepart{two}	\strut $C_1$
+  \nodepart{three}	\strut $C_2$
+  \nodepart{four}	\strut $D_1$
+  \nodepart{five}	\strut $F_1$
+  \nodepart{six}	\strut $F_2$
+  \nodepart{seven}	\strut $G_1$
+  \nodepart{eight}	\strut $G_2$
+  \nodepart{nine}	\strut $D_2$
+  \nodepart{ten}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 9] in {one ,two ,three , four , five , six , seven , eight , nine , ten }
+  \node[below] at (array4.\Valor south) {\Valori};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+\node[myrect=12]
+  (array5)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $B_2$
+  \nodepart{four}	\strut $C_1$
+  \nodepart{five}	\strut $C_2$
+  \nodepart{six}	\strut $D_1$
+  \nodepart{seven}	\strut $F_1$
+  \nodepart{eight}	\strut $F_2$
+  \nodepart{nine}	\strut $G_1$
+  \nodepart{ten}	\strut $G_2$
+  \nodepart{eleven}	\strut $D_2$
+  \nodepart{twelve}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve }
+  \node[below] at (array5.\Valor south) {\Valori};
+
+\node[myrect=6, fill=mysalmon] [right=of array5]
+  (array6)
+  {	
+  					\strut $E_1$
+  \nodepart{two}	\strut $H_1$
+  \nodepart{three}	\strut $H_2$
+  \nodepart{four}	\strut $I_1$
+  \nodepart{five}	\strut $I_2$
+  \nodepart{six}	\strut $E_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
+  \node[below] at (array6.\Valor south) {\Valori};
+\end{tikzpicture}
+\end{center}
+
+Let's see what happens when we link $E$ to $D$. We need to split the first list immediately after $D_1$.
+
+\begin{center}
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+\node[myrect=12]
+  (array5)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $B_2$
+  \nodepart{four}	\strut $C_1$
+  \nodepart{five}	\strut $C_2$
+  \nodepart{six}	\strut $D_1$
+  \nodepart{seven}	\strut $F_1$
+  \nodepart{eight}	\strut $F_2$
+  \nodepart{nine}	\strut $G_1$
+  \nodepart{ten}	\strut $G_2$
+  \nodepart{eleven}	\strut $D_2$
+  \nodepart{twelve}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve }
+  \node[below] at (array5.\Valor south) {\Valori};
+
+\node[myrect=6, fill=mysalmon] [right=of array5]
+  (array6)
+  {	
+  					\strut $E_1$
+  \nodepart{two}	\strut $H_1$
+  \nodepart{three}	\strut $H_2$
+  \nodepart{four}	\strut $I_1$
+  \nodepart{five}	\strut $I_2$
+  \nodepart{six}	\strut $E_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
+  \node[below] at (array6.\Valor south) {\Valori};
+\end{tikzpicture}
+
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+\node[myrect=6]
+  (array2)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $B_2$
+  \nodepart{four}	\strut $C_1$
+  \nodepart{five}	\strut $C_2$
+  \nodepart{six}	\strut $D_1$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
+  \node[below] at (array2.\Valor south) {\Valori};
+
+\node[myrect=6] [right=of array2]
+  (array4)
+  {
+  	\strut $F_1$
+  \nodepart{two}	\strut $F_2$
+  \nodepart{three}	\strut $G_1$
+  \nodepart{four}	\strut $G_2$
+  \nodepart{five}	\strut $D_2$
+  \nodepart{six}	\strut $A_2$
+  };
+  
+  \node[myrect=6, fill=mysalmon] [right=of array4]
+  (array3)
+  {	
+  					\strut $E_1$
+  \nodepart{two}	\strut $H_1$
+  \nodepart{three}	\strut $H_2$
+  \nodepart{four}	\strut $I_1$
+  \nodepart{five}	\strut $I_2$
+  \nodepart{six}	\strut $E_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
+  \node[below] at (array3.\Valor south) {\Valori};
+\foreach \Valor [count=\Valori from 7] in {one ,two ,three , four , five , six }
+  \node[below] at (array4.\Valor south) {\Valori};
+\end{tikzpicture}
+
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=18]
+  (array1)
+  {
+  					\strut $A_1$
+  \nodepart{two}	\strut $B_1$
+  \nodepart{three}	\strut $B_2$
+  \nodepart{four}	\strut $C_1$
+  \nodepart{five}	\strut $C_2$
+  \nodepart{six}	\strut $D_1$
+  \nodepart{seven}	\strut $E_1$
+  \nodepart{eight}	\strut $H_1$
+  \nodepart{nine}	\strut $H_2$
+  \nodepart{ten}	\strut $I_1$
+  \nodepart{eleven}	\strut $I_2$
+  \nodepart{twelve}	\strut $E_2$
+  \nodepart{thirteen}	\strut $F_1$
+  \nodepart{fourteen}	\strut $F_2$
+  \nodepart{fifteen}	\strut $G_1$
+  \nodepart{sixteen}	\strut $G_2$
+  \nodepart{seventeen}	\strut $D_2$
+  \nodepart{eighteen}	\strut $A_2$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen , seventeen , eighteen }
+  \node[below] at (array1.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+
+\end{center}
+
+We have a data structure that maintains a set of ordered elements that can split and merge quickly. Splay trees can maintain an ordered list, and the split and join operations on splay trees can easily implement link and cut. Each tree of our forest is then represented by a splay tree maintaining that tree's Euler tour list, and we can support each of the three necessary operations in $O(\log{n})$ amortized time.
+
+
+\section{Heavy-Light Decomposition}
+
+Brute-force algorithms on trees are often fast when the tree is nearly complete, or has small depth. Unfortunately, brute force is far too slow when the tree becomes more and more unbalanced and approximates a linked list.
+
+Certain problems can be solved very nicely in a list with segment trees and similar data structures. Heavy-light decomposition provides us with a way to exploit the fact that long ``chains," which are present in unbalanced trees, might be slow in brute force but can be sped up with other data structures.
+
+\textit{Heavy-light decomposition} provides us a way to dynamically find the lowest common ancestor as well as a way to prove time complexities about tree data structures, like link-cut trees. 
+
+Heavy-light decomposition is a coloring of all the edges in a binary tree either heavy or light. For each vertex $v$, let $s(v)$ denote the number of nodes in the subtree with $v$ as its head. Then, if $u,w$ are the children of $v$, $s(v)=s(u)+s(w)+1$.
+
+We see that the smaller child $u$ or $w$ must have less than half the subtree size as $v$, and so that child exhibits qualities similar to those of a completely balanced tree. We color the edge connecting $v$ to its lesser child \textit{light}. We color the other edge \textit{heavy}.
+
+We see that from any node, the number of light edges needed to reach the head of the tree is at most $\log{n}$, as each light edge doubles the subtree size. Then, the number of ``heavy chains" along the upwards path from any node is also of the order $\log{n}$.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level/.style={sibling distance=70mm/#1}]
+\node [vertex] (a) {17}
+child {
+  node [vertex] (b) {12}
+  child {
+    node [vertex] (c) {6}
+    child {
+      node [vertex] (d) {3}
+      child {
+        node [vertex] (e) {1}
+      } 
+      child {
+        node [vertex] (f) {1}
+      }
+    }
+    child {node [vertex] (g) {2}
+      child {
+      	node[vertex] (h) {1}
+      }
+    }
+    child[missing]
+  }
+  child {
+      node [vertex] (i) {5}
+      child {node [vertex] (j) {1}}
+      child {node [vertex] (k) {1}}
+      child {
+      	node [vertex] (l) {2}
+        child {node[vertex] (m) {1}}
+      }
+  }
+}
+child {
+	node [vertex] (n) {4}
+    child {
+    	node[vertex] (o) {3}
+        child {
+    	    node[vertex] (p) {1}
+        }
+        child {
+	        node[vertex] (q) {1}
+        }
+    }
+};
+\draw[line width=6pt] (a) -- (b);
+\draw[line width=6pt] (b) -- (c);
+\draw[line width=6pt] (c) -- (d);
+\draw[line width=6pt] (d) -- (e);
+\draw[line width=6pt] (g) -- (h);
+\draw[line width=6pt] (i) -- (l);
+\draw[line width=6pt] (l) -- (m);
+\draw[line width=6pt] (n) -- (o);
+\draw[line width=6pt] (o) -- (p);
+\end{tikzpicture}
+\end{center}
+
+\section{Link-Cut Tree}
+
