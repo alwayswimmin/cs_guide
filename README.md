@@ -23,7 +23,7 @@ evan.sty untouched if possible.
 
 Compile in Terminal using the command
 
-pdflatex -jobname=guide main.tex
+latexmk -pdf -jobname=guide main.tex
 
 Contact Me
 --------------
