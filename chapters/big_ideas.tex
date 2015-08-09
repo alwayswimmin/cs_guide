@@ -51,8 +51,6 @@ The nature of this problem should remind you of some other search technique. Oft
 
 The idea behind dynamic programming is to avoid doing the same thing twice. Two nodes in the search tree described in the complete search techniques might very well represent the same state. For example, two different sets of initial moves could result in the same chessboard configuration, and if we already calculated who has the winning or losing position in that configuration, we ought to remember that fact somehow so we don't need to calculate it again. Of course, however, actually keeping track of every possible game state is intractable by both time and memory constraints.
 
-\subsection{Standard Dynamic Programming}
-
 Here's a much more reasonable problem. Given a sequence of $N \le 10,000$ integers, what is the maximum decreasing subsequence? A subsequence does not have to consist of consecutive terms in the original sequence.
 
 \begin{center}
@@ -163,49 +161,5 @@ The integer knapsack problem is another example where dynamic programming may be
 We are given a list of $K$ objects each assigned an availability, a size, and a value. We have a total amount of ``space'' available in our knapsack and need to find the set of objects from our list that maximizes the total the value of objects in the set such that the total size does not exceed the space and the number of times we take one particular object does not exceed its availability.
 
 Dynamic programming yields a straightforward $O(NK)$ solution. See if you can find it. Note, however, if $N$ is very large, this solution is no longer practical. In general, the knapsack problem is NP-complete, so don't think dynamic programming works on everything!
-
-\subsection{Dynamic Programming over Subsets ($n2^n$ DP)}
-
-Consider the following problem:
-
-(USACO December 2014, guard)
-Farmer John and his herd are playing frisbee.  Bessie throws the
-frisbee down the field, but it's going straight to Mark the field hand
-on the other team!  Mark has height $H$ ($1 \le H \le 1,000,000,000$), but
-there are $N$ cows on Bessie's team gathered around Mark ($2 \le N \le 20$).
-They can only catch the frisbee if they can stack up to be at least as
-high as Mark.  Each of the $N$ cows has a height, weight, and strength.
-A cow's strength indicates the maximum amount of total weight of the
-cows that can be stacked above her.  
-
-Given these constraints, Bessie wants to know if it is possible for
-her team to build a tall enough stack to catch the frisbee, and if so,
-what is the maximum safety factor of such a stack.  The safety factor
-of a stack is the amount of weight that can be added to the top of the
-stack without exceeding any cow's strength.
-
-We can try the $O(N!)$ brute force, trying every permutation of cows possible. However, this is far too slow. $N \le 20$ hints at an exponential solution, so we think of trying every possible subset of the cows. Given a subset $S$ of cows, the height reached is the same, so perhaps we sort the subset by strength, and put the strongest cow on the bottom. We see that this greedy approach fails: suppose that the first cow has weight 1 and strength 3 and the second cow has weight 4 and strength 2. Greedy would tell us to put the first cow on the bottom, but this fails, while putting the second cow on the bottom succeeds.
-
-When greedy fails, the next strategy we look at is dynamic programming. To decide whether $S$ is stable, we have to find whether there exists a cow $j$ in $S$ that can support the weight of all the other cows in $S$. But how do we know whether the set $S \setminus \{j\}$ is stable? This is where dynamic programming comes in.
-
-This leads to a $O(N 2^N)$ solution. This seems like a pain to code iteratively, but there is a nice fact about subsets: there is a cute bijection from the subsets of $\{0,1,2, \ldots, N-1\}$ to the integers from 0 to $2^N - 1$. That is, the subset $\{0,2,5,7\}$ maps to $2^0 + 2^2 + 2^5 + 2^7 = 165$ in the bijection. We call this technique \textit{masking}. We require all the subsets of $S$ to be processed before $S$ is processed, but that property is also handled by our bijection, since subtracting a power of 2 from a number decreases it. With a little knowledge of bit operators, this can be handled easily.
-
-\noindent \begin{minipage}{\textwidth}
-\begin{algorithmic}
-\For{$i\gets 0, 2^N-1$}
-	\Comment $i$ represents the subset $S$
-	\State $dp(i) \gets -1$
-	\ForAll{$j \in S$}
-		\Comment $j \in S$ satisfy \texttt{i \& (1 << j) != 0}
-		\State $alt \gets \min(dp(i-2^j), strength(j) - \sum_{k \in S \setminus \{j\}} weight(k))$
-		\If{$dp(i) < alt$}
-			\State $dp(i) \gets alt$
-		\EndIf
-	\EndFor
-\EndFor
-\end{algorithmic}
-\end{minipage}
-
-\texttt{\&} is the bitwise and function, while \texttt{<<} is the left shift operator.
 
 Brian Dean compiled some standard dynamic programming problems with animations and analyses. Practice dynamic programming here: \url{http://people.cs.clemson.edu/~bcdean/dp_practice/}
