@@ -48,16 +48,16 @@ This leads to a $O(N 2^N)$ solution. This seems like a pain to code iteratively,
 
 \section{$\sqrt{n}$ Bucketing}
 
-$\sqrt{n}$ bucketing is a relatively straightforward idea -- given $n$ elements $\{a_i\}_{i=1}^n$ in a sequence, we group them into $\sqrt{n}$ equal-sized buckets. The motivation for arranging elements like this is to support an operation called a \textit{range query}.
+$\sqrt{n}$ bucketing is a relatively straightforward idea -- given $n$ elements $\{x_i\}_{i=1}^n$ in a sequence, we group them into $\sqrt{n}$ equal-sized buckets. The motivation for arranging elements like this is to support an operation called a \textit{range query}.
 
 Let's take a concrete example. Suppose we want to support two operations:
 
 \begin{itemize}
 \item
-$update(i, x)$ -- increment the value of $a_i$ by $x$
+$update(i, z)$ -- increment the value of $x_i$ by $z$
 
 \item
-$query(i, j)$ -- return $\sum_{k=i}^j a_k$.
+$query(i, j)$ -- return $\sum_{k=i}^j x_k$.
 \end{itemize}
 
 Suppose we simply stored the sequence in an array. $update$ then becomes an $O(1)$ operation, but $query$ is $O(n)$.
@@ -278,7 +278,10 @@ It is often the case that $O(\sqrt{n})$ bounds can be improved to $O(\log{n})$ u
 
 It turns out for our specific sum problem that we can do as good as $O(\log{n})$ with a \textit{segment tree}, or \textit{range tree}, or \textit{augmented static BBST}. The essential idea is still the same -- we want to group elements in some way that allows us to update and query efficiently.
 
-As the name ``tree'' suggests, we draw inspiration from a binary structure. Let's build a tree on top of the array, where each node keeps track of the sum of the numbers associated with its children.
+As the name ``tree'' suggests, we draw inspiration from a binary structure. Let's build a tree on top of the array, where each node keeps track of the sum of the numbers associated with its children. Every node keeps track of the \textit{range} it is associated with and the \textit{value} of the sum of all elements on that range. For example, the root of the tree is responsible for the sum of all elements in the range $[1, n]$, its left child is responsible for the range $\left[1, \floor{\frac{n}{2}}\right]$ and its right child is responsible for $\left[\floor{\frac{n}{2}} + 1, n\right]$.
+
+In general, for the vertex responsible for the range $[a,b]$, its left child holds the sum for
+$\left[a,\floor{\frac{a+b-1}{2}}\right]$ and its right child $\left[\floor{\frac{a+b-1}{2}}+1,b\right]$. As we go down to the tree, eventually we'll have nodes with ranges $[a,a]$ that represent a single element in the original list. These, of course, will not have any children.
 
 \begin{center}
 {
@@ -453,9 +456,30 @@ Highlighted are the nodes we'll need to access for $query(7,15)$. Notice how the
 }
 \end{center}
 
-Again, the key idea is if the the interval associated with a node is completely contained within the interval we are querying, we simply return the sum associated with that node. Otherwise, we recurse on the two children. This process is $O(\log{n})$ because each level in the tree can have at most two highlighted nodes.
+$-2$ represents the sum $x_7+x_8$, $-10$ the sum $x_9+x_{10}+x_{11}+x_{12}$, $14$ the sum $x_{13}+x_{14}$, and $0$ represents the single element $x_15$. It seems we always want to take the \textit{largest} segments that stay within the range $[7,15]$. But how do we know exactly which segments these are?
 
-If we wanted to change the third element to 2, we would have to update the highlighted nodes in the following diagram. This process is more straightforward than the querying.
+We handle queries using a recursive call, starting at the root of the tree. We always begin by querying the node for $[1,n]$. The key idea is if the the interval associated with a node is completely contained within the interval we are querying, we simply return the sum associated with that node. Otherwise, we pass the query on to each of the two children.
+
+\noindent \begin{minipage}{\textwidth}
+\begin{algorithmic}
+\Function{Query}{range $[i,j]$, range $[a,b]$}
+	\Comment want $\sum_{k=i}^j x_i$, querying node $[a,b]$
+	\If{$j < a$ or $b < i$}
+		\Comment $[a, b] \cap [i,j] = \emptyset$
+		\State \Return 0
+	\EndIf
+	\If{$i \le a$ and $b \le j$}
+		\Comment $[a,b] \subseteq [i,j]$
+		\State \Return $sum(a,b)$
+	\EndIf
+	\State \Return $\Call{Query}{[i,j], \left[a,\floor{\frac{a+b-1}{2}}\right]} + \Call{Query}{[i,j], \left[\floor{\frac{a+b-1}{2}}+1,b \right]}$
+\EndFunction
+\end{algorithmic}
+\end{minipage}
+
+This process is $O(\log{n})$ because each level in the tree can have at most two highlighted nodes.
+
+If we wanted to change the third element to 2, we would have to update the highlighted nodes in the following diagram. This process is more intuitive than querying.
 
 \begin{center}
 {
@@ -531,10 +555,28 @@ If we wanted to change the third element to 2, we would have to update the highl
 }
 \end{center}
 
+\noindent \begin{minipage}{\textwidth}
+\begin{algorithmic}
+\Function{Update}{$i$, $z$, range $[a,b]$}
+	\Comment $x_i \gets x_i + z$
+	\If{$i < a$ or $b < i$}
+		\Comment $i \not\in [a, b]$
+		\State \Return
+	\EndIf
+	\State $sum(a,b) \gets sum(a,b) + z$
+	\If{$a = b$}
+		\Comment leaf node
+		\State \Return
+	\EndIf
+	\State \Call{Update}{$i$, $y$, $\left[a,\floor{\frac{a+b-1}{2}}\right]$}
+	\State \Call{Update}{$i$, $y$, $\left[\floor{\frac{a+b-1}{2}}+1,b \right]$}
+\EndFunction
+\end{algorithmic}
+\end{minipage}
+
 Updating is also $O(\log{n})$ as we need to change the values of at most one node in each level in the tree.
 
-I cheated with my example by using a nice power of two, $n=16$, as the number of elements in the sequence. Of course, the size is not always this nice. One solution is to simply pad the back of the sequence with enough 0s and pretend that the number of elements in the sequence is actually a power of two. For the segment tree, this is not necessary -- if a vertex is associated with the range $[a,b]$, we can simply split this range into two,
-$\left[a,\floor{\frac{a+b-1}{2}}\right]$ and $\left[\floor{\frac{a+b-1}{2}}+1,b\right]$. We then recursively apply this pattern except for when the lower bound of the range is equal to the upper bound. If $n=12$, the resulting tree would have the following structure.
+I cheated with my example by using a nice power of two, $n=16$, as the number of elements in the sequence. Of course, the size is not always this nice. If $n=12$, the resulting tree would have the following structure.
 
 \begin{center}
 {
@@ -601,7 +643,28 @@ $\left[a,\floor{\frac{a+b-1}{2}}\right]$ and $\left[\floor{\frac{a+b-1}{2}}+1,b\
 }
 \end{center}
 
-For this reason, while I used the concept of ``building up'' on top of our array to introduce the segment tree, any operation we implement will start at the root and recursively trickle down the tree. We see that the segment tree structure does not have to resemble a complete tree at all. However, with this approach, it is still quite balanced, so we can store a segment tree within an array as we would a heap.
+Now all we need is a way for us to easily store the sum values associated with each node. We can clearly use a structure with two child pointers, but we can also exploit the fact that the segment tree structure is a balanced binary search tree. Therefore, we can store the tree like we store a heap. The root is labeled 1, and for each node with label $index$, the left child is labeled with $index \cdot 2$ and the right child with $index \cdot 2 + 1$. Here's some sample code. Note that in actual implementation, it is easier to zero-index the original array and denote ranges by an open upper bound: $[a, b)$.
+
+\begin{mylstlisting}
+int sum = new int[MAXN * 4]; // sum[1] contains sum for [0, n), and so on
+int query(int i, int j, int a, int b, int index) {
+	if(a >= j || b <= i)
+		return 0;
+	if(i >= a && j <= b)
+		return tree[index];
+	return query(i, j, a, (a + b) / 2, index * 2)
+			+ query(i, j, (a + b) / 2, a, index * 2 + 1);
+}
+void update(int i, int z, int a, int b, int index) {
+	if(a >= j || b <= i)
+		return;
+	sum[index] += z;
+	if(b - a == 1)
+		return;
+	update(i, z, a, (a + b) / 2, index * 2);
+	update(i, z, (a + b) / 2, b, index * 2 + 1);
+}
+\end{mylstlisting}
 
 \subsection{Fenwick Tree}
 
@@ -735,7 +798,7 @@ Our Fenwick tree is simply this last array. This should be quite confusing -- it
 
 Notice that the final position of every unblackened node is just the rightmost black child in its subtree. This leads to the fact that the $i$th element in the Fenwick tree array is the sum
 
-\[b_k = \sum_{k=i-2^{v_2(i)}+1}^i a_k, \]
+\[y_i = \sum_{k=i-2^{v_2(i)}+1}^i x_k, \]
 
 where $2^{v_2(i)}$ is simply the greatest power of 2 that divides $i$. Let's look at a new diagram that hopefully will better illustrate this key property of the random array we just came up with.
 
@@ -852,7 +915,7 @@ where $2^{v_2(i)}$ is simply the greatest power of 2 that divides $i$. Let's loo
 
 All the framework is now in place. Now we need to find out how to query and update the Fenwick tree.
 
-Suppose we wanted to find the sum $\sum_{k=1}^{11} a_k$. Let's take a look at the diagram to see which elements we need.
+Suppose we wanted to find the sum $\sum_{k=1}^{11} x_k$. Let's take a look at the diagram to see which elements we need.
 
 \begin{center}
 {
@@ -976,7 +1039,7 @@ Suppose we wanted to find the sum $\sum_{k=1}^{11} a_k$. Let's take a look at th
 }
 \end{center}
 
-We see that the sum $\sum_{k=1}^{11}a_k=b_8+b_{10}+b_{11}$. If we look at 11 in binary, we have $11=01011_2$. Let's see if we can find a pattern in these numbers in binary:
+We see that the sum $\sum_{k=1}^{11}x_k=y_8+y_{10}+y_{11}$. If we look at 11 in binary, we have $11=01011_2$. Let's see if we can find a pattern in these numbers in binary:
 
 \begin{align*}
 11 &= 01011_2, \\
@@ -987,7 +1050,7 @@ We see that the sum $\sum_{k=1}^{11}a_k=b_8+b_{10}+b_{11}$. If we look at 11 in 
 
 So, we can simply subtract $11-2^{v_2(11)}=10=01010_2$, find the sum of the first 10 elements, and add $b_{11}$ to that sum to get the sum of the first 11 elements. We see that repeating this process takes off the last 1 in the binary representation of the number $i$, and since there are at most $\log{n}+1$ 1s in the binary representation $\forall i \in [1,n]$, the query operation is $O(\log{n})$.
 
-And now for the update operation. Suppose we want to change the value of $a_{11}$ from $-6$ to $-3$. Which numbers will we have to change?
+And now for the update operation. Suppose we want to change the value of $x_{11}$ from $-6$ to $-3$. Which numbers will we have to change?
 
 \begin{center}
 {
@@ -1111,7 +1174,7 @@ And now for the update operation. Suppose we want to change the value of $a_{11}
 }
 \end{center}
 
-We needed to increment the highlighted values, $b_{11}$, $b_{12}$, and $b_{16}$, by 3. Once again we'll look at 11, 12, and 16 in base 2.
+We needed to increment the highlighted values, $y_{11}$, $y_{12}$, and $y_{16}$, by 3. Once again we'll look at 11, 12, and 16 in base 2.
 
 \begin{align*}
 11 &= 01011_2, \\
@@ -1124,15 +1187,15 @@ It appears that instead of subtracting the largest dividing power of 2, we are a
 The real magic in the Fenwick tree is how quickly it can be coded. The only tricky part is finding exactly what $2^{v_2(i)}$ is. But it turns out, by the way bits are arranged in negative numbers, this is just \texttt{i \& -i}. With this in mind, here's all the code that's necessary to code a Fenwick tree.
 
 \begin{mylstlisting}
-int[] b = new int[MAXN]; // Fenwick tree stored as array
+int[] y = new int[MAXN]; // Fenwick tree stored as array
 void update(int i, int x) {
 	for( ; i < MAXN; i += i & -i)
-		b[i] += x;
+		y[i] += x;
 }
 int prefixSum(int i) {
 	int sum = 0;
 	for( ; i > 0; i -= i & -i)
-		sum += b[i];
+		sum += y[i];
 	return sum;
 }
 int query(int i, int j) {
@@ -1146,10 +1209,10 @@ It is often the case that in addition to performing range queries, we need to be
 
 \begin{itemize}
 \item
-$update(i, j, x)$ -- increment the value of $a_k$ by $x$ for all $k\in [i,j]$
+$update(i, j, z)$ -- increment the value of $x_k$ by $z$ for all $k\in [i,j]$
 
 \item
-$query(i, j)$ -- return $\sum_{k=i}^j a_k$.
+$query(i, j)$ -- return $\sum_{k=i}^j x_k$.
 \end{itemize}
 
 \subsubsection{Some Motivation: $\sqrt{n}$ Blocking}
