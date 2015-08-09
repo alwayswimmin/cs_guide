@@ -1,8 +1,42 @@
 \chapter{Fundamentals}
 
+\section{Input and Output}
+
+The first part of solving any programming contest problem is reading the input correctly. In this section, we'll briefly go over input and output in Java using \texttt{java.util.Scanner} and \texttt{java.io.PrintWriter}. There are two scenarios that you should be familiar with: \texttt{stdin}/\texttt{stdout} and file I/O. You encounter the former when entering input and seeing output for a program run in the commandline. You encounter the latter when you have two files (for example \texttt{input.txt} and \texttt{output.txt}) that you read from and write to.
+
+For \texttt{stdin}/\texttt{stdout}, we read input from \texttt{System.in} using a Scanner and output our results using \texttt{System.out.println()}. Here's an example of a main method that takes two integers and prints their sum:
+
+\begin{mylstlisting}
+public static void main(String args[]){
+  // hint: you should write "import java.util.*;" at the top of your code.
+  Scanner sc = new Scanner(System.in);
+  int x = sc.nextInt();
+  int y = sc.nextInt();
+  System.out.println(x + y);
+}
+\end{mylstlisting}
+
+File I/O is a touch more complicated. For our Scanner, we have to make a new File object and use it in the constructor. We do something similar for our PrintWriter. However, PrintWriter also comes with a couple more usage notes. First, we should include \texttt{throws IOException} after our main method, since Java requires that we acknowledge the possibility of an IOException. (We bravely assume that our file open will succeed.) After we finish printing, we must also close the PrintWriter to make sure that everything gets written. Here's a snippet showing how Scanner and PrintWriter work with files: 
+
+\begin{mylstlisting}
+public static void main(String args[]) throws IOException {
+  // hint: for file I/O, you should also have "import java.io.*;"
+  Scanner sc = new Scanner(new File("input.txt"));
+  int x = sc.nextInt();
+  int y = sc.nextInt();
+  PrintWriter pw = new PrintWriter(new File("output.txt"));
+  pw.println(x + y);
+  pw.close();
+}
+\end{mylstlisting}
+
+Although more efficient methods of I/O exist, such as BufferedReader and BufferedWriter, what we've covered here should be sufficient for now. (It's possible to read in $10^5$ integers with Scanner in a fraction of a second.)
+
+Now that we can read and write, let's move on to one of the most basic subroutines in computer science: sorting. 
+
 \section{Comparable}
 
-The interface \texttt{Comparable} is how Java can impose an ordering on any object. Implementing \texttt{Comparable} requires support to the method \texttt{int compareTo(Object o)}. If \texttt{a.compareTo(b) < 0}, then \texttt{a} should come before \texttt{b} in the ordering. If \texttt{a.compareTo(b) > 0}, then \texttt{a} should come after \texttt{b} in the ordering. If \texttt{a.compareTo(b) == 0}, then \texttt{a} is considered to be equal to \texttt{b}. \texttt{a.compareTo(b) == 0} should be equivalent to \texttt{a.equals(b)}. For example, consider the following \texttt{class MyPair}:
+The interface \texttt{Comparable} is how Java imposes an ordering on a set of objects. Implementing \texttt{Comparable} requires support of the method \texttt{int compareTo(Object o)}. If \texttt{a.compareTo(b) < 0}, then \texttt{a} comes before \texttt{b}; if \texttt{a.compareTo(b) > 0}, then \texttt{a} comes after \texttt{b}; if \texttt{a.compareTo(b) == 0}, then \texttt{a} is considered equal to \texttt{b}. (\texttt{a.compareTo(b) == 0} should be equivalent to \texttt{a.equals(b)}.) For example, consider the following \texttt{class MyPair}:
 
 \begin{mylstlisting}
 class MyPair implements Comparable {
@@ -21,7 +55,7 @@ class MyPair implements Comparable {
 }
 \end{mylstlisting}
 
-We can also clean this up a bit using generics:
+We can clean this up a bit using generics:
 
 \begin{mylstlisting}
 class MyPair implements Comparable<MyPair> {
