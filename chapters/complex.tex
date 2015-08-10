@@ -568,7 +568,7 @@ Segment trees also handle modifications well. If we want to change the third ele
 	\EndIf
 	\State \Call{Update}{$\left[l,\floor{\frac{l+r}{2}}\right]$, $p$, $k$}
 	\State \Call{Update}{$\left[\floor{\frac{l+r}{2}}+1,r\right]$, $p$, $k$}
-	\State $sum(l,r) \gets sum(l,\floor{\frac{l+r}{2}}\right]) + sum(\floor{\frac{l+r}{2}}+1,r)$
+	\State $sum(l,r) \gets sum(l,\floor{\frac{l+r}{2}}) + sum(\floor{\frac{l+r}{2}}+1,r)$
 \EndFunction
 \end{algorithmic}
 \end{minipage}
