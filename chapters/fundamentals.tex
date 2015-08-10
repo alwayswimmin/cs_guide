@@ -2,9 +2,9 @@
 
 \section{Input and Output}
 
-The first part of solving any programming contest problem is reading the input correctly. In this section, we'll briefly go over input and output in Java using \texttt{java.util.Scanner} and \texttt{java.io.PrintWriter}. There are two scenarios that you should be familiar with: \texttt{stdin}/\texttt{stdout} and file I/O. You encounter the former when entering input and seeing output for a program run in the commandline. You encounter the latter when you have two files (for example \texttt{input.txt} and \texttt{output.txt}) that you read from and write to.
+The first part of solving any programming contest problem is reading the input correctly. In this section, we'll briefly go over input and output in Java using \texttt{java.util.Scanner} and \texttt{java.io.PrintWriter}. There are two scenarios that you should be familiar with: \texttt{stdin}/\texttt{stdout} and file I/O. You encounter the former when you enter input and see output for a program run in the commandline. You encounter the latter when you have two files (for example \texttt{input.txt} and \texttt{output.txt}) that you read from and write to.
 
-For \texttt{stdin}/\texttt{stdout}, we read input from \texttt{System.in} using a Scanner and output our results using \texttt{System.out.println()}. Here's an example of a main method that takes two integers and prints their sum:
+When using \texttt{stdin}/\texttt{stdout}, we read input from \texttt{System.in} using a Scanner and output our results using \texttt{System.out.println()}. \texttt{Scanner.nextInt()} and \texttt{Scanner.next()} read in integers and strings, respectively. \texttt{System.out.println()} prints its argument and adds a newline at the end. (If we don't want the newline, we can use \texttt{System.out.print()}.) Here's an example of a main method that takes two integers and outputs their sum:
 
 \begin{mylstlisting}
 public static void main(String args[]){
@@ -16,7 +16,7 @@ public static void main(String args[]){
 }
 \end{mylstlisting}
 
-File I/O is a touch more complicated. For our Scanner, we have to make a new File object and use it in the constructor. We do something similar for our PrintWriter. However, PrintWriter also comes with a couple more usage notes. First, we should include \texttt{throws IOException} after our main method, since Java requires that we acknowledge the possibility of an IOException. (We bravely assume that our file open will succeed.) After we finish printing, we must also close the PrintWriter to make sure that everything gets written. Here's a snippet showing how Scanner and PrintWriter work with files: 
+File I/O is a touch more complicated. For our Scanner, we have to make a new File object and use it in the constructor. We do the same for our PrintWriter. However, PrintWriter also comes with a couple more usage notes. First, we should include \texttt{throws IOException} after our main method, since Java requires that we acknowledge the possibility of an IOException. (We bravely assume that our file open will succeed!) After we finish printing, we must also close the PrintWriter to make sure that everything gets written. Here's a snippet showing how Scanner and PrintWriter work with files: 
 
 \begin{mylstlisting}
 public static void main(String args[]) throws IOException {
@@ -30,13 +30,13 @@ public static void main(String args[]) throws IOException {
 }
 \end{mylstlisting}
 
-Although more efficient methods of I/O exist, such as BufferedReader and BufferedWriter, what we've covered here should be sufficient for now. (It's possible to read in $10^5$ integers with Scanner in a fraction of a second.)
+Although more efficient methods of I/O exist, such as BufferedReader and BufferedWriter, what's covered here should be sufficient for now. (It's possible to read in $10^5$ integers with Scanner in a fraction of a second.)
 
 Now that we can read and write, let's move on to one of the most basic subroutines in computer science: sorting. 
 
 \section{Comparable}
 
-The interface \texttt{Comparable} is how Java imposes an ordering on a set of objects. Implementing \texttt{Comparable} requires support of the method \texttt{int compareTo(Object o)}. If \texttt{a.compareTo(b) < 0}, then \texttt{a} comes before \texttt{b}; if \texttt{a.compareTo(b) > 0}, then \texttt{a} comes after \texttt{b}; if \texttt{a.compareTo(b) == 0}, then \texttt{a} is considered equal to \texttt{b}. (\texttt{a.compareTo(b) == 0} should be equivalent to \texttt{a.equals(b)}.) For example, consider the following \texttt{class MyPair}:
+We'll start by taking a look at how Java sorts objects. In \texttt{java.util.Arrays}, there is a built-in sort method, \texttt{Arrays.sort()}, which takes an array and sorts it. If we want to sort an array of our own objects, we have to first implement the \texttt{Comparable} interface. This is how Java orders a set of objects. Implementing \texttt{Comparable} requires support of the method \texttt{int compareTo(Object o)}. If \texttt{a.compareTo(b) < 0}, then \texttt{a} comes before \texttt{b}; if \texttt{a.compareTo(b) > 0}, then \texttt{a} comes after \texttt{b}; if \texttt{a.compareTo(b) == 0}, then \texttt{a} is considered equal to \texttt{b}. (\texttt{a.compareTo(b) == 0} should be equivalent to \texttt{a.equals(b)}.) For example, consider the following \texttt{class MyPair}:
 
 \begin{mylstlisting}
 class MyPair implements Comparable {
@@ -75,23 +75,29 @@ Note that no casting is required anymore.
 
 \section{Sorts}
 
+This section covers three of the more practical sorting algorithms.
+
+\subsection{Insertion Sort}
+
+Insertion sort builds up the sorted list by inserting new elements one at a time. Inserting an element into a sorted list takes time proportional to the length of the list, so the runtime of this algorithm is $O(n^2)$. This algorithm, despite being slower than merge sort and quicksort, is still useful because of its efficiency on small inputs. Many implementations of merge sort and quicksort actually use insertion sort once the problem size gets small.
+
+(The $O(n^2)$, called big-O notation, means that the number of operations our algorithm does is at most $cn \log n$, for some constant $c$.)
+
 \subsection{Merge Sort}
 
-The idea behind merge sort is simple. If we are given two equally sized sorted stacks, we could easily combine them into one sorted stack by comparing the top of the two stacks only, since the smallest element remaining must be one of those two.
-
-From here, we divide and conquer. Simply cut the array in half, recurse on each half, and merge the two back together. This runs in $O(n \log (n))$ time.
+The idea behind merge sort is the following observation: If we are given two sorted lists of length $n/2$, we only need $n$ comparisons to merge them into one sorted list of length $n$. So we can divide and conquer. We do this by cutting the array in half, sorting each half recursively, and merging the two halves back together. Because our recursion goes $\log_2 n$ levels deep, this algorithm runs in $O(n \log n)$.
 
 \subsection{Quicksort}
 
-Quicksort also uses a divide and conquer strategy to achieve an $O(n \log (n))$ amortized bound. We take a random element from the array, move anything less than it to the left of the array, anything right of it to the right of the array, and recurse.
+Quicksort also uses a divide and conquer strategy to achieve an $O(n \log n)$ amortized bound. We take a random element from the array, move anything less than it to the left of the array, anything greater than it to the right of the array, and recurse on the two halves that we just created.
 
-This was previously implemented by \texttt{Arrays.sort()} and \texttt{Collections.sort()}, but Java now uses either dual-pivot quicksort or timsort.
+This was previously implemented by \texttt{Arrays.sort()} and \texttt{Collections.sort()}, but Java now uses dual-pivot quicksort and timsort.
 
 \section{Binary Search}
 
-Before we begin studying data structures, it is necessary to first understand general search techniques. Given a list, it is straightforward to simply check every element in the list in a linear search.
+Before we begin studying data structures, it is necessary to first understand some search techniques. Suppose we're given a list and we want to check if it contains some element. We can do this directly by looking at every element of the list in a \emph{linear search}.
 
-One way we can make this faster is by imposing an ordering on the list. Then inserting elements becomes slower because we can no longer just pop the element to the the end of the list. However, if we are asked to find an element, we know roughly where in the list to search because we can compare the element to other elements in the list.
+One way we can make this faster is by imposing an ordering on the list. Then inserting elements becomes slower because we can no longer just pop the element to the the end of the list. However, if we are asked to find an element, we know roughly where to search because we can compare our element to other elements in the list. In fact, we only need to look at $O(\log n)$ elements to check if the queried element exists.
 
-Consider an array of sorted elements. The array supports $O(1)$ access to any element in the array. We'll take a look at the middle element in the array. Depending on whether or not the element to be searched is larger, smaller, or equal to the middle element, we can guarantee we can eliminate half of the array. Then finding an element is an $O(\log{n})$ operation on a sorted array. This can be done either iteratively or recursively.
+Consider a sorted array that supports $O(1)$ access to any element. We can compare our queried element to the middle element of the array. Depending on whether our element is larger, smaller, or equal to the middle element, we'll be able to eliminate at least half of the array. Thus finding an element in a sorted array with \emph{binary search} is an $O(\log{n})$ operation. This can be done either iteratively or recursively.
 
