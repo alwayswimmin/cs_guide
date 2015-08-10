@@ -276,12 +276,11 @@ It is often the case that $O(\sqrt{n})$ bounds can be improved to $O(\log{n})$ u
 
 \section{Segment Tree}
 
-It turns out for our specific sum problem that we can do as good as $O(\log{n})$ with a \textit{segment tree}, or \textit{range tree}, or \textit{augmented static BBST}. The essential idea is still the same -- we want to group elements in some way that allows us to update and query efficiently.
+For our range sum query problem, it turns out that we can do as well as $O(\log{n})$ with a \textit{segment tree}, also known as a \textit{range tree} or \textit{augmented static BBST}. The essential idea is still the same---we want to group elements in some way that allows us to update and query efficiently.
 
-As the name ``tree'' suggests, we draw inspiration from a binary structure. Let's build a tree on top of the array, where each node keeps track of the sum of the numbers associated with its children. Every node keeps track of the \textit{range} it is associated with and the \textit{value} of the sum of all elements on that range. For example, the root of the tree is responsible for the sum of all elements in the range $[1, n]$, its left child is responsible for the range $\left[1, \floor{\frac{n}{2}}\right]$ and its right child is responsible for $\left[\floor{\frac{n}{2}} + 1, n\right]$.
+As the name ``tree'' suggests, we draw inspiration from a binary structure. Let's build a tree on top of the array, where each node keeps track of the sum of the numbers associated with its children. Every node keeps track of the \textit{range} it is associated with and the \textit{value} of the sum of all elements on that range. For example, the root of the tree is responsible for the sum of all elements in the range $[1, n]$, its left child is responsible for the range $\left[1, \floor{\frac{1+n}{2}}\right]$ and its right child is responsible for $\left[\floor{\frac{1+n}{2}} + 1, n\right]$.
 
-In general, for the vertex responsible for the range $[a,b]$, its left child holds the sum for
-$\left[a,\floor{\frac{a+b-1}{2}}\right]$ and its right child $\left[\floor{\frac{a+b-1}{2}}+1,b\right]$. As we go down to the tree, eventually we'll have nodes with ranges $[a,a]$ that represent a single element in the original list. These, of course, will not have any children.
+In general, for the vertex responsible for the range $[l,r]$, its left child holds the sum for $\left[l,\floor{\frac{l+r}{2}}\right]$ and its right child $\left[\floor{\frac{l+r}{2}}+1,r\right]$. As we go down to the tree, eventually we'll have nodes with ranges $[l,l]$ that represent a single element in the original list. These, of course, will not have any children.
 
 \begin{center}
 {
@@ -458,28 +457,26 @@ Highlighted are the nodes we'll need to access for $query(7,15)$. Notice how the
 
 $-2$ represents the sum $x_7+x_8$, $-10$ the sum $x_9+x_{10}+x_{11}+x_{12}$, $14$ the sum $x_{13}+x_{14}$, and $0$ represents the single element $x_{15}$. It seems we always want to take the \textit{largest} segments that stay within the range $[7,15]$. But how do we know exactly which segments these are?
 
-We handle queries using a recursive call, starting at the root of the tree. We always begin by querying the node for $[1,n]$. The key idea is if the the interval associated with a node is completely contained within the interval we are querying, we simply return the sum associated with that node. Otherwise, we pass the query on to each of the two children.
+We handle queries using a recursive call, starting at the root of the tree. We then proceed as follows: If the current node's interval is completely disjoint from the queried interval, we return 0. If the current node's interval is completely contained within the queried interval, we return the sum associated with that node. Otherwise, we pass the query on to the node's two children. Note that this process is $O(\log{n})$ because each level in the tree can have at most two highlighted nodes.
 
 \noindent \begin{minipage}{\textwidth}
 \begin{algorithmic}
-\Function{Query}{range $[i,j]$, range $[a,b]$}
-	\Comment want $\sum_{k=i}^j x_i$, querying node $[a,b]$
-	\If{$j < a$ or $b < i$}
-		\Comment $[a, b] \cap [i,j] = \emptyset$
+\Function{Query}{range $[l,r]$, range $[a,b]$}
+	\Comment at node $[l,r]$, want $\sum_{i=a}^b x_i$
+	\If{$r < a$ or $b < l$}
+		\Comment $[l,r] \cap [a,b] = \emptyset$
 		\State \Return 0
 	\EndIf
-	\If{$i \le a$ and $b \le j$}
-		\Comment $[a,b] \subseteq [i,j]$
-		\State \Return $sum(a,b)$
+	\If{$a \le l$ and $r \le b$}
+		\Comment $[l,r] \subseteq [a,b]$
+		\State \Return $sum(l,r)$
 	\EndIf
-	\State \Return $\Call{Query}{[i,j], \left[a,\floor{\frac{a+b-1}{2}}\right]} + \Call{Query}{[i,j], \left[\floor{\frac{a+b-1}{2}}+1,b \right]}$
+	\State \Return $\Call{Query}{\left[l,\floor{\frac{l+r}{2}}\right], [a,b]} + \Call{Query}{\left[\floor{\frac{l+r}{2}}+1,r \right], [a,b]}$
 \EndFunction
 \end{algorithmic}
 \end{minipage}
 
-This process is $O(\log{n})$ because each level in the tree can have at most two highlighted nodes.
-
-If we wanted to change the third element to 2, we would have to update the highlighted nodes in the following diagram. This process is more intuitive than querying.
+Segment trees also handle modifications well. If we want to change the third element to 2, then we have to update the highlighted nodes in the following diagram. We can implement this the same way we implement queries. Starting from the root, we update each modified node's children before recomputing the value stored at that node. The complexity is $O(\log{n})$; we change the value of one node in each level of the tree.
 
 \begin{center}
 {
@@ -557,118 +554,57 @@ If we wanted to change the third element to 2, we would have to update the highl
 
 \noindent \begin{minipage}{\textwidth}
 \begin{algorithmic}
-\Function{Update}{$i$, $z$, range $[a,b]$}
-	\Comment $x_i \gets x_i + z$
-	\If{$i < a$ or $b < i$}
-		\Comment $i \not\in [a, b]$
+\Function{Update}{range $[l,r]$, $p$, $k$}
+	\Comment $x_p \gets x_p + k$
+	\If{$r < p$ or $p < l$}
+		\Comment $p \not\in [l,r]$
 		\State \Return
 	\EndIf
-	\State $sum(a,b) \gets sum(a,b) + z$
-	\If{$a = b$}
+	\If{$l = r$}
 		\Comment leaf node
+		\State $sum(l,r) \gets k$
 		\State \Return
 	\EndIf
-	\State \Call{Update}{$i$, $y$, $\left[a,\floor{\frac{a+b-1}{2}}\right]$}
-	\State \Call{Update}{$i$, $y$, $\left[\floor{\frac{a+b-1}{2}}+1,b \right]$}
+	\State \Call{Update}{$\left[l,\floor{\frac{l+r}{2}}\right]$, $p$, $k$}
+	\State \Call{Update}{$\left[\floor{\frac{l+r}{2}}+1,r\right]$, $p$, $k$}
+	\State $sum(l,r) \gets sum(l,\floor{\frac{l+r}{2}}) + sum(\floor{\frac{l+r}{2}}+1,r)$
 \EndFunction
 \end{algorithmic}
 \end{minipage}
 
-Updating is also $O(\log{n})$ as we need to change the values of at most one node in each level in the tree.
+I cheated with my example by using a nice power of two, $n=16$, as the number of elements in the sequence. Of course, the size is not always this nice. However, if we want a tree of size $n$, we can always round up to the nearest power of 2, which is at most $2n$. A perfectly balanced segment tree of size $n$ equalling a power of 2 requires $2n-1$ nodes representing our segments, so $4n$ bounds the memory we'll need.
 
-I cheated with my example by using a nice power of two, $n=16$, as the number of elements in the sequence. Of course, the size is not always this nice. If $n=12$, the resulting tree would have the following structure.
-
-\begin{center}
-{
-\begin{tikzpicture}[
-  very thick,
-  level 1/.style={sibling distance=80mm},
-  level 2/.style={sibling distance=40mm},
-  level 3/.style={sibling distance=18mm},
-  level 4/.style={sibling distance=15mm},
-]
-\node [vertex, minimum size=38pt] (r){$[1,12]$}
-  child {
-    node [vertex, minimum size=38pt] (a) {$[1,6]$}
-    	child {
-        	node[vertex, minimum size=38pt] {$[1,3]$}
-            	child {
-                	node[vertex, minimum size=38pt] {$[1,1]$}
-                }
-                child {
-                	node[vertex, minimum size=38pt] {$[2,3]$}
-                    	child {node [vertex, minimum size=38pt] {$[2,2]$}}
-                    	child {node [vertex, minimum size=38pt] {$[3,3]$}}
-                }
-        }
-    	child {
-        	node[vertex, minimum size=38pt] {$[4,6]$}
-            	child {
-                	node[vertex, minimum size=38pt] {$[4,4]$}
-                }
-                child {
-                	node[vertex, minimum size=38pt] {$[5,6]$}
-                    	child {node [vertex, minimum size=38pt] {$[5,5]$}}
-                    	child {node [vertex, minimum size=38pt] {$[6,6]$}}
-                }
-        }
-  }
-  child {
-    node [vertex, minimum size=38pt] {$[7,12]$}
-    	child {
-        	node[vertex, minimum size=38pt] {$[7,9]$}
-            	child {
-                	node[vertex, minimum size=38pt] {$[7,7]$}
-                }
-                child {
-                	node[vertex, minimum size=38pt] {$[8,9]$}
-                    	child {node [vertex, minimum size=38pt] {$[8,8]$}}
-                    	child {node [vertex, minimum size=38pt] {$[9,9]$}}
-                }
-        }
-    	child {
-        	node[vertex, minimum size=38pt] {$[10,12]$}
-            	child {
-                	node[vertex, minimum size=38pt] {$[10,10]$}
-                }
-                child {
-                	node[vertex, minimum size=38pt] {$[11,12]$}
-                    	child {node [vertex, minimum size=38pt] {$[11,11]$}}
-                    	child {node [vertex, minimum size=38pt] {$[12,12]$}}
-                }
-        }
-  };
-
-\end{tikzpicture}
-}
-\end{center}
-
-Now all we need is a way for us to easily store the sum values associated with each node. We can clearly use a structure with two child pointers, but we can also exploit the fact that the segment tree structure is a balanced binary search tree. Therefore, we can store the tree like we store a heap. The root is labeled 1, and for each node with label $index$, the left child is labeled with $index \cdot 2$ and the right child with $index \cdot 2 + 1$. Here's some sample code. Note that in actual implementation, it is easier to zero-index the original array and denote ranges by an open upper bound: $[a, b)$.
+Now all we need is a way for us to easily store the sum values associated with each node. We can clearly use a structure with two child pointers, but we can also exploit the fact that the segment tree structure is a balanced binary search tree. We can store the tree like we store a heap. The root is labeled 1, and for each node with label $i$, the left child is labeled $2i$ and the right child $2i + 1$. Here's some sample code.
 
 \begin{mylstlisting}
-int[] sum = new int[MAXN * 4]; // sum[1] contains sum for [0, n), and so on
-int query(int i, int j, int a, int b, int index) {
-	if(a >= j || b <= i)
-		return 0;
-	if(i >= a && j <= b)
-		return sum[index];
-	return query(i, j, a, (a + b) / 2, index * 2)
-			+ query(i, j, (a + b) / 2, b, index * 2 + 1);
+final int SZ = 1 << 17; // some sufficiently large power of 2
+int[] sum = new int[2 * SZ]; // sum[1] contains sum for [1, SZ], and so on
+int query(int i, int l, int r, int a, int b) {
+	// i.e. query(1, 1, SZ, 7, 15)
+	if(r < a || b < l) return 0;
+	if(a <= l && r <= b) return tree[i];
+	int m = (l + r) / 2;
+	int ql = query(2 * i, l, m, a, b);
+	int qr = query(2 * i + 1, m + 1, r, a, b);
+	return ql + qr;
 }
-void update(int i, int z, int a, int b, int index) {
-	if(i < a || i > b)
+void update(int i, int l, int r, int p, int k) {
+	// i.e. update(1, 1, SZ, 3, 2)
+	if(r < p || p < l) return;
+	if(l == r){
+		sum[i] = k;
 		return;
-	sum[index] += z;
-	if(b - a == 1)
-		return;
-	update(i, z, a, (a + b) / 2, index * 2);
-	update(i, z, (a + b) / 2, b, index * 2 + 1);
+	}
+	int m = (l + r) / 2;
+	update(2 * i, l, m, p, k);
+	update(2 * i + 1, m + 1, r, p, k);
+	sum[i] = sum[2 * i] + sum[2 * i + 1];
 }
 \end{mylstlisting}
 
 Mathematically, what allows the segment tree to work on the addition operation lies in the fact that addition is an associative operation. This means that we can support a wide variety of other kinds of range queries, so long as the operation is associative. For example, we can also support range minimum queries and $gcd$ and $lcm$ queries.
 
-Sometimes, we prefer the tree to have the nice, completely balanced structure present when the number of elements is a nice power of two. In the case of $n=12$, we can simply pretend $n$ is actually $16$ by padding the 12-element list with 4 zeros. This is necessary if we want to force the array $sum[]$ to have the same nice properties as an actual heap so we can perform nice iterative operations on our tree. It is also necessary if we need the numbers representing the indices in our tree to have special properties, as in the Fenwick tree.
+For this simple problem, we don't need the nice, completely balanced structure present when the number of elements is a nice power of two. However, it is necessary if we want to force the array $sum[]$ to have the same nice properties as an actual heap so we can perform nice iterative operations on our tree, as previously, all tree operations were recursive. It is also necessary if we need the numbers representing the indices in our tree to have special properties, as in the Fenwick tree.
 
 \subsection{Fenwick Tree}
 
@@ -1697,7 +1633,7 @@ The \textit{red-black tree} was an early development that represents the ``just 
 
 The \textit{splay tree} is a data structure that guarantees amortized logarithmic performance; this means that any single operation is not necessarily linear, but over \textit{any} sequence of length $m$ for $m \ge n$, the performance for all $m$ operations is $O(m \log{n})$. Though the proof of the splay tree's complexity is necessarily more complicated than the red-black tree's complexity, as it requires amortized analysis, coding the splay tree is much easier than coding the red-black tree. In addition, the splay tree grants us more flexibility than the red-black tree provides, allowing us to build more complicated structures like link-cut trees using splay trees.
 
-The \textit{treap} is a probabilistic data structure that combines the BST with a heap to usually create a balanced tree. Just as quicksort is not guaranteed to run in $O(n\log{n})$, so too does the treap not guarantee $O(\log{n})$ operations, but will usually result in logarithmic performance.
+The \textit{treap} is a probabilistic data structure that combines a binary search tree with a heap to create a BBST. Just as quicksort is not guaranteed to run in $O(n\log{n})$, treaps are not guaranteed to have logarithmic depth. In practice, however, they almost always have performance that is $O(\log n)$. Treaps are especially useful in programming contests because they are the easiest BBST to implement. 
 
 \subsection{Tree Rotation}
 
@@ -2784,6 +2720,147 @@ Since a binary search tree stores an ordered set, it is incredibly useful for st
 For example, to remove elements indexed in the range $[i, j]$, we split at index $i$ and split at index $j+1$ to get three splay trees, one representing $[1, i-1]$, another $[i,j]$, and the last $[j+1,n]$. We can then merge the first and third trees together, to get two trees, one representing $[i,j]$ and the other representing the original list with $[i,j]$ removed. A similar procedure can insert a list within another list as as contiguous block. Both of these operations can be completed in $O(\log{n})$ amortized using a splay tree.
 
 \subsection{Treap}
+
+A treap is a binary search tree smushed together with a heap. Each node stores, in addition to its key, a random \emph{priority}. The priorities in a treap always satisfy the \emph{heap property}: for any node, its priority is greater than the priority of either of its children. The diagram below illustrates a treap. On each node, the letter is the node's key and the number is the node's priority.
+
+\begin{center}
+\begin{tikzpicture}[
+  very thick,
+  sibling distance=15mm,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split parts=2,
+    text width=4ex,
+    text centered
+  }
+]
+\node [myrect] {$D$ \nodepart{two} 8}
+child {
+  node [myrect] {$B$ \nodepart{two} 3}
+  child {
+    node [myrect] {$A$ \nodepart{two} 1}
+    child [missing]
+    child [missing]
+  }
+  child {
+    node [myrect] {$C$ \nodepart{two} 2}
+    child [missing]
+    child [missing]
+  }
+}
+child {
+node [myrect] {$E$ \nodepart{two} 5}
+child [missing]
+};
+\end{tikzpicture}
+\end{center}
+
+The randomness in each node's priority balances the treap. We can gain some intuition for how this works by looking at how a treap is built. Consider an array containing pairs of key and priority, sorted by key. To construct a treap from these values, we first take the element with the highest priority and set it as the root. We can then recurse on the two halves of the array split by the root, and construct the root's left and right subtrees in a similar way. Because the priority of each node is randomly chosen, we effectively choose a random element as the root each time we recurse.
+
+Like quicksort, we can expect that the root doesn't always split the tree too unevenly and obtain a $O(\log n)$ bound on the expected depth of each node. Moreover, it is possible to show that the entire tree has a depth of $O(\log n)$ with high probability. This analysis means that a treap is as good complexity-wise as any other deterministic BBST for all practical purposes. (To do the first part more rigorously, we can let $A_{i,j}$ be an indicator random variable representing whether the $j$th node is an ancestor of the $i$th node. What is the expected value of $\sum_{j=1}^n A_{i,j}$?) 
+
+In the remainder of this section, we'll go over the implementation of treaps. Our implementation will be quite different from the rotation-based implementations of splay trees and red-black trees described above. Intead of rotating, we will have two functions, \texttt{split} and \texttt{merge}, that will be used to define all other treap operations. Here are their definitions:
+
+\texttt{split} takes a treap $T$ and a key $k$ and splits $T$ into two treaps by $k$. Thus \texttt{split} outputs two treaps, $L$ and $R$, where all the elements of $L$ are less than $k$ and all the elements of $R$ are at least $k$. \texttt{split} has a complexity of $O(\log n)$.
+
+\texttt{merge} does the opposite of \texttt{split}. It takes two treaps $L$ and $R$, where each key in $L$ is at most the smallest key in $R$, and turns them into one treap, $T$. \texttt{merge} also has a complexity of $O(\log n)$.
+
+One way to think about these functions is to imagine treaps as a data structure that dynamically maintains sorted arrays. Then splitting is cutting an array into two, and merging is appending one array onto the end of another. With this perspective on \texttt{split} and \texttt{merge}, standard BST operations are not difficult to write. For example, we can insert a key $k$ into a treap $T$ by splitting $T$ into $L$ and $R$ by $k$. Then we can create a new node $n$ with key $k$, and merge $L$, $n$ and $R$ back into $T$. Other operations that we can implement are \texttt{erase}, \texttt{union} and \texttt{intersect}. 
+
+Writing \texttt{split} and \texttt{merge} is also relatively easy. With C++, we can use pointers and references to simplify our work.
+
+To \texttt{split}, we recurse on $T$, while maintaing references to $L$ and $R$. The root of $T$ becomes the root of one of $L$ and $R$, depending on its key. If the root of $T$ becomes the root of $R$, we recurse on the left subtree of $T$ and \texttt{split} into $L$ any nodes that have key less than $k$. The other case, where the root of $T$ becomes the root of $L$, works similarly.
+
+To \texttt{merge}, we take the root of $L$ and $R$ with the higher priority, and set it as the root of $T$. If the root of $L$ has higher priority, we \texttt{merge} $R$ and the right subtree of $L$. Otherwise, we \texttt{merge} $L$ and the left subtree of $R$. Like \texttt{split}, we can recurse down the relevant subtrees until we are done.
+
+Here's a short C++ implementation of a treap with \texttt{split}, \texttt{merge} and \texttt{insert}:
+
+\begin{mylstlisting}[language=C++]
+struct node {
+  node *l, *r;
+  int k, p;
+  node(int k) : l(0), r(0), k(k), p(rand()) {}
+};
+
+void split(node *t, node *&l, node *&r, int k){
+  // Splits t into l and r.
+  if(t == NULL) l = r = NULL;
+  else if(k <= t -> k) split(t -> l, l, t -> l, k), r = t;
+  else split(t -> r, t -> r, r, k), l = t;
+}
+
+void merge(node *&t, node *l, node *r){
+  // Merges l and r into t.
+  if(l == NULL || r == NULL) t = l ? l : r;
+  else if(l -> p > r -> p) merge(l -> r, l -> r, r), t = l;
+  else merge(r -> l, l, r -> l), t = r;
+}
+
+void insert(node *&t, int k){
+  node *n = new node(k), *a;
+  split(t, t, a, k);
+  merge(t, t, n);
+  merge(t, t, a);
+}
+\end{mylstlisting}
+
+We can also create an \emph{implicitly keyed} treap, which functions as a dynamic array. Instead of storing keys, each node stores the size of its subtree. We can then define the \emph{implicit key} of a node as its position in the in-order traversal of the treap, a value we can easily compute from subtree sizes. Modifying \texttt{split} to operate based on the implicit key allows us to rearrange parts of the array and insert new elements anywhere. Further augmentation allows us to perform range queries as well. And if we add lazy propagation, we can also support operations that modify ranges.
+
+Here's an example of an implicitly keyed treap that supports reversal of subarrays. In \texttt{node}, \texttt{s} maintains the size of its subtree, and \texttt{f} is a flag that indicates reversal. We use \texttt{push} and \texttt{pull} to propagate data down and up the treap, respectively. Also, note the difference in the implementation of \texttt{split}.
+
+\begin{mylstlisting}[language=C++]
+struct node {
+  node *l, *r;
+  int v, p, s, f;
+  node(int v) : l(0), r(0), v(v), p(rand()), s(1), f(0) {}
+};
+
+int size(node *t){
+  return t ? t -> s : 0;
+}
+
+void push(node *t){
+  if(t == NULL) return;
+  if(t -> f){
+    swap(t -> l, t -> r);
+    if(t -> l) t -> l -> f ^= 1;
+    if(t -> r) t -> r -> f ^= 1;
+    t -> f = 0;
+  }
+}
+
+void pull(node *t){
+  if(t == NULL) return;
+  t -> s = size(t -> l) + size(t -> r) + 1;
+}
+
+void split(node *t, node *&l, node *&r, int k){
+  push(t);
+  if(t == NULL) l = r = NULL;
+  else if(k <= size(t -> l)) split(t -> l, l, t -> l, k), r = t;
+  else split(t -> r, t -> r, r, k - size(t -> l) - 1), l = t;
+  pull(t);
+}
+
+void merge(node *&t, node *l, node *r){
+  push(l), push(r);
+  if(l == NULL || r == NULL) t = l ? l : r;
+  else if(l -> p > r -> p) merge(l -> r, l -> r, r), t = l;
+  else merge(r -> l, l, r -> l), t = r;
+  pull(t);
+}
+
+void reverse(node *t, int l, int r){
+  node *a, *b;
+  split(t, t, b, r + 1);
+  split(t, t, a, l);
+  a -> f ^= 1;
+  merge(t, t, a);
+  merge(t, t, b);
+}
+\end{mylstlisting}
 
 \section{Fractional Cascading}
 

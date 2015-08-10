@@ -30,7 +30,7 @@ DFS is a very useful technique for collecting information about the structure of
   \State $depth(v) \gets depth(p) + 1$
   \ForAll{vertices $n$ adjacent to $v$}
     \If{$n \neq p$}
-      \State DFS(n, v)
+      \State \Call{DFS}{$n$, $v$}
       \State $sum(v) \gets sum(v) + sum(n)$
     \EndIf
   \EndFor
@@ -85,9 +85,9 @@ Otherwise, if $u' \neq v$, we can find the LCA of $u'$ and $v$ by advancing them
 \EndFunction
 \Function{LCA}{$u$, $v$}
   \If{$depth(u) < depth(v)$}
-    \State $swap(u, v)$
+    \State \Call{swap}{$u$, $v$}
   \EndIf
-  \State $u \gets LevelAncestor(u, depth(v) - depth(u))$
+  \State $u \gets \Call{LevelAncestor}{u, depth(v) - depth(u)}$
   \If{$u = v$}
     \State \Return $u$
   \EndIf
