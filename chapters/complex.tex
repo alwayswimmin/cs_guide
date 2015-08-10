@@ -276,12 +276,11 @@ It is often the case that $O(\sqrt{n})$ bounds can be improved to $O(\log{n})$ u
 
 \section{Segment Tree}
 
-It turns out for our specific sum problem that we can do as good as $O(\log{n})$ with a \textit{segment tree}, or \textit{range tree}, or \textit{augmented static BBST}. The essential idea is still the same -- we want to group elements in some way that allows us to update and query efficiently.
+For our range sum query problem, it turns out that we can do as well as $O(\log{n})$ with a \textit{segment tree}, also known as a \textit{range tree} or \textit{augmented static BBST}. The essential idea is still the same---we want to group elements in some way that allows us to update and query efficiently.
 
-As the name ``tree'' suggests, we draw inspiration from a binary structure. Let's build a tree on top of the array, where each node keeps track of the sum of the numbers associated with its children. Every node keeps track of the \textit{range} it is associated with and the \textit{value} of the sum of all elements on that range. For example, the root of the tree is responsible for the sum of all elements in the range $[1, n]$, its left child is responsible for the range $\left[1, \floor{\frac{n}{2}}\right]$ and its right child is responsible for $\left[\floor{\frac{n}{2}} + 1, n\right]$.
+As the name ``tree'' suggests, we draw inspiration from a binary structure. Let's build a tree on top of the array, where each node keeps track of the sum of the numbers associated with its children. Every node keeps track of the \textit{range} it is associated with and the \textit{value} of the sum of all elements on that range. For example, the root of the tree is responsible for the sum of all elements in the range $[1, n]$, its left child is responsible for the range $\left[1, \floor{\frac{1+n}{2}}\right]$ and its right child is responsible for $\left[\floor{\frac{1+n}{2}} + 1, n\right]$.
 
-In general, for the vertex responsible for the range $[a,b]$, its left child holds the sum for
-$\left[a,\floor{\frac{a+b-1}{2}}\right]$ and its right child $\left[\floor{\frac{a+b-1}{2}}+1,b\right]$. As we go down to the tree, eventually we'll have nodes with ranges $[a,a]$ that represent a single element in the original list. These, of course, will not have any children.
+In general, for the vertex responsible for the range $[l,r]$, its left child holds the sum for $\left[l,\floor{\frac{l+r}{2}}\right]$ and its right child $\left[\floor{\frac{l+r}{2}}+1,r\right]$. As we go down to the tree, eventually we'll have nodes with ranges $[l,l]$ that represent a single element in the original list. These, of course, will not have any children.
 
 \begin{center}
 {
@@ -456,30 +455,29 @@ Highlighted are the nodes we'll need to access for $query(7,15)$. Notice how the
 }
 \end{center}
 
-$-2$ represents the sum $x_7+x_8$, $-10$ the sum $x_9+x_{10}+x_{11}+x_{12}$, $14$ the sum $x_{13}+x_{14}$, and $0$ represents the single element $x_15$. It seems we always want to take the \textit{largest} segments that stay within the range $[7,15]$. But how do we know exactly which segments these are?
+$-2$ represents the sum $x_7+x_8$, $-10$ the sum $x_9+x_{10}+x_{11}+x_{12}$, $14$ the sum $x_{13}+x_{14}$, and $0$ represents the single element $x_{15}$. It seems we always want to take the \textit{largest} segments that stay within the range $[7,15]$. But how do we know exactly which segments these are?
 
-We handle queries using a recursive call, starting at the root of the tree. We always begin by querying the node for $[1,n]$. The key idea is if the the interval associated with a node is completely contained within the interval we are querying, we simply return the sum associated with that node. Otherwise, we pass the query on to each of the two children.
+We handle queries using a recursive call, starting at the root of the tree. We then proceed as follows: If the current node's interval is completely disjoint from the queried interval, we return 0. If the current node's interval is completely contained within the queried interval, we return the sum associated with that node. Otherwise, we pass the query on to the node's two children. Note that this process is $O(\log{n})$ because each level in the tree can have at most two highlighted nodes.
+
 
 \noindent \begin{minipage}{\textwidth}
 \begin{algorithmic}
-\Function{Query}{range $[i,j]$, range $[a,b]$}
-	\Comment want $\sum_{k=i}^j x_i$, querying node $[a,b]$
-	\If{$j < a$ or $b < i$}
-		\Comment $[a, b] \cap [i,j] = \emptyset$
+\Function{Query}{range $[l,r]$, range $[a,b]$}
+	\Comment at node $[l,r]$, want $\sum_{i=a}^b x_i$
+	\If{$r < a$ or $b < l$}
+		\Comment $[l,r] \cap [a,b] = \emptyset$
 		\State \Return 0
 	\EndIf
-	\If{$i \le a$ and $b \le j$}
-		\Comment $[a,b] \subseteq [i,j]$
-		\State \Return $sum(a,b)$
+	\If{$a \le l$ and $r \le b$}
+		\Comment $[l,r] \subseteq [a,b]$
+		\State \Return $sum(l,r)$
 	\EndIf
-	\State \Return $\Call{Query}{[i,j], \left[a,\floor{\frac{a+b-1}{2}}\right]} + \Call{Query}{[i,j], \left[\floor{\frac{a+b-1}{2}}+1,b \right]}$
+	\State \Return $\Call{Query}{\left[l,\floor{\frac{l+r}{2}}\right], [a,b]} + \Call{Query}{\left[\floor{\frac{l+r}{2}}+1,r \right], [a,b]}$
 \EndFunction
 \end{algorithmic}
 \end{minipage}
 
-This process is $O(\log{n})$ because each level in the tree can have at most two highlighted nodes.
-
-If we wanted to change the third element to 2, we would have to update the highlighted nodes in the following diagram. This process is more intuitive than querying.
+Segment trees also handle modifications well. If we want to change the third element to 2, then we have to update the highlighted nodes in the following diagram. We can implement this the same way we implement queries. Starting from the root, we update each modified node's children before recomputing the value stored at that node. The complexity is $O(\log{n})$; we change the value of one node in each level of the tree.
 
 \begin{center}
 {
@@ -557,112 +555,51 @@ If we wanted to change the third element to 2, we would have to update the highl
 
 \noindent \begin{minipage}{\textwidth}
 \begin{algorithmic}
-\Function{Update}{$i$, $z$, range $[a,b]$}
-	\Comment $x_i \gets x_i + z$
-	\If{$i < a$ or $b < i$}
-		\Comment $i \not\in [a, b]$
+\Function{Update}{range $[l,r]$, $p$, $k$}
+	\Comment $x_p \gets x_p + k$
+	\If{$r < p$ or $p < l$}
+		\Comment $p \not\in [l,r]$
 		\State \Return
 	\EndIf
-	\State $sum(a,b) \gets sum(a,b) + z$
-	\If{$a = b$}
+	\If{$l = r$}
 		\Comment leaf node
+		\State $sum(l,r) \gets k$
 		\State \Return
 	\EndIf
-	\State \Call{Update}{$i$, $y$, $\left[a,\floor{\frac{a+b-1}{2}}\right]$}
-	\State \Call{Update}{$i$, $y$, $\left[\floor{\frac{a+b-1}{2}}+1,b \right]$}
+	\State \Call{Update}{$\left[l,\floor{\frac{l+r}{2}}\right]$, $p$, $k$}
+	\State \Call{Update}{$\left[\floor{\frac{l+r}{2}}+1,r\right]$, $p$, $k$}
+	\State $sum(l,r) \gets sum(l,\floor{\frac{l+r}{2}}\right]) + sum(\floor{\frac{l+r}{2}}+1,r)$
 \EndFunction
 \end{algorithmic}
 \end{minipage}
 
-Updating is also $O(\log{n})$ as we need to change the values of at most one node in each level in the tree.
+I cheated with my example by using a nice power of two, $n=16$, as the number of elements in the sequence. Of course, the size is not always this nice. However, if we want a tree of size $n$, we can always round up to the nearest power of 2, which is at most $2n$. 
 
-I cheated with my example by using a nice power of two, $n=16$, as the number of elements in the sequence. Of course, the size is not always this nice. If $n=12$, the resulting tree would have the following structure.
-
-\begin{center}
-{
-\begin{tikzpicture}[
-  very thick,
-  level 1/.style={sibling distance=80mm},
-  level 2/.style={sibling distance=40mm},
-  level 3/.style={sibling distance=18mm},
-  level 4/.style={sibling distance=15mm},
-]
-\node [vertex, minimum size=38pt] (r){$[1,12]$}
-  child {
-    node [vertex, minimum size=38pt] (a) {$[1,6]$}
-    	child {
-        	node[vertex, minimum size=38pt] {$[1,3]$}
-            	child {
-                	node[vertex, minimum size=38pt] {$[1,1]$}
-                }
-                child {
-                	node[vertex, minimum size=38pt] {$[2,3]$}
-                    	child {node [vertex, minimum size=38pt] {$[2,2]$}}
-                    	child {node [vertex, minimum size=38pt] {$[3,3]$}}
-                }
-        }
-    	child {
-        	node[vertex, minimum size=38pt] {$[4,6]$}
-            	child {
-                	node[vertex, minimum size=38pt] {$[4,4]$}
-                }
-                child {
-                	node[vertex, minimum size=38pt] {$[5,6]$}
-                    	child {node [vertex, minimum size=38pt] {$[5,5]$}}
-                    	child {node [vertex, minimum size=38pt] {$[6,6]$}}
-                }
-        }
-  }
-  child {
-    node [vertex, minimum size=38pt] {$[7,12]$}
-    	child {
-        	node[vertex, minimum size=38pt] {$[7,9]$}
-            	child {
-                	node[vertex, minimum size=38pt] {$[7,7]$}
-                }
-                child {
-                	node[vertex, minimum size=38pt] {$[8,9]$}
-                    	child {node [vertex, minimum size=38pt] {$[8,8]$}}
-                    	child {node [vertex, minimum size=38pt] {$[9,9]$}}
-                }
-        }
-    	child {
-        	node[vertex, minimum size=38pt] {$[10,12]$}
-            	child {
-                	node[vertex, minimum size=38pt] {$[10,10]$}
-                }
-                child {
-                	node[vertex, minimum size=38pt] {$[11,12]$}
-                    	child {node [vertex, minimum size=38pt] {$[11,11]$}}
-                    	child {node [vertex, minimum size=38pt] {$[12,12]$}}
-                }
-        }
-  };
-
-\end{tikzpicture}
-}
-\end{center}
-
-Now all we need is a way for us to easily store the sum values associated with each node. We can clearly use a structure with two child pointers, but we can also exploit the fact that the segment tree structure is a balanced binary search tree. Therefore, we can store the tree like we store a heap. The root is labeled 1, and for each node with label $index$, the left child is labeled with $index \cdot 2$ and the right child with $index \cdot 2 + 1$. Here's some sample code. Note that in actual implementation, it is easier to zero-index the original array and denote ranges by an open upper bound: $[a, b)$.
+Now all we need is a way for us to easily store the sum values associated with each node. We can clearly use a structure with two child pointers, but we can also exploit the fact that the segment tree structure is a balanced binary search tree. We can store the tree like we store a heap. The root is labeled 1, and for each node with label $i$, the left child is labeled $2i$ and the right child $2i + 1$. Here's some sample code.
 
 \begin{mylstlisting}
-int sum = new int[MAXN * 4]; // sum[1] contains sum for [0, n), and so on
-int query(int i, int j, int a, int b, int index) {
-	if(a >= j || b <= i)
-		return 0;
-	if(i >= a && j <= b)
-		return tree[index];
-	return query(i, j, a, (a + b) / 2, index * 2)
-			+ query(i, j, (a + b) / 2, a, index * 2 + 1);
+final int SZ = 1 << 17;
+int[] sum = new int[2 * SZ]; // sum[1] contains sum for [1, SZ], and so on
+int query(int i, int l, int r, int a, int b) {
+	// i.e. query(1, 1, SZ, 7, 15)
+	if(r < a || b < l) return 0;
+	if(a <= l && r <= b) return tree[i];
+	int m = (l + r) / 2;
+	int ql = query(2 * i, l, m, a, b);
+	int qr = query(2 * i + 1, m + 1, r, a, b);
+	return ql + qr;
 }
-void update(int i, int z, int a, int b, int index) {
-	if(a >= j || b <= i)
+void update(int i, int l, int r, int p, int k) {
+	// i.e. update(1, 1, SZ, 3, 2)
+	if(r < p || p < l) return;
+	if(l == r){
+		sum[i] = k;
 		return;
-	sum[index] += z;
-	if(b - a == 1)
-		return;
-	update(i, z, a, (a + b) / 2, index * 2);
-	update(i, z, (a + b) / 2, b, index * 2 + 1);
+	}
+	int m = (l + r) / 2;
+	update(2 * i, l, m, p, k);
+	update(2 * i + 1, m + 1, r, p, k);
+	sum[i] = sum[2 * i] + sum[2 * i + 1];
 }
 \end{mylstlisting}
 
