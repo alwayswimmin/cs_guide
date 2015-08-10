@@ -1628,7 +1628,7 @@ The \textit{red-black tree} was an early development that represents the ``just 
 
 The \textit{splay tree} is a data structure that guarantees amortized logarithmic performance; this means that any single operation is not necessarily linear, but over \textit{any} sequence of length $m$ for $m \ge n$, the performance for all $m$ operations is $O(m \log{n})$. Though the proof of the splay tree's complexity is necessarily more complicated than the red-black tree's complexity, as it requires amortized analysis, coding the splay tree is much easier than coding the red-black tree. In addition, the splay tree grants us more flexibility than the red-black tree provides, allowing us to build more complicated structures like link-cut trees using splay trees.
 
-The \textit{treap} is a probabilistic data structure that combines the BST with a heap to usually create a balanced tree. Just as quicksort is not guaranteed to run in $O(n\log{n})$, so too does the treap not guarantee $O(\log{n})$ operations, but will usually result in logarithmic performance.
+The \textit{treap} is a probabilistic data structure that combines a binary search tree with a heap to create a BBST. Just as quicksort is not guaranteed to run in $O(n\log{n})$, treaps are not guaranteed to have logarithmic depth. In practice, however, they almost always have performance that is $O(\log n)$. Treaps are especially useful in programming contests because they are the easiest BBST to implement. 
 
 \subsection{Tree Rotation}
 
@@ -2715,6 +2715,147 @@ Since a binary search tree stores an ordered set, it is incredibly useful for st
 For example, to remove elements indexed in the range $[i, j]$, we split at index $i$ and split at index $j+1$ to get three splay trees, one representing $[1, i-1]$, another $[i,j]$, and the last $[j+1,n]$. We can then merge the first and third trees together, to get two trees, one representing $[i,j]$ and the other representing the original list with $[i,j]$ removed. A similar procedure can insert a list within another list as as contiguous block. Both of these operations can be completed in $O(\log{n})$ amortized using a splay tree.
 
 \subsection{Treap}
+
+A treap is a binary search tree smushed together with a heap. Each node stores, in addition to its key, a random \emph{priority}. The priorities in a treap always satisfy the \emph{heap property}: for any node, its priority is greater than the priority of either of its children. The diagram below illustrates a treap. On each node, the letter is the node's key and the number is the node's priority.
+
+\begin{center}
+\begin{tikzpicture}[
+  very thick,
+  sibling distance=15mm,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split parts=2,
+    text width=4ex,
+    text centered
+  }
+]
+\node [myrect] {$D$ \nodepart{two} 8}
+child {
+  node [myrect] {$B$ \nodepart{two} 3}
+  child {
+    node [myrect] {$A$ \nodepart{two} 1}
+    child [missing]
+    child [missing]
+  }
+  child {
+    node [myrect] {$C$ \nodepart{two} 2}
+    child [missing]
+    child [missing]
+  }
+}
+child {
+node [myrect] {$E$ \nodepart{two} 5}
+child [missing]
+};
+\end{tikzpicture}
+\end{center}
+
+The randomness in each node's priority balances the treap. We can gain some intuition for how this works by looking at how a treap is built. Consider an array containing pairs of key and priority, sorted by key. To construct a treap from these values, we first take the element with the highest priority and set it as the root. We can then recurse on the two halves of the array split by the root, and construct the root's left and right subtrees in a similar way. Because the priority of each node is randomly chosen, we effectively choose a random element as the root each time we recurse.
+
+Like quicksort, we can expect that the root doesn't always split the tree too unevenly and obtain a $O(\log n)$ bound on the expected depth of each node. Moreover, it is possible to show that the entire tree has a depth of $O(\log n)$ with high probability. This analysis means that a treap is as good complexity-wise as any other deterministic BBST for all practical purposes. (To do the first part more rigorously, we can let $A_{i,j}$ be an indicator random variable representing whether the $j$th node is an ancestor of the $i$th node. What is the expected value of $\sum_{j=1}^n A_{i,j}$?) 
+
+In the remainder of this section, we'll go over the implementation of treaps. Our implementation will be quite different from the rotation-based implementations of splay trees and red-black trees described above. Intead of rotating, we will have two functions, \texttt{split} and \texttt{merge}, that will be used to define all other treap operations. Here are their definitions:
+
+\texttt{split} takes a treap $T$ and a key $k$ and splits $T$ into two treaps by $k$. Thus \texttt{split} outputs two treaps, $L$ and $R$, where all the elements of $L$ are less than $k$ and all the elements of $R$ are at least $k$. \texttt{split} has a complexity of $O(\log n)$.
+
+\texttt{merge} does the opposite of \texttt{split}. It takes two treaps $L$ and $R$, where each key in $L$ is at most the smallest key in $R$, and turns them into one treap, $T$. \texttt{merge} also has a complexity of $O(\log n)$.
+
+One way to think about these functions is to imagine treaps as a data structure that dynamically maintains sorted arrays. Then splitting is cutting an array into two, and merging is appending one array onto the end of another. With this perspective on \texttt{split} and \texttt{merge}, standard BST operations are not difficult to write. For example, we can insert a key $k$ into a treap $T$ by splitting $T$ into $L$ and $R$ by $k$. Then we can create a new node $n$ with key $k$, and merge $L$, $n$ and $R$ back into $T$. Other operations that we can implement are \texttt{erase}, \texttt{union} and \texttt{intersect}. 
+
+Writing \texttt{split} and \texttt{merge} is also relatively easy. With C++, we can use pointers and references to simplify our work.
+
+To \texttt{split}, we recurse on $T$, while maintaing references to $L$ and $R$. The root of $T$ becomes the root of one of $L$ and $R$, depending on its key. If the root of $T$ becomes the root of $R$, we recurse on the left subtree of $T$ and \texttt{split} into $L$ any nodes that have key less than $k$. The other case, where the root of $T$ becomes the root of $L$, works similarly.
+
+To \texttt{merge}, we take the root of $L$ and $R$ with the higher priority, and set it as the root of $T$. If the root of $L$ has higher priority, we \texttt{merge} $R$ and the right subtree of $L$. Otherwise, we \texttt{merge} $L$ and the left subtree of $R$. Like \texttt{split}, we can recurse down the relevant subtrees until we are done.
+
+Here's a short C++ implementation of a treap with \texttt{split}, \texttt{merge} and \texttt{insert}:
+
+\begin{mylstlisting}[language=C++]
+struct node {
+  node *l, *r;
+  int k, p;
+  node(int k) : l(0), r(0), k(k), p(rand()) {}
+};
+
+void split(node *t, node *&l, node *&r, int k){
+  // Splits t into l and r.
+  if(t == NULL) l = r = NULL;
+  else if(k <= t -> k) split(t -> l, l, t -> l, k), r = t;
+  else split(t -> r, t -> r, r, k), l = t;
+}
+
+void merge(node *&t, node *l, node *r){
+  // Merges l and r into t.
+  if(l == NULL || r == NULL) t = l ? l : r;
+  else if(l -> p > r -> p) merge(l -> r, l -> r, r), t = l;
+  else merge(r -> l, l, r -> l), t = r;
+}
+
+void insert(node *&t, int k){
+  node *n = new node(k), *a;
+  split(t, t, a, k);
+  merge(t, t, n);
+  merge(t, t, a);
+}
+\end{mylstlisting}
+
+We can also create an \emph{implicitly keyed} treap, which functions as a dynamic array. Instead of storing keys, each node stores the size of its subtree. We can then define the \emph{implicit key} of a node as its position in the in-order traversal of the treap, a value we can easily compute from subtree sizes. Modifying \texttt{split} to operate based on the implicit key allows us to rearrange parts of the array and insert new elements anywhere. Further augmentation allows us to perform range queries as well. And if we add lazy propagation, we can also support operations that modify ranges.
+
+Here's an example of an implicitly keyed treap that supports reversal of subarrays. In \texttt{node}, \texttt{s} maintains the size of its subtree, and \texttt{f} is a flag that indicates reversal. We use \texttt{push} and \texttt{pull} to propagate data down and up the treap, respectively. Also, note the difference in the implementation of \texttt{split}.
+
+\begin{mylstlisting}[language=C++]
+struct node {
+  node *l, *r;
+  int v, p, s, f;
+  node(int v) : l(0), r(0), v(v), p(rand()), s(1), f(0) {}
+};
+
+int size(node *t){
+  return t ? t -> s : 0;
+}
+
+void push(node *t){
+  if(t == NULL) return;
+  if(t -> f){
+    swap(t -> l, t -> r);
+    if(t -> l) t -> l -> f ^= 1;
+    if(t -> r) t -> r -> f ^= 1;
+    t -> f = 0;
+  }
+}
+
+void pull(node *t){
+  if(t == NULL) return;
+  t -> s = size(t -> l) + size(t -> r) + 1;
+}
+
+void split(node *t, node *&l, node *&r, int k){
+  push(t);
+  if(t == NULL) l = r = NULL;
+  else if(k <= size(t -> l)) split(t -> l, l, t -> l, k), r = t;
+  else split(t -> r, t -> r, r, k - size(t -> l) - 1), l = t;
+  pull(t);
+}
+
+void merge(node *&t, node *l, node *r){
+  push(l), push(r);
+  if(l == NULL || r == NULL) t = l ? l : r;
+  else if(l -> p > r -> p) merge(l -> r, l -> r, r), t = l;
+  else merge(r -> l, l, r -> l), t = r;
+  pull(t);
+}
+
+void reverse(node *t, int l, int r){
+  node *a, *b;
+  split(t, t, b, r + 1);
+  split(t, t, a, l);
+  a -> f ^= 1;
+  merge(t, t, a);
+  merge(t, t, b);
+}
+\end{mylstlisting}
 
 \section{Fractional Cascading}
 
