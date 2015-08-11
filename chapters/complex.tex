@@ -459,7 +459,6 @@ $-2$ represents the sum $x_7+x_8$, $-10$ the sum $x_9+x_{10}+x_{11}+x_{12}$, $14
 
 We handle queries using a recursive call, starting at the root of the tree. We then proceed as follows: If the current node's interval is completely disjoint from the queried interval, we return 0. If the current node's interval is completely contained within the queried interval, we return the sum associated with that node. Otherwise, we pass the query on to the node's two children. Note that this process is $O(\log{n})$ because each level in the tree can have at most two highlighted nodes.
 
-
 \noindent \begin{minipage}{\textwidth}
 \begin{algorithmic}
 \Function{Query}{range $[l,r]$, range $[a,b]$}
@@ -573,12 +572,12 @@ Segment trees also handle modifications well. If we want to change the third ele
 \end{algorithmic}
 \end{minipage}
 
-I cheated with my example by using a nice power of two, $n=16$, as the number of elements in the sequence. Of course, the size is not always this nice. However, if we want a tree of size $n$, we can always round up to the nearest power of 2, which is at most $2n$. 
+I cheated with my example by using a nice power of two, $n=16$, as the number of elements in the sequence. Of course, the size is not always this nice. However, if we want a tree of size $n$, we can always round up to the nearest power of 2, which is at most $2n$. A perfectly balanced segment tree of size $n$ equalling a power of 2 requires $2n-1$ nodes representing our segments, so $4n$ bounds the memory we'll need.
 
 Now all we need is a way for us to easily store the sum values associated with each node. We can clearly use a structure with two child pointers, but we can also exploit the fact that the segment tree structure is a balanced binary search tree. We can store the tree like we store a heap. The root is labeled 1, and for each node with label $i$, the left child is labeled $2i$ and the right child $2i + 1$. Here's some sample code.
 
 \begin{mylstlisting}
-final int SZ = 1 << 17;
+final int SZ = 1 << 17; // some sufficiently large power of 2
 int[] sum = new int[2 * SZ]; // sum[1] contains sum for [1, SZ], and so on
 int query(int i, int l, int r, int a, int b) {
 	// i.e. query(1, 1, SZ, 7, 15)
@@ -603,9 +602,13 @@ void update(int i, int l, int r, int p, int k) {
 }
 \end{mylstlisting}
 
+Mathematically, what allows the segment tree to work on the addition operation lies in the fact that addition is an associative operation. This means that we can support a wide variety of other kinds of range queries, so long as the operation is associative. For example, we can also support range minimum queries and $gcd$ and $lcm$ queries.
+
+For this simple problem, we don't need the nice, completely balanced structure present when the number of elements is a nice power of two. However, it is necessary if we want to force the array $sum[]$ to have the same nice properties as an actual heap so we can perform nice iterative operations on our tree, as previously, all tree operations were recursive. It is also necessary if we need the numbers representing the indices in our tree to have special properties, as in the Fenwick tree.
+
 \subsection{Fenwick Tree}
 
-A \textit{Fenwick tree}, or \textit{binary indexed tree (BIT)}, is simply a faster and easier to code segment tree when the operator in question has an inverse. Unfortunately, it's not at all intuitive, so bear with me at first and let the magic of the Fenwick tree reveal itself later. In fact, it is so magical that Richard Peng hates it because it is too gimmicky. The key idea is to compress the data stored within a segment tree in a crazy way that ends up having a really slick implementation using some bit operation tricks.
+A \textit{Fenwick tree}, or \textit{binary indexed tree (BIT)}, is simply a faster and easier to code segment tree when the operator in question, in addition to being associative, has an inverse. Unfortunately, it's not at all intuitive, so bear with me at first and let the magic of the Fenwick tree reveal itself later.\footnote{In fact, it is so magical that Richard Peng hates it because it is too gimmicky.} The key idea is to compress the data stored within a segment tree in a crazy way that ends up having a really slick implementation using some bit operation tricks.
 
 As discussed earlier, the $+$ operator has an inverse, $-$. Therefore, there is an inherent redundancy, for example, in keeping track of the sum of the first $\frac{n}{2}$ elements, the sum of all $n$ elements, and the sum of the last $\frac{n}{2}$ elements, as we do in the segment tree. If we are given only $\sum_{k=1}^{n/2} a_k$ and $\sum_{k=1}^n a_k$, we can find $\sum_{k=n/2+1}^{n} a_k$ easily using subtraction.
 
@@ -1121,7 +1124,7 @@ We needed to increment the highlighted values, $y_{11}$, $y_{12}$, and $y_{16}$,
 
 It appears that instead of subtracting the largest dividing power of 2, we are adding. Once again this is an $O(\log{n})$ operation.
 
-The real magic in the Fenwick tree is how quickly it can be coded. The only tricky part is finding exactly what $2^{v_2(i)}$ is. But it turns out, by the way bits are arranged in negative numbers, this is just \texttt{i \& -i}. With this in mind, here's all the code that's necessary to code a Fenwick tree.
+The real magic in the Fenwick tree is how quickly it can be coded. The only tricky part is finding exactly what $2^{v_2(i)}$ is. It turns out, by the way bits are arranged in negative numbers, this is just \texttt{i \& -i}. With this in mind, here's all the code that's necessary to code a Fenwick tree. Note that here, values in the array remain 1-indexed, which is different from how we code segment trees.
 
 \begin{mylstlisting}
 int[] y = new int[MAXN]; // Fenwick tree stored as array
@@ -1594,6 +1597,8 @@ $query(7,13)$ requires access to the nodes for the ranges $[7,8]$, $[9,12]$, and
 \end{center}
 
 Now, the nodes that we need are all up to date, and we can perform our query. This process is necessary whenever we are performing an operation on an interval that intersects but does not contain the range associated with a lazy node. Since this can only happen for two such nodes (one at either end of the interval in question), both updating and querying change values of at most four nodes per level, so both operations are $O(\log{n})$.
+
+It is important to note that we can also support a different kind of update, where instead of \textit{incrementing} each element on a range \textit{by} a certain value, we \textit{set} each element \textit{to} that value. With only point updates, there is no difference between the two, but they are very different operations in a range update.
 
 \section{Queue with Minimum Query}
 
