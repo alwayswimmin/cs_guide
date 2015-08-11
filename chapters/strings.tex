@@ -2,19 +2,234 @@
 
 \section{String Hashing}
 
-\section{Rabin-Karp}
+String hashing is a probabilistic technique for dealing with strings. The most common hashing algorithm used in programming contests is the \emph{polynomial hash}, also known as the \emph{Rabin-Karp hash}. This method allows for the fast comparison of strings and their substrings---$O(1)$ after linear time precomputation. Thus we can often use conceptually simpler hashing to replace trickier string algorithms, such as Knuth-Morris-Pratt and the Z-algorithm. In addition, adding binary search allows for the computation of the longest common prefix in $\log n$ time, useful in constructing suffix arrays.
+
+Jonathan Paulson gives a great introduction to polynomial hashing: \url{https://www.reddit.com/r/usaco/comments/39qrta/string_hashing/}
 
 \section{Knuth-Morris-Pratt}
 
-\url{https://activities.tjhsst.edu/sct/lectures/1415/stringmatching_10_3_14.pdf}
+Knuth-Morris-Pratt is an easy-to-code linear time string matching algorithm. Using the ``needle and haystack'' analogy, for a given needle of length $n$ and a haystack of length $m$, KMP takes $O(n)$ to preprocess the needle and $O(m)$ to search. Hariank and Corwin explain the algorithm well: \url{https://activities.tjhsst.edu/sct/lectures/1415/stringmatching_10_3_14.pdf}
 
 \section{Trie}
 
-\section{Suffix Data Structures}
+A trie (from re\emph{trie}val) is a data structure for storing strings that supports insertion and look-up in linear time. The trie maintains the strings in a rooted tree, where each vertex represents a prefix and each edge is labeled with a character. The prefix of a node $n$ is the string of characters on the path from the root to $n$. (In particular, the prefix of the root is the empty string.) Every string that is stored in the tree is represented by a path starting from the root. Below is a picture of a trie storing ``COW,'' ``MO,'' ``MOM,'' ``MOO,'' and ``MOP.''
+
+\begin{center}
+\begin{tikzpicture}[
+  very thick,
+  level 1/.style={sibling distance=42mm},
+  level 2/.style={sibling distance=30mm},
+  level 3/.style={sibling distance=24mm},
+  level 4/.style={sibling distance=18mm},
+  level distance=16mm,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    text width=8ex,
+    text centered
+  }
+]
+\node [myrect] {\vphantom{A}}
+child {
+  node [myrect] {C}
+  child {
+    node [myrect] {CO}
+    child {
+      node [myrect] {COW}
+      child {
+        node [myrect] {COW\$}
+        edge from parent [->] node [left] {\$}
+      }
+      edge from parent [->] node [left] {W}
+    }
+    child [missing]
+    edge from parent [->] node [left, xshift=-0.5mm] {O}
+  }
+  child [missing]
+  edge from parent [->] node [left, xshift=-1mm] {C}
+}
+child {
+  node [myrect] {M}
+  child {
+    node [myrect] {MO}
+    child {
+      node [myrect] {MO\$}
+      edge from parent [->] node [left, xshift=-3mm] {\$}
+    }
+    child {
+      node [myrect] {MOM}
+      child {
+        node [myrect] {MOM\$}
+        edge from parent [->] node [left, xshift=-1mm] {\$}
+      }
+      edge from parent [->] node [left, xshift=-1mm] {M}
+    }
+    child {
+      node [myrect] {MOO}
+      child {
+        node [myrect] {MOO\$}
+        edge from parent [->] node [left] {\$}
+      }
+      edge from parent [->] node [left] {O}
+    }
+    child {
+      node [myrect] {MOP}
+      child {
+        node [myrect] {MOP\$}
+        edge from parent [->] node [left] {\$}
+      }
+      edge from parent [->] node [right, xshift=2mm] {P}
+    }
+    edge from parent [->] node [left] {O}
+  }
+  edge from parent [->] node [right, xshift=1mm] {M}
+}
+;
+
+\end{tikzpicture}
+\end{center}
+
+Insertion into a trie is straightfoward. We start at the root, and create edges and vertices as necessary until a path representing the string is formed. If a vertex already has an edge of the corect character leading out from it, we just travel down that edge. In order to identify the end of a string, we can append a ``\$'' to every string before we insert. Searching is the same as insertion, except we terminate our search when we can't go any further instead of adding a new edge. 
+
+What we've seen so far doesn't make the trie seem particularly useful---string insertion and look up can be easily done in linear time with Rabin-Karp and a hash table as well. The advantage of the trie comes from its tree structure. Having common prefixes bundled together on the same path means we can compute compute information relating to prefixes easily. This allows for tree DPs that we wouldn't be able to do with hashing. (However, hashing does handle certain forms of prefix queries well, such as longest common prefix.)
+
+Tries are also a building block for other string data structures, such as the Aho-Corasick automaton and the suffix tree. (In fact, tries can be viewed as a very simple form of string automaton.)
+
+\section{Suffix Array}
+
+For a string of length $n$, each index $i$ ($0 \le i < n$) can represent the suffix that starts at that index. A \emph{suffix array} is a list of these indices, sorted in lexicographically increasing order by suffix. Thus a suffix array is essentially a sorted list of the suffixes of a string. Below is the suffix array of ``mississippi\$.''
+
+\begin{center}
+  \begin{tabular}{r | l}
+    Suffix Array & Suffix \phantom{moooooooooo} \\ \hline
+    11 & \$ \\
+    10 & i\$ \\
+    7 & ippi\$ \\
+    4 & issippi\$ \\
+    1 & ississippi\$ \\
+    0 & mississippi\$ \\
+    9 & pi\$ \\
+    8 & ppi\$ \\
+    6 & sippi\$ \\
+    3 & sissippi\$ \\
+    5 & ssippi\$ \\
+    2 & ssissippi\$ \\
+  \end{tabular}
+\end{center}
+
+At first, it might seem surprising that such a structure is useful---why do we care about suffixes at all? The crucial observation is that every substring of a string is a prefix of a suffix. Thus if we have something that does well with prefixes, such as hashing or a trie, we use this to compute information about substrings. A trie built from suffixes is known as a \emph{suffix tree}, which we'll cover later. In this section, we'll go over what we can do with hashing and a suffix array.
+
+First, let's figure out how we can construct a suffix array. The naive solution is to sort all $n$ suffixes using $O(n)$ string comparison. Since sorting itself takes $O(n \log n)$ comparisons, we have an $O(n^2 \log n)$ algorithm. However, with hashing and binary search, we can lexicographically compare two strings in $O(\log n)$ time. We do this by binary searching for the longest common prefix and then comparing the next character. We can can compute the hash of any substring with a polynomial hash, so it's easy to compare if the prefixes of two suffixes (a.k.a two substrings) are equal. Now that we have $O(\log n)$ comparison, our algorithm runs in $O(n \log^2 n)$ overall.
+
+Note that it is also possible to compute suffix arrays in $O(n \log n)$ and even $O(n)$, but these algorithms are much more involved. For the purposes of contests, an $O(n \log^2 n)$ suffix array algorithm should almost always be enough.
+
+With a suffix array, we can check if any queried ``needle'' string exists using a binary search with hashing. We can even count the number of occurences by binary searching for the first and last macth. This works in $O(m + \log n \log m)$, where $m$ is the length of the needle, because we need $O(\log m)$ operations for string comparison and $O(\log n)$ iterations of the binary search. Suffix arrays differ from KMP because KMP preprocesses the ``needle,'' while suffix arrays preprocess the ``haystack.'' 
+
+From the suffix array, we can also obtain another useful data structure called the \emph{LCP array}. This array stores the longest common prefix between adjacent suffixes in the suffix array. We can use it to speed up pattern matching to $O(m + \log n)$. In addition, we can build a segment tree over the LCP array to answer queries, such as the LCP between two arbitrary suffixes.
+
+To handle multiple strings with suffix arrays, we can either concatenate them with separator characters in between or separately compute their hashes.
+
+Below is a short C++ code for computing suffix arrays. Look up lambda functions in C++ if you're not familiar with the syntax.
+
+\begin{mylstlisting}[language=C++]
+typedef unsigned long long ull;
+// We use A as the exponent and M as the mod for our hash.
+const ull M = 1000000007;
+const ull A = 127;
+
+void build(string S, int *sa){
+  // Builds a suffix array for a string S in array sa.
+  S.push_back('$');
+  int N = S.size();
+  ull P[N + 1], H[N + 1];
+  P[0] = 1; // P stores the precomputed powers of A.
+  H[0] = 0; // H stores the prefix hashes of S.
+  for(int i = 0; i < N; i++){
+    // Precomputing powers and hashes.
+    P[i + 1] = A * P[i] % M;
+    H[i + 1] = (A * H[i] + S[i]) % M;
+    sa[i] = i;
+  }
+  auto f = [&](int a, int l){
+    // Returns the hash of the substring starting at index a with length l.
+    return (H[a + l] - H[a] * P[l] % M + M) % M;
+  };
+  auto comp = [&](int a, int b){
+    // Compares the suffixes starting at indices a and b.
+    int lo = 0, hi = min(N - a, N - b);
+    while(lo + 1 < hi){
+      int m = (lo + hi) / 2;
+      (f(a, m) == f(b, m) ? lo : hi) = m;
+    }
+    return S[a + lo] < S[b + lo];
+  };
+  sort(sa, sa + N, comp);
+}
+\end{mylstlisting}
+
+\section{Aho-Corasick}
+
+One way to think about the Aho-Corasick algorithm is KMP on a trie. This algorithm is used for matching multiple needles in a single haystack in linear time. To do this, we first add all strings to a trie that stores some extra information at its nodes. Upon inserting each string, we mark the last node visited as a endpoint node. Each node, in addition to storing its children and its status as an endpoint node, stores a \emph{suffix link}. This link points to the longest proper suffix that is also a node on the trie. If necessary, each node can also store a \emph{dictionary suffix link}, which points to the first endpoint node reachable by only following suffix links.
+
+To build an Aho-Corasick automaton, we start with a trie of the needle strings. What we want to do is compute the suffix links. We simplify this by using an $O(nk)$ approach, where $k$ is the alphabet size. For each node $n$, we compute an additional failure function, with one value corresponding to each letter of the alphabet. Suppose $p$ is the prefix represented by $n$. Then the failure function of $n$ for the letter $\alpha$ points to the node representing longest suffix of $p + \alpha$ in the trie.
+
+We can compute all of this with a BFS. When we are at a node, we can find the suffix links of its children using the failure function of its own suffix link. We also have to calculate the node's own failure function. For every letter that has a corresponding child, its failure function is equal to that child. Otherwise, its failure function is equal to the corresponding failure function of the node's suffix link. Take a moment to think through why this works.
+
+To query, we can iterate through our haystack string character by character and make the corresponding moves in the automaton. We follow the failure function when no child exists. However, note that there isn't really a distinction between a normal trie edge and a failed edge anymore. To check for matches, we can look at the values we store at each node and/or follow dictionary suffix links. Here's an implementation of Aho-Corasick in C++ without dictionary suffix links:
+
+\begin{mylstlisting}[language=C++]
+const int SIGMA = 26;
+const int MAXN = 100005;
+// Each node is assigned an index where its data is stored.
+// ch first stores the children of each node and later the failure function.
+// val counts the number of strings ending at a given node.
+// link stores suffix links.
+int ch[MAXN][SIGMA], val[MAXN], link[MAXN], sz = 1;
+// Array q is a hand-implemented queue.
+// h and t point to the head and tail, respectively.
+int q[MAXN], h, t;
+
+void add(string s){
+  // Adds a string to the trie.
+  int p = 0; // p tracks our current position and starts at 0, the root.
+  for(int i = 0; i < s.size(); i++){
+    int c = s[i] - 'A';
+    // ch[p][c] is 0 if null, so we have to allocate a new node/index.
+    if(!ch[p][c]) ch[p][c] = sz++;
+    p = ch[p][c];
+  }
+  val[p]++; // Updates endpoint marker.
+}
+
+void build(){
+  // Computes all suffix links with a BFS, starting from the root.
+  h = t = 0;
+  q[t++] = 0;
+  while(h < t){
+    int v = q[h++], u = link[v];
+    val[v] += val[u]; // Propagates endpoint marker.
+    for(int c = 0; c < SIGMA; c++){
+      if(ch[v][c]){
+        // If child exists, we create a suffix link. 
+        // The node's failure function here is the child.
+        // Also, note that we have a special case if v is the root.
+        link[ch[v][c]] = v ? ch[u][c] : 0;
+        q[t++] = ch[v][c];
+      } else {
+        // Otherwise, we need to figure out its failure function.
+        // We do this by using the failure function of the node's suffix link.
+        ch[v][c] = ch[u][c];
+      }
+    }
+  }
+}
+\end{mylstlisting}
+
+\section{Advanced Suffix Data Structures}
+
+I've yet to see these used in a contest, but they do exist. 
 
 \subsection{Suffix Tree}
 
-\subsection{Suffix Array}
-
-\section{Aho-Corasick}
+\subsection{Suffix Automaton}
 
