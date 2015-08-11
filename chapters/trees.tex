@@ -19,15 +19,14 @@ We'll define a few more terms for rooted trees. An \emph{ancestor} of a vertex $
 
 DFS is a very useful technique for collecting information about the structure of a tree. For example, we can compute in linear time the depth of each node, the size of each subtree or the diameter of the entire tree. This can be done by recursively computing results for each subtree, and then combining this data to obtain the final result. Sometimes, it takes more than one DFS to collect all the necessary information. Calculating node depth and subtree size via DFS is relatively straightforward. Below is a snippet of pseudocode computing these two sets of values.
 
-\begin{algorithm}[H]
-\caption{DFS on a Tree}
+\noindent \begin{minipage}{\textwidth}
 \begin{algorithmic}
-\State $sum(v)$ is size of the subtree rooted at vertex $v$
-\State $depth(v)$ is the depth of vertex $v$
 \Function{DFS}{$v$, $p$}
   \Comment{$v$ is the current vertex, $p$ is its parent}
   \State $sum(v) \gets 1$
+  \Comment $sum(v)$ is size of the subtree rooted at vertex $v$
   \State $depth(v) \gets depth(p) + 1$
+  \Comment $depth(v)$ is the depth of vertex $v$
   \ForAll{vertices $n$ adjacent to $v$}
     \If{$n \neq p$}
       \State \Call{DFS}{$n$, $v$}
@@ -36,7 +35,7 @@ DFS is a very useful technique for collecting information about the structure of
   \EndFor
 \EndFunction
 \end{algorithmic}
-\end{algorithm}
+\end{minipage}
 
 Computing the diameter of a tree is a bit trickier. For a given tree, let $r$ be its root, and let $a$ be a vertex of maximum depth. It turns out that the diameter of the tree is the maximum distance between $a$ and any other vertex in the tree. (Try to prove this!) Thus we can run two DFSes to compute the diameter, calculating the depth of each vertex with each pass.
 
@@ -46,10 +45,18 @@ Depth, subtree size and diameter are only a few of the values we can compute for
 
 \emph{Jump pointers} are a technique for decomposing paths on rooted trees. The central idea is that we can always take a path and break it into $O(\log n)$ chunks of size $2^i$. By augmenting these smaller chunks with data, we can use jump pointers to quickly answer a variety of queries, including level ancestor and lowest common ancestor.
 
-Let's start with an example. The most fundamental application of jump pointers is to level ancestor queries---for any vertex $v$, we want to be able to find its $k$th ancestor in $O(\log n)$ time.To solve this problem, we precompute for each vertex a pointer to its $2^i$th ancestor for all possible values of $i$. These are the ``jump pointers'' for which this technique is named. If our tree has $n$ vertices, then each vertex has at most $\lfloor \log_2 n \rfloor$ pointers leading out from it. Thus we have at most $O(n \log n)$ jump pointers in total. The following pseudocode shows how to compute jump pointers for a tree in $O(n \log n)$ time.
+Let's start with an example. The most fundamental application of jump pointers is to level ancestor queries---for any vertex $v$, we want to be able to find its $k$th ancestor in $O(\log n)$ time.To solve this problem, we precompute for each vertex a pointer to its $2^i$th ancestor for all possible values of $i$. These are the ``jump pointers'' for which this technique is named. If our tree has $n$ vertices, then each vertex has at most $\lfloor \log_2 n \rfloor$ pointers leading out from it. Thus we have at most $O(n \log n)$ jump pointers in total. We can compute these with a DP in $O(n \log n)$.
+
+Using jump pointers, we can finish the level ancestor problem. Let $2^i$ be the largest power of 2 that is at most $k$. We use our jump pointers to obtain $u$, the $2^i$th ancestor of $v$. If $2^i$ is not equal to $k$, we can jump up again from $u$. Continuing recursively, we'll finish in $O(\log n)$ iterations, since we reduce $k$ by at least a factor of 2 each time.
+
+Now we'll tackle lowest common ancestor queries. The lowest common ancestor (LCA), $l$, of two vertices $u$ and $v$ is the deepest vertex that is an ancestor of both $u$ and $v$. LCA queries are especially useful because any path on a rooted tree can be broken into two shorter paths joined at the LCA of its endpoints.
+
+The solution of the LCA problem with jump pointers consists of two steps. The first step involves bringing the two queried vertices to the same depth. If we are looking for the LCA of $u$ and $v$, we can assume that $depth(u) > depth(v)$ without loss of generality. Let $u'$ be the ancestor of $u$ satisfying $depth(u') = depth(v)$. We can compute $u'$ with a single level ancestor query in $O(\log n)$ time. If $u' = v$, then we are done.
+
+Otherwise, if $u' \neq v$, we can find the LCA of $u'$ and $v$ by advancing them towards the root in increments of $2^i$ in a binary-search-like manner. If the $2^i$th ancestors of $u'$ and $v$ are distinct, then the LCA of $u'$ and $v$ is equal to the LCA of the $2^i$th ancestors of $u'$ and $v$. Thus, iterating down from the largest power of 2 less than $n$, we can move $u'$ and $v$ up the tree until they share a parent. This common parent is the LCA of $u$ and $v$. Since jump pointers allow us to access the $2^i$th ancestor of a vertex in $O(1)$, our algorithm runs in $O(\log n)$ time.
 
 \begin{algorithm}[H]
-\caption{Jump Pointers}
+\caption{Jump Pointers, Level Ancestor and LCA}
 \begin{algorithmic}
 \Function{BuildJumpPointers}{$V$, $par$}
   \Comment{Initially, $par(0, v)$ holds the parent of vertex $v$.}
@@ -60,20 +67,6 @@ Let's start with an example. The most fundamental application of jump pointers i
     \EndFor
   \EndFor
 \EndFunction
-\end{algorithmic}
-\end{algorithm}
-
-With jump pointers, we can now finish the level ancestor problem. Let $2^i$ be the largest power of 2 that is at most $k$. We use our jump pointers to obtain $u$, the $2^i$th ancestor of $v$. If $2^i$ is not equal to $k$, we can jump up again from $u$. Continuing recursively, we'll finish in $O(\log n)$ iterations, since we reduce $k$ by at least a factor of 2 each time.
-
-Now we'll tackle lowest common ancestor queries. The lowest common ancestor (LCA), $l$, of two vertices $u$ and $v$ is the deepest vertex that is an ancestor of both $u$ and $v$. LCA queries are especially useful because any path on a rooted tree can be broken into two shorter paths joined at the LCA of its endpoints.
-
-The solution of the LCA problem with jump pointers consists of two steps. The first step involves bringing the two queried vertices to the same depth. If we are looking for the LCA of $u$ and $v$, we can assume that $depth(u) > depth(v)$ without loss of generality. Let $u'$ be the ancestor of $u$ satisfying $depth(u') = depth(v)$. We can compute $u'$ with a single level ancestor query in $O(\log n)$ time. If $u' = v$, then we are done.
-
-Otherwise, if $u' \neq v$, we can find the LCA of $u'$ and $v$ by advancing them towards the root in increments of $2^i$ in a binary-search-like manner. If the $2^i$th ancestors of $u'$ and $v$ are distinct, then the LCA of $u'$ and $v$ is equal to the LCA of the $2^i$th ancestors of $u'$ and $v$. Thus, iterating down from the largest power of 2 less than $n$, we can move $u'$ and $v$ up the tree until they share a parent. This common parent is the LCA of $u$ and $v$. Since jump pointers allow us to access the $2^i$th ancestor of a vertex in $O(1)$, our algorithm runs in $O(\log n)$ time.
-
-\begin{algorithm}[H]
-\caption{Level Ancestor and LCA}
-\begin{algorithmic}
 \Function{LevelAncestor}{$u$, $k$}
   \ForAll{i from $\lfloor \log_2 n \rfloor$ to 0}
     \If{$2^i \le k$}

@@ -2716,12 +2716,15 @@ For example, to remove elements indexed in the range $[i, j]$, we split at index
 
 \subsection{Treap}
 
-A treap is a binary search tree smushed together with a heap. Each node stores, in addition to its key, a random \emph{priority}. The priorities in a treap always satisfy the \emph{heap property}: for any node, its priority is greater than the priority of either of its children. The diagram below illustrates a treap. On each node, the letter is the node's key and the number is the node's priority.
+A treap is a binary search tree smushed together with a heap. Each node is assigned, in addition to its key, a random \emph{priority}. The priorities in a treap always satisfy the \emph{heap property}: for any node, its priority is greater than the priority of either of its children. The diagram below illustrates a treap. On each node, the letter is the node's key and the number is the node's priority.
 
 \begin{center}
 \begin{tikzpicture}[
   very thick,
-  sibling distance=15mm,
+  level 1/.style={sibling distance=27mm},
+  level 2/.style={sibling distance=18mm},
+  level 3/.style={sibling distance=12mm},
+  level 4/.style={sibling distance=8mm},
   myrect/.style={
     draw,
     fill=myseagreen,
@@ -2731,28 +2734,41 @@ A treap is a binary search tree smushed together with a heap. Each node stores, 
     text centered
   }
 ]
-\node [myrect] {$D$ \nodepart{two} 8}
+\node [myrect] {$E$ \nodepart{two} 9}
 child {
-  node [myrect] {$B$ \nodepart{two} 3}
+  node [myrect] {$D$ \nodepart{two} 6}
   child {
-    node [myrect] {$A$ \nodepart{two} 1}
-    child [missing]
-    child [missing]
+    node [myrect] {$B$ \nodepart{two} 4}
+    child {
+      node [myrect] {$A$ \nodepart{two} 1}
+      child [missing]
+      child [missing]
+    }
+    child {
+      node [myrect] {$C$ \nodepart{two} 2}
+      child [missing]
+      child [missing]
+    }
   }
-  child {
-    node [myrect] {$C$ \nodepart{two} 2}
-    child [missing]
-    child [missing]
-  }
+  child [missing]
 }
 child {
-node [myrect] {$E$ \nodepart{two} 5}
-child [missing]
+  node [myrect] {$H$ \nodepart{two} 8}
+  child {
+    node [myrect] {$F$ \nodepart{two} 5}
+    child [missing]
+    child {
+      node [myrect] {$G$ \nodepart{two} 3}
+    }
+  }
+  child {
+    node [myrect] {$I$ \nodepart{two} 7}
+  }
 };
 \end{tikzpicture}
 \end{center}
 
-The randomness in each node's priority balances the treap. We can gain some intuition for how this works by looking at how a treap is built. Consider an array containing pairs of key and priority, sorted by key. To construct a treap from these values, we first take the element with the highest priority and set it as the root. We can then recurse on the two halves of the array split by the root, and construct the root's left and right subtrees in a similar way. Because the priority of each node is randomly chosen, we effectively choose a random element as the root each time we recurse.
+The randomness in each node's priority balances the treap. We can gain some intuition for why this works by looking at how a treap is built. Consider an array containing pairs of key and priority, sorted by key. To construct a treap from these values, we first take the element with the highest priority and set it as the root. We can then recurse on the two halves of the array split by the root, and construct the root's left and right subtrees in a similar way. Because the priority of each node is randomly chosen, we effectively choose a random element as the root each time we recurse.
 
 Like quicksort, we can expect that the root doesn't always split the tree too unevenly and obtain a $O(\log n)$ bound on the expected depth of each node. Moreover, it is possible to show that the entire tree has a depth of $O(\log n)$ with high probability. This analysis means that a treap is as good complexity-wise as any other deterministic BBST for all practical purposes. (To do the first part more rigorously, we can let $A_{i,j}$ be an indicator random variable representing whether the $j$th node is an ancestor of the $i$th node. What is the expected value of $\sum_{j=1}^n A_{i,j}$?) 
 
@@ -2803,7 +2819,7 @@ void insert(node *&t, int k){
 
 We can also create an \emph{implicitly keyed} treap, which functions as a dynamic array. Instead of storing keys, each node stores the size of its subtree. We can then define the \emph{implicit key} of a node as its position in the in-order traversal of the treap, a value we can easily compute from subtree sizes. Modifying \texttt{split} to operate based on the implicit key allows us to rearrange parts of the array and insert new elements anywhere. Further augmentation allows us to perform range queries as well. And if we add lazy propagation, we can also support operations that modify ranges.
 
-Here's an example of an implicitly keyed treap that supports reversal of subarrays. In \texttt{node}, \texttt{s} maintains the size of its subtree, and \texttt{f} is a flag that indicates reversal. We use \texttt{push} and \texttt{pull} to propagate data down and up the treap, respectively. Also, note the difference in the implementation of \texttt{split}.
+Here's an example of an implicitly keyed treap that supports reversal of subarrays. In \texttt{node}, \texttt{s} maintains the size of its subtree, and \texttt{f} is a flag that indicates reversal. We use \texttt{push} and \texttt{pull} to propagate data down and up the treap, respectively. Note the difference in the implementation of \texttt{split}.
 
 \begin{mylstlisting}[language=C++]
 struct node {
@@ -2848,6 +2864,7 @@ void merge(node *&t, node *l, node *r){
 }
 
 void reverse(node *t, int l, int r){
+  // Reverses the range [l,r].
   node *a, *b;
   split(t, t, b, r + 1);
   split(t, t, a, l);
@@ -2856,7 +2873,5 @@ void reverse(node *t, int l, int r){
   merge(t, t, b);
 }
 \end{mylstlisting}
-
-\section{Fractional Cascading}
 
 \section{Sweep Line}
