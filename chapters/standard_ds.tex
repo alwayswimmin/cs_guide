@@ -1,30 +1,34 @@
-\chapter{Java Standard Library Data Structures}
+\chapter{Standard Library Data Structures}
 
 The purpose of this chapter is to provide an overview on how the most basic and useful data structures work. The implementations of most higher-level languages already coded these for us, but it is important to know how each data structure works rather than blindly use the standard library.
 
-More technical explanations of all of these can be found, mostly under the package \texttt{java.util}, in the \href{https://docs.oracle.com/javase/8/docs/api/}{Java API}.
+More technical explanations of all of these can be found in a language's API. For Java, this is mostly under the package \texttt{java.util}, in the \href{https://docs.oracle.com/javase/8/docs/api/}{Java API}.
 
 I strongly believe that Java is better than C++ for beginning programmers. It forces people into good coding habits, and though the lack of pointers initially frustrated me, it really does make learning general concepts liked LinkedLists much easier, as the intricacies of the C++ pointer no longer distract from the larger idea.
 
 \section{Generics}
 
-You may or may not have seen these used before:
-\begin{verbatim}
-ArrayList<Integer> al = new ArrayList<Integer>();
-\end{verbatim}
-This means that \texttt{al} is an ArrayList of Integers. We can only add Integers into the ArrayList, and anything removed from the ArrayList is guaranteed to be an Integer. I don't think the beginning programmer needs to know how to necessarily code a class that supports generics. However, you are going to use the standard library, so you should know how to use a class that does support generics. I think standard classes are relatively straightforward to use but can be annoying to actually implement.
+In general, a data structure can store any kind of data, ranging from integers to strings to other data structures. We therefore want to implement data structures that can hold any and all kinds of information. When we use a data structure, however, we might want our structure to store only one kind of information: only strings, for example, or only integers. We use \textit{generics} to specify to an external structure that we only want it to store a particular kind of information.
 
-\textit{For simplicity, all data structures in this chapter will store Strings.}
+\begin{mylstlisting}
+ArrayList<Integer> al = new ArrayList<Integer>();
+\end{mylstlisting}
+
+This means that \texttt{al} is an ArrayList of Integers. We can only add Integers into the ArrayList, and anything removed from the ArrayList is guaranteed to be an Integer. We can write \texttt{Integer i = al.get(0)} without any need to cast to an Integer.
+
+I don't think the beginning programmer needs to know how to necessarily code a class that supports generics, since each language has its own complex set of rules governing generics. However, we use the standard library extensively in any coding environment, so it is necessary to use a class that does support generics. I think standard classes are relatively straightforward to use but can be annoying to actually implement.
+
+When examining a language's API or explanations of implemented functions in this chapter, the characters \texttt{E}, \texttt{V}, and \texttt{K} represent generic classes. For example, when we set \texttt{al = new ArrayList<Integer>()}, \texttt{E} represents \texttt{Integer}. Otherwise, \texttt{E} simply means any object.
 
 \section{List}
 
 A List is a collection of objects with an ordering. Users of a list have control over where in the list each object is and can access a specific element by its index, like in an array.
 
-\subsection{ArrayList}
+\subsection{Size-Adjustable Array}
 
 What is nice about an array? We can access or change any element we want in the array in $O(1)$ time. The problem is that an array has fixed length. It's not easy to append an element to the end of an array.
 
-The fix to this is pretty simple. Why not just make a bigger array, and copy everything over to the new array? Then there's more room at the end to add a new element. This is the idea behind an ArrayList. If the backbone array runs out of space, we create a new array with double the size and keep going as if nothing happened.
+The fix to this is pretty simple. Why not just make a bigger array, and copy everything over to the new array? Then there's more room at the end to add a new element. If the backbone array runs out of space, we create a new array with double the size and keep going as if nothing happened.
 
 \begin{center}
 {
@@ -101,7 +105,7 @@ The fix to this is pretty simple. Why not just make a bigger array, and copy eve
 
 We see that there is still room in the array to add \texttt{"c"}, but to add more elements to the list, we must use a new array with double the length.
 
-It's important to note that any given insertion to the ArrayList is either $O(n)$ or $O(1)$, but there is only one $O(n)$ insertion for every $O(n)$ $O(1)$ insertions, so we still average out to constant time.
+It's important to note that any given insertion to the structure is either $O(n)$ or $O(1)$, but there is only one $O(n)$ insertion for every $O(n)$ $O(1)$ insertions, so we still average out to constant time.
 
 \begin{itemize}
 
