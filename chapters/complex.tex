@@ -602,9 +602,9 @@ void update(int i, int l, int r, int p, int k) {
 }
 \end{mylstlisting}
 
-Mathematically, what allows the segment tree to work on the addition operation lies in the fact that addition is an associative operation. This means that we can support a wide variety of other kinds of range queries, so long as the operation is associative. For example, we can also support range minimum queries and $gcd$ and $lcm$ queries.
+Mathematically, what allows the segment tree to work on the addition operation lies in the fact that addition is an associative operation. This means that we can support a wide variety of other kinds of range queries, so long as the operation is associative. For example, we can also support range minimum queries and $gcd$ and $lcm$ queries. We can even combine different types of information stored at a node. One situation that requires this is maintaining the maximum prefix sum.
 
-For this simple problem, we don't need the nice, completely balanced structure present when the number of elements is a nice power of two. However, it is necessary if we want to force the array $sum[]$ to have the same nice properties as an actual heap so we can perform nice iterative operations on our tree, as previously, all tree operations were recursive. It is also necessary if we need the numbers representing the indices in our tree to have special properties, as in the Fenwick tree.
+For our simple range sum query problem, we don't need the nice, completely balanced structure present when the number of elements is a nice power of two. However, it is necessary if we want to force the array $sum[]$ to have the same nice properties as an actual heap so we can perform nice iterative operations on our tree, as previously, all tree operations were recursive. It is also necessary if we need the numbers representing the indices in our tree to have special properties, as in the Fenwick tree.
 
 \subsection{Fenwick Tree}
 
@@ -2880,3 +2880,60 @@ void reverse(node *t, int l, int r){
 \end{mylstlisting}
 
 \section{Sweep Line}
+
+Oftentimes when trying to solve geometry problems, or combinatorial problems that we give a geometric interpretation, we have something that involves one or two dimensions. If this is difficult to deal with directly, we can use a sweep line to reduce the dimension of the problem.
+
+Sweeplines are best explained with an example. Suppose we're given several intervals on the number line, and we want to find the length of their union. If we wanted to, we could use a segment tree with lazy propagation to insert the intervals and calculate the total length. However, a sweep line gives us a much easier approach. Imagine a vertical beam of light sweeping from $-\infty$ to $\infty$ on the number line. At any given time, we keep track of the number of intervals that are hit by this beam. This takes the problem from one dimension to zero dimensions. Our answer is then the length over which our beam hit a positive number of intervals.
+
+Our implementation of a sweep line simulates this process. If we sort the endpoints of our intervals by their positions on the number line, we can simply increment our counter each time we encounter a ``start'' endpoint and decrement our counter each time we encounter an ``end'' endpoint. We can look at the regions between consecutive endpoints, and add to our result if our counter is positive in that region.
+
+\begin{center}\begin{tikzpicture}
+  \coordinate (A) at (2,1);
+  \coordinate (B) at (6,1);
+  \coordinate (C) at (0,2);
+  \coordinate (D) at (3,2);
+  \coordinate (E) at (5,2);
+  \coordinate (F) at (7,2);
+  \coordinate (G) at (1,3);
+  \coordinate (H) at (5,3);
+  \draw[fill] (A) circle [radius=2pt];
+  \draw[fill] (B) circle [radius=2pt];
+  \draw[fill] (C) circle [radius=2pt];
+  \draw[fill] (D) circle [radius=2pt];
+  \draw[fill] (E) circle [radius=2pt];
+  \draw[fill] (F) circle [radius=2pt];
+  \draw[fill] (G) circle [radius=2pt];
+  \draw[fill] (H) circle [radius=2pt];
+  \draw[ultra thick] (A) -- (B);
+  \draw[very thick] (C) -- (D);
+  \draw[very thick] (E) -- (F);
+  \draw[ultra thick] (G) -- (H);
+
+  \draw[<->] (-1,0) -- (8,0);
+  \foreach \x in {0, 1, 2, 3, 4, 5, 6, 7}
+  \draw[shift={(\x,0)}] (0,3pt) -- (0,-3pt);
+
+  \draw[<->, very thick, dashed, color=red] (3.75,-1) -- (3.75,4);
+\end{tikzpicture}\end{center}
+
+One other way to interpret sweep lines is to consider time as the dimension we sweep along. For the example above, this would mean that each interval appears and then disappears on our beam, existing only when the time is between its endpoints. Although time may not seem useful for our one dimensional problem, this type of thinking helps in higher dimensions. 
+
+Most sweep lines that you use won't be as simple as this. Sweepline problems usually involve reducing a two dimensional problem to a one dimensional problem and require maintaining data structures such as BBSTs or segment trees along that dimension. This technique also generalizes to higher dimensions---to solve a three dimensional problem, we can sweep along one dimension and use two dimensional data structures to maintain the other two dimensions.
+
+To finish, let's go over another example, Cow Rectangles from USACO 2015 January:
+
+\texttt{
+\fontdimen2\font=0.4em% interword space
+\fontdimen3\font=0.2em% interword stretch
+\fontdimen4\font=0.1em% interword shrink
+\fontdimen7\font=0.1em% extra space
+\hyphenchar\font=`\-% allowing hyphenation
+The locations of Farmer John's $N$ cows ($1 \le N \le 500$) are described by distinct points in the 2D plane. The cows belong to two different breeds: Holsteins and Guernseys. Farmer John wants to build a rectangular fence with sides parallel to the coordinate axes enclosing only Holsteins, with no Guernseys (a cow counts as enclosed even if it is on the boundary of the fence). Among all such fences, Farmer John wants to build a fence enclosing the maximum number of Holsteins. And among all these fences, Farmer John wants to build a fence of minimum possible area. Please determine this area. A fence of zero width or height is allowable.}
+
+The first observation we should make is that we want a Holstein on every side of the fence. Otherwise, we would be able to decrease the area of our fence without decreasing the number of Holsteins. Even with our observation, this problem still seems hard to deal with. We can make it easier by adding another constraint: Suppose we knew which Holstein was on the leftmost boundary of our fence. Since we added the constraint to the $x$-dimension, we naturally want to figure out where our rightmost Holstein is next. We can do this with a sweep line moving to the right.
+
+The reason we want a sweep line here is because for any given rightmost cow, we want to know information about the Guernseys and Holsteins inbetween. With a sweep line, we can collect and maintain all this data by processing the cows from left to right. For example, whenever we see a Guernsey, we have to limit the $y$-coordinates that our Holsteins can take. And whenever we see a Holstein, we have to consider this Holstein as our rightmost cow and also store it in case we include it in a fence later on.
+
+What remains is to find an appropriate data structure to track all this. A set data structure (STL set or Java TreeMap) turns out to be enough. We can insert the Holsteins, sorted by $y$-coordinate, and delete one whenever any rectangle bounded by that Holstein, the leftmost Holstein, and our sweep line includes a Guernsey. Thus we take $O(n \log n)$ time to sweep, giving us an $O(n^2 \log n)$ solution overall.
+
+This type of analysis is pretty representative of sweep line problems. Whether you're given rectangles, line segments or even polygons, you want to think about how you can reduce the dimension and obtain a tractable problem. Note that sweep lines don't always have to be along some axis. Radial sweep lines (sweeping by rotating) and sweeping at an angle (rotating the plane by $45^\circ$) also work. 
