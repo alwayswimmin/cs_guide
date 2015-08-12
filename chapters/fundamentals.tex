@@ -32,11 +32,45 @@ public static void main(String args[]) throws IOException {
 
 Although more efficient methods of I/O exist, such as BufferedReader and BufferedWriter, what's covered here should be sufficient for now. (It's possible to read in $10^5$ integers with Scanner in a fraction of a second.)
 
-Now that we can read and write, let's move on to one of the most basic subroutines in computer science: sorting. 
+\section{Complexity}
 
-\section{Comparable}
+Before we start computing contests, we should understand what the problems on these contests are trying to test. One class of problems, called \emph{implementation problems}, assesses your ability write code quickly and accurately. These problems are only common in easier contests, since they usually don't involve too much thinking or creativity---you just have to implement what's written in the problem statement. Most competitive programming problems ask you to come up with a clever algorithm instead, testing speed and memory efficiency.
 
-We'll start by taking a look at how Java sorts objects. In \texttt{java.util.Arrays}, there is a built-in sort method, \texttt{Arrays.sort()}, which takes an array and sorts it. If we want to sort an array of our own objects, we have to first implement the \texttt{Comparable} interface. This is how Java orders a set of objects. Implementing \texttt{Comparable} requires support of the method \texttt{int compareTo(Object o)}. If \texttt{a.compareTo(b) < 0}, then \texttt{a} comes before \texttt{b}; if \texttt{a.compareTo(b) > 0}, then \texttt{a} comes after \texttt{b}; if \texttt{a.compareTo(b) == 0}, then \texttt{a} is considered equal to \texttt{b}. (\texttt{a.compareTo(b) == 0} should be equivalent to \texttt{a.equals(b)}.) For example, consider the following \texttt{class MyPair}:
+To analyze the efficiency of algorithms, computer scientists use a concept called \emph{complexity}. Complexity is measured as a function of the input size; an algorithm could require $3n$, $n^4/3$ or even $2^n + n^2$ steps to finish calculating for an input of size $n$. To express complexity, we use something called ``big-O notation.'' Essentially, we write the number of steps it takes for an algorithm to finish inside a pair of parentheses with an $O$ in front, like this: $O(\text{\# of steps})$. However, we drop any constant factors and lower order terms from the expression.\footnote{Unfortunately, this isn't entirely accurate. Saying an algorithm is $O(f(n))$ actually means it takes \emph{at most} $c\cdot f(n)$ steps to finish, for a sufficiently large constant $c$.} I'll explain why in a moment; let's look at some examples for now. 
+
+Suppose we have three programs that require $3n$, $n^4/3$ and $2^n + n^2$ steps to finish, respectively. The complexity of the first program is $O(n)$ because we don't care about the constant factor $3$ on the $3n$. The complexity of the second program is $O(n^4)$; again, we drop the constant. For the last program, we write its complexity as $O(2^n)$ because $n^2$ is a lower order term.
+
+As to why we drop the constants and the lower order terms, consider the first two programs from above. When $n=300$, the first program takes $900$ steps, while the second program takes $2,700,000,000$ steps. The second program is much slower, despite a smaller constant factor. Meanwhile, if we had a third program that runs in $5n$ steps, it would still only take $1,500$ steps to finish. Constant factors become pretty much irrelevant when we're comparing functions that grow at different rates. The same can be said about lower order terms: $n^2$ gets dwarfed by $2^n$ even when $n=10$.
+
+Thus in programming contests, we usually want a program with the correct complexity, without worrying about too much constant factors. Complexity will be the difference between whether a program gets \textbf{\color{green}accepted} or \textbf{\color{red}time limit exceeded}. As a rule of thumb, a modern processor can do around $10^8$ computations each second. When you plug the maximum possible $n$ into the complexity of your algorithm, it should never be much more than that.
+
+We've focused on time and haven't talked much about memory so far, but memory does gets tested. The amount of memory a program uses as a function of $n$ is called its \emph{space complexity}, as opposed to the \emph{time complexity} we discussed earlier. Space complexity however, shows up much less frequently than time complexity. One of the reasons is that you usually run out of time before you can exceed the memory limit.
+
+\section{Sorting}
+
+To further explore the concept of complexity, we will use sorting algorithms as a case study. Sorting is just as it sounds---we're given a collection of objects, and we want to sort them into a predefined order.
+
+\subsection{Insertion Sort}
+
+Insertion sort builds up a sorted list by inserting new elements one at a time. Inserting an element into a sorted list takes time proportional to the length of the list, so the runtime of this algorithm is $1 + 2 + 3 + \cdots + n$, which is $O(n^2)$. One way to think about this is to iterate $i$ from $1$ to $n$, and let the first $i$ elements be our sorted list. To insert the $(i+1)$th element, we just swap it with the largest, the second largest, and so on, until it's greater than than the next largest element. Then we have a sorted list in the first $(i+1)$ entries of the array. Insertion sort, despite being slower than merge sort and quicksort, is still useful because of its efficiency on small inputs. Many implementations of merge sort and quicksort actually use insertion sort once the problem size gets small.
+
+Around how long is the longest list that you can sort with insertion sort in less than a second?
+
+\subsection{Merge Sort}
+
+The idea behind merge sort is the following observation: If we are given two sorted lists of length $n/2$, we only need $n$ comparisons to merge them into one sorted list of length $n$. So we can divide and conquer. We do this by cutting the array in half, sorting each half recursively, and merging the two halves back together. Because our recursion goes $\log_2 n$ levels deep, this algorithm runs in $O(n \log n)$. Try to work out the details of this yourself. (You can in fact prove that $O(n \log n)$ comparisons is optimal for sorting algorithms, one of the few problems in computer science that has a non-trivial lower bound.)
+
+Around how long is the longest list that you can sort with merge sort in less than a second?
+
+\subsection{Quicksort}
+
+Quicksort also uses a divide and conquer strategy to run in $O(n \log n)$ on average.\footnote{A bound ``on average'' is also called an \emph{amortized bound}.} We first take a random element from the array, called the \emph{pivot}. Then, we move anything less than the pivot to the left of the array, anything greater than the pivot to the right of the array, and recurse on the two halves that we just created. We say that quicksort runs in $O(n \log n)$ only on average because there are cases that can make quicksort run in $O(n^2)$. What would happen if we chose the smallest element of the array as the pivot each time?
+
+Quicksort was previously implemented by \texttt{Arrays.sort()} and \texttt{Collections.sort()}, but Java now uses dual-pivot quicksort and timsort.
+
+\subsection{Comparable}
+
+We'll finish our section on sorting by taking a look at how Java sorts objects. In \texttt{java.util.Arrays}, there is a built-in sort method, \texttt{Arrays.sort()}, which takes an array and sorts it. If we want to sort an array of our own objects, we have to first implement the \texttt{Comparable} interface. This is how Java orders a set of objects. Implementing \texttt{Comparable} requires support of the method \texttt{int compareTo(Object o)}. If \texttt{a.compareTo(b) < 0}, then \texttt{a} comes before \texttt{b}; if \texttt{a.compareTo(b) > 0}, then \texttt{a} comes after \texttt{b}; if \texttt{a.compareTo(b) == 0}, then \texttt{a} is considered equal to \texttt{b}. (\texttt{a.compareTo(b) == 0} should be equivalent to \texttt{a.equals(b)}.) For example, consider the class \texttt{MyPair}:
 
 \begin{mylstlisting}
 class MyPair implements Comparable {
@@ -55,7 +89,7 @@ class MyPair implements Comparable {
 }
 \end{mylstlisting}
 
-We can clean this up a bit using generics:
+If you know generics (Section \ref{sec:generics}), we can clean this up a bit. Note that no casting is required anymore.
 
 \begin{mylstlisting}
 class MyPair implements Comparable<MyPair> {
@@ -71,33 +105,11 @@ class MyPair implements Comparable<MyPair> {
 }
 \end{mylstlisting}
 
-Note that no casting is required anymore.
-
-\section{Sorts}
-
-This section covers three of the more practical sorting algorithms.
-
-\subsection{Insertion Sort}
-
-Insertion sort builds up the sorted list by inserting new elements one at a time. Inserting an element into a sorted list takes time proportional to the length of the list, so the runtime of this algorithm is $O(n^2)$. This algorithm, despite being slower than merge sort and quicksort, is still useful because of its efficiency on small inputs. Many implementations of merge sort and quicksort actually use insertion sort once the problem size gets small.
-
-(The $O(n^2)$, called big-O notation, means our algorithm does at most $cn^2$ operations, for some constant $c$.)
-
-\subsection{Merge Sort}
-
-The idea behind merge sort is the following observation: If we are given two sorted lists of length $n/2$, we only need $n$ comparisons to merge them into one sorted list of length $n$. So we can divide and conquer. We do this by cutting the array in half, sorting each half recursively, and merging the two halves back together. Because our recursion goes $\log_2 n$ levels deep, this algorithm runs in $O(n \log n)$.
-
-\subsection{Quicksort}
-
-Quicksort also uses a divide and conquer strategy to achieve an $O(n \log n)$ amortized bound. We take a random element from the array, move anything less than it to the left of the array, anything greater than it to the right of the array, and recurse on the two halves that we just created.
-
-This was previously implemented by \texttt{Arrays.sort()} and \texttt{Collections.sort()}, but Java now uses dual-pivot quicksort and timsort.
-
 \section{Binary Search}
 
-Before we begin studying data structures, it is necessary to first understand some search techniques. Suppose we're given a list and we want to check if it contains some element. We can do this directly by looking at every element of the list in a \emph{linear search}.
+Before we begin studying data structures in Chapter \ref{chap:standard_ds}, it is necessary to first understand some search techniques. Suppose we're given a list and we want to check if it contains some element. We can do this directly by looking at every element of the list in a \emph{linear search}.
 
 One way we can make this faster is by imposing an ordering on the list. Then inserting elements becomes slower because we can no longer just pop the element to the the end of the list. However, if we are asked to find an element, we know roughly where to search because we can compare our element to other elements in the list. In fact, we only need to look at $O(\log n)$ elements to check if the queried element exists.
 
-Consider a sorted array that supports $O(1)$ access to any element. We can compare our queried element to the middle element of the array. Depending on whether our element is larger, smaller, or equal to the middle element, we'll be able to eliminate at least half of the array. Thus finding an element in a sorted array with \emph{binary search} is an $O(\log{n})$ operation. This can be done either iteratively or recursively.
+Consider a sorted array that supports $O(1)$ access to any element. We can compare our queried element to the middle element of the array. Depending on whether our element is larger, smaller, or equal to the middle element, we'll be able to eliminate at least half of the array. Thus finding an element in a sorted array with \emph{binary search} is an $O(\log{n})$ operation. We can implemented this either iteratively or recursively.
 
