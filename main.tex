@@ -2,6 +2,8 @@
 
 \usepackage{emptypage}
 
+\usepackage[T1]{fontenc}
+
 \usepackage[utf8x]{inputenc}
 \usepackage{listings}
 \usepackage{hyperref}
@@ -100,7 +102,11 @@
 
 \raggedbottom
 
-% \includeonly{chapters/complex}
+\usepackage{footnote}
+\makesavenoteenv{tabular}
+\makesavenoteenv{table}
+
+% \includeonly{chapters/standard_ds}
 
 \begin{document}
 
