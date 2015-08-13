@@ -54,10 +54,10 @@ Let's take a concrete example. Suppose we want to support two operations:
 
 \begin{itemize}
 \item
-$update(i, z)$ -- increment the value of $x_i$ by $z$
+$update(p, k)$ -- increment the value of $x_p$ by $k$
 
 \item
-$query(i, j)$ -- return $\sum_{k=i}^j x_k$.
+$query(a, b)$ -- return $\sum_{i=a}^b x_i$.
 \end{itemize}
 
 Suppose we simply stored the sequence in an array. $update$ then becomes an $O(1)$ operation, but $query$ is $O(n)$.

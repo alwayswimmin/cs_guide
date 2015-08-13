@@ -10,6 +10,10 @@ Jonathan Paulson gives a great introduction to polynomial hashing: \url{https://
 
 Knuth-Morris-Pratt is an easy-to-code linear time string matching algorithm. Using the ``needle and haystack'' analogy, for a given needle of length $n$ and a haystack of length $m$, KMP takes $O(n)$ to preprocess the needle and $O(m)$ to search. Hariank and Corwin explain the algorithm well: \url{https://activities.tjhsst.edu/sct/lectures/1415/stringmatching_10_3_14.pdf}
 
+Beyond string matching, KMP is also useful for problems involving periodic strings. This is because a string with an equal prefix and suffix of length $l$ has a period of $n - l$, which is exactly what KMP computes.
+
+A similar (and equivalent) algorithm is the Z-algorithm, explained here: \url{http://codeforces.com/blog/entry/3107}
+
 \section{Trie}
 
 A trie (from re\emph{trie}val) is a data structure for storing strings that supports insertion and look-up in linear time. The trie maintains the strings in a rooted tree, where each vertex represents a prefix and each edge is labeled with a character. The prefix of a node $n$ is the string of characters on the path from the root to $n$. (In particular, the prefix of the root is the empty string.) Every string that is stored in the tree is represented by a path starting from the root. Below is a picture of a trie storing ``COW,'' ``MO,'' ``MOM,'' ``MOO,'' and ``MOP.''
@@ -127,6 +131,8 @@ With a suffix array, we can check if any queried ``needle'' string exists using 
 
 From the suffix array, we can also obtain another useful data structure called the \emph{LCP array}. This array stores the longest common prefix between adjacent suffixes in the suffix array. We can use it to speed up pattern matching to $O(m + \log n)$. In addition, we can build a segment tree over the LCP array to answer queries, such as the LCP between two arbitrary suffixes.
 
+Suffix arrays can also be used to solve many string problems beyond matching. This data structure does very well with most problems involving substrings. For example, suffix arrays/LCP arrays can count the number of distinct substrings in a string or return the $k$th lexicographically largest substring. The minimum string rotation problem can is another problem solvable with suffix arrays, since each rotation of a string $S$ is a substring of $S + S$.
+
 To handle multiple strings with suffix arrays, we can either concatenate them with separator characters in between or separately compute their hashes.
 
 Below is a short C++ code for computing suffix arrays. Look up lambda functions in C++ if you're not familiar with the syntax.
@@ -169,13 +175,13 @@ void build(string S, int *sa){
 
 \section{Aho-Corasick}
 
-One way to think about the Aho-Corasick algorithm is KMP on a trie. This algorithm is used for matching multiple needles in a single haystack in linear time. To do this, we first add all strings to a trie that stores some extra information at its nodes. Upon inserting each string, we mark the last node visited as a endpoint node. Each node, in addition to storing its children and its status as an endpoint node, stores a \emph{suffix link}. This link points to the longest proper suffix that is also a node on the trie. If necessary, each node can also store a \emph{dictionary suffix link}, which points to the first endpoint node reachable by only following suffix links.
+One way to think about the Aho-Corasick algorithm is KMP/Z-algorithm on a trie. This algorithm is used for matching multiple needles in a single haystack and runs in time linear in the length of the haystack, with preprocessing linear in the total length of the needles. To do this, we first add all strings to a trie that stores some extra information at its nodes. Upon inserting each string, we mark the last node visited as a endpoint node. Each node, in addition to storing its children and its status as an endpoint node, stores a \emph{suffix link}. This link points to the longest proper suffix that is also a node on the trie. If necessary, each node can also store a \emph{dictionary suffix link}, which points to the first endpoint node reachable by only following suffix links.
 
 To build an Aho-Corasick automaton, we start with a trie of the needle strings. What we want to do is compute the suffix links. We simplify this by using an $O(nk)$ approach, where $k$ is the alphabet size. For each node $n$, we compute an additional failure function, with one value corresponding to each letter of the alphabet. Suppose $p$ is the prefix represented by $n$. Then the failure function of $n$ for the letter $\alpha$ points to the node representing longest suffix of $p + \alpha$ in the trie.
 
 We can compute all of this with a BFS. When we are at a node, we can find the suffix links of its children using the failure function of its own suffix link. We also have to calculate the node's own failure function. For every letter that has a corresponding child, its failure function is equal to that child. Otherwise, its failure function is equal to the corresponding failure function of the node's suffix link. Take a moment to think through why this works.
 
-To query, we can iterate through our haystack string character by character and make the corresponding moves in the automaton. We follow the failure function when no child exists. However, note that there isn't really a distinction between a normal trie edge and a failed edge anymore. To check for matches, we can look at the values we store at each node and/or follow dictionary suffix links. Here's an implementation of Aho-Corasick in C++ without dictionary suffix links:
+To query, we can iterate through our haystack string character by character and make the corresponding moves in the automaton. We follow the failure function when no child exists. However, note that there isn't really a distinction between a normal trie edge and a failed edge anymore. To check for matches, we can look at the values we store at each node and/or follow dictionary suffix links. To find all matches with dictionary suffix links, we have to follow the pointers until we reach a node that doesn't have a suffix in the dictionary. Note that if we follow dictionary suffix links, the complexity of our algorithm will also be linear in the number of matches. Here's an implementation of Aho-Corasick in C++ without dictionary suffix links:
 
 \begin{mylstlisting}[language=C++]
 const int SIGMA = 26;
