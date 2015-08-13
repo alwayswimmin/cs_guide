@@ -1690,6 +1690,166 @@ The \textit{splay tree} is a data structure that guarantees amortized logarithmi
 
 The \textit{treap} is a probabilistic data structure that combines a binary search tree with a heap to create a BBST. Just as quicksort is not guaranteed to run in $O(n\log{n})$, treaps are not guaranteed to have logarithmic depth. In practice, however, they almost always have performance that is $O(\log n)$. Treaps are especially useful in programming contests because they are the easiest BBST to implement. 
 
+\subsection{Treap}
+
+A treap is a binary search tree smushed together with a heap. Each node is assigned, in addition to its key, a random \emph{priority}. The priorities in a treap always satisfy the \emph{heap property}: for any node, its priority is greater than the priority of either of its children. The diagram below illustrates a treap. On each node, the letter is the node's key and the number is the node's priority.
+
+\begin{center}
+\begin{tikzpicture}[
+  very thick,
+  level 1/.style={sibling distance=27mm},
+  level 2/.style={sibling distance=18mm},
+  level 3/.style={sibling distance=12mm},
+  level 4/.style={sibling distance=8mm},
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split parts=2,
+    text width=4ex,
+    text centered
+  }
+]
+\node [myrect] {$E$ \nodepart{two} 9}
+child {
+  node [myrect] {$D$ \nodepart{two} 6}
+  child {
+    node [myrect] {$B$ \nodepart{two} 4}
+    child {
+      node [myrect] {$A$ \nodepart{two} 1}
+      child [missing]
+      child [missing]
+    }
+    child {
+      node [myrect] {$C$ \nodepart{two} 2}
+      child [missing]
+      child [missing]
+    }
+  }
+  child [missing]
+}
+child {
+  node [myrect] {$H$ \nodepart{two} 8}
+  child {
+    node [myrect] {$F$ \nodepart{two} 5}
+    child [missing]
+    child {
+      node [myrect] {$G$ \nodepart{two} 3}
+    }
+  }
+  child {
+    node [myrect] {$I$ \nodepart{two} 7}
+  }
+};
+\end{tikzpicture}
+\end{center}
+
+The randomness in each node's priority balances the treap. We can gain some intuition for why this works by looking at how a treap is built. Consider an array containing pairs of key and priority, sorted by key. To construct a treap from these values, we first take the element with the highest priority and set it as the root. We can then recurse on the two halves of the array split by the root, and construct the root's left and right subtrees in a similar way. Because the priority of each node is randomly chosen, we effectively choose a random element as the root each time we recurse.
+
+Like quicksort, we can expect that the root doesn't always split the tree too unevenly and obtain a $O(\log n)$ bound on the expected depth of each node. Moreover, it is possible to show that the entire tree has a depth of $O(\log n)$ with high probability. This analysis means that a treap is as good complexity-wise as any other deterministic BBST for all practical purposes. (To do the first part more rigorously, we can let $A_{i,j}$ be an indicator random variable representing whether the $j$th node is an ancestor of the $i$th node. What is the expected value of $\sum_{j=1}^n A_{i,j}$?) 
+
+In the remainder of this section, we'll go over the implementation of treaps. Our implementation will be quite different from the rotation-based implementations of splay trees and red-black trees described above. Intead of rotating, we will have two functions, \texttt{split} and \texttt{merge}, that will be used to define all other treap operations. Here are their definitions:
+
+\texttt{split} takes a treap $T$ and a key $k$ and splits $T$ into two treaps by $k$. Thus \texttt{split} outputs two treaps, $L$ and $R$, where all the elements of $L$ are less than $k$ and all the elements of $R$ are at least $k$. \texttt{split} has a complexity of $O(\log n)$.
+
+\texttt{merge} does the opposite of \texttt{split}. It takes two treaps $L$ and $R$, where each key in $L$ is at most the smallest key in $R$, and turns them into one treap, $T$. \texttt{merge} also has a complexity of $O(\log n)$.
+
+One way to think about these functions is to imagine treaps as a data structure that dynamically maintains sorted arrays. Then splitting is cutting an array into two, and merging is appending one array onto the end of another. With this perspective on \texttt{split} and \texttt{merge}, standard BST operations are not difficult to write. For example, we can insert a key $k$ into a treap $T$ by splitting $T$ into $L$ and $R$ by $k$. Then we can create a new node $n$ with key $k$, and merge $L$, $n$ and $R$ back into $T$. Other operations that we can implement are \texttt{erase}, \texttt{union} and \texttt{intersect}. 
+
+Writing \texttt{split} and \texttt{merge} is also relatively easy. With C++, we can use pointers and references to simplify our work.
+
+To \texttt{split}, we recurse on $T$, while maintaing references to $L$ and $R$. The root of $T$ becomes the root of one of $L$ and $R$, depending on its key. If the root of $T$ becomes the root of $R$, we recurse on the left subtree of $T$ and \texttt{split} into $L$ any nodes that have key less than $k$. The other case, where the root of $T$ becomes the root of $L$, works similarly.
+
+To \texttt{merge}, we take the root of $L$ and $R$ with the higher priority, and set it as the root of $T$. If the root of $L$ has higher priority, we \texttt{merge} $R$ and the right subtree of $L$. Otherwise, we \texttt{merge} $L$ and the left subtree of $R$. Like \texttt{split}, we can recurse down the relevant subtrees until we are done.
+
+Here's a short C++ implementation of a treap with \texttt{split}, \texttt{merge} and \texttt{insert}:
+
+\begin{mylstlisting}[language=C++]
+struct node {
+  node *l, *r;
+  int k, p;
+  node(int k) : l(0), r(0), k(k), p(rand()) {}
+};
+
+void split(node *t, node *&l, node *&r, int k){
+  // Splits t into l and r.
+  if(t == NULL) l = r = NULL;
+  else if(k <= t -> k) split(t -> l, l, t -> l, k), r = t;
+  else split(t -> r, t -> r, r, k), l = t;
+}
+
+void merge(node *&t, node *l, node *r){
+  // Merges l and r into t.
+  if(l == NULL || r == NULL) t = l ? l : r;
+  else if(l -> p > r -> p) merge(l -> r, l -> r, r), t = l;
+  else merge(r -> l, l, r -> l), t = r;
+}
+
+void insert(node *&t, int k){
+  node *n = new node(k), *a;
+  split(t, t, a, k);
+  merge(t, t, n);
+  merge(t, t, a);
+}
+\end{mylstlisting}
+
+We can also create an \emph{implicitly keyed} treap, which functions as a dynamic array. Instead of storing keys, each node stores the size of its subtree. We can then define the \emph{implicit key} of a node as its position in the in-order traversal of the treap, a value we can easily compute from subtree sizes. Modifying \texttt{split} to operate based on the implicit key allows us to rearrange parts of the array and insert new elements anywhere. Further augmentation allows us to perform range queries as well. And if we add lazy propagation, we can also support operations that modify ranges.
+
+Here's an example of an implicitly keyed treap that supports reversal of subarrays. In \texttt{node}, \texttt{s} maintains the size of its subtree, and \texttt{f} is a flag that indicates reversal. We use \texttt{push} and \texttt{pull} to propagate data down and up the treap, respectively. Note the difference in the implementation of \texttt{split}.
+
+\begin{mylstlisting}[language=C++]
+struct node {
+  node *l, *r;
+  int v, p, s, f;
+  node(int v) : l(0), r(0), v(v), p(rand()), s(1), f(0) {}
+};
+
+int size(node *t){
+  return t ? t -> s : 0;
+}
+
+void push(node *t){
+  if(t == NULL) return;
+  if(t -> f){
+    swap(t -> l, t -> r);
+    if(t -> l) t -> l -> f ^= 1;
+    if(t -> r) t -> r -> f ^= 1;
+    t -> f = 0;
+  }
+}
+
+void pull(node *t){
+  if(t == NULL) return;
+  t -> s = size(t -> l) + size(t -> r) + 1;
+}
+
+void split(node *t, node *&l, node *&r, int k){
+  push(t);
+  if(t == NULL) l = r = NULL;
+  else if(k <= size(t -> l)) split(t -> l, l, t -> l, k), r = t;
+  else split(t -> r, t -> r, r, k - size(t -> l) - 1), l = t;
+  pull(t);
+}
+
+void merge(node *&t, node *l, node *r){
+  push(l), push(r);
+  if(l == NULL || r == NULL) t = l ? l : r;
+  else if(l -> p > r -> p) merge(l -> r, l -> r, r), t = l;
+  else merge(r -> l, l, r -> l), t = r;
+  pull(t);
+}
+
+void reverse(node *t, int l, int r){
+  // Reverses the range [l,r].
+  node *a, *b;
+  split(t, t, b, r + 1);
+  split(t, t, a, l);
+  a -> f ^= 1;
+  merge(t, t, a);
+  merge(t, t, b);
+}
+\end{mylstlisting}
+
 \subsection{Tree Rotation}
 
 The key idea behind all of these data structures is the use of the \textit{tree rotation}, which is used to change the structure of the tree but will not change the order of the elements (inorder). Maintaining the order of the elements is important, of course, if we wish our tree to remain a binary search tree.
@@ -1804,6 +1964,307 @@ child[missing];
 \end{center}
 
 Note that in this example, rotating up $P$ decreases the total height of the tree. We want to somehow systematically rotate up nodes to accomplish this. The following data structures provide such a system.
+
+\subsection{Splay Tree}
+
+Remember that rotating a node brings it one level closer to the root. The idea behind a splay tree is to apply a sequence of rotations that rotate a node all the way up to the root. The intuition for doing this is once we access a node, it is easy to perform other operations on it since it will simply be the root of the tree.
+
+It is not at all clear that rotating nodes to the root will somehow improve the average performance of the tree. That's because rotating the normal way doesn't! To improve the performance of the tree, we expect that our balancing procedure tends to decrease the height of the tree. Unfortunately, simply repeatedly rotating a node up the tree doesn't exactly do that task. Consider a tree that looks liked a linked list, and rotating the nodes in the order $A$, $B$, $C$, $D$, as shown in the diagram. The height of the tree remains linear in magnitude, as at its smallest stage the tree is around $\frac{n}{2}$ in height, so accessing elements remains $O(n)$ on average.
+
+\begin{center}
+\begin{tikzpicture}[very thick,sibling distance=15mm, auto]
+
+\node [vertex] (r) {$D$}
+child {
+	node [vertex] (r3) {$C$}
+		child {
+			node [vertex] {$B$}
+				child {
+					node[vertex] {$A$}
+				}
+				child[missing]
+		}
+		child[missing]
+}
+child[missing];
+
+\node[vertex] [right=0.8cm of r] (r2) {$A$}
+child[missing]
+child {
+	node [vertex] (r4) {$D$}
+		child {
+			node [vertex] {$C$}
+				child {
+					node[vertex] {$B$}
+				}
+				child[missing]
+		}
+		child[missing]
+};
+
+\node[vertex] [right=2.8cm of r2] (r6) {$B$}
+child {
+	node [vertex] (r5) {$A$}
+}
+child {
+	node [vertex] (r7) {$D$}
+		child {
+			node[vertex] {$C$}
+		}
+		child[missing]
+};
+
+\node [vertex] [right=2.8 of r6] (r8) {$C$}
+child {
+			node [vertex] (r9) {$B$}
+				child {
+					node[vertex] {$A$}
+				}
+				child[missing]
+}
+child{
+	node [vertex] (r10) {$D$}
+};
+
+\node [vertex] [right=2.8cm of r8] (r11) {$D$}
+child {
+	node [vertex] (r12) {$C$}
+		child {
+			node [vertex] {$B$}
+				child {
+					node[vertex] {$A$}
+				}
+				child[missing]
+		}
+		child[missing]
+}
+child[missing];
+
+\coordinate[right=0.25cm of r3] (a);
+\coordinate[left=0.25cm of r4] (b);
+\coordinate[right=0.25cm of r4] (c);
+\coordinate[left=0.25cm of r5] (d);
+\coordinate[right=0.25cm of r7] (e);
+\coordinate[left=0.25cm of r9] (f);
+\coordinate[right=0.25cm of r10] (g);
+\coordinate[left=0.25cm of r12] (h);
+
+\draw[->] (a) to node {rot. $A$} (b);
+
+\draw[->] (c) to node {rot. $B$} (d);
+
+\draw[->] (e) to node {rot. $C$} (f);
+
+\draw[->] (g) to node {rot. $D$} (h);
+
+\end{tikzpicture}
+\end{center}
+
+As discussed earlier, simply repeatedly applying the standard rotation clearly is not guaranteed to reduce the height of the tree on average. However, if we simply make one small change, magic happens. The trick of the splay tree is to rotate a node to the root in such a way that the tree has a tendency to decrease in height. We'll use two compound rotations, and depending on the structure of the tree, we'll use a different one accordingly, to rotate a node to the root.
+
+When a node is a left child and its parent is a left child, or the node is a right child and its parent is a right child, we first rotate up the parent, and then rotate up the node. This sequence of rotations is the only difference between splaying and rotating a node to the root using standard rotation.
+
+\begin{center}
+\begin{tikzpicture}[very thick,sibling distance=25mm, auto]
+
+\node [vertex] (r) {$Z$}
+	child {
+		node [vertex] {$Y$}
+			child {
+				node [vertex] {$X$}
+				  	child {
+  		node [vertex] {$A$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+				  	child {
+  		node [vertex] {$B$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+			}
+  	child {
+  		node [vertex] {$C$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+	}
+  	child {
+  		node [vertex] (r3) {$D$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	};
+
+\node[vertex] [right=6cm of r] (r2) {$X$}
+  	child {
+  		node [vertex] (r4) {$A$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+child {
+	node [vertex] {$Y$}
+  	child {
+  		node [vertex] {$B$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+		child {
+			node [vertex] {$Z$}
+	  	child {
+  		node [vertex] {$C$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+	child {
+  		node [vertex] {$D$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+		}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to node {rotate $Y$, rotate $X$} (b);
+
+\end{tikzpicture}
+\end{center}
+
+When a node is a left child and its parent is a right child, or the node is a right child and its parent is a left child, we rotate the node up twice, the normal way.
+
+\begin{center}
+\begin{tikzpicture}[very thick, auto]
+
+\node [vertex] (r) {$Z$} [sibling distance=25mm]
+	child {
+		node [vertex] {$Y$}
+			child {
+  		node [vertex] {$A$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+			child {
+				node [vertex] {$X$} [sibling distance=15mm]
+				  	child {
+  		node [vertex] {$B$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+				  	child {
+  		node [vertex] {$C$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+			}
+	}
+  	child {
+  		node [vertex] (r3) {$D$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	};
+
+\node[vertex] [right=7cm of r] (r2) {$X$} [sibling distance=30mm]
+child {
+	node [vertex] (r4) {$Y$} [sibling distance=15mm]
+  	child {
+  		node [vertex] {$A$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+  	child {
+  		node [vertex] {$B$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+  	}
+	child {
+			node [vertex] {$Z$} [sibling distance=15mm]
+	  	child {
+  		node [vertex] {$C$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+	child {
+  		node [vertex] {$D$} {
+		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
+  	}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to node {rotate $X$, rotate $X$} (b);
+
+\end{tikzpicture}
+\end{center}
+
+Finally, when a node's parent is the root, so it has no grandparent, we simply rotate up the normal way.
+
+Rotating a node to the root in this way is called \textit{splaying} the node. Thus, splaying a node brings it to the root of the tree. Splaying seems too simple to lead to an amortized $O(\log{n})$ solution. To get a better idea of how splaying works, let's see what it does to a tree that looks like a linked list.
+
+\begin{center}
+\begin{tikzpicture}[very thick,sibling distance=15mm, auto]
+
+\node [vertex] (r) {$G$}
+		child {
+		node [vertex] {$F$}
+		child {
+		node [vertex] (r3) {$E$}
+		child {
+		node [vertex] {$D$}
+		child {
+		node [vertex] {$C$}
+		child {
+		node [vertex] {$B$}
+		child {
+		node [vertex] {$A$}
+		}
+		child [missing]
+		}
+		child [missing]
+		}
+		child [missing]
+		}
+		child [missing]
+		}
+		child [missing]
+		}
+		child [missing]
+;
+
+\node[vertex] [right=6cm of r] (r2) {$A$}
+child[missing]
+child {
+	node[vertex] {$F$}
+	child {
+		node[vertex] (r4) {$D$}
+		child {
+		node[vertex] {$B$}
+		child [missing]
+	child {
+		node[vertex] {$C$}
+	}
+	}
+	child {
+		node[vertex] {$E$}
+	}
+	}
+	child {
+		node[vertex] {$G$}
+	}
+};
+
+\coordinate[right=of r3] (a);
+\coordinate[left=of r4] (b);
+
+\draw[->] (a) to node {splay $A$} (b);
+
+\end{tikzpicture}
+\end{center}
+
+Splaying here cuts the height of the tree in half -- a huge improvement. Splaying is not guaranteed to decrease the height of the tree, and it is possible for a sequence of splays to even result in a linked-list-like structure. However, given a number $m$ at least equal to the maximum number of nodes $n$ ever in the tree, \textit{any} sequence of $m$ splays runs in $O(m \log{n})$. Splaying is then $O(\log{n})$, amortized.\footnote{If you're curious to see the proof of this, a rather in depth explanation can be found here: \url{http://www.cs.cmu.edu/afs/cs/academic/class/15859-f05/www/documents/splay-trees.txt}}
+
+Then, whenever we access a node, even in insertion and deletion, we splay that node to the top. This makes access, insert, and delete all $O(\log{n})$ amortized.
+
+Since splay trees need not satisfy a restrictive coloring, as red-black trees do, we have the freedom to completely change the structure of the tree at a whim. Recall how tedious the casework was to simply add or remove one node at a time in a red-black tree. Because the splay tree is simply a normal binary search tree that rotates nodes up upon access, we can detach an entire subtree from the tree and not worry about any properties of our tree no longer being satisfied.
+
+For this reason, we define the \textit{split} and \textit{join} functions for splay trees.
+
+Given two trees $S$ and $T$, such that every element in $S$ is less than every element in $T$, we join $S$ and $T$ into one tree by splaying the largest element in $S$, so that the root, which is now the largest element, has no right child. Then, we set its right child to the root of $T$, resulting in a single tree with elements from both $S$ and $T$.
+
+Given a tree and a value $v$, we split the tree in two by splaying the greatest element not greater than $v$ to the root and detaching the right subtree from the rest. This results in two trees, one containing all elements at most $v$, and the other containing all elements greater than $v$.
+
+Both of these operations are $O(\log{n})$ amortized. It is possible to implement insert and delete using split and join.
+
+Since a binary search tree stores an ordered set, it is incredibly useful for storing a dynamic list of elements where the length can change and elements need to be added or removed from any point in the list, not just the beginning or the end. Splay trees are incredibly useful because of the split and join operations, as they allow us to remove consecutive elements from the list represented by our tree.
+
+For example, to remove elements indexed in the range $[i, j]$, we split at index $i$ and split at index $j+1$ to get three splay trees, one representing $[1, i-1]$, another $[i,j]$, and the last $[j+1,n]$. We can then merge the first and third trees together, to get two trees, one representing $[i,j]$ and the other representing the original list with $[i,j]$ removed. A similar procedure can insert a list within another list as as contiguous block. Both of these operations can be completed in $O(\log{n})$ amortized using a splay tree.
 
 \subsection{Red-Black Tree}
 
@@ -2473,522 +2934,3 @@ Unlike the balancing for insertions, the balancing for deletions has the potenti
 
 Thus the red-black tree supports standard binary search tree operations, all in $O(\log{n})$.
 
-\subsection{Splay Tree}
-
-Remember that rotating a node brings it one level closer to the root. The idea behind a splay tree is to apply a sequence of rotations that rotate a node all the way up to the root. The intuition for doing this is once we access a node, it is easy to perform other operations on it since it will simply be the root of the tree.
-
-It is not at all clear that rotating nodes to the root will somehow improve the average performance of the tree. That's because rotating the normal way doesn't! To improve the performance of the tree, we expect that our balancing procedure tends to decrease the height of the tree. Unfortunately, simply repeatedly rotating a node up the tree doesn't exactly do that task. Consider a tree that looks liked a linked list, and rotating the nodes in the order $A$, $B$, $C$, $D$, as shown in the diagram. The height of the tree remains linear in magnitude, as at its smallest stage the tree is around $\frac{n}{2}$ in height, so accessing elements remains $O(n)$ on average.
-
-\begin{center}
-\begin{tikzpicture}[very thick,sibling distance=15mm, auto]
-
-\node [vertex] (r) {$D$}
-child {
-	node [vertex] (r3) {$C$}
-		child {
-			node [vertex] {$B$}
-				child {
-					node[vertex] {$A$}
-				}
-				child[missing]
-		}
-		child[missing]
-}
-child[missing];
-
-\node[vertex] [right=0.8cm of r] (r2) {$A$}
-child[missing]
-child {
-	node [vertex] (r4) {$D$}
-		child {
-			node [vertex] {$C$}
-				child {
-					node[vertex] {$B$}
-				}
-				child[missing]
-		}
-		child[missing]
-};
-
-\node[vertex] [right=2.8cm of r2] (r6) {$B$}
-child {
-	node [vertex] (r5) {$A$}
-}
-child {
-	node [vertex] (r7) {$D$}
-		child {
-			node[vertex] {$C$}
-		}
-		child[missing]
-};
-
-\node [vertex] [right=2.8 of r6] (r8) {$C$}
-child {
-			node [vertex] (r9) {$B$}
-				child {
-					node[vertex] {$A$}
-				}
-				child[missing]
-}
-child{
-	node [vertex] (r10) {$D$}
-};
-
-\node [vertex] [right=2.8cm of r8] (r11) {$D$}
-child {
-	node [vertex] (r12) {$C$}
-		child {
-			node [vertex] {$B$}
-				child {
-					node[vertex] {$A$}
-				}
-				child[missing]
-		}
-		child[missing]
-}
-child[missing];
-
-\coordinate[right=0.25cm of r3] (a);
-\coordinate[left=0.25cm of r4] (b);
-\coordinate[right=0.25cm of r4] (c);
-\coordinate[left=0.25cm of r5] (d);
-\coordinate[right=0.25cm of r7] (e);
-\coordinate[left=0.25cm of r9] (f);
-\coordinate[right=0.25cm of r10] (g);
-\coordinate[left=0.25cm of r12] (h);
-
-\draw[->] (a) to node {rot. $A$} (b);
-
-\draw[->] (c) to node {rot. $B$} (d);
-
-\draw[->] (e) to node {rot. $C$} (f);
-
-\draw[->] (g) to node {rot. $D$} (h);
-
-\end{tikzpicture}
-\end{center}
-
-As discussed earlier, simply repeatedly applying the standard rotation clearly is not guaranteed to reduce the height of the tree on average. However, if we simply make one small change, magic happens. The trick of the splay tree is to rotate a node to the root in such a way that the tree has a tendency to decrease in height. We'll use two compound rotations, and depending on the structure of the tree, we'll use a different one accordingly, to rotate a node to the root.
-
-When a node is a left child and its parent is a left child, or the node is a right child and its parent is a right child, we first rotate up the parent, and then rotate up the node. This sequence of rotations is the only difference between splaying and rotating a node to the root using standard rotation.
-
-\begin{center}
-\begin{tikzpicture}[very thick,sibling distance=25mm, auto]
-
-\node [vertex] (r) {$Z$}
-	child {
-		node [vertex] {$Y$}
-			child {
-				node [vertex] {$X$}
-				  	child {
-  		node [vertex] {$A$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	}
-				  	child {
-  		node [vertex] {$B$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	}
-			}
-  	child {
-  		node [vertex] {$C$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	}
-	}
-  	child {
-  		node [vertex] (r3) {$D$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	};
-
-\node[vertex] [right=6cm of r] (r2) {$X$}
-  	child {
-  		node [vertex] (r4) {$A$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	}
-child {
-	node [vertex] {$Y$}
-  	child {
-  		node [vertex] {$B$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	}
-		child {
-			node [vertex] {$Z$}
-	  	child {
-  		node [vertex] {$C$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	}
-	child {
-  		node [vertex] {$D$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	}
-		}
-};
-
-\coordinate[right=of r3] (a);
-\coordinate[left=of r4] (b);
-
-\draw[->] (a) to node {rotate $Y$, rotate $X$} (b);
-
-\end{tikzpicture}
-\end{center}
-
-When a node is a left child and its parent is a right child, or the node is a right child and its parent is a left child, we rotate the node up twice, the normal way.
-
-\begin{center}
-\begin{tikzpicture}[very thick, auto]
-
-\node [vertex] (r) {$Z$} [sibling distance=25mm]
-	child {
-		node [vertex] {$Y$}
-			child {
-  		node [vertex] {$A$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	}
-			child {
-				node [vertex] {$X$} [sibling distance=15mm]
-				  	child {
-  		node [vertex] {$B$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	}
-				  	child {
-  		node [vertex] {$C$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	}
-			}
-	}
-  	child {
-  		node [vertex] (r3) {$D$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	};
-
-\node[vertex] [right=7cm of r] (r2) {$X$} [sibling distance=30mm]
-child {
-	node [vertex] (r4) {$Y$} [sibling distance=15mm]
-  	child {
-  		node [vertex] {$A$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	}
-  	child {
-  		node [vertex] {$B$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	}
-  	}
-	child {
-			node [vertex] {$Z$} [sibling distance=15mm]
-	  	child {
-  		node [vertex] {$C$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	}
-	child {
-  		node [vertex] {$D$} {
-		node [draw, isosceles triangle, shape border uses incircle, fill=myseagreen, minimum height = 1.275cm, shape border rotate=90, yshift=-1.40cm] {} }
-  	}
-};
-
-\coordinate[right=of r3] (a);
-\coordinate[left=of r4] (b);
-
-\draw[->] (a) to node {rotate $X$, rotate $X$} (b);
-
-\end{tikzpicture}
-\end{center}
-
-Finally, when a node's parent is the root, so it has no grandparent, we simply rotate up the normal way.
-
-Rotating a node to the root in this way is called \textit{splaying} the node. Thus, splaying a node brings it to the root of the tree. Splaying seems too simple to lead to an amortized $O(\log{n})$ solution. To get a better idea of how splaying works, let's see what it does to a tree that looks like a linked list.
-
-\begin{center}
-\begin{tikzpicture}[very thick,sibling distance=15mm, auto]
-
-\node [vertex] (r) {$G$}
-		child {
-		node [vertex] {$F$}
-		child {
-		node [vertex] (r3) {$E$}
-		child {
-		node [vertex] {$D$}
-		child {
-		node [vertex] {$C$}
-		child {
-		node [vertex] {$B$}
-		child {
-		node [vertex] {$A$}
-		}
-		child [missing]
-		}
-		child [missing]
-		}
-		child [missing]
-		}
-		child [missing]
-		}
-		child [missing]
-		}
-		child [missing]
-;
-
-\node[vertex] [right=6cm of r] (r2) {$A$}
-child[missing]
-child {
-	node[vertex] {$F$}
-	child {
-		node[vertex] (r4) {$D$}
-		child {
-		node[vertex] {$B$}
-		child [missing]
-	child {
-		node[vertex] {$C$}
-	}
-	}
-	child {
-		node[vertex] {$E$}
-	}
-	}
-	child {
-		node[vertex] {$G$}
-	}
-};
-
-\coordinate[right=of r3] (a);
-\coordinate[left=of r4] (b);
-
-\draw[->] (a) to node {splay $A$} (b);
-
-\end{tikzpicture}
-\end{center}
-
-Splaying here cuts the height of the tree in half -- a huge improvement. Splaying is not guaranteed to decrease the height of the tree, and it is possible for a sequence of splays to even result in a linked-list-like structure. However, given a number $m$ at least equal to the maximum number of nodes $n$ ever in the tree, \textit{any} sequence of $m$ splays runs in $O(m \log{n})$. Splaying is then $O(\log{n})$, amortized.\footnote{If you're curious to see the proof of this, a rather in depth explanation can be found here: \url{http://www.cs.cmu.edu/afs/cs/academic/class/15859-f05/www/documents/splay-trees.txt}}
-
-Then, whenever we access a node, even in insertion and deletion, we splay that node to the top. This makes access, insert, and delete all $O(\log{n})$ amortized.
-
-Since splay trees need not satisfy a restrictive coloring, as red-black trees do, we have the freedom to completely change the structure of the tree at a whim. Recall how tedious the casework was to simply add or remove one node at a time in a red-black tree. Because the splay tree is simply a normal binary search tree that rotates nodes up upon access, we can detach an entire subtree from the tree and not worry about any properties of our tree no longer being satisfied.
-
-For this reason, we define the \textit{split} and \textit{join} functions for splay trees.
-
-Given two trees $S$ and $T$, such that every element in $S$ is less than every element in $T$, we join $S$ and $T$ into one tree by splaying the largest element in $S$, so that the root, which is now the largest element, has no right child. Then, we set its right child to the root of $T$, resulting in a single tree with elements from both $S$ and $T$.
-
-Given a tree and a value $v$, we split the tree in two by splaying the greatest element not greater than $v$ to the root and detaching the right subtree from the rest. This results in two trees, one containing all elements at most $v$, and the other containing all elements greater than $v$.
-
-Both of these operations are $O(\log{n})$ amortized. It is possible to implement insert and delete using split and join.
-
-Since a binary search tree stores an ordered set, it is incredibly useful for storing a dynamic list of elements where the length can change and elements need to be added or removed from any point in the list, not just the beginning or the end. Splay trees are incredibly useful because of the split and join operations, as they allow us to remove consecutive elements from the list represented by our tree.
-
-For example, to remove elements indexed in the range $[i, j]$, we split at index $i$ and split at index $j+1$ to get three splay trees, one representing $[1, i-1]$, another $[i,j]$, and the last $[j+1,n]$. We can then merge the first and third trees together, to get two trees, one representing $[i,j]$ and the other representing the original list with $[i,j]$ removed. A similar procedure can insert a list within another list as as contiguous block. Both of these operations can be completed in $O(\log{n})$ amortized using a splay tree.
-
-\subsection{Treap}
-
-A treap is a binary search tree smushed together with a heap. Each node is assigned, in addition to its key, a random \emph{priority}. The priorities in a treap always satisfy the \emph{heap property}: for any node, its priority is greater than the priority of either of its children. The diagram below illustrates a treap. On each node, the letter is the node's key and the number is the node's priority.
-
-\begin{center}
-\begin{tikzpicture}[
-  very thick,
-  level 1/.style={sibling distance=27mm},
-  level 2/.style={sibling distance=18mm},
-  level 3/.style={sibling distance=12mm},
-  level 4/.style={sibling distance=8mm},
-  myrect/.style={
-    draw,
-    fill=myseagreen,
-    rectangle split,
-    rectangle split parts=2,
-    text width=4ex,
-    text centered
-  }
-]
-\node [myrect] {$E$ \nodepart{two} 9}
-child {
-  node [myrect] {$D$ \nodepart{two} 6}
-  child {
-    node [myrect] {$B$ \nodepart{two} 4}
-    child {
-      node [myrect] {$A$ \nodepart{two} 1}
-      child [missing]
-      child [missing]
-    }
-    child {
-      node [myrect] {$C$ \nodepart{two} 2}
-      child [missing]
-      child [missing]
-    }
-  }
-  child [missing]
-}
-child {
-  node [myrect] {$H$ \nodepart{two} 8}
-  child {
-    node [myrect] {$F$ \nodepart{two} 5}
-    child [missing]
-    child {
-      node [myrect] {$G$ \nodepart{two} 3}
-    }
-  }
-  child {
-    node [myrect] {$I$ \nodepart{two} 7}
-  }
-};
-\end{tikzpicture}
-\end{center}
-
-The randomness in each node's priority balances the treap. We can gain some intuition for why this works by looking at how a treap is built. Consider an array containing pairs of key and priority, sorted by key. To construct a treap from these values, we first take the element with the highest priority and set it as the root. We can then recurse on the two halves of the array split by the root, and construct the root's left and right subtrees in a similar way. Because the priority of each node is randomly chosen, we effectively choose a random element as the root each time we recurse.
-
-Like quicksort, we can expect that the root doesn't always split the tree too unevenly and obtain a $O(\log n)$ bound on the expected depth of each node. Moreover, it is possible to show that the entire tree has a depth of $O(\log n)$ with high probability. This analysis means that a treap is as good complexity-wise as any other deterministic BBST for all practical purposes. (To do the first part more rigorously, we can let $A_{i,j}$ be an indicator random variable representing whether the $j$th node is an ancestor of the $i$th node. What is the expected value of $\sum_{j=1}^n A_{i,j}$?) 
-
-In the remainder of this section, we'll go over the implementation of treaps. Our implementation will be quite different from the rotation-based implementations of splay trees and red-black trees described above. Intead of rotating, we will have two functions, \texttt{split} and \texttt{merge}, that will be used to define all other treap operations. Here are their definitions:
-
-\texttt{split} takes a treap $T$ and a key $k$ and splits $T$ into two treaps by $k$. Thus \texttt{split} outputs two treaps, $L$ and $R$, where all the elements of $L$ are less than $k$ and all the elements of $R$ are at least $k$. \texttt{split} has a complexity of $O(\log n)$.
-
-\texttt{merge} does the opposite of \texttt{split}. It takes two treaps $L$ and $R$, where each key in $L$ is at most the smallest key in $R$, and turns them into one treap, $T$. \texttt{merge} also has a complexity of $O(\log n)$.
-
-One way to think about these functions is to imagine treaps as a data structure that dynamically maintains sorted arrays. Then splitting is cutting an array into two, and merging is appending one array onto the end of another. With this perspective on \texttt{split} and \texttt{merge}, standard BST operations are not difficult to write. For example, we can insert a key $k$ into a treap $T$ by splitting $T$ into $L$ and $R$ by $k$. Then we can create a new node $n$ with key $k$, and merge $L$, $n$ and $R$ back into $T$. Other operations that we can implement are \texttt{erase}, \texttt{union} and \texttt{intersect}. 
-
-Writing \texttt{split} and \texttt{merge} is also relatively easy. With C++, we can use pointers and references to simplify our work.
-
-To \texttt{split}, we recurse on $T$, while maintaing references to $L$ and $R$. The root of $T$ becomes the root of one of $L$ and $R$, depending on its key. If the root of $T$ becomes the root of $R$, we recurse on the left subtree of $T$ and \texttt{split} into $L$ any nodes that have key less than $k$. The other case, where the root of $T$ becomes the root of $L$, works similarly.
-
-To \texttt{merge}, we take the root of $L$ and $R$ with the higher priority, and set it as the root of $T$. If the root of $L$ has higher priority, we \texttt{merge} $R$ and the right subtree of $L$. Otherwise, we \texttt{merge} $L$ and the left subtree of $R$. Like \texttt{split}, we can recurse down the relevant subtrees until we are done.
-
-Here's a short C++ implementation of a treap with \texttt{split}, \texttt{merge} and \texttt{insert}:
-
-\begin{mylstlisting}[language=C++]
-struct node {
-  node *l, *r;
-  int k, p;
-  node(int k) : l(0), r(0), k(k), p(rand()) {}
-};
-
-void split(node *t, node *&l, node *&r, int k){
-  // Splits t into l and r.
-  if(t == NULL) l = r = NULL;
-  else if(k <= t -> k) split(t -> l, l, t -> l, k), r = t;
-  else split(t -> r, t -> r, r, k), l = t;
-}
-
-void merge(node *&t, node *l, node *r){
-  // Merges l and r into t.
-  if(l == NULL || r == NULL) t = l ? l : r;
-  else if(l -> p > r -> p) merge(l -> r, l -> r, r), t = l;
-  else merge(r -> l, l, r -> l), t = r;
-}
-
-void insert(node *&t, int k){
-  node *n = new node(k), *a;
-  split(t, t, a, k);
-  merge(t, t, n);
-  merge(t, t, a);
-}
-\end{mylstlisting}
-
-We can also create an \emph{implicitly keyed} treap, which functions as a dynamic array. Instead of storing keys, each node stores the size of its subtree. We can then define the \emph{implicit key} of a node as its position in the in-order traversal of the treap, a value we can easily compute from subtree sizes. Modifying \texttt{split} to operate based on the implicit key allows us to rearrange parts of the array and insert new elements anywhere. Further augmentation allows us to perform range queries as well. And if we add lazy propagation, we can also support operations that modify ranges.
-
-Here's an example of an implicitly keyed treap that supports reversal of subarrays. In \texttt{node}, \texttt{s} maintains the size of its subtree, and \texttt{f} is a flag that indicates reversal. We use \texttt{push} and \texttt{pull} to propagate data down and up the treap, respectively. Note the difference in the implementation of \texttt{split}.
-
-\begin{mylstlisting}[language=C++]
-struct node {
-  node *l, *r;
-  int v, p, s, f;
-  node(int v) : l(0), r(0), v(v), p(rand()), s(1), f(0) {}
-};
-
-int size(node *t){
-  return t ? t -> s : 0;
-}
-
-void push(node *t){
-  if(t == NULL) return;
-  if(t -> f){
-    swap(t -> l, t -> r);
-    if(t -> l) t -> l -> f ^= 1;
-    if(t -> r) t -> r -> f ^= 1;
-    t -> f = 0;
-  }
-}
-
-void pull(node *t){
-  if(t == NULL) return;
-  t -> s = size(t -> l) + size(t -> r) + 1;
-}
-
-void split(node *t, node *&l, node *&r, int k){
-  push(t);
-  if(t == NULL) l = r = NULL;
-  else if(k <= size(t -> l)) split(t -> l, l, t -> l, k), r = t;
-  else split(t -> r, t -> r, r, k - size(t -> l) - 1), l = t;
-  pull(t);
-}
-
-void merge(node *&t, node *l, node *r){
-  push(l), push(r);
-  if(l == NULL || r == NULL) t = l ? l : r;
-  else if(l -> p > r -> p) merge(l -> r, l -> r, r), t = l;
-  else merge(r -> l, l, r -> l), t = r;
-  pull(t);
-}
-
-void reverse(node *t, int l, int r){
-  // Reverses the range [l,r].
-  node *a, *b;
-  split(t, t, b, r + 1);
-  split(t, t, a, l);
-  a -> f ^= 1;
-  merge(t, t, a);
-  merge(t, t, b);
-}
-\end{mylstlisting}
-
-\section{Sweep Line}
-
-Oftentimes when trying to solve geometry problems, or combinatorial problems that we give a geometric interpretation, we have something that involves one or two dimensions. If this is difficult to deal with directly, we can use a sweep line to reduce the dimension of the problem.
-
-Sweeplines are best explained with an example. Suppose we're given several intervals on the number line, and we want to find the length of their union. If we wanted to, we could use a segment tree with lazy propagation to insert the intervals and calculate the total length. However, a sweep line gives us a much easier approach. Imagine a vertical beam of light sweeping from $-\infty$ to $\infty$ on the number line. At any given time, we keep track of the number of intervals that are hit by this beam. This takes the problem from one dimension to zero dimensions. Our answer is then the length over which our beam hit a positive number of intervals.
-
-Our implementation of a sweep line simulates this process. If we sort the endpoints of our intervals by their positions on the number line, we can simply increment our counter each time we encounter a ``start'' endpoint and decrement our counter each time we encounter an ``end'' endpoint. We can look at the regions between consecutive endpoints, and add to our result if our counter is positive in that region.
-
-\begin{center}\begin{tikzpicture}
-  \coordinate (A) at (2,1);
-  \coordinate (B) at (6,1);
-  \coordinate (C) at (0,2);
-  \coordinate (D) at (3,2);
-  \coordinate (E) at (5,2);
-  \coordinate (F) at (7,2);
-  \coordinate (G) at (1,3);
-  \coordinate (H) at (5,3);
-  \draw[fill] (A) circle [radius=2pt];
-  \draw[fill] (B) circle [radius=2pt];
-  \draw[fill] (C) circle [radius=2pt];
-  \draw[fill] (D) circle [radius=2pt];
-  \draw[fill] (E) circle [radius=2pt];
-  \draw[fill] (F) circle [radius=2pt];
-  \draw[fill] (G) circle [radius=2pt];
-  \draw[fill] (H) circle [radius=2pt];
-  \draw[ultra thick] (A) -- (B);
-  \draw[very thick] (C) -- (D);
-  \draw[very thick] (E) -- (F);
-  \draw[ultra thick] (G) -- (H);
-
-  \draw[<->] (-1,0) -- (8,0);
-  \foreach \x in {0, 1, 2, 3, 4, 5, 6, 7}
-  \draw[shift={(\x,0)}] (0,3pt) -- (0,-3pt);
-
-  \draw[<->, very thick, dashed, color=red] (3.75,-1) -- (3.75,4);
-\end{tikzpicture}\end{center}
-
-One other way to interpret sweep lines is to consider time as the dimension we sweep along. For the example above, this would mean that each interval appears and then disappears on our beam, existing only when the time is between its endpoints. Although time may not seem useful for our one dimensional problem, this type of thinking helps in higher dimensions. 
-
-Most sweep lines that you use won't be as simple as this. Sweepline problems usually involve reducing a two dimensional problem to a one dimensional problem and require maintaining data structures such as BBSTs or segment trees along that dimension. This technique also generalizes to higher dimensions---to solve a three dimensional problem, we can sweep along one dimension and use two dimensional data structures to maintain the other two dimensions.
-
-To finish, let's go over another example, Cow Rectangles from USACO 2015 January:
-
-\texttt{
-\fontdimen2\font=0.4em% interword space
-\fontdimen3\font=0.2em% interword stretch
-\fontdimen4\font=0.1em% interword shrink
-\fontdimen7\font=0.1em% extra space
-\hyphenchar\font=`\-% allowing hyphenation
-The locations of Farmer John's $N$ cows ($1 \le N \le 500$) are described by distinct points in the 2D plane. The cows belong to two different breeds: Holsteins and Guernseys. Farmer John wants to build a rectangular fence with sides parallel to the coordinate axes enclosing only Holsteins, with no Guernseys (a cow counts as enclosed even if it is on the boundary of the fence). Among all such fences, Farmer John wants to build a fence enclosing the maximum number of Holsteins. And among all these fences, Farmer John wants to build a fence of minimum possible area. Please determine this area. A fence of zero width or height is allowable.}
-
-The first observation we should make is that we want a Holstein on every side of the fence. Otherwise, we would be able to decrease the area of our fence without decreasing the number of Holsteins. Even with our observation, this problem still seems hard to deal with. We can make it easier by adding another constraint: Suppose we knew which Holstein was on the leftmost boundary of our fence. Since we added the constraint to the $x$-dimension, we naturally want to figure out where our rightmost Holstein is next. We can do this with a sweep line moving to the right.
-
-The reason we want a sweep line here is because for any given rightmost cow, we want to know information about the Guernseys and Holsteins inbetween. With a sweep line, we can collect and maintain all this data by processing the cows from left to right. For example, whenever we see a Guernsey, we have to limit the $y$-coordinates that our Holsteins can take. And whenever we see a Holstein, we have to consider this Holstein as our rightmost cow and also store it in case we include it in a fence later on.
-
-What remains is to find an appropriate data structure to track all this. A set data structure (STL set or Java TreeMap) turns out to be enough. We can insert the Holsteins, sorted by $y$-coordinate, and delete one whenever any rectangle bounded by that Holstein, the leftmost Holstein, and our sweep line includes a Guernsey. Thus we take $O(n \log n)$ time to sweep, giving us an $O(n^2 \log n)$ solution overall.
-
-This type of analysis is pretty representative of sweep line problems. Whether you're given rectangles, line segments or even polygons, you want to think about how you can reduce the dimension and obtain a tractable problem. Note that sweep lines don't always have to move along some axis. Radial sweep lines (sweeping by rotating) and sweeping at an angle (rotating the plane by $45^\circ$) also work. 
