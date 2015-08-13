@@ -686,9 +686,9 @@ We perform a series of swaps to restore the heap property. We always want to cho
 
 And we are done. Once again, this takes at most $\log(N)$ swaps. This idea can be extended to removing or changing the value of any node we'd like from a tree -- this is particularly useful for Dijkstra later.
 
-Remember to implement your heap in an array or ArrayList!
+Remember to implement your heap in an array-like structure!
 
-Java implements a min heap with the \texttt{PriorityQueue}. This class, like \texttt{LinkedList}, also implements \texttt{Queue}. C++ implements a max heap with the \texttt{priority\_queue}. The functions for heaps in both languages are identical to those for queues.
+Java implements a min heap with the \texttt{PriorityQueue}. This class, like \texttt{LinkedList}, also implements \texttt{Queue}. C++ implements a max heap with the \texttt{priority\_queue}. The functions for heaps in both languages are nearly identical to those for queues.
 
 \begin{center}
     \begin{tabular}{ p{5cm} p{5cm} p{5cm} }
@@ -696,7 +696,7 @@ Java implements a min heap with the \texttt{PriorityQueue}. This class, like \te
 	\hline
 	\textit{push}		&	\texttt{boolean offer(E e)}	&	\texttt{void push (const value\_type\& val)} \\
     \textit{pop}			&	\texttt{E poll()}		&	\texttt{void pop()}	\\
-    \textit{front}		&	\texttt{E peek()}		&	\texttt{value\_type\& front()}	\\
+    \textit{front}		&	\texttt{E peek()}		&	\texttt{value\_type\& top()}	\\
     \end{tabular}
 \end{center}
 
@@ -909,56 +909,40 @@ Note that \texttt{"h"} has either no children or only one child, and that nodes 
 \end{tikzpicture}
 \end{center}
 
-A standard BST has $O(\log{n})$ operations if the tree is ``nice'', but each operation can be $O(n)$ in the worst case. We need to find a way to automatically balance the BST such that we avoid linear time complexities.
+Since a BST is ordered, iterating over it from left to right will pass over every element in sorted order.
 
-A red-black tree is a self-balancing BST that guarantees $O(\log{n})$ operations by making sure the height of the tree grows logarithmically. It is implemented in Java's \texttt{TreeSet} and is usually implemented in the C++ \texttt{set}, so while the BST I described above does not guarantee nice time bounds, Java's implementation does.
+A standard BST has $O(\log{n})$ operations if the tree is ``nice,'' or sufficiently randomized, but each operation can be $O(n)$ in the worst case. We need to find a way to automatically balance the BST such that we avoid linear time complexities.
+
+A red-black tree is a self-balancing BST that guarantees $O(\log{n})$ operations by making sure the height of the tree grows logarithmically. It is implemented in Java's \texttt{TreeSet} and is usually\footnote{Implementations of \texttt{set} must be some kind of balanced binary search tree, but need not be red-black.} implemented in the C++ \texttt{set}, so while the simple BST I described above does not guarantee nice time bounds, Java's implementation does.
 
 I don't think learning exactly how a red-black tree works is particularly useful for the beginning programmer or a competitive programmer. How exactly a red-black tree works, together with some more balanced binary search trees which are useful on the competitive scene, are covered in a later chapter.
 
-Here are some notable functions TreeSet implements. You don't need to implement everything -- \texttt{add()}, \texttt{remove()}, and \texttt{contains()} are the most important.
+\begin{center}
+    \begin{tabular}{ p{5cm} p{5cm} p{5cm} }
+	Function	&	Java, \texttt{TreeSet}	&	C++, \texttt{set} \\
+	\hline
+	\textit{insert}		&	\texttt{boolean add(E e)}	&	\texttt{void insert (const value\_type\& val)} \\
+   \textit{search}		&	\texttt{E peek()}		&	\texttt{value\_type\& front()}	\\
+    \textit{delete}		&	\texttt{E poll()}		&	\texttt{void pop()}
+    \end{tabular}
+\end{center}
 
-\begin{itemize}
+\subsection{Hash Table}
 
+A \textit{hash table} is a way for us to store objects when we do not require a natural ordering on the set. As with the binary search tree, we want to be able to check whether an element is in our set or not quickly. We do this with the help of a \textit{hash function}. The hash function operates on the object and returns something that characterizes that object. For example, for a string, a possible hash could be the length of the string or the sum of the characters. We want to map an object with an integer hash, so that we can store the values by their hashes in an array.
+
+What characterizes a good hash function?
+
+\begin{enumerate}
 \item
-\texttt{boolean add(String s)}
-
+If two objects are considered equal, like the strings \texttt{"Hello"} and \texttt{"Hello"}, their hashes must be equal.
 \item
-\texttt{String ceiling(String s)} -- the least element in the set greater than or equal to \texttt{s}, or \texttt{null} if there is no such element.
-
+If two objects are not equal, like the strings \texttt{"Hello"} and \texttt{"Bye"}, their hashes are only equal with very low probability. A \textit{collision} is when two different objects have the same hash. We want to minimize the probability of this happening. As a result, hashes like the length of the string are not very good hashes.
 \item
-\texttt{boolean contains(Object o)}
+A good hash should be reasonably fast to compute. One main purpose of hashing is to make equality checks between objects fast. A hash function that is hard to compute defeats the purpose of this.
+\end{enumerate}
 
-\item
-\texttt{String first()} -- the least element in the set.
-
-\item
-\texttt{String floor(String s)} -- the greatest element in the set less than or equal to \texttt{s}, or \texttt{null} if there is no such element.
-
-\item
-\texttt{String higher(String s)} -- the least element in the set strictly greater than \texttt{s}, or \texttt{null} if there is no such element.
-
-\item
-\texttt{boolean isEmpty()}
-
-\item
-\texttt{String last()} -- the greatest element in the set.
-
-\item
-\texttt{String lower(String s)} -- the greatest element in the set strictly less than \texttt{s}, or \texttt{null} if there is no such element.
-
-\item
-\texttt{boolean remove(Object o)}
-
-\item
-\texttt{int size()}
-
-\end{itemize}
-
-Since the TreeSet is ordered, iterating over a TreeSet will also be in order.
-
-\subsection{HashSet}
-
-A HashSet is a way for us to store objects when we do not require a natural ordering on the set. As with the TreeSet, we want to be able to check whether an element is in our set or not quickly. We do this with the help of a \textit{hash function}. Every Java Object supports the \texttt{hashCode()} function. We usually want to map an object with an integer hash, so that we can store the values in an array. For example, let us define the following hash for Strings:
+Every Java \texttt{Object} supports the \texttt{hashCode()} function. By default, \texttt{hashCode()} stores information about the memory address of the \texttt{Object}. When we implement a new class, we can override this function. For example, let us define the following \textit{polynomial hash} for strings:
 
 \begin{mylstlisting}
 public int hashCode() {
@@ -971,36 +955,38 @@ public int hashCode() {
 }
 \end{mylstlisting}
 
-\texttt{a.equals(b)} should imply \texttt{a.hashCode() == b.hashCode()}. This function produces the same result as the actual \texttt{hashCode()} function in the String class. However, this is not quite what we want for our HashSet, because in the end we wish to be able to store the objects in some kind of array. This hash not only returns integers that can be very large, they can also be negative, and thus are not suitable as array indices. The natural way to fix this is to take the hash modulo the size of the array we want.
+In Java, \texttt{a.equals(b)} should imply \texttt{a.hashCode() == b.hashCode()}. This function produces the same result as the actual \texttt{hashCode()} function in the String class. However, this is not quite what we want for our hash set implementation, because in the end we wish to be able to store the objects in some kind of array. Since \texttt{hashCode()} can be any \texttt{int}, this hash not only returns integers that can be very large, they can also be negative, and thus are not suitable as array indices. The natural way to fix this is to take the hash modulo the size of the array we want.
 
 \begin{mylstlisting}
 String[] table = new String[10007];
-int index(String s) {
-	int i = s.hashCode() % table.length;
+int index(E o) {
+	int i = o.hashCode() % table.length;
     if(i >= 0)
     	return i;
 	return i + table.length;
 }
 \end{mylstlisting}
 
-We chose the number 10007 because it is a prime number, and primes are generally nice when taking a number modulo something else, as integers modulo a prime form a field. Remember that a negative number \texttt{\%} another number is not necessarily positive, so we need to be a little careful.
+The length of our array is somewhat arbitrary. We chose the number 100007 because it is a prime number, and primes are generally nice since integers modulo a prime form a field. Remember that a negative number \texttt{\%} another number is not necessarily positive, so we need to be a little careful.
 
-From here, adding an element to the HashSet and checking if an element is contained both seem straightforward:
+From here, adding an element to the table and checking if an element is contained both seem straightforward:
 
 \begin{mylstlisting}
-boolean add (String s) {
-	table[index(s)] = s;
+boolean add(E o) {
+	table[index(o)] = o;
     return true;
 }
 boolean contains(Object o) {
-    int i = index((String) o);
+    int i = index((E) o);
 	return table[i] != null && table[i].equals(o);
 }
 \end{mylstlisting}
 
-\texttt{null} is always annoying to deal with, and will have to be handled separately.
+\texttt{null} is always annoying to deal with, and will always have to be handled separately.
 
-However, one problem quickly arises. Two Strings may map to the same index in the array. We call this a \textit{collision}. The easiest way to handle a collision is by \textit{chaining}. We change the hash table to store a LinkedList instead of a single element in the event of a collision. Java once implemented this method of resolving collisions, but recently changed the LinkedList to a BST in Java 8.
+However, a problem quickly arises in the (hopefully unlikely) instance of a collision. If two strings have the same hash, we can't add both to the table since there isn't enough space in the array. The easiest way to handle a collision is by \textit{chaining}. We change the hash table to store a linked list instead of a single element in the event of a collision. Java once implemented this method of resolving collisions, but recently changed it to a BST in Java 8.
+
+If we use a good hash function, collisions will almost always be pretty evenly spread across the array. Then since we store everything using an array, the hash table provides probabilistic $O(1)$ time complexities for insertion, deletion, and search.
 
 \begin{itemize}
 
@@ -1023,18 +1009,16 @@ However, one problem quickly arises. Two Strings may map to the same index in th
 
 \section{Map}
 
-A Map is simply an extension of a Set. It stores a mapping that takes a key to a value. Map is a Java Interface. Generics for Maps therefore have two arguments. Consider the following Map from Strings to Strings.
+A map is very similar to a set. A map is simply a function that takes a key to a value. Generics for maps therefore have two arguments: one for the key and one for the value. Consider the following Java \texttt{Map} from \texttt{String}s to \texttt{String}s.
 
 \begin{mylstlisting}
 Map<String, String> email = new TreeMap<String, String>();
 email.put("Samuel Hsiang", "samuel.c.hsiang@gmail.com");
 \end{mylstlisting}
 
-The keys of a Map form a Set, though the Values need not be unique.
+As a map is a function, the domain, or the keys of the map, form a set, though the values need not be unique.
 
-The TreeMap is the Map variant of the TreeSet; similarly, the HashMap is the Map variant of the HashSet.
-
-All useful Set functions have a Map counterpart. The following additional functions are of use.
+\texttt{Map} is a Java interface. The \texttt{TreeMap} is the \texttt{Map} variant of the \texttt{TreeSet}; similarly, the \texttt{HashMap} is the \texttt{Map} variant of the \texttt{HashSet}. \texttt{map} is the C++ implementation of a balanced binary search tree map, while \texttt{unordered\_map} is the C++11 implementation of a hash table.
 
 \begin{itemize}
 

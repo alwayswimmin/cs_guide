@@ -2268,6 +2268,8 @@ For example, to remove elements indexed in the range $[i, j]$, we split at index
 
 \subsection{Red-Black Tree}
 
+Red-black trees are not very useful in the contest environment, but since nearly every implementation of BBST in standard libraries uses them, it may be useful to be familiar with the idea behind them.
+
 As stated earlier, the red-black tree represents the ``just do it'' approach. We want to somehow bound the maximum length from the root to any leaf node by applying a constraint on the tree. In this case, our constraint is a coloring of the nodes (red or black) such certain properties are satisfied. For the red-black tree, the only nodes storing data are non-leaf nodes, and all leaf nodes store ``null.'' The number of null nodes, then, is $n+1$, where $n$ is the number of non-null nodes. We do this so that any node storing useful information has two children.
 
 We want our tree to satisfy the following properties:
