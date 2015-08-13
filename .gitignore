@@ -1,3 +1,5 @@
 guide.*
+main.*
 *.aux
 !guide.pdf
+!main.tex
