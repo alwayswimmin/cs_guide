@@ -20,17 +20,17 @@ This means that \texttt{al} is an ArrayList of Integers. We can only add Integer
 
 I don't think the beginning programmer needs to know how to necessarily code a class that supports generics, since each language has its own complex set of rules governing generics. However, we use the standard library extensively in any coding environment, so it is necessary to use a class that does support generics. I think standard classes are relatively straightforward to use but can be annoying to actually implement.
 
-When examining a language's API or explanations of implemented functions in this chapter, the characters \texttt{E}, \texttt{V}, and \texttt{K} represent generic classes. For example, when we set \texttt{al = new ArrayList<Integer>()}, \texttt{E} represents \texttt{Integer}. Otherwise, \texttt{E} simply means any object.
+When examining Java API or explanations of implemented functions in this chapter, the characters \texttt{E}, \texttt{V}, and \texttt{K} all can represent generics. For C++, generics are denoted by strings like \texttt{value\_type}. For example, in Java, when we set \texttt{al = new ArrayList<Integer>()}, \texttt{E} represents \texttt{Integer}. Otherwise, \texttt{E} simply means any object.
 
 \section{List}
 
-A List is a collection of objects with an ordering. Users of a list have control over where in the list each object is and can access a specific element by its index, like in an array.
+A list is a collection of objects with an ordering. The objects are ordered in the sense that each element is associated with an index that represents its placement in the list. Users of a list have control over where in the list each object is and can access a specific element by its index, like in an array.
 
-\subsection{Size-Adjustable Array}
+\subsection{Dynamic Array}
 
 What is nice about an array? We can access or change any element we want in the array in $O(1)$ time. The problem is that an array has fixed length. It's not easy to append an element to the end of an array.
 
-The fix to this is pretty simple. Why not just make a bigger array, and copy everything over to the new array? Then there's more room at the end to add a new element. If the backbone array runs out of space, we create a new array with double the size and keep going as if nothing happened.
+The fix to this is pretty simple. Why not just make a bigger array, and copy everything over to the new array? Then there's more room at the end to add a new element. If the backbone array runs out of space, we create a new array with double the size and keep going as if nothing happened. Therefore we now have an array of extendable size -- a \textit{dynamic array}.
 
 \begin{center}
 {
@@ -109,35 +109,32 @@ We see that there is still room in the array to add \texttt{"c"}, but to add mor
 
 It's important to note that any given insertion to the structure is either $O(n)$ or $O(1)$, but there is only one $O(n)$ insertion for every $O(n)$ $O(1)$ insertions, so we still average out to constant time.
 
-\begin{itemize}
+The Java implementation of a dynamic array is the ArrayList. The C++ implementation is the vector.
 
-\item
-\texttt{boolean add(String s)} -- add an element to the end of the list. (By convention, this returns \texttt{true} if the addition was successful, and \texttt{false} otherwise.)
-\item
-\texttt{void add(int i, String s)} -- shift everything from position \texttt{i} onward down by one, and add \texttt{s} at position \texttt{i}.
-\item
-\texttt{boolean contains(Object o)} -- return \texttt{true} if \texttt{o} is stored in the ArrayList, and \texttt{false} otherwise. Remember to cast \texttt{o} to a String.
-\item
-\texttt{String get(int i)} -- return the element stored at index \texttt{i}.
-\item
-\texttt{boolean isEmpty()} -- return \texttt{true} if \texttt{size() == 0}.
-\item
-\texttt{String remove(int i)} -- remove and return the element at index $i$ from the list. (Why is this annoying?)
-\item
-\texttt{String set(int i, String s)} -- replace the element stored at index \texttt{i} with \texttt{s}, and return the element that was originally at position \texttt{i}.
-\item
-\texttt{int size()} -- note that this is not just the length of the backbone array.
-\end{itemize}
+For the following operations, think about how you would implement each and analyze its time complexity. 
 
-The \texttt{get} and \texttt{set} functions are very nice. They are easy to code and run in constant time. These are the bread and butter of any array. Adding at the end of the ArrayList is nice as well. \texttt{contains} is a pain, as it is $O(n)$, and adding to and removing from early in the list are more annoying.
+\begin{center}
+    \begin{tabular}{ p{5cm} p{5cm} p{5cm} }
+	Function	&	Java, \texttt{ArrayList}	&	C++, \texttt{vector} \\
+	\hline
+	\textit{add} an element to the end of the list		&	\texttt{boolean add(E e)}	&	\texttt{void push\_back(const value\_type\& val)}\footnote{\texttt{\& is a C++ reference}} \\
+	\textit{insert} an element to a particular index in the list, shifting all subsequent elements down one index	&	\texttt{void add(int index, E element)}		&	\texttt{iterator insert(iterator position, const value\_type\& val)}\footnote{An \textit{iterator} is like a pointer that allows for traversal of a data structure in a particular order. For example, we can increment the iterator to access the next element in the list. An iterator is NOT merely an integer representing the relative position in our list, as the in the Java implementation of \texttt{add}}	\\
+	\textit{access} the element stored at a particular index	&	\texttt{E get(int index)}		&	\texttt{reference operator[] (size\_type n)}\footnote{\texttt{size\_type} is, for our purposes, \texttt{unsigned int}, and \texttt{reference operator[]} makes this structure's syntax more like a normal array. In particular, to access the element at index \texttt{i} of a vector \texttt{v}, we simply use \texttt{v[i]}, and to update an element, we use \texttt{v[i] = val}.}	\\
+	\textit{update} the value of the element stored at a particular index to a new element & \texttt{E set(int index, E element)} & \texttt{reference operator[] (size\_type n)} \\
+	\textit{search} whether the list contains a particular element & \texttt{boolean contains(Object o)} & no C++ implementation \\
+	\textit{remove} the element at a particular index from the list & \texttt{E remove(int index)} & \texttt{iterator erase (iterator position)} \\
+	search for and \textit{remove} a given element from the list & \texttt{boolean remove(Object o)} & no C++ implementation \\
+	return the \textit{size} of the list\footnote{Note that the length of the list is not simply the size of the backing array.} & \texttt{int size()} & \texttt{int size()}
+    \end{tabular}
+\end{center}
 
-If this is your first time seeing an ArrayList, I would suggest coding up your own. It should be relatively straightforward.
+Accessing and updating elements at particular indices are very nice. They are easy to code and run in constant time. These are the bread and butter of any array. Adding at the end of the list is nice as well. Checking whether some element is contained in the list is a pain, as it is $O(n)$, and adding to and removing from early in the list are more annoying.
 
-\subsection{LinkedList}
+\subsection{Linked List}
 
-Arrays are nice for accessing, say, the seventh element in the list. We extend this to an ArrayList to implement adding and removing elements to and from the end of the list nicely. Removing elements from the beginning of the list, however, is cumbersome.
+Arrays are nice for accessing, say, the seventh element in the list. We extend this to the dynamic array to implement adding and removing elements to and from the end of the list nicely. Removing elements from the beginning of the list, however, is cumbersome.
 
-The LinkedList attempts to remedy this. It trades $O(1)$ access to any element in the list for an easier way to remove elements from either end of the list easily. Consider a chain of paper clips:
+The \textit{linked list} attempts to remedy this. It trades $O(1)$ access to any element in the list for an easier way to remove elements from either end of the list easily. Consider a chain of paper clips:
 
 \begin{center}
 
@@ -145,9 +142,9 @@ The LinkedList attempts to remedy this. It trades $O(1)$ access to any element i
 
 \end{center}
 
-It's easy to add or remove more paper clips from either end of the chain, and from any given paper clip, it's easy to access the paper clip directly previous or next to it in the chain. If we needed the seventh paper clip in the chain, we'd need to manually count, an $O(n)$ operation. However, if we then needed to remove that paper clip from the chain, it wouldn't be that hard, assuming we kept a finger on the seventh paper clip.
+It's easy to add or remove more paper clips from either end of the chain, and from any given paper clip, it's easy to access the paper clip directly previous or next to it in the chain. If we needed the seventh paper clip in the chain, we'd need to manually count, an $O(n)$ operation. However, if we then needed to remove that paper clip from the chain, it wouldn't be that hard, assuming we kept a finger, or pointer, on the seventh paper clip.
 
-The standard library implements a cyclical doubly-linked list, with a dummy head. It looks something like this:
+The best way to think about and implement a linked list is through a cyclical doubly-linked list, with a dummy head. This means each element has its own node container, while the head of the list is simply a node without an element. Such a data structure looks something like this:
 
 \begin{center}
 
@@ -190,93 +187,96 @@ The standard library implements a cyclical doubly-linked list, with a dummy head
 We see that each node maintains a pointer to its next neighbor and its previous neighbor, in addition to containing the String it stores. We can store this data in a class like the following:
 
 \begin{mylstlisting}
-class ListNode {
+class ListNode<E> {
 	ListNode prev, next;
-    String s;
+    E s;
 }
 \end{mylstlisting}
 
 If we were to insert an element after a ListNode \texttt{a}, it is necessary to update all pointers:
 
 \begin{mylstlisting}
-ListNode b = new ListNode();
+ListNode<String> b = new ListNode<String>();
 b.prev = a;
 b.next = a.next;
 b.next.prev = b;
 a.next = b;
 \end{mylstlisting}
 
-Since the LinkedList is symmetric, inserting an element before a node is also easy. To add something to the end of the list, simply add it before the dummy head. From here it should not be too hard to implement all the important functions of a LinkedList.
+Since the linked list is symmetric, inserting an element before a node is also easy. To add something to the end of the list, simply add it before the dummy head. From here it should not be too hard to implement all the important functions of a linked list.
 
-\begin{itemize}
+The Java implementation of a linked list is \texttt{LinkedList}, and the C++ implementation is \texttt{list}. A second C++ class that performs the same tasks but uses a backing array instead of a linked list structure is the \texttt{deque}.
 
-\item \texttt{boolean add(String s)} -- add to the end.
-\item \texttt{void add(int i, String s)} -- this is linear. Don't forget about 0-indexing.
-\item \texttt{void addFirst()}
-\item \texttt{boolean contains(Object o)}
-\item \texttt{String get(int i)}
-\item \texttt{String getFirst()}
-\item \texttt{String getLast()}
-\item \texttt{boolean isEmpty()}
-\item \texttt{String remove()} -- remove the last element.
-\item \texttt{String remove(int i)}
-\item \texttt{String removeFirst()}
-\item \texttt{String set(int i, String s)}
-\item \texttt{int size()}
+\begin{center}
+    \begin{tabular}{ p{3cm} p{4cm} p{4cm} p{4cm} }
+	Function	&	Java, \texttt{LinkedList}	&	C++, \texttt{list} & C++, \texttt{deque} \\
+	\hline
+\textit{add} an element to the end\footnote{In addition, both languages have some more useful operations on either end: Java, \texttt{addFirst}, \texttt{addLast}, \texttt{getFirst}, \texttt{getLast}, \texttt{removeFirst}, \texttt{removeLast}; C++, \texttt{push\_front}, \texttt{push\_back}, \texttt{pop\_front}, \texttt{pop\_back}.} & \texttt{boolean add(E e)} & \multicolumn{2}{p{8cm}}{\centering \texttt{void push\_back(const value\_type\& val)}} \\
+\textit{insert}\footnote{The index in a linked list is implicit.} & \texttt{void add(int index, E element)} & \multicolumn{2}{p{8cm}}{\centering \texttt{iterator insert(iterator position, const value\_type\& val)}} \\
+\textit{access} & \texttt{E get(int index)} & use iterators & \texttt{reference operator[] (size\_type n)} \\
+\textit{update} & \texttt{E set(int index, E element)} & use iterators & \texttt{reference operator[] (size\_type n)} \\
+\textit{search} & \texttt{boolean contains(Object o)} & \multicolumn{2}{p{8cm}}{\centering no C++ implementation} \\
+\textit{remove} the element at a particular index & \texttt{E remove(int index)} & \multicolumn{2}{p{8cm}}{\centering \texttt{iterator erase (iterator position)}} \\
+search for and \textit{remove} a given element & \texttt{boolean remove(Object o)} & \texttt{void remove (const value\_type\& val)} & no implementation \\
+\textit{size} & \texttt{int size()} & \multicolumn{2}{p{8cm}}{\centering \texttt{int size()}} \\
+    \end{tabular}
+\end{center}
 
-\end{itemize}
-
-With a LinkedList implemented, two other data structures immediately follow.
+With a linked list implemented, two other data structures immediately follow.
 
 \section{Stack}
 
-A stack is is literally a stack. If we have a stack of papers, we can \textit{push} things on the top and \textit{pop} things off the top. Sometimes we \textit{peek} at what's on the top but don't actually remove anything. We never do anything with what's on the bottom. This is called \textit{LIFO}: Last In, First Out.
+A \textit{stack} gets its name from being exactly that: a stack. If we have a stack of papers, we can push things on the top and pop things off the top. Sometimes we peek at to access the element on top but don't actually remove anything. We never do anything with what's on the bottom. This is called \textit{LIFO}: Last In, First Out.
 
-\begin{itemize}
+Java implements the stack with \texttt{Stack}, C++ with \texttt{stack}.
 
-\item \texttt{String push(String s)} -- pushes the item on the top of the stack, and returns the same element.
+\begin{center}
+    \begin{tabular}{ p{5cm} p{5cm} p{5cm} }
+	Function	&	Java, \texttt{Stack}	&	C++, \texttt{stack} \\
+	\hline
+	\textit{push}		&	\texttt{E push(E item)}	&	\texttt{void push (const value\_type\& val)} \\
+    \textit{pop}			&	\texttt{E poll()}		&	\texttt{void pop()}	\\
+	\textit{top}		&	\texttt{E peek()}		&	\texttt{value\_type\& top()}	\\
+    \end{tabular}
+\end{center}
 
-\item \texttt{String pop()} -- removes the item at the top of the stack and returns it.
-
-\item \texttt{String peek()} -- returns the top element but does not remove it.
-
-\end{itemize}
-
-Java implements a Stack using an ArrayList-like structure. This works just as well, and is faster in practice, but I prefer the LinkedList structure as a mathematical concept as it is more elegant and more easily customizable.
+Java implements \texttt{Stack} using an array-like structure. This works just as well, and is faster in practice, but I prefer the linked-list structure as a mathematical concept as it is more elegant in its relationship with the queue and more easily customizable.
 
 \section{Queue}
 
-A queue is like a lunch line. We \textit{add} things to the end and \textit{poll} things from the front. Sometimes we \textit{peek} at the front but don't actually remove anything. The first person in line gets served first. This is called \textit{FIFO}: First In, First Out.
+A \textit{queue} is like a queue waiting in line for lunch. We push to the end and pop from the front. Sometimes we peek at the front but don't actually remove anything. The first person in line gets served first. This is called \textit{FIFO}: First In, First Out.
 
-\begin{itemize}
+In Java, \texttt{Queue} is an interface, and in C++, the implementation of the queue is \texttt{queue}.
 
-\item \texttt{boolean add(String s)}
+\begin{center}
+    \begin{tabular}{ p{5cm} p{5cm} p{5cm} }
+	Function	&	Java, \texttt{Queue}	&	C++, \texttt{queue} \\
+	\hline
+	\textit{push}		&	\texttt{boolean offer(E e)}	&	\texttt{void push (const value\_type\& val)} \\
+    \textit{pop}			&	\texttt{E poll()}		&	\texttt{void pop()}	\\
+    \textit{front}		&	\texttt{E peek()}		&	\texttt{value\_type\& front()}	\\
+    \end{tabular}
+\end{center}
 
-\item \texttt{String poll()} -- removes the item at the front of the queue and returns it. Same thing as \texttt{remove()}.
-
-\item \texttt{String peek()}
-
-\end{itemize}
-
-In Java, \texttt{Queue} is an interface. This means that we cannot instantiate a \texttt{Queue}, so the following statement is illegal.
+Since \texttt{Queue} is an interface in Java, we cannot instantiate a \texttt{Queue}, so the following statement is illegal.
 
 \begin{mylstlisting}
 Queue<String> q = new Queue<String>();
 \end{mylstlisting}
 
-Instead, we must do something like this:
+Instead, we must use \texttt{LinkedList}, so we do something like this:
 
 \begin{mylstlisting}
-Queue<String> q = new Queue<LinkedList>();
+Queue<String> q = new LinkedList<String>();
 \end{mylstlisting}
 
-This is legal because LinkedList implements Queue. Queue, however, does not extend List, so it is somewhat untruthful to place Queue under List in this book. However, I do want to stress that the LinkedList is the standard FIFO queue.
+This is legal because \texttt{LinkedList} implements \texttt{Queue}, making it the standard implementation of the FIFO queue.
 
-\section{PriorityQueue}
+\section{Heap}
 
-Quite often a FIFO queue is not always desirable. Maybe the String I want to remove at every given point is the one that is lexicographically least. a PriorityQueue is a Queue that allows us to do this using what is known as a \textit{heap}.
+Quite often a FIFO queue is not always desirable. For example, perhaps the string I want to remove at every given point is the one that is lexicographically least.
 
-A min heap is a tree such that every node is smaller than or equal to all of its children. Pictured is a complete binary min heap, which will be of most use to us.
+A min heap is a tree such that every node is smaller than or equal to all of its children. A max heap is a tree such that every node is larger than or equal to all of its children. Pictured is a complete binary min heap, which will be of use to us.
 
 \begin{center}
 \begin{tikzpicture}[very thick,level/.style={sibling distance=70mm/#1}]
@@ -315,7 +315,7 @@ A min heap is a tree such that every node is smaller than or equal to all of its
 \end{tikzpicture}
 \end{center}
 
-We see that the root of the tree will always be the top element. It is tempting to use a container class with a pointer to its left and its right child. However, we have a much nicer way to store \textit{complete} binary trees with an array. Consider the following numbering of the nodes:
+We see that the root of the tree will always be the smallest element. It is tempting to use a container class with a pointer to its left and its right child. However, we have a much nicer way to store \textit{complete} binary trees with an array. Consider the following numbering of the nodes:
 
 \begin{center}
 \begin{tikzpicture}[very thick,level 1/.style={sibling distance=80mm}, level 2/.style={sibling distance=40mm}, level 3/.style={sibling distance=20mm}]
@@ -688,27 +688,25 @@ And we are done. Once again, this takes at most $\log(N)$ swaps. This idea can b
 
 Remember to implement your heap in an array or ArrayList!
 
-\begin{itemize}
+Java implements a min heap with the \texttt{PriorityQueue}. This class, like \texttt{LinkedList}, also implements \texttt{Queue}. C++ implements a max heap with the \texttt{priority\_queue}. The functions for heaps in both languages are identical to those for queues.
 
-\item \texttt{boolean add(String s)}
-
-\item \texttt{boolean isEmpty()}
-
-\item \texttt{String poll()}
-
-\item \texttt{String peek()}
-
-\item \texttt{int size()}
-
-\end{itemize}
+\begin{center}
+    \begin{tabular}{ p{5cm} p{5cm} p{5cm} }
+	Function	&	Java, \texttt{PriorityQueue}	&	C++, \texttt{priority\_queue} \\
+	\hline
+	\textit{push}		&	\texttt{boolean offer(E e)}	&	\texttt{void push (const value\_type\& val)} \\
+    \textit{pop}			&	\texttt{E poll()}		&	\texttt{void pop()}	\\
+    \textit{front}		&	\texttt{E peek()}		&	\texttt{value\_type\& front()}	\\
+    \end{tabular}
+\end{center}
 
 \section{Set}
 
-A Set is a collection of objects with no duplicate elements. Set is a Java interface. Note that the data structures discussed in this section can be extended to become multisets, but Java implementations of these explicitly disallow multiplicity.
+A \textit{set} is a collection of objects with no duplicate elements. Note that the data structures discussed in this section can be extended to become multisets, but Java and C++ implementations of these explicitly disallow multiplicity.
 
-\subsection{TreeSet}
+\subsection{Binary Search Tree}
 
-A TreeSet is Java's implementation of a \textit{binary search tree} (BST). A binary search tree is a tree where every node is greater than every node in its left subtree and less than every node in its right subtree. As with a heap, to use a BST, we need to impose some kind of ordering on the elements stored.
+A \textit{binary search tree (BST)} is a tree where every node is greater than every node in its left subtree and less than every node in its right subtree. As with a heap, to use a BST, we need to impose some kind of ordering on the elements stored.
 
 \begin{center}
 \begin{tikzpicture}[very thick,level/.style={sibling distance=70mm/#1}]
@@ -744,9 +742,9 @@ A TreeSet is Java's implementation of a \textit{binary search tree} (BST). A bin
 \end{tikzpicture}
 \end{center}
 
-The tree need not be complete. Because it is not complete, there is no way to nicely bound the size of the array we would need if we were to use the same storage method as with the heap. Thus, we are forced to use a TreeNode, with left and right pointers. This is also problematic when determining guarantees on time complexities later, but the ways to solve this problem are pretty complicated so we'll ignore them for now.
+The tree need not be complete, unlike the heap. Because it is not guaranteed to be complete, there is no way to nicely bound the size of the array we would need if we were to use the same storage method as with the heap. Thus, we are forced to use a \texttt{TreeNode}, with left and right pointers. This is also problematic when determining guarantees on time complexities later, but the ways to solve this problem are pretty complicated so we'll ignore them for now.
 
-Given the name of the tree, searching for an element within the tree is quite natural, and similar to a binary search. Compare the element to be searched for with the current node. If they are equal, we are done; otherwise, search the appropriate left or right subtree. As with most structures and algorithms with a binary search structure, this operation lends itself nicely to recursion. If the tree is reasonably nice, we expect to complete this in $O(\log{n})$ time, but searching can be as bad as linear if the tree looks like a LinkedList.
+Given the name of the tree, searching for an element within the tree is quite natural, and similar to a binary search. Compare the element to be searched for with the current node. If they are equal, we are done; otherwise, search the appropriate left or right subtree. As with most structures and algorithms with a binary search structure, this operation lends itself nicely to recursion. If the tree is reasonably nice, we expect to complete this in $O(\log{n})$ time, but searching can be as bad as linear if the tree looks like a linked list.
 
 Adding an element is also natural. As our tree represents a set, it will not contain the same element twice. We trace down until we hit a null pointer, and add the element in the appropriate spot. Let's add a \texttt{"p"} to the BST:
 
@@ -913,9 +911,9 @@ Note that \texttt{"h"} has either no children or only one child, and that nodes 
 
 A standard BST has $O(\log{n})$ operations if the tree is ``nice'', but each operation can be $O(n)$ in the worst case. We need to find a way to automatically balance the BST such that we avoid linear time complexities.
 
-A red-black tree is a self-balancing BST that guarantees $O(\log{n})$ operations by making sure the height of the tree grows logarithmically. It is implemented in Java's TreeSet, so while the BST I described above does not guarantee nice time bounds, Java's implementation does.
+A red-black tree is a self-balancing BST that guarantees $O(\log{n})$ operations by making sure the height of the tree grows logarithmically. It is implemented in Java's \texttt{TreeSet} and is usually implemented in the C++ \texttt{set}, so while the BST I described above does not guarantee nice time bounds, Java's implementation does.
 
-I don't think learning exactly how a red-black tree works is particularly useful for the beginning programmer. How exactly a red-black tree works, together with some more balanced binary search trees which are useful on the competitive scene, are covered in a later chapter.
+I don't think learning exactly how a red-black tree works is particularly useful for the beginning programmer or a competitive programmer. How exactly a red-black tree works, together with some more balanced binary search trees which are useful on the competitive scene, are covered in a later chapter.
 
 Here are some notable functions TreeSet implements. You don't need to implement everything -- \texttt{add()}, \texttt{remove()}, and \texttt{contains()} are the most important.
 
