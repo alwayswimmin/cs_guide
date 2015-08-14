@@ -936,7 +936,11 @@ I don't think learning exactly how a red-black tree works is particularly useful
 
 \subsection{Hash Table}
 
-A \textit{hash table} is a way for us to store objects when we do not require a natural ordering on the set. As with the binary search tree, we want to be able to check whether an element is in our set or not quickly. We do this with the help of a \textit{hash function}. The hash function operates on the object and returns something that characterizes that object. For example, for a string, a possible hash could be the length of the string or the sum of the characters. We want to map an object with an integer hash, so that we can store the values by their hashes in an array.
+The fastest way to store values in a collection is through an array structure. Unfortunately, searching an array for a specific value is very costly. The binary search tree provided a quick way to search for a value by imposing constraints on its placement based on characteristics of the value. Similarly, to find a specific value in an array, we need to impose constraints on what index the value is placed in based on the value itself.
+
+Suppose, for instance, I wanted to store some set of numbers from 0 to 999. I want to quickly add a new number to our set, remove a number, or check if a number is in our set. The easiest way to do this is to maintain a size-1000 array of boolean values. If a number $i$ is in our set, we set the $i$th index in our array to true. We then have $O(1)$ updates and queries for our set.
+
+To extend this to other values, we define the \textit{hash function}. The hash function operates on the object and returns something that characterizes that object. For example, for a string, a possible hash could be the length of the string or the sum of the characters. We want to map an object with an integer hash, so that we can store the values by their hashes in an array. The resulting structure is a \textit{hash table}.
 
 What characterizes a good hash function?
 
@@ -993,6 +997,76 @@ boolean contains(Object o) {
 
 However, a problem quickly arises in the (hopefully unlikely) instance of a collision. If two strings have the same hash, we can't add both to the table since there isn't enough space in the array. The easiest way to handle a collision is by \textit{chaining}. We change the hash table to store a linked list instead of a single element in the event of a collision. The hope is that not too many objects map to a single index in the array, as searching a linked list for a particular element is $O(n)$. Java once implemented this method of resolving collisions, but recently changed it to a BST in Java 8.
 
+Here's an example of chaining on a small array of size 5 with the characters for ``cow''. The numbers below the letters represent their hashes. \texttt{c} and \texttt{w} collide.
+
+\begin{center}
+\begin{tikzpicture}[
+      thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=2.5ex,
+    text centered
+    },
+	hrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=2.5ex,
+    text centered
+    }
+      ]
+
+\node[myrect=5]
+	(array)
+  {
+  					\strut 
+  \nodepart{two}	\strut 
+  \nodepart{three}	\strut 
+  \nodepart{four}	\strut
+  \nodepart{five}	\strut 
+  };
+\foreach \Valor [count=\Valori from 0] in {one ,two ,three ,four ,five }
+  \node[left] at (array.\Valor west) {\Valori};
+
+\node[squarecross] [right=5mm] at (array.one east) (n1) {\strut};
+\draw[*->] ($(array.one)+(0.1,0.1)$) -- (n1);
+
+\node[hrect=2] [right=15mm] at (array.two east) (n2) {\strut \texttt{o} \nodepart{two} \strut };
+\node[below] at (n2.one south) {111};
+\draw[*->] ($(array.two)+(0.1,0.1)$) -- (n2);
+
+\node[squarecross] [right=5mm] at (n2.two east) (m2) {\strut};
+\draw[*->] ($(n2.two)+(0.1,0.1)$) -- (m2);
+
+\node[squarecross] [right=5mm] at (array.three east) (n3) {\strut};
+\draw[*->] ($(array.three)+(0.1,0.1)$) -- (n3);
+
+\node[squarecross] [right=5mm] at (array.four east) (n4) {\strut};
+\draw[*->] ($(array.four)+(0.1,0.1)$) -- (n4);
+
+\node[hrect=2] [right=15mm] at (array.five east) (n5) {\strut \texttt{c} \nodepart{two} \strut };
+\node[below] at (n5.one south) {99};
+\draw[*->] ($(array.five)+(0.1,0.1)$) -- (n5);
+
+\node[hrect=2] [right=15mm] at (n5.two east) (o5) {\strut \texttt{w} \nodepart{two} \strut };
+\node[below] at (o5.one south) {119};
+\draw[*->] ($(n5.two)+(0.1,0.1)$) -- (o5);
+
+\node[squarecross] [right=5mm] at (o5.two east) (m5) {\strut};
+\draw[*->] ($(o5.two)+(0.1,0.1)$) -- (m5);
+
+% c 99 o 111 w 119
+
+\end{tikzpicture}
+\end{center}
+
 If we use a good hash function and a reasonable array size, collisions will almost always be pretty evenly spread across the array. Then, since we store everything using an array, the hash table provides probabilistic $O(1)$ time complexities for insertion, deletion, and search.
 
 The Java set implementation of a hash table is the \texttt{HashSet}. The C++11\footnote{added recently; not included in C++} set implementation of a hash table is the \texttt{unordered\_set}.
@@ -1017,7 +1091,7 @@ Map<String, String> email = new TreeMap<String, String>();
 email.put("Samuel Hsiang", "samuel.c.hsiang@gmail.com");
 \end{mylstlisting}
 
-As a map is a function, the domain, or the keys of the map, form a set, though the values need not be unique.
+As a map is a function, its domain, or the keys of the map, form a set, though the values need not be unique.
 
 \texttt{Map} is a Java interface. The \texttt{TreeMap} is the \texttt{Map} variant of the \texttt{TreeSet}; similarly, the \texttt{HashMap} is the \texttt{Map} variant of the \texttt{HashSet}. \texttt{map} is the C++ implementation of a balanced binary search tree map, while \texttt{unordered\_map} is the C++11 implementation of a hash table.
 
