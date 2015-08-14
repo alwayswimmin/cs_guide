@@ -7,7 +7,7 @@
 \usepackage{lmodern}
 
 \usepackage{listings}
-\usepackage{hyperref}
+\usepackage[hyperfootnotes=false]{hyperref}
 \usepackage{exercise}
 
 \usepackage{algorithm}
@@ -107,7 +107,9 @@
 \makesavenoteenv{tabular}
 \makesavenoteenv{table}
 
-\includeonly{chapters/standard_ds}
+\renewcommand{\arraystretch}{1.5}
+
+% \includeonly{chapters/standard_ds}
 
 \begin{document}
 

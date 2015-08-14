@@ -114,19 +114,18 @@ The Java implementation of a dynamic array is the \texttt{ArrayList}. The C++ im
 For the following operations, think about how you would implement each and analyze its time complexity. 
 
 \begin{center}
-    \begin{tabular}{ p{5cm} p{5cm} p{5cm} }
-	Function	&	Java, \texttt{ArrayList}	&	C++, \texttt{vector} \\
-	\hline
-	\textit{add} an element to the end of the list		&	\texttt{boolean add(E e)}	&	\texttt{void push\_back(const value\_type\& val)}\footnote{\texttt{\& is a C++ reference}} \\
-	\textit{insert} an element to a particular index in the list, shifting all subsequent elements down one index	&	\texttt{void add(int index, E element)}		&	\texttt{iterator insert(iterator position, const value\_type\& val)}\footnote{An \textit{iterator} is like a pointer that allows for traversal of a data structure in a particular order. For example, we can increment the iterator to access the next element in the list. An iterator is NOT merely an integer representing the relative position in our list, as the in the Java implementation of \texttt{add}}	\\
-	\textit{access} the element stored at a particular index	&	\texttt{E get(int index)}		&	\texttt{reference operator[] (size\_type n)}\footnote{\texttt{size\_type} is, for our purposes, \texttt{unsigned int}, and \texttt{reference operator[]} makes this structure's syntax more like a normal array. In particular, to access the element at index \texttt{i} of a vector \texttt{v}, we simply use \texttt{v[i]}, and to update an element, we use \texttt{v[i] = val}.}	\\
-	\textit{update} the value of the element stored at a particular index to a new element & \texttt{E set(int index, E element)} & \texttt{reference operator[] (size\_type n)} \\
-	\textit{search} whether the list contains a particular element & \texttt{boolean contains(Object o)} & \texttt{template <class InputIterator, class T>
-   InputIterator find (InputIterator first, InputIterator last, const T\& val)}\footnote{This function is in \texttt{<algorithm>}.} \\
-	\textit{remove} the element at a particular index from the list & \texttt{E remove(int index)} & \texttt{iterator erase (iterator position)} \\
-	search for and \textit{remove} a given element from the list & \texttt{boolean remove(Object o)} & use iterators \\
-	return the \textit{size} of the list\footnote{Note that the length of the list is not simply the size of the backing array.} & \texttt{int size()} & \texttt{size\_type size() const}
-    \end{tabular}
+  \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
+    \hline
+    \textbf{Function}	&	\textbf{Java, \texttt{ArrayList}}	&	\textbf{C++, \texttt{vector}} \\ \hline
+    \textit{add} an element to the end of the list		&	\texttt{boolean add(E e)}	&	\texttt{void push\_back(const value\_type\& val)}\footnote{\texttt{\& is a C++ reference}} \\ \hline
+    \textit{insert} an element to a particular index in the list, shifting all subsequent elements down one index	&	\texttt{void add(int index, E element)}		&	\texttt{iterator insert(iterator position, const value\_type\& val)}\footnote{An \textit{iterator} is like a pointer that allows for traversal of a data structure in a particular order. For example, we can increment the iterator to access the next element in the list. An iterator is NOT merely an integer representing the relative position in our list, as the in the Java implementation of \texttt{add}}	\\ \hline
+    \textit{access} the element stored at a particular index	&	\texttt{E get(int index)}		&	\texttt{reference operator[] (size\_type n)}\footnote{\texttt{size\_type} is, for our purposes, \texttt{unsigned int}, and \texttt{reference operator[]} makes this structure's syntax more like a normal array. In particular, to access the element at index \texttt{i} of a vector \texttt{v}, we simply use \texttt{v[i]}, and to update an element, we use \texttt{v[i] = val}.}	\\ \hline
+    \textit{update} the value of the element stored at a particular index to a new element & \texttt{E set(int index, E element)} & \texttt{reference operator[] (size\_type n)} \\ \hline
+    \textit{search} whether the list contains a particular element & \texttt{boolean contains(Object o)} & \texttt{iterator find (iterator first, iterator last, const value\_type\& val)}\footnote{This function is in \texttt{<algorithm>}.} \\ \hline
+    \textit{remove} the element at a particular index from the list & \texttt{E remove(int index)} & \texttt{iterator erase (iterator position)} \\ \hline
+    search for and \textit{remove} a given element from the list & \texttt{boolean remove(Object o)} & use iterators \\ \hline
+    return the \textit{size} of the list\footnote{Note that the length of the list is not simply the size of the backing array.} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
+  \end{tabular}
 \end{center}
 
 Accessing and updating elements at particular indices are very nice. They are easy to code and run in constant time. These are the bread and butter of any array. Adding at the end of the list is nice as well. Checking whether some element is contained in the list is a pain, as it is $O(n)$, and adding to and removing from early in the list are more annoying.
@@ -209,20 +208,20 @@ Since the linked list is symmetric, inserting an element before a node is also e
 The Java implementation of a linked list is \texttt{LinkedList}, and the C++ implementation is \texttt{list}. A second C++ class that performs the same tasks but uses a backing array instead of a linked list structure is the \texttt{deque}.
 
 \begin{center}
-    \begin{tabular}{ p{3cm} p{4cm} p{4cm} p{4cm} }
-	Function	&	Java, \texttt{LinkedList}	&	C++, \texttt{list} & C++, \texttt{deque} \\
-	\hline
-\textit{add} an element to the end & \texttt{boolean add(E e)} & \multicolumn{2}{p{8cm}}{\centering \texttt{void push\_back(const value\_type\& val)}} \\
-\textit{insert}\footnote{The index in a linked list is implicit.} & \texttt{void add(int index, E element)} & \multicolumn{2}{p{8cm}}{\centering \texttt{iterator insert(iterator position, const value\_type\& val)}} \\
-\textit{access} & \texttt{E get(int index)} & use iterators & \texttt{reference operator[] (size\_type n)} \\
-\textit{update} & \texttt{E set(int index, E element)} & use iterators & \texttt{reference operator[] (size\_type n)} \\
-\textit{search} & \texttt{boolean contains(Object o)} & \multicolumn{2}{p{8cm}}{\centering InputIterator find (InputIterator first, InputIterator last, const T\& val)}\footnote{This function is in \texttt{<algorithm>}.} \\
-\textit{remove} the element at a particular index & \texttt{E remove(int index)} & \multicolumn{2}{p{8cm}}{\centering \texttt{iterator erase (iterator position)}} \\
-search for and \textit{remove} a given element & \texttt{boolean remove(Object o)} & \texttt{void remove (const value\_type\& val)} & use iterators \\
-\textit{size} & \texttt{int size()} & \multicolumn{2}{p{8cm}}{\centering \texttt{size\_type size() const}} \\
-end operations & \texttt{addFirst}, \texttt{addLast}, \texttt{getFirst}, \texttt{getLast}, \texttt{removeFirst}, \texttt{removeLast} & \texttt{push\_front}, \texttt{push\_back}, \texttt{pop\_front}, \texttt{pop\_back}
+    \begin{tabular}{ | p{3cm} | p{4cm} | p{4cm} | p{4cm} | }
+      \hline
+      \textbf{Function}	&	\textbf{Java, \texttt{LinkedList}}	&	\textbf{C++, \texttt{list}} & \textbf{C++, \texttt{deque}} \\ \hline
+      \textit{add} an element to the end & \texttt{boolean add(E e)} & \multicolumn{2}{p{8cm} |}{\centering \texttt{void push\_back(const value\_type\& val)}} \\ \hline
+      \textit{insert}\footnote{The index in a linked list is implicit.} & \texttt{void add(int index, E element)} & \multicolumn{2}{p{8cm} |}{\centering \texttt{iterator insert(iterator position, const value\_type\& val)}} \\ \hline
+      \textit{access} & \texttt{E get(int index)} & use iterators & \texttt{reference operator[] (size\_type n)} \\ \hline
+      \textit{update} & \texttt{E set(int index, E element)} & use iterators & \texttt{reference operator[] (size\_type n)} \\ \hline
+      \textit{search} & \texttt{boolean contains(Object o)} & \multicolumn{2}{p{8cm} |}{\centering \texttt{iterator find (iterator first, iterator last, const value\_type\& val)}\footnote{This function is in \texttt{<algorithm>}.}} \\ \hline
+      \textit{remove} the element at a particular index & \texttt{E remove(int index)} & \multicolumn{2}{p{8cm} |}{\centering \texttt{iterator erase (iterator position)}} \\ \hline
+      search for and \textit{remove} a given element & \texttt{boolean remove(Object o)} & \texttt{void remove (const value\_type\& val)} & use iterators \\ \hline
+      \textit{size} & \texttt{int size()} & \multicolumn{2}{p{8cm} |}{\centering \texttt{size\_type size() const}} \\ \hline
+      end operations & \texttt{addFirst}, \texttt{addLast}, \texttt{getFirst}, \texttt{getLast}, \texttt{removeFirst}, \texttt{removeLast} & \multicolumn{2}{p{8cm} |}{\texttt{push\_front}, \texttt{push\_back}, \texttt{pop\_front}, \texttt{pop\_back}} \\ \hline
     \end{tabular}
-\end{center}
+  \end{center}
 
 With a linked list implemented, two other data structures immediately follow.
 
@@ -233,13 +232,13 @@ A \textit{stack} gets its name from being exactly that: a stack. If we have a st
 Java implements the stack with \texttt{Stack}, C++ with \texttt{stack}.
 
 \begin{center}
-    \begin{tabular}{ p{5cm} p{5cm} p{5cm} }
-	Function	&	Java, \texttt{Stack}	&	C++, \texttt{stack} \\
-	\hline
-	\textit{push}		&	\texttt{E push(E item)}	&	\texttt{void push (const value\_type\& val)} \\
-    \textit{pop}			&	\texttt{E poll()}		&	\texttt{void pop()}	\\
-	\textit{top}		&	\texttt{E peek()}		&	\texttt{value\_type\& top()}	\\
-    \textit{size} & \texttt{int size()} & \texttt{size\_type size() const}
+    \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
+      \hline
+      \textbf{Function}	&	\textbf{Java, \texttt{Stack}}	&	\textbf{C++, \texttt{stack}} \\ \hline
+      \textit{push}		&	\texttt{E push(E item)}	&	\texttt{void push (const value\_type\& val)} \\ \hline
+      \textit{pop}			&	\texttt{E poll()}		&	\texttt{void pop()}	\\ \hline
+      \textit{top}		&	\texttt{E peek()}		&	\texttt{value\_type\& top()}	\\ \hline
+      \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
     \end{tabular}
 \end{center}
 
@@ -252,14 +251,14 @@ A \textit{queue} is like a queue waiting in line for lunch. We push to the end a
 In Java, \texttt{Queue} is an interface, and in C++, the implementation of the queue is \texttt{queue}.
 
 \begin{center}
-    \begin{tabular}{ p{5cm} p{5cm} p{5cm} }
-	Function	&	Java, \texttt{Queue}	&	C++, \texttt{queue} \\
-	\hline
-	\textit{push}		&	\texttt{boolean offer(E e)}	&	\texttt{void push (const value\_type\& val)} \\
-    \textit{pop}			&	\texttt{E poll()}		&	\texttt{void pop()}	\\
-    \textit{top}		&	\texttt{E peek()}		&	\texttt{value\_type\& front()}	\\
-    \textit{size} & \texttt{int size()} & \texttt{size\_type size() const}
-    \end{tabular}
+  \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
+    \hline
+    \textbf{Function}	&	\textbf{Java, \texttt{Queue}}	&	\textbf{C++, \texttt{queue}} \\ \hline
+    \textit{push}		&	\texttt{boolean offer(E e)}	&	\texttt{void push (const value\_type\& val)} \\ \hline
+    \textit{pop}			&	\texttt{E poll()}		&	\texttt{void pop()}	\\ \hline
+    \textit{top}		&	\texttt{E peek()}		&	\texttt{value\_type\& front()}	\\ \hline
+    \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
+  \end{tabular}
 \end{center}
 
 Since \texttt{Queue} is an interface in Java, we cannot instantiate a \texttt{Queue}, so the following statement is illegal.
@@ -695,13 +694,13 @@ Remember to implement your heap in an array-like structure!
 Java implements a min heap with the \texttt{PriorityQueue}. This class, like \texttt{LinkedList}, also implements \texttt{Queue}. C++ implements a \textit{max}\footnote{Don't forget that C++ implements a max heap, ever.} heap with the \texttt{priority\_queue}. The functions for heaps in both languages are nearly identical to those for queues.
 
 \begin{center}
-    \begin{tabular}{ p{5cm} p{5cm} p{5cm} }
-	Function	&	Java, \texttt{PriorityQueue}	&	C++, \texttt{priority\_queue} \\
-	\hline
-	\textit{push}		&	\texttt{boolean offer(E e)}	&	\texttt{void push (const value\_type\& val)} \\
-    \textit{pop}			&	\texttt{E poll()}		&	\texttt{void pop()}	\\
-    \textit{top}		&	\texttt{E peek()}		&	\texttt{value\_type\& top()}	\\
-    \textit{size} & \texttt{int size()} & \texttt{size\_type size() const}
+    \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
+      \hline
+      \textbf{Function}	&	\textbf{Java, \texttt{PriorityQueue}}	&	\textbf{C++, \texttt{priority\_queue}} \\ \hline
+      \textit{push}		&	\texttt{boolean offer(E e)}	&	\texttt{void push (const value\_type\& val)} \\ \hline
+      \textit{pop}			&	\texttt{E poll()}		&	\texttt{void pop()}	\\ \hline
+      \textit{top}		&	\texttt{E peek()}		&	\texttt{value\_type\& top()}	\\ \hline
+      \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
     \end{tabular}
 \end{center}
 
@@ -923,16 +922,16 @@ A red-black tree is a self-balancing BST that guarantees $O(\log{n})$ operations
 I don't think learning exactly how a red-black tree works is particularly useful for the beginning programmer or a competitive programmer. How exactly a red-black tree works, together with some more balanced binary search trees which are useful on the competitive scene, are covered in a later chapter.
 
 \begin{center}
-    \begin{tabular}{ p{5cm} p{5cm} p{5cm} }
-	Function	&	Java, \texttt{TreeSet}	&	C++, \texttt{set} \\
-	\hline
-	\textit{insert}		&	\texttt{boolean add(E e)}	&	\texttt{void insert (const value\_type\& val)} \\
-   \textit{search}		&	\texttt{boolean contains(Object o)}	&	\texttt{size\_type count (const value\_type\& val) const}\footnote{1 if in the \texttt{set}, 0 otherwise.}	\\
-    \textit{delete}		&	\texttt{boolean	remove(Object o)}		&	\texttt{size\_type erase (const value\_type\& val)}, \texttt{void erase (iterator position)} \\
-    \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\
-    other useful \textit{search} functions	& \texttt{first}, \texttt{last}, \texttt{ceiling}, \texttt{floor}, \texttt{higher}, \texttt{lower} & \texttt{begin}, \texttt{end}, \texttt{lower\_bound}\footnote{\texttt{lower\_bound} is similar to Java's \texttt{ceiling}}, \texttt{upper\_bound}\footnote{\texttt{upper\_bound} is similar to Java's \texttt{higher}}
+    \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
+      \hline
+      \textbf{Function}	&	\textbf{Java, \texttt{TreeSet}}	&	\textbf{C++, \texttt{set}} \\ \hline
+      \textit{insert}		&	\texttt{boolean add(E e)}	&	\texttt{void insert (const value\_type\& val)} \\ \hline
+      \textit{search}		&	\texttt{boolean contains(Object o)}	&	\texttt{size\_type count (const value\_type\& val) const}\footnote{1 if in the \texttt{set}, 0 otherwise.}	\\ \hline
+      \textit{delete}		&	\texttt{boolean	remove(Object o)}		&	\texttt{size\_type erase (const value\_type\& val)}, \texttt{void erase (iterator position)} \\ \hline
+      \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
+      other useful \textit{search} functions	& \texttt{first}, \texttt{last}, \texttt{ceiling}, \texttt{floor}, \texttt{higher}, \texttt{lower} & \texttt{begin}, \texttt{end}, \texttt{lower\_bound}\footnote{\texttt{lower\_bound} is similar to Java's \texttt{ceiling}}, \texttt{upper\_bound}\footnote{\texttt{upper\_bound} is similar to Java's \texttt{higher}}, \texttt{find} \\ \hline
     \end{tabular}
-\end{center}
+  \end{center}
 
 \subsection{Hash Table}
 
@@ -1072,15 +1071,15 @@ If we use a good hash function and a reasonable array size, collisions will almo
 The Java set implementation of a hash table is the \texttt{HashSet}. The C++11\footnote{added recently; not included in C++} set implementation of a hash table is the \texttt{unordered\_set}.
 
 \begin{center}
-    \begin{tabular}{ p{5cm} p{5cm} p{5cm} }
-	Function	&	Java, \texttt{HashSet}	&	C++11, \texttt{unordered\_set} \\
-	\hline
-	\textit{insert}		&	\texttt{boolean add(E e)}	&	\texttt{void insert (const value\_type\& val)} \\
-   \textit{search}		&	\texttt{boolean contains(Object o)}	&	\texttt{size\_type count (const value\_type\& val) const}\footnote{1 if in the \texttt{set}, 0 otherwise.}	\\
-    \textit{delete}		&	\texttt{boolean	remove(Object o)}		&	\texttt{size\_type erase (const value\_type\& val)}, \texttt{void erase (iterator position)} \\
-    \textit{size} & \texttt{int size()} & \texttt{size\_type size() const}
+    \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
+      \hline
+      \textbf{Function}	&	\textbf{Java, \texttt{HashSet}}	&	\textbf{C++11, \texttt{unordered\_set}} \\ \hline
+      \textit{insert}		&	\texttt{boolean add(E e)}	&	\texttt{void insert (const value\_type\& val)} \\ \hline
+      \textit{search}		&	\texttt{boolean contains(Object o)}	&	\texttt{size\_type count (const value\_type\& val) const}\footnote{1 if in the \texttt{set}, 0 otherwise.}	\\ \hline
+      \textit{delete}		&	\texttt{boolean	remove(Object o)}		&	\texttt{size\_type erase (const value\_type\& val)}, \texttt{void erase (iterator position)} \\ \hline
+      \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
     \end{tabular}
-\end{center}
+  \end{center}
 
 \section{Map}
 
@@ -1096,30 +1095,30 @@ As a map is a function, its domain, or the keys of the map, form a set, though t
 \texttt{Map} is a Java interface. The \texttt{TreeMap} is the \texttt{Map} variant of the \texttt{TreeSet}; similarly, the \texttt{HashMap} is the \texttt{Map} variant of the \texttt{HashSet}. \texttt{map} is the C++ implementation of a balanced binary search tree map, while \texttt{unordered\_map} is the C++11 implementation of a hash table.
 
 \begin{center}
-    \begin{tabular}{ p{5cm} p{5cm} p{5cm} }
-	Function	&	Java, \texttt{TreeMap}	&	C++, \texttt{map} \\
-	\hline
-	\textit{insert} and \textit{update}	value	&	\texttt{V put(K key, V value)}	&	\texttt{mapped\_type\& operator[] (const key\_type\& k)}\footnote{Works like an array or \texttt{vector}.} \\
-	\textit{access} & \texttt{V get(Object key)} & \texttt{mapped\_type\& operator[] (const key\_type\& k)} \\
-    \textit{delete} & \texttt{V remove(Object key)} &	\texttt{size\_type erase (const key\_type\& val)}, \texttt{void erase (iterator position)} \\
-    \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\
-    other useful \textit{search} functions	& \multicolumn{2}{c}{just look in the API >.<}
+    \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
+      \hline
+      \textbf{Function}	&	\textbf{Java, \texttt{TreeMap}}	&	\textbf{C++, \texttt{map}} \\ \hline
+      \textit{insert} and \textit{update}	value	&	\texttt{V put(K key, V value)}	&	\texttt{mapped\_type\& operator[] (const key\_type\& k)}\footnote{Works like an array or \texttt{vector}.} \\ \hline
+      \textit{access} & \texttt{V get(Object key)} & \texttt{mapped\_type\& operator[] (const key\_type\& k)} \\ \hline
+      \textit{delete} & \texttt{V remove(Object key)} &	\texttt{size\_type erase (const key\_type\& val)}, \texttt{void erase (iterator position)} \\ \hline
+      \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
+      other useful \textit{search} functions	& \multicolumn{2}{c |}{just look in the API >.<} \\ \hline
     \end{tabular}
 \end{center}
 
 \begin{center}
-    \begin{tabular}{ p{5cm} p{5cm} p{5cm} }
-	Function	&	Java, \texttt{HashMap}	&	C++11, \texttt{unordered\_map} \\
-	\hline
-	\textit{insert} and \textit{update}	value	&	\texttt{V put(K key, V value)}	&	\texttt{mapped\_type\& operator[] (const key\_type\& k)}\footnote{Works like an array or \texttt{vector}.} \\
-	\textit{access} & \texttt{V get(Object key)} & \texttt{mapped\_type\& operator[] (const key\_type\& k)} \\
-    \textit{delete} & \texttt{V remove(Object key)} &	\texttt{size\_type erase (const key\_type\& val)}, \texttt{void erase (iterator position)} \\
-    \textit{size} & \texttt{int size()} & \texttt{size\_type size() const}
+    \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
+      \hline
+      \textbf{Function}	&	\textbf{Java, \texttt{HashMap}}	&	\textbf{C++11, \texttt{unordered\_map}} \\ \hline
+      \textit{insert} and \textit{update}	value	&	\texttt{V put(K key, V value)}	&	\texttt{mapped\_type\& operator[] (const key\_type\& k)}\footnote{Works like an array or \texttt{vector}.} \\ \hline
+      \textit{access} & \texttt{V get(Object key)} & \texttt{mapped\_type\& operator[] (const key\_type\& k)} \\ \hline
+      \textit{delete} & \texttt{V remove(Object key)} &	\texttt{size\_type erase (const key\_type\& val)}, \texttt{void erase (iterator position)} \\ \hline
+      \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
     \end{tabular}
 \end{center}
 
 \section{Big Integer}
 
-A big int is for times when int and long just aren't large enough. The way it works is it stores a number as an array of ints. Each value in the array represents a digit in some very large base. Addition and subtraction can be done in the standard way. Generally multiplying two big ints is not necessary on contests, but it can be sped up using multiplication algorithms like Karatsuba.
+A big int is for times when you need integers greater than $2^{63}-1$, when int and long just aren't large enough. The way it works is it stores a number as an array of ints. Each value in the array represents a digit in some very large base. Addition and subtraction can be done in the standard way. Generally multiplying two big ints is not necessary on contests, but it can be sped up using multiplication algorithms like Karatsuba.
 
 \texttt{BigInteger} is in \texttt{java.math}, but C++ does not have an implementation.
