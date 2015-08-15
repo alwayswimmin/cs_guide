@@ -172,7 +172,8 @@ Suppose we have an array \texttt{my\_pair array[]}. We can then call \texttt{sor
 The second method is to use a custom comparison function. This is very similar to what we would put in function contained in the Java \texttt{Comparator}, but is distinct from the \texttt{Comparator} itself as it is only a function and not a class. Suppose we wanted to sort pairs primarily increasing in the first element and secondarily decreasing in the second. It seems inefficient to code a new pair class when C++ provides one, so we can simply use a custom comparison function to get around this.
 
 \begin{mylstlisting}[language=C++]
-bool cmp(const std::pair<int, int>& lhs, const std::pair<int, int>& rhs) {
+typedef std::pair<int, int> pii;
+bool cmp(const pii& lhs, const pii& rhs) {
 	return lhs.x < rhs.x || lhs.x == rhs.x && lhs.y > rhs.y;
 }
 \end{mylstlisting}
@@ -182,8 +183,9 @@ bool cmp(const std::pair<int, int>& lhs, const std::pair<int, int>& rhs) {
 The final method uses a functor, which is an object that can also work as a function. This is done by implementing the function \texttt{operator()()}. In the case of sorting, the functor works somewhat like a Java \texttt{Comparator}.
 
 \begin{mylstlisting}[language=C++]
+typedef std::pair<int, int> pii;
 struct cmp {
-	bool operator()(const std::pair<int, int>& lhs, const std::pair<int, int>& rhs) {
+	bool operator()(const pii& lhs, const pii& rhs) {
 		return lhs.x < rhs.x || lhs.x == rhs.x && lhs.y > rhs.y;
 	}
 };
