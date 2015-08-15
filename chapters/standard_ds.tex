@@ -1102,6 +1102,7 @@ As a map is a function, its domain, or the keys of the map, form a set, though t
       \textit{access} & \texttt{V get(Object key)} & \texttt{mapped\_type\& operator[] (const key\_type\& k)} \\ \hline
       \textit{delete} & \texttt{V remove(Object key)} &	\texttt{size\_type erase (const key\_type\& val)}, \texttt{void erase (iterator position)} \\ \hline
       \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
+      set of keys	&  \texttt{Set<K> keySet()} & no implementation \\ \hline
       other useful \textit{search} functions	& \multicolumn{2}{c |}{just look in the API >.<} \\ \hline
     \end{tabular}
 \end{center}
@@ -1110,10 +1111,11 @@ As a map is a function, its domain, or the keys of the map, form a set, though t
     \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
       \hline
       \textbf{Function}	&	\textbf{Java, \texttt{HashMap}}	&	\textbf{C++11, \texttt{unordered\_map}} \\ \hline
-      \textit{insert} and \textit{update}	value	&	\texttt{V put(K key, V value)}	&	\texttt{mapped\_type\& operator[] (const key\_type\& k)}\footnote{Works like an array or \texttt{vector}.} \\ \hline
+      \textit{insert} and \textit{update}	value	&	\texttt{V put(K key, V value)}	&	\texttt{mapped\_type\& operator[] (const key\_type\& k)} \\ \hline
       \textit{access} & \texttt{V get(Object key)} & \texttt{mapped\_type\& operator[] (const key\_type\& k)} \\ \hline
       \textit{delete} & \texttt{V remove(Object key)} &	\texttt{size\_type erase (const key\_type\& val)}, \texttt{void erase (iterator position)} \\ \hline
       \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
+      set of keys	&  \texttt{Set<K> keySet()} & no implementation \\ \hline
     \end{tabular}
 \end{center}
 

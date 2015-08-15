@@ -68,9 +68,13 @@ Quicksort also uses a divide and conquer strategy to run in $O(n \log n)$ on ave
 
 Quicksort was previously implemented by \texttt{Arrays.sort()} and \texttt{Collections.sort()}, but Java now uses dual-pivot quicksort and timsort.
 
-\subsection{Comparable}
+\subsection{Comparison}
 
-We'll finish our section on sorting by taking a look at how Java sorts objects. In \texttt{java.util.Arrays}, there is a built-in sort method, \texttt{Arrays.sort()}, which takes an array and sorts it. If we want to sort an array of our own objects, we have to first implement the \texttt{Comparable} interface. This is how Java orders a set of objects. Implementing \texttt{Comparable} requires support of the method \texttt{int compareTo(Object o)}. If \texttt{a.compareTo(b) < 0}, then \texttt{a} comes before \texttt{b}; if \texttt{a.compareTo(b) > 0}, then \texttt{a} comes after \texttt{b}; if \texttt{a.compareTo(b) == 0}, then \texttt{a} is considered equal to \texttt{b}. (\texttt{a.compareTo(b) == 0} should be equivalent to \texttt{a.equals(b)}.) For example, consider the class \texttt{MyPair}:
+We'll finish our section on sorting by taking a look at how Java and C++ sorts objects. We also provide a brief glimpse into using standard data structures that require a natural ordering on the objects within the container.
+
+In Java, there is a built-in sort method, \texttt{Arrays.sort()}, in \texttt{java.util.Arrays}, which takes an array and sorts it. To sort an array \texttt{int array[]}, we call \texttt{Arrays.sort(array)}. Java always sorts least to greatest.
+
+If we want to sort an array of our own objects, we have to first implement the \texttt{Comparable} interface. This is how Java orders a set of objects. Implementing \texttt{Comparable} requires support of the method \texttt{int compareTo(Object o)}. If \texttt{a.compareTo(b) < 0}, then \texttt{a} comes before \texttt{b}; if \texttt{a.compareTo(b) > 0}, then \texttt{a} comes after \texttt{b}; if \texttt{a.compareTo(b) == 0}, then \texttt{a} is considered equal to \texttt{b}. (\texttt{a.compareTo(b) == 0} should be equivalent to \texttt{a.equals(b)}.) For example, consider the class \texttt{MyPair}:
 
 \begin{mylstlisting}
 class MyPair implements Comparable {
@@ -104,6 +108,88 @@ class MyPair implements Comparable<MyPair> {
 	}
 }
 \end{mylstlisting}
+
+We can sort much more than just arrays. Java provides us many data structures we can use, much more than just arrays. In this section, I'll mention briefly the \texttt{ArrayList} for Java and the \texttt{vector} for C++. If you don't know what either of these are, you can just pretend like they are arrays for now; they are very similar and will be covered in detail in a later chapter. To sort these more complex data structures in Java, we use \texttt{Collections.sort()}.
+
+Suppose we wanted to code a custom comparison operation for something that already exists. For example, suppose we wanted to sort an array of \texttt{ArrayList}s based on the sum of the elements in the \texttt{ArrayList}. We clearly don't want to code an entire \texttt{ArrayList} just because we want to sort it in a special way. One way we can easily resolve this is by using \texttt{extends}.
+
+\begin{mylstlisting}
+class MyArrayList extends ArrayList<Integer> implements Comparable<MyArrayList> {
+	public int compareTo(MyArrayList c) {
+		int sum = 0;
+		for(int k = 0; k < size(); k++) {
+			sum += get(k);
+		}
+		int csum = 0;
+		for(int k = 0; k < c.size(); k++) {
+			csum += c.get(k);
+		}
+		if(sum < csum) return -1;
+		if(sum == csum) return 0;
+		return 1;
+	}
+}
+\end{mylstlisting}
+
+Alternatively, we could use a \texttt{Comparator}. This is considered much better practice than the hack I presented earlier by coding a new class with \texttt{extends}. \texttt{Comparator}s are especially useful if we are to compare the same object different ways in the same program. A \texttt{Comparator} is an entirely separate class that takes two objects and determines which ought to come before the other in the ordering. Here is the \texttt{Comparator} implementation of the example I showed above.
+
+\begin{mylstlisting}
+class Cmp implements Comparator<ArrayList<Integer>> {
+	public int compare(ArrayList<Integer> o1, ArrayList<Integer> o2) {
+		int sum1 = 0;
+		for(int k = 0; k < o1.size(); k++) {
+			sum1 += o1.get(k);
+		}
+		int sum2 = 0;
+		for(int k = 0; k < o2.size(); k++) {
+			sum2 += o2.get(k);
+		}
+		if(sum1 < sum2) return -1;
+		if(sum1 == sum2) return 0;
+		return 1;
+	}
+}
+\end{mylstlisting}
+
+Now, when we sort, we'll need to pass our \texttt{Comparator} in addition to the data structure to be sorted. For example, we use the code \texttt{Arrays.sort(array, new Cmp())}.
+
+In C++, comparing objects is slightly different. We have three methods, and all can be used with \texttt{sort}, which is in \texttt{<algorithm>}, or with any other standard library function or data structure which requires an ordering. As in Java, sorting is done least to greatest.
+
+The first method is to implement the method \texttt{operator<} in a \texttt{struct} or \texttt{class} we coded ourselves. Here's an example \texttt{struct my\_pair} which is equivalent to the above Java \texttt{class MyPair}.
+
+\begin{mylstlisting}[language=C++]
+struct my_pair {
+	int x;
+	int y;
+	friend bool operator<(const my_pair& lhs, const my_pair& rhs) {
+		return lhs.x < rhs.x || lhs.x == rhs.x && lhs.y < rhs.y;
+    }
+};
+\end{mylstlisting}
+
+Suppose we have an array \texttt{my\_pair array[]}. We can then call \texttt{sort(array, array + n)} to sort the first \texttt{n} elements of the array. If we have a different data structure, like \texttt{vector<my\_pair> v}, we can sort it using \texttt{sort(v.begin(), v.end())}.
+
+The second method is to use a custom comparison function. This is very similar to what we would put in function contained in the Java \texttt{Comparator}, but is distinct from the \texttt{Comparator} itself as it is only a function and not a class. Suppose we wanted to sort pairs primarily increasing in the first element and secondarily decreasing in the second. It seems inefficient to code a new pair class when C++ provides one, so we can simply use a custom comparison function to get around this.
+
+\begin{mylstlisting}[language=C++]
+bool cmp(const std::pair<int, int>& lhs, const std::pair<int, int>& rhs) {
+	return lhs.x < rhs.x || lhs.x == rhs.x && lhs.y > rhs.y;
+}
+\end{mylstlisting}
+
+\texttt{cmp}, like \texttt{operator<}, should return \texttt{true} when \texttt{lhs} is considered to come before \texttt{rhs} in the ordering. To use \texttt{sort} here, we pass a third argument containing our custom comparison: \texttt{sort(array, array + n, cmp)}. Passing a custom comparison function to a standard library data structure is possible but unfortunately quite confusing and will not be covered here. This can be done more easily using the final method.
+
+The final method uses a functor, which is an object that can also work as a function. This is done by implementing the function \texttt{operator()()}. In the case of sorting, the functor works somewhat like a Java \texttt{Comparator}.
+
+\begin{mylstlisting}[language=C++]
+struct cmp {
+	bool operator()(const std::pair<int, int>& lhs, const std::pair<int, int>& rhs) {
+		return lhs.x < rhs.x || lhs.x == rhs.x && lhs.y > rhs.y;
+	}
+};
+\end{mylstlisting}
+
+The functor method works just as the custom comparison function for \texttt{sort}: \texttt{sort(array, array + n, cmp)}. However, since it is now an object, it can be passed as a template argument to standard library containers much more easily than the comparison function can. For example, for the binary search tree implemented by C++, we can pass a custom comparison using \texttt{set<int, cmp> s}.
 
 \section{Binary Search}
 
