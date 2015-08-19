@@ -151,7 +151,7 @@ class Cmp implements Comparator<ArrayList<Integer>> {
 }
 \end{mylstlisting}
 
-Now, when we sort, we'll need to pass our \texttt{Comparator} in addition to the data structure to be sorted. For example, we use the code \texttt{Arrays.sort(array, new Cmp())}.
+Now, when we sort, we'll need to pass our \texttt{Comparator} in addition to the data structure to be sorted. For example, we use the code \texttt{Arrays.sort(array, new Cmp())}. When we use a data structure that requires a custom comparison, we use a different constructor: \texttt{new TreeSet<ArrayList<Integer>>(new Cmp())}.
 
 In C++, comparing objects is slightly different. We have three methods, and all can be used with \texttt{sort}, which is in \texttt{<algorithm>}, or with any other standard library function or data structure which requires an ordering. As in Java, sorting is done least to greatest.
 
