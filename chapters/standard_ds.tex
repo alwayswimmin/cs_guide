@@ -1083,16 +1083,158 @@ The Java set implementation of a hash table is the \texttt{HashSet}. The C++11\f
 
 \section{Map}
 
-A map is very similar to a set. A map is simply a function that takes a key to a value. Generics for maps therefore have two arguments: one for the key and one for the value. Consider the following Java \texttt{Map} from \texttt{String}s to \texttt{String}s.
+A \textit{map} is simply a function that takes a key to a value. As a map is a function, its domain, or the keys of the map, form a set, though the values need not be unique. The most generic function looks something like in the following diagram conceptually.
 
-\begin{mylstlisting}
-Map<String, String> email = new TreeMap<String, String>();
-email.put("Samuel Hsiang", "samuel.c.hsiang@gmail.com");
-\end{mylstlisting}
+\begin{center}
+\begin{tikzpicture}[
+      thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+\node[myrect=5] (key) {
+						\strut \texttt{"a"}
+	\nodepart{two}		\strut \texttt{"c"}
+	\nodepart{three}	\strut \texttt{"d"}
+	\nodepart{four}		\strut \texttt{"f"}
+	\nodepart{five}		\strut \texttt{"g"}
+};
+\node[myrect=4, fill=mypurple] [right=5cm of key] (value) {
+						\strut \texttt{5}
+	\nodepart{two}		\strut \texttt{3}
+	\nodepart{three}	\strut \texttt{6}
+	\nodepart{four}		\strut \texttt{2}
+};
+\draw[->] (key.one east) -- (value.one west);
+\draw[->] (key.two east) -- (value.three west);
+\draw[->] (key.three east) -- (value.two west);
+\draw[->] (key.four east) -- ($(value.four west) + (0, 0.1)$);
+\draw[->] (key.five east) -- ($(value.four west) + (0, -0.1)$);
 
-As a map is a function, its domain, or the keys of the map, form a set, though the values need not be unique.
+\node[below] at (key.south) {keys};
+\node[below] at (value.south) {values};
+\end{tikzpicture}
+\end{center}
+
+In implementation, a map is very similar to a set. Since the map represents a function from the set of keys to the set of values, we want to support quick lookup and updates of the keys so we can evaluate and change the function represented by our map. The best ways to store a set for quick access and update are, as discussed in the previous section, the binary search tree and the hash table, so all we need to store is the set of keys itself with extra information for the value associated attached.
+
+In a binary search tree map, the elements are sorted by the keys.
+
+\begin{center}
+\begin{tikzpicture}[very thick,level/.style={sibling distance=70mm/#1}, myrect/.style={
+    draw,
+    fill=mypurple,
+    rectangle split,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=3ex,
+    text centered
+    }]
+\node [vertex] (g){\texttt{"g"}}
+  child {
+    node [vertex] (d) {\texttt{"d"}}
+    child {
+      node [vertex] (a) {\texttt{"a"}}
+      child [missing]
+      child {
+        node [vertex] (c) {\texttt{"c"}}
+      }
+    }
+    child {
+      node [vertex] (f) {\texttt{"f"}}
+    }
+  }
+  child [missing];
+
+\node[myrect=1] [below=0.5cm] at (a.south) (a2) {\texttt{5}};
+\node[myrect=1] [below=0.5cm] at (c.south) (c2) {\texttt{6}};
+\node[myrect=1] [below=0.5cm] at (d.south) (d2) {\texttt{3}};
+\node[myrect=1] [below=0.5cm] at (f.south) (f2) {\texttt{2}};
+\node[myrect=1] [below=0.5cm] at (g.south) (g2) {\texttt{2}};
+
+\draw[->] (a) -- (a2);
+\draw[->] (c) -- (c2);
+\draw[->] (d) -- (d2);
+\draw[->] (f) -- (f2);
+\draw[->] (g) -- (g2);
+\end{tikzpicture}
+\end{center}
+
+Similarly, for the hash table map, we use the hashes of the keys.
+
+\begin{center}
+\begin{tikzpicture}[
+      thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+      ]
+
+\node[myrect=5]
+	(array)
+  {
+  					\strut 0
+  \nodepart{two}	\strut 1
+  \nodepart{three}	\strut 2
+  \nodepart{four}	\strut 3
+  \nodepart{five}	\strut 4
+  };
+
+\node[myrect=1] [right=10mm] at (array.one east) (d) {\texttt{"d"}};
+\node[above] at (d.north) {100};
+\node[myrect=1, fill=mypurple] [below=2mm] at (d.south) (d2) {\texttt{3}};
+\draw[->] (array.one east) -- (d);
+\draw[->] (d) -- (d2);
+
+\node[myrect=1] [left=10mm] at (array.three west) (a) {\texttt{"a"}};
+\node[above] at (a.north) {97};
+\node[myrect=1, fill=mypurple] [below=2mm] at (a.south) (a2) {\texttt{5}};
+\draw[->] (array.three west) -- (a);
+\draw[->] (a) -- (a2);
+
+\node[myrect=1] [left=10mm] at (a.west) (f) {\texttt{"f"}};
+\node[above] at (f.north) {102};
+\node[myrect=1, fill=mypurple] [below=2mm] at (f.south) (f2) {\texttt{2}};
+\draw[->] (a) -- (f);
+\draw[->] (f) -- (f2);
+
+\node[myrect=1] [right=30mm] at (array.four east) (g) {\texttt{"g"}};
+\node[above] at (g.north) {103};
+\node[myrect=1, fill=mypurple] [below=2mm] at (g.south) (g2) {\texttt{2}};
+\draw[->] (array.four east) -- (g.west);
+\draw[->] (g) -- (g2);
+
+\node[myrect=1] [right=10mm] at (array.five east) (c) {\texttt{"c"}};
+\node[above] at (c.north) {99};
+\node[myrect=1, fill=mypurple] [below=2mm] at (c.south) (c2) {\texttt{6}};
+\draw[->] (array.five east) -- (c.west);
+\draw[->] (c) -- (c2);
+
+% a 97 c 99 d 100 f 102 g 103
+
+\end{tikzpicture}
+\end{center}
 
 \texttt{Map} is a Java interface. The \texttt{TreeMap} is the \texttt{Map} variant of the \texttt{TreeSet}; similarly, the \texttt{HashMap} is the \texttt{Map} variant of the \texttt{HashSet}. \texttt{map} is the C++ implementation of a balanced binary search tree map, while \texttt{unordered\_map} is the C++11 implementation of a hash table.
+
+As a map involves two kinds of data, keys and values, generics for maps therefore have two arguments, one for the key and one for the value. The following Java \texttt{Map} from \texttt{String}s to \texttt{Integer}s demonstrates generics with multiple arguments.
+
+\begin{mylstlisting}
+Map<String, Integer> number = new TreeMap<String, Integer>();
+email.put("Samuel Hsiang", 5);
+\end{mylstlisting}
 
 \begin{center}
     \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
@@ -1118,9 +1260,3 @@ As a map is a function, its domain, or the keys of the map, form a set, though t
       set of keys	&  \texttt{Set<K> keySet()} & no implementation \\ \hline
     \end{tabular}
 \end{center}
-
-\section{Big Integer}
-
-A big int is for times when you need integers greater than $2^{63}-1$, when int and long just aren't large enough. The way it works is it stores a number as an array of ints. Each value in the array represents a digit in some very large base. Addition and subtraction can be done in the standard way. Generally multiplying two big ints is not necessary on contests, but it can be sped up using multiplication algorithms like Karatsuba.
-
-\texttt{BigInteger} is in \texttt{java.math}, but C++ does not have an implementation.
