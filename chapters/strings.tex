@@ -93,7 +93,7 @@ child {
 \end{tikzpicture}
 \end{center}
 
-Insertion into a trie is straightfoward. We start at the root, and create edges and vertices as necessary until a path representing the string is formed. If a vertex already has an edge of the corect character leading out from it, we just travel down that edge. In order to identify the end of a string, we can append a ``\$'' to every string before we insert. Searching is the same as insertion, except we terminate our search when we can't go any further instead of adding a new edge. 
+Insertion into a trie is straightforward. We start at the root, and create edges and vertices as necessary until a path representing the string is formed. If a vertex already has an edge of the correct character leading out from it, we just travel down that edge. In order to identify the end of a string, we can append a ``\$'' to every string before we insert. Searching is the same as insertion, except we terminate our search when we can't go any further instead of adding a new edge. 
 
 What we've seen so far doesn't make the trie seem particularly useful---string insertion and look up can be easily done in linear time with Rabin-Karp and a hash table as well. The advantage of the trie comes from its tree structure. Having common prefixes bundled together on the same path means we can compute compute information relating to prefixes easily. This allows for tree DPs that we wouldn't be able to do with hashing. (However, hashing does handle certain forms of prefix queries well, such as longest common prefix.)
 
@@ -127,7 +127,7 @@ First, let's figure out how we can construct a suffix array. The naive solution 
 
 Note that it is also possible to compute suffix arrays in $O(n \log n)$ and even $O(n)$, but these algorithms are much more involved. For the purposes of contests, an $O(n \log^2 n)$ suffix array algorithm should almost always be enough.
 
-With a suffix array, we can check if any queried ``needle'' string exists using a binary search with hashing. We can even count the number of occurences by binary searching for the first and last macth. This works in $O(m + \log n \log m)$, where $m$ is the length of the needle, because we need $O(\log m)$ operations for string comparison and $O(\log n)$ iterations of the binary search. Suffix arrays differ from KMP because KMP preprocesses the ``needle,'' while suffix arrays preprocess the ``haystack.'' 
+With a suffix array, we can check if any queried ``needle'' string exists using a binary search with hashing. We can even count the number of occurrences by binary searching for the first and last match. This works in $O(m + \log n \log m)$, where $m$ is the length of the needle, because we need $O(\log m)$ operations for string comparison and $O(\log n)$ iterations of the binary search. Suffix arrays differ from KMP because KMP preprocesses the ``needle,'' while suffix arrays preprocess the ``haystack.'' 
 
 From the suffix array, we can also obtain another useful data structure called the \emph{LCP array}. This array stores the longest common prefix between adjacent suffixes in the suffix array. We can use it to speed up pattern matching to $O(m + \log n)$. In addition, we can build a segment tree over the LCP array to answer queries, such as the LCP between two arbitrary suffixes.
 

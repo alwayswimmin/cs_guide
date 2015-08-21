@@ -105,7 +105,7 @@ If vertex $v$ was the $n$th vertex visited in the DFS, we'll mark $v$ with the l
 
 As we're using a DFS, we'll use a stack $S$ to keep track of nodes we've visited. In a normal DFS on a tree, once we finish exploring a vertex $v$, we pop off $v$ from the stack. This will not be the case for us. A node remains on the stack iff it has a path to some node earlier in the stack.
 
-This means as we explore the descendents of a vertex $v$, we'll know if $v$ has a path back to a previous vertex. That is, if $link(v) < order(v)$, it stays on the stack. If $link(v) = order(v)$, we take it off the stack.
+This means as we explore the descendants of a vertex $v$, we'll know if $v$ has a path back to a previous vertex. That is, if $link(v) < order(v)$, it stays on the stack. If $link(v) = order(v)$, we take it off the stack.
 
 Now we describe Tarjan's algorithm. Here, $num$ represents a global variable that indicates how many vertices have been visited so far.
 
@@ -334,7 +334,7 @@ Unfortunately, even the much-improved bounds of the $O(VE^2)$ Edmonds-Karp are a
 
 Ford-Fulkerson and its variants all deal with global augmentations of paths from $s$ to $t$. Push-relabel takes a different perspective, introducing the concept of a \textit{preflow} and a \textit{height} to make local optimizations that ultimately result in the maximum flow.
 
-A preflow maintains the same properties as a flow but modifies the conservation of flow condition. Instead of total flow in equalling total flow out, flow in must be at least, and therefore can exceed, flow out. We denote the difference between flow in and flow out as the \textit{excess} $e(v)$.
+A preflow maintains the same properties as a flow but modifies the conservation of flow condition. Instead of total flow in equaling total flow out, flow in must be at least, and therefore can exceed, flow out. We denote the difference between flow in and flow out as the \textit{excess} $e(v)$.
 
 \begin{alignat*}{2}
 f(u,v) &\le c(u,v)   \quad && \forall (u,v) \in E \\
