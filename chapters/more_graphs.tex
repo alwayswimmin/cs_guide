@@ -154,12 +154,12 @@ We are given a directed graph with weighted edges, a source node, and a sink nod
 
 More formally, for a graph $G(V,E)$, where $c(u,v)$ represents the capacity of the edge from $u$ to $v$, the flow $f(u,v)$ from a source $s$ to a sink $t$ satisfies
 
-\begin{align*}
-f(u,v) &\le c(u,v) \forall (u,v) \in E \\
-f(u,v) &= -f(v,u) \forall (u,v) \in E \\
-\sum_{v \in V} f(u,v) &= 0 \forall u \in V \setminus \{s,t\} \\
-\sum_{v \in V} f(s,v) &= \sum_{v \in V} f(v,t) = |f|,
-\end{align*}
+\begin{alignat*}{2}
+f(u,v) &\le c(u,v)   \quad && \forall (u,v) \in E \\
+f(u,v) &= -f(v,u)   \quad && \forall (u,v) \in E \\
+\sum_{v \in V} f(u,v) &= 0   \quad && \forall u \in V \setminus \{s,t\} \\
+\sum_{v \in V} f(s,v) &= \sum_{v \in V} f(v,t) = |f|, \quad &&
+\end{alignat*}
 
 where $|f|$ represents the total flow from the source to the sink.
 
@@ -336,12 +336,12 @@ Ford-Fulkerson and its variants all deal with global augmentations of paths from
 
 A preflow maintains the same properties as a flow but modifies the conservation of flow condition. Instead of total flow in equalling total flow out, flow in must be at least, and therefore can exceed, flow out. We denote the difference between flow in and flow out as the \textit{excess} $e(v)$.
 
-\begin{align*}
-f(u,v) &\le c(u,v) \forall (u,v) \in E \\
-f(u,v) &= -f(v,u) \forall (u,v) \in E \\
-e(v) = \sum_{u \in V} f(u,v) &\ge 0 \forall v \in V \setminus \{s\} \\
-e(s) &= \infty.
-\end{align*}
+\begin{alignat*}{2}
+f(u,v) &\le c(u,v)   \quad && \forall (u,v) \in E \\
+f(u,v) &= -f(v,u)   \quad && \forall (u,v) \in E \\
+e(v) = \sum_{u \in V} f(u,v) &\ge 0   \quad && \forall v \in V \setminus \{s\} \\
+e(s) &= \infty. \quad &&
+\end{alignat*}
 
 The definitions of the residual capacity $c_f(u,v)$, edge set $E_f$, and graph $G_f$ are the same as they were defined before, except with a preflow $f$ instead of a normal flow.
 
