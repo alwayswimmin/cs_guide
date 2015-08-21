@@ -16,6 +16,8 @@ In this section we explore ways for computers to quickly compute some useful mat
 
 \section{Fast Fourier Transform}
 
+\textit{This section generously contributed by Yang Liu.}
+
 \subsection{Introduction}
 
 The \emph{Fast Fourier Transform} (FFT) is a technique used to multiply two polynomials of degree $n$ in $O(n \cdot \log n)$ time. At a high level, what this algorithm is doing is something called \emph{polynomial interpolation}. This refers to the fact that if we know the value of a polynomial $P$ of degree $n$ at $n+1$ points, then we can uniquely determine the polynomial $P.$ The proof of this statement is simple, and involves the Lagrange Interpolation Formula for one direction and a simple root counting argument to prove uniqueness. I won't go into detail here because the proof isn't important, but it is useful to know some motivation behind the algorithm.
