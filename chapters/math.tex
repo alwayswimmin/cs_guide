@@ -2,12 +2,6 @@
 
 Algorithms here exhibit a different flavor than the graph theory, string, or geometry algorithms from earlier. This chapter is placed towards the end because material here doesn't really fit in any other section or the USACO canon, \textit{not} because this material is particularly difficult.
 
-\section{Big Integer}
-
-A \textit{big int} is for times when you need integers greater than $2^{63}-1$, when \texttt{int} and \texttt{long} just aren't large enough. The way it works is it stores a number as an array of ints. Each value in the array represents a digit in some very large base. Addition and subtraction can be done in the standard way. Generally multiplying two big ints is not necessary on contests, but it can be sped up using multiplication algorithms like Karatsuba.
-
-\texttt{BigInteger} is in \texttt{java.math}, but C++ does not have an implementation.
-
 \section{Number Theory}
 
 In this section we explore ways for computers to quickly compute some useful mathematical quantities.
@@ -22,4 +16,82 @@ In this section we explore ways for computers to quickly compute some useful mat
 
 \section{Fast Fourier Transform}
 
-Hi, I'll try to write this.
+\subsection{Introduction}
+
+The \emph{Fast Fourier Transform} (FFT) is a technique used to multiply two polynomials of degree $n$ in $O(n \cdot \log n)$ time. At a high level, what this algorithm is doing is something called \emph{polynomial interpolation}. This refers to the fact that if we know the value of a polynomial $P$ of degree $n$ at $n+1$ points, then we can uniquely determine the polynomial $P.$ The proof of this statement is simple, and involves the Lagrange Interpolation Formula for one direction and a simple root counting argument to prove uniqueness. I won't go into detail here because the proof isn't important, but it is useful to know some motivation behind the algorithm.
+
+\subsection{Algorithm Outline}
+
+Let's say we want to multiply 2 polynomials $A(x), B(x)$, both of degree $n$. Let $C(x) = A(x)B(x).$ The algorithm will proceed in 3 steps. Choose an integer $m > 2n,$ and choose $m$ numbers $x_0, x_1, \dots, x_{m-1}.$ I'll clarify what to choose $m$ and the $x_i$ as later. Just keep in mind that we can choose these values to be anything we want.
+
+\begin{enumerate}
+
+\item Evaluate $A(x_0), A(x_1), \dots, A(x_{m-1}).$ Similarly, evaluate $B(x_0), B(x_1), \dots, B(x_{m-1}).$
+
+\item Evaluate $C(x_i) = A(x_i)B(x_i)$ for $0 \le i \le m-1.$
+
+\item Interpolate the coefficients of $C(x)$ given the values $C(x_0), C(x_1), \dots, C(x_{m-1}).$
+
+\end{enumerate}
+
+The last step explains why we need $m > 2n.$ The degree of $C(x)$ is $2n$, so we need at least $2n+1$ points to determine $C(x)$ uniquely.
+
+You should be skeptical that the above approach does any better than $O(n^2).$ In particular, step 1 seems like it should take $O(n^2).$ It turns out that if we choose the values $x_0, x_1, \dots, x_{m-1}$ properly, then we can do much better. Let me now describe what to choose $m$ to be, and what to choose $x_0, x_1, \dots, x_{m-1}$ to be.
+
+\subsection{Roots of Unity}
+
+So what should we choose $m$ and the $x_i$ to be? I'll tell you now and then explain why this selection works so well: choose $m$ to be a power of $2$ that is larger than $2n$, and choose $x_0, x_1, \dots, x_{m-1}$ to be the $m$\emph{-th roots of unity}. The $m$-th roots of unity are complex numbers that satisfy the equation $x^m = 1.$ They are of the form $\cos\left(\frac{2k\pi i}{m}\right) + i \cdot \sin\left(\frac{2k\pi i}{m} \right)$ for any integer $k$ from $0$ to $m-1.$
+
+Let $\omega$ be a \emph{primitive} root of unity, i.e. the smallest $m'$ such that $\omega^{m'} = 1$ is $m' = m.$ We can without loss of generality set $\omega = \cos\left(\frac{2\pi i}{m}\right) + i \cdot \sin\left(\frac{2\pi i}{m} \right).$ One can easily check the the remaining roots of unity are $\omega^2, \omega^3, \dots, \omega^m.$ From now on, let's just set $x_i = \omega^i$ for all $0 \le i \le m-1.$ Note that $x_0 = 1.$ Also set $m = 2^k > 2n.$ Now I can proceed to describing why this algorithm works.
+
+\subsection{Algorithm Specifics: Step 1}
+
+In this section I'll implement (using pseudocode) a function 
+
+vector<double> fft(vector<int> $A$, k, $\omega$). This means that this will return a vector<double> of length $2^k$ containing the values $A(\omega^0), A(\omega^1), A(\omega^2), \dots, A(\omega^{2^k-1}).$ Remember that $\omega^{2^k} = 1.$ The vector<int> $A$ stores the coefficients of $A(x)$. The $x^i$ coefficient of $A$ would be stored as $A[i].$
+
+Here's an implementation. The brackets $\{ \}$ will be shorthand for containing a vector.
+
+\begin{algorithm}[H]
+\caption{FFT}
+%\label{}
+\begin{algorithmic}
+\Function{fft}{vector<int> $A, k, \omega$} \Comment $\omega^{2^k} = 1$
+	\State $A$.resize($2^k$)
+	\State vector<double> $f, f_{even}, f_{odd}$
+	\State $f$.resize($2^k$)
+	
+	\If {$k = 0$}
+		\State \Return $ \{A[0] \}$ \Comment a vector of length 1
+    \EndIf
+    \State $A_{even}$ = $ \{A[0], A[2], \dots, A[2^k-2] \}$
+    \State $A_{odd}$ = $ \{A[1], A[3], \dots, A[2^k-1] \}$
+    \State $f_{even} = $ \Call{fft}{$A_{even}, k-1, \omega^2$}
+    \State $f_{odd} = $ \Call{fft}{$A_{odd}, k-1, \omega^2$}
+    
+    \ForAll {$i = 0, i < 2^{k-1}, i++$}
+    	\State $f[i] = f_{even}[i] + \omega^i \cdot f_{odd}[i]$
+	\State $f[i+2^{k-1}] = f_{even}[i] - \omega^i \cdot f_{odd}[i]$
+
+	\EndFor
+
+\Return f
+
+\EndFunction
+
+\end{algorithmic}
+\end{algorithm}
+
+So why does this algorithm work? Note that the algorithm proceeds recursively, calling itself twice (once for even, once for odd). $A_{even}(x)$ is the polynomial $A[0] + A[2]x + A[4]x^2 + \dots + A[2^k-2]x^{2^{k-1}-1}.$ Therefore, what the recursive call is doing is computing the values of $A_{even}$ at the values $x = \omega^0, \omega^2, \omega^4, \dots, \omega^{2^k-2}.$ This is equivalent to computing the values of the polynomial $B_{even}(x) = A[0] + A[2]x^2 + A[4]x^4 + \dots + A[2^k-2]x^{2^{k}-2}$ at the values $x = \omega^0, \omega^1, \omega^2, \dots, \omega^{2^{k-1}-1}.$ The recursive call for $A_{odd}(x) = A[1] + A[3]x + A[5]x^2 + \dots + A[2^k-1]x^{2^{k-1}-1}$ behaves in a similar way. Similarly, define $B_{odd}(x) = A[1] + A[3]x^2 + A[5]x^4 + \dots + A[2^k-1]x^{2^{k}-2}.$
+
+The key is to note that $A(x) = B_{even}(x) + x \cdot B_{odd}(x).$ Since we know the values of $B_{even}(x), B_{odd}(x)$ for $x = \omega^0, \omega^1, \dots, \omega^{2^{k-1}-1},$ we also can compute the values of $A(x)$ for these values of $x$. But what about the remaining values? This requires the observation that $\omega^{i + 2^{k-1}} = -\omega^i.$ Since $B_{even}(x), B_{odd}(x)$ only have even powers, $B_{even}(\omega^i) = B_{even}(-\omega^i) = B_{even}(\omega^{i + 2^{k-1}}).$ The same equality also holds for $B_{odd}(x).$ Using this observation along with the equation $A(x) = B_{even}(x) + x \cdot B_{odd}(x),$ we can see now why the two equations in the for loop of the code above hold. And that's how we do Step 1!
+
+Let's analyze the runtime of this function FFT. Let $T(2^k)$ denote the time needed to run FFT on an array of length $2^k.$ Then $T(2^k) = 2T(2^{k-1}) + O(2^k) \implies T(2^k) = k \cdot 2^k,$ by the Master Theorem. Since $2^k$ is $O(n)$ by the above discussion, this steps runs in $O(n \cdot \log n)$ time.
+
+\subsection{Algorithm Specifics: Step 2}
+
+I'll give you a rest after a hard theoretical previous section. You do this step by looping through the values $A(x_0), A(x_1), \dots, A(x_{2^k-1}), B(x_0), B(x_1), \dots, B(x_{2^k-1})$ and directly multiplying $C(x_i) = A(x_i)B(x_i).$ This step runs in $O(n)$ time.
+
+\subsection{Algorithm Specifics: Step 3}
+
+This may seem like something completely new, but actually most of the work is already done. I'll explain. In fact I claim that writing the code $C = \text{fft}(C, k, \omega^{-1}),$ and then dividing all elements of $C$ by $2^k$ finishes. You should believe me on this. If you work out the computations, you'll see that this is true. You can think of it kind of as a roots of unity filter if you know what that means. If not, just be happy that step 3 is very easy once you have Step 1!
