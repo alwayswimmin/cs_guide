@@ -1,0 +1,134 @@
+\BOOKMARK [0][-]{chapter*.1}{Acknowledgments}{}% 1
+\BOOKMARK [0][-]{chapter*.4}{Preface}{}% 2
+\BOOKMARK [0][-]{chapter.1}{Fundamentals}{}% 3
+\BOOKMARK [1][-]{section.1.1}{Input and Output}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.2}{Complexity}{chapter.1}% 5
+\BOOKMARK [1][-]{section.1.3}{Sorting}{chapter.1}% 6
+\BOOKMARK [2][-]{subsection.1.3.1}{Insertion Sort}{section.1.3}% 7
+\BOOKMARK [2][-]{subsection.1.3.2}{Merge Sort}{section.1.3}% 8
+\BOOKMARK [2][-]{subsection.1.3.3}{Quicksort}{section.1.3}% 9
+\BOOKMARK [2][-]{subsection.1.3.4}{Comparison}{section.1.3}% 10
+\BOOKMARK [1][-]{section.1.4}{Binary Search}{chapter.1}% 11
+\BOOKMARK [0][-]{chapter.2}{Standard Library Data Structures}{}% 12
+\BOOKMARK [1][-]{section.2.1}{Generics}{chapter.2}% 13
+\BOOKMARK [1][-]{section.2.2}{List}{chapter.2}% 14
+\BOOKMARK [2][-]{subsection.2.2.1}{Dynamic Array}{section.2.2}% 15
+\BOOKMARK [2][-]{subsection.2.2.2}{Linked List}{section.2.2}% 16
+\BOOKMARK [1][-]{section.2.3}{Stack}{chapter.2}% 17
+\BOOKMARK [1][-]{section.2.4}{Queue}{chapter.2}% 18
+\BOOKMARK [1][-]{section.2.5}{Heap}{chapter.2}% 19
+\BOOKMARK [1][-]{section.2.6}{Set}{chapter.2}% 20
+\BOOKMARK [2][-]{subsection.2.6.1}{Binary Search Tree}{section.2.6}% 21
+\BOOKMARK [2][-]{subsection.2.6.2}{Hash Table}{section.2.6}% 22
+\BOOKMARK [1][-]{section.2.7}{Map}{chapter.2}% 23
+\BOOKMARK [0][-]{chapter.3}{Big Ideas}{}% 24
+\BOOKMARK [1][-]{section.3.1}{Complete Search}{chapter.3}% 25
+\BOOKMARK [2][-]{subsection.3.1.1}{Depth-First Search}{section.3.1}% 26
+\BOOKMARK [2][-]{subsection.3.1.2}{Breadth-First Search}{section.3.1}% 27
+\BOOKMARK [2][-]{subsection.3.1.3}{Depth-First Search with Iterative Deepening}{section.3.1}% 28
+\BOOKMARK [1][-]{section.3.2}{Greedy Algorithm}{chapter.3}% 29
+\BOOKMARK [1][-]{section.3.3}{Binary Searching on the Answer}{chapter.3}% 30
+\BOOKMARK [1][-]{section.3.4}{Dynamic Programming}{chapter.3}% 31
+\BOOKMARK [0][-]{chapter.4}{Graph Algorithms}{}% 32
+\BOOKMARK [1][-]{section.4.1}{Connected Components}{chapter.4}% 33
+\BOOKMARK [2][-]{subsection.4.1.1}{Flood Fill}{section.4.1}% 34
+\BOOKMARK [2][-]{subsection.4.1.2}{Union-Find \(Disjoint Set Union\)}{section.4.1}% 35
+\BOOKMARK [1][-]{section.4.2}{Shortest Path}{chapter.4}% 36
+\BOOKMARK [2][-]{subsection.4.2.1}{Dijkstra}{section.4.2}% 37
+\BOOKMARK [2][-]{subsection.4.2.2}{Floyd-Warshall}{section.4.2}% 38
+\BOOKMARK [2][-]{subsection.4.2.3}{Bellman-Ford}{section.4.2}% 39
+\BOOKMARK [1][-]{section.4.3}{Minimum Spanning Tree}{chapter.4}% 40
+\BOOKMARK [2][-]{subsection.4.3.1}{Prim}{section.4.3}% 41
+\BOOKMARK [2][-]{subsection.4.3.2}{Kruskal}{section.4.3}% 42
+\BOOKMARK [1][-]{section.4.4}{Eulerian Tour}{chapter.4}% 43
+\BOOKMARK [0][-]{chapter.5}{Complex Ideas and Data Structures}{}% 44
+\BOOKMARK [1][-]{section.5.1}{Dynamic Programming over Subsets \(n2n DP\)}{chapter.5}% 45
+\BOOKMARK [1][-]{section.5.2}{n Bucketing}{chapter.5}% 46
+\BOOKMARK [1][-]{section.5.3}{Segment Tree}{chapter.5}% 47
+\BOOKMARK [2][-]{subsection.5.3.1}{Lazy Propagation}{section.5.3}% 48
+\BOOKMARK [2][-]{subsection.5.3.2}{Fenwick Tree}{section.5.3}% 49
+\BOOKMARK [1][-]{section.5.4}{Queue with Minimum Query}{chapter.5}% 50
+\BOOKMARK [1][-]{section.5.5}{Balanced Binary Search Tree}{chapter.5}% 51
+\BOOKMARK [2][-]{subsection.5.5.1}{Treap}{section.5.5}% 52
+\BOOKMARK [2][-]{subsection.5.5.2}{Tree Rotation}{section.5.5}% 53
+\BOOKMARK [2][-]{subsection.5.5.3}{Splay Tree}{section.5.5}% 54
+\BOOKMARK [2][-]{subsection.5.5.4}{Red-Black Tree}{section.5.5}% 55
+\BOOKMARK [0][-]{chapter.6}{Computational Geometry}{}% 56
+\BOOKMARK [1][-]{section.6.1}{Basic Tools}{chapter.6}% 57
+\BOOKMARK [1][-]{section.6.2}{Formulas}{chapter.6}% 58
+\BOOKMARK [2][-]{subsection.6.2.1}{Area}{section.6.2}% 59
+\BOOKMARK [2][-]{subsection.6.2.2}{Distance}{section.6.2}% 60
+\BOOKMARK [2][-]{subsection.6.2.3}{Configuration}{section.6.2}% 61
+\BOOKMARK [2][-]{subsection.6.2.4}{Intersection}{section.6.2}% 62
+\BOOKMARK [1][-]{section.6.3}{Convex Hull}{chapter.6}% 63
+\BOOKMARK [1][-]{section.6.4}{Sweep Line}{chapter.6}% 64
+\BOOKMARK [0][-]{chapter.7}{Tree Algorithms}{}% 65
+\BOOKMARK [1][-]{section.7.1}{DFS on Trees}{chapter.7}% 66
+\BOOKMARK [1][-]{section.7.2}{Jump Pointers}{chapter.7}% 67
+\BOOKMARK [1][-]{section.7.3}{Euler Tour Technique}{chapter.7}% 68
+\BOOKMARK [2][-]{subsection.7.3.1}{Euler Tour Tree}{section.7.3}% 69
+\BOOKMARK [1][-]{section.7.4}{Heavy-Light Decomposition}{chapter.7}% 70
+\BOOKMARK [1][-]{section.7.5}{Link-Cut Tree}{chapter.7}% 71
+\BOOKMARK [0][-]{chapter.8}{Strings}{}% 72
+\BOOKMARK [1][-]{section.8.1}{String Hashing}{chapter.8}% 73
+\BOOKMARK [1][-]{section.8.2}{Knuth-Morris-Pratt}{chapter.8}% 74
+\BOOKMARK [1][-]{section.8.3}{Trie}{chapter.8}% 75
+\BOOKMARK [1][-]{section.8.4}{Suffix Array}{chapter.8}% 76
+\BOOKMARK [1][-]{section.8.5}{Aho-Corasick}{chapter.8}% 77
+\BOOKMARK [1][-]{section.8.6}{Advanced Suffix Data Structures}{chapter.8}% 78
+\BOOKMARK [2][-]{subsection.8.6.1}{Suffix Tree}{section.8.6}% 79
+\BOOKMARK [2][-]{subsection.8.6.2}{Suffix Automaton}{section.8.6}% 80
+\BOOKMARK [0][-]{chapter.9}{More Graph Algorithms}{}% 81
+\BOOKMARK [1][-]{section.9.1}{Strongly Connected Components}{chapter.9}% 82
+\BOOKMARK [1][-]{section.9.2}{Network Flow}{chapter.9}% 83
+\BOOKMARK [2][-]{subsection.9.2.1}{Ford-Fulkerson}{section.9.2}% 84
+\BOOKMARK [2][-]{subsection.9.2.2}{Max-Flow Min-Cut Theorem}{section.9.2}% 85
+\BOOKMARK [2][-]{subsection.9.2.3}{Refinements of Ford-Fulkerson}{section.9.2}% 86
+\BOOKMARK [2][-]{subsection.9.2.4}{Push-Relabel}{section.9.2}% 87
+\BOOKMARK [2][-]{subsection.9.2.5}{Other Problems with Flow Solutions}{section.9.2}% 88
+\BOOKMARK [0][-]{chapter.10}{Math}{}% 89
+\BOOKMARK [1][-]{section.10.1}{Number Theory}{chapter.10}% 90
+\BOOKMARK [2][-]{subsection.10.1.1}{Random Prime Numbers Bounds}{section.10.1}% 91
+\BOOKMARK [2][-]{subsection.10.1.2}{Prime Number Testing}{section.10.1}% 92
+\BOOKMARK [2][-]{subsection.10.1.3}{Sieve of Eratosthenes}{section.10.1}% 93
+\BOOKMARK [2][-]{subsection.10.1.4}{Prime Factorization}{section.10.1}% 94
+\BOOKMARK [2][-]{subsection.10.1.5}{GCD and the Euclidean Algorithm}{section.10.1}% 95
+\BOOKMARK [2][-]{subsection.10.1.6}{Fermat's Little Theorem}{section.10.1}% 96
+\BOOKMARK [2][-]{subsection.10.1.7}{Modular Inverses}{section.10.1}% 97
+\BOOKMARK [1][-]{section.10.2}{Combinatorial Games}{chapter.10}% 98
+\BOOKMARK [1][-]{section.10.3}{Karatsuba}{chapter.10}% 99
+\BOOKMARK [1][-]{section.10.4}{Matrices}{chapter.10}% 100
+\BOOKMARK [1][-]{section.10.5}{Fast Fourier Transform}{chapter.10}% 101
+\BOOKMARK [2][-]{subsection.10.5.1}{Introduction}{section.10.5}% 102
+\BOOKMARK [2][-]{subsection.10.5.2}{Algorithm Outline}{section.10.5}% 103
+\BOOKMARK [2][-]{subsection.10.5.3}{Roots of Unity}{section.10.5}% 104
+\BOOKMARK [2][-]{subsection.10.5.4}{Algorithm Specifics: Step 1}{section.10.5}% 105
+\BOOKMARK [2][-]{subsection.10.5.5}{Algorithm Specifics: Step 2}{section.10.5}% 106
+\BOOKMARK [2][-]{subsection.10.5.6}{Algorithm Specifics: Step 3}{section.10.5}% 107
+\BOOKMARK [2][-]{subsection.10.5.7}{A Brief Note on Number Theory}{section.10.5}% 108
+\BOOKMARK [0][-]{chapter.11}{Nonsense}{}% 109
+\BOOKMARK [1][-]{section.11.1}{Segment Tree Extensions}{chapter.11}% 110
+\BOOKMARK [2][-]{subsection.11.1.1}{Fractional Cascading}{section.11.1}% 111
+\BOOKMARK [2][-]{subsection.11.1.2}{Persistence}{section.11.1}% 112
+\BOOKMARK [2][-]{subsection.11.1.3}{Higher Dimensions}{section.11.1}% 113
+\BOOKMARK [1][-]{section.11.2}{DP Optimizations}{chapter.11}% 114
+\BOOKMARK [1][-]{section.11.3}{Top Tree}{chapter.11}% 115
+\BOOKMARK [1][-]{section.11.4}{Link-Cut Cactus}{chapter.11}% 116
+\BOOKMARK [0][-]{chapter.12}{Problems}{}% 117
+\BOOKMARK [1][-]{section.12.1}{Bronze}{chapter.12}% 118
+\BOOKMARK [1][-]{section.12.2}{Silver}{chapter.12}% 119
+\BOOKMARK [2][-]{subsection.12.2.1}{Complete Search}{section.12.2}% 120
+\BOOKMARK [2][-]{subsection.12.2.2}{Greedy}{section.12.2}% 121
+\BOOKMARK [2][-]{subsection.12.2.3}{Standard Dynamic Programming}{section.12.2}% 122
+\BOOKMARK [2][-]{subsection.12.2.4}{Standard Graph Theory}{section.12.2}% 123
+\BOOKMARK [2][-]{subsection.12.2.5}{Easy Computational Geometry}{section.12.2}% 124
+\BOOKMARK [1][-]{section.12.3}{Gold}{chapter.12}% 125
+\BOOKMARK [2][-]{subsection.12.3.1}{More Dynamic Programming}{section.12.3}% 126
+\BOOKMARK [2][-]{subsection.12.3.2}{Binary Search}{section.12.3}% 127
+\BOOKMARK [2][-]{subsection.12.3.3}{Segment Tree}{section.12.3}% 128
+\BOOKMARK [2][-]{subsection.12.3.4}{More Standard Graph Theory}{section.12.3}% 129
+\BOOKMARK [2][-]{subsection.12.3.5}{Standard Computational Geometry}{section.12.3}% 130
+\BOOKMARK [2][-]{subsection.12.3.6}{Less Standard Problems}{section.12.3}% 131
+\BOOKMARK [1][-]{section.12.4}{Beyond}{chapter.12}% 132
+\BOOKMARK [2][-]{subsection.12.4.1}{Data Structure Nonsense}{section.12.4}% 133
+\BOOKMARK [2][-]{subsection.12.4.2}{Other Nonsense}{section.12.4}% 134
