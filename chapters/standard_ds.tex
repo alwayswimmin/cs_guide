@@ -113,8 +113,7 @@ The Java implementation of a dynamic array is the \texttt{ArrayList}. The C++ im
 
 For the following operations, think about how you would implement each and analyze its time complexity. 
 
-\begin{center}
-  \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
+\beginmytabular{ | p{5cm} | p{5cm} | p{5cm} | }
     \hline
     \textbf{Function}	&	\textbf{Java, \texttt{ArrayList}}	&	\textbf{C++, \texttt{vector}} \\ \hline
     \textit{add} an element to the end of the list		&	\texttt{boolean add(E e)}	&	\texttt{void push\_back(const value\_type\& val)}\footnote{\texttt{\& is a C++ reference}} \\ \hline
@@ -125,9 +124,7 @@ For the following operations, think about how you would implement each and analy
     \textit{remove} the element at a particular index from the list & \texttt{E remove(int index)} & \texttt{iterator erase (iterator position)} \\ \hline
     search for and \textit{remove} a given element from the list & \texttt{boolean remove(Object o)} & use iterators \\ \hline
     return the \textit{size} of the list\footnote{Note that the length of the list is not simply the size of the backing array.} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
-  \end{tabular}
-\end{center}
-
+\endmytabular
 Accessing and updating elements at particular indices are very nice. They are easy to code and run in constant time. These are the bread and butter of any array. Adding at the end of the list is nice as well. Checking whether some element is contained in the list is a pain, as it is $O(n)$, and adding to and removing from early in the list are more annoying.
 
 \subsection{Linked List}
@@ -207,8 +204,7 @@ Since the linked list is symmetric, inserting an element before a node is also e
 
 The Java implementation of a linked list is \texttt{LinkedList}, and the C++ implementation is \texttt{list}. A second C++ class that performs the same tasks but uses a backing array instead of a linked list structure is the \texttt{deque}.
 
-\begin{center}
-    \begin{tabular}{ | p{3cm} | p{4cm} | p{4cm} | p{4cm} | }
+\beginmytabular{ | p{3cm} | p{4cm} | p{4cm} | p{4cm} | }
       \hline
       \textbf{Function}	&	\textbf{Java, \texttt{LinkedList}}	&	\textbf{C++, \texttt{list}} & \textbf{C++, \texttt{deque}} \\ \hline
       \textit{add} an element to the end & \texttt{boolean add(E e)} & \multicolumn{2}{p{8cm} |}{\centering \texttt{void push\_back(const value\_type\& val)}} \\ \hline
@@ -220,8 +216,7 @@ The Java implementation of a linked list is \texttt{LinkedList}, and the C++ imp
       search for and \textit{remove} a given element & \texttt{boolean remove(Object o)} & \texttt{void remove (const value\_type\& val)} & use iterators \\ \hline
       \textit{size} & \texttt{int size()} & \multicolumn{2}{p{8cm} |}{\centering \texttt{size\_type size() const}} \\ \hline
       end operations & \texttt{addFirst}, \texttt{addLast}, \texttt{getFirst}, \texttt{getLast}, \texttt{removeFirst}, \texttt{removeLast} & \multicolumn{2}{p{8cm} |}{\texttt{push\_front}, \texttt{push\_back}, \texttt{pop\_front}, \texttt{pop\_back}} \\ \hline
-    \end{tabular}
-  \end{center}
+\endmytabular
 
 With a linked list implemented, two other data structures immediately follow.
 
@@ -231,16 +226,14 @@ A \textit{stack} gets its name from being exactly that: a stack. If we have a st
 
 Java implements the stack with \texttt{Stack}, C++ with \texttt{stack}.
 
-\begin{center}
-    \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
+\beginmytabular{ | p{5cm} | p{5cm} | p{5cm} | }
       \hline
       \textbf{Function}	&	\textbf{Java, \texttt{Stack}}	&	\textbf{C++, \texttt{stack}} \\ \hline
       \textit{push}		&	\texttt{E push(E item)}	&	\texttt{void push (const value\_type\& val)} \\ \hline
       \textit{pop}			&	\texttt{E poll()}		&	\texttt{void pop()}	\\ \hline
       \textit{top}		&	\texttt{E peek()}		&	\texttt{value\_type\& top()}	\\ \hline
       \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
-    \end{tabular}
-\end{center}
+\endmytabular
 
 Java implements \texttt{Stack} using an array-like structure. This works just as well, and is faster in practice, but I prefer the linked-list structure as a mathematical concept as it is more elegant in its relationship with the queue and more easily customizable.
 
@@ -250,16 +243,14 @@ A \textit{queue} is like a queue waiting in line for lunch. We push to the end a
 
 In Java, \texttt{Queue} is an interface, and in C++, the implementation of the queue is \texttt{queue}.
 
-\begin{center}
-  \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
+\beginmytabular{ | p{5cm} | p{5cm} | p{5cm} | }
     \hline
     \textbf{Function}	&	\textbf{Java, \texttt{Queue}}	&	\textbf{C++, \texttt{queue}} \\ \hline
     \textit{push}		&	\texttt{boolean offer(E e)}	&	\texttt{void push (const value\_type\& val)} \\ \hline
     \textit{pop}			&	\texttt{E poll()}		&	\texttt{void pop()}	\\ \hline
     \textit{top}		&	\texttt{E peek()}		&	\texttt{value\_type\& front()}	\\ \hline
     \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
-  \end{tabular}
-\end{center}
+\endmytabular
 
 Since \texttt{Queue} is an interface in Java, we cannot instantiate a \texttt{Queue}, so the following statement is illegal.
 
@@ -701,9 +692,7 @@ Java implements a min heap with the \texttt{PriorityQueue}. This class, like \te
       \textit{pop}			&	\texttt{E poll()}		&	\texttt{void pop()}	\\ \hline
       \textit{top}		&	\texttt{E peek()}		&	\texttt{value\_type\& top()}	\\ \hline
       \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
-    \end{tabular}
-\end{center}
-
+  \endmytabular
 \section{Set}
 
 A \textit{set} is a collection of objects with no duplicate elements. Note that the data structures discussed in this section can be extended to become multisets, but Java and C++ implementations of these explicitly disallow multiplicity.
@@ -921,8 +910,7 @@ A red-black tree is a self-balancing BST that guarantees $O(\log{n})$ operations
 
 I don't think learning exactly how a red-black tree works is particularly useful for the beginning programmer or a competitive programmer. How exactly a red-black tree works, together with some more balanced binary search trees which are useful on the competitive scene, are covered in a later chapter.
 
-\begin{center}
-    \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
+\beginmytabular{ | p{5cm} | p{5cm} | p{5cm} | }
       \hline
       \textbf{Function}	&	\textbf{Java, \texttt{TreeSet}}	&	\textbf{C++, \texttt{set}} \\ \hline
       \textit{insert}		&	\texttt{boolean add(E e)}	&	\texttt{void insert (const value\_type\& val)} \\ \hline
@@ -930,8 +918,7 @@ I don't think learning exactly how a red-black tree works is particularly useful
       \textit{delete}		&	\texttt{boolean	remove(Object o)}		&	\texttt{size\_type erase (const value\_type\& val)}, \texttt{void erase (iterator position)} \\ \hline
       \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
       other useful \textit{search} functions	& \texttt{first}, \texttt{last}, \texttt{ceiling}, \texttt{floor}, \texttt{higher}, \texttt{lower} & \texttt{begin}, \texttt{end}, \texttt{lower\_bound}\footnote{\texttt{lower\_bound} is similar to Java's \texttt{ceiling}}, \texttt{upper\_bound}\footnote{\texttt{upper\_bound} is similar to Java's \texttt{higher}}, \texttt{find} \\ \hline
-    \end{tabular}
-  \end{center}
+\endmytabular
 
 \subsection{Hash Table}
 
@@ -1070,16 +1057,14 @@ If we use a good hash function and a reasonable array size, collisions will almo
 
 The Java set implementation of a hash table is the \texttt{HashSet}. The C++11\footnote{added recently; not included in C++} set implementation of a hash table is the \texttt{unordered\_set}.
 
-\begin{center}
-    \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
+\beginmytabular{ | p{5cm} | p{5cm} | p{5cm} | }
       \hline
       \textbf{Function}	&	\textbf{Java, \texttt{HashSet}}	&	\textbf{C++11, \texttt{unordered\_set}} \\ \hline
       \textit{insert}		&	\texttt{boolean add(E e)}	&	\texttt{void insert (const value\_type\& val)} \\ \hline
       \textit{search}		&	\texttt{boolean contains(Object o)}	&	\texttt{size\_type count (const value\_type\& val) const}\footnote{1 if in the \texttt{set}, 0 otherwise.}	\\ \hline
       \textit{delete}		&	\texttt{boolean	remove(Object o)}		&	\texttt{size\_type erase (const value\_type\& val)}, \texttt{void erase (iterator position)} \\ \hline
       \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
-    \end{tabular}
-  \end{center}
+\endmytabular
 
 \section{Map}
 
@@ -1236,8 +1221,7 @@ Map<String, Integer> number = new TreeMap<String, Integer>();
 email.put("Samuel Hsiang", 5);
 \end{mylstlisting}
 
-\begin{center}
-    \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
+\beginmytabular{ | p{5cm} | p{5cm} | p{5cm} | }
       \hline
       \textbf{Function}	&	\textbf{Java, \texttt{TreeMap}}	&	\textbf{C++, \texttt{map}} \\ \hline
       \textit{insert} and \textit{update}	value	&	\texttt{V put(K key, V value)}	&	\texttt{mapped\_type\& operator[] (const key\_type\& k)}\footnote{Works like an array or \texttt{vector}.} \\ \hline
@@ -1246,9 +1230,7 @@ email.put("Samuel Hsiang", 5);
       \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
       set of keys	&  \texttt{Set<K> keySet()} & no implementation \\ \hline
       other useful \textit{search} functions	& \multicolumn{2}{c |}{just look in the API >.<} \\ \hline
-    \end{tabular}
-\end{center}
-
+  \endmytabular
 \begin{center}
     \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} | }
       \hline
@@ -1258,5 +1240,4 @@ email.put("Samuel Hsiang", 5);
       \textit{delete} & \texttt{V remove(Object key)} &	\texttt{size\_type erase (const key\_type\& val)}, \texttt{void erase (iterator position)} \\ \hline
       \textit{size} & \texttt{int size()} & \texttt{size\_type size() const} \\ \hline
       set of keys	&  \texttt{Set<K> keySet()} & no implementation \\ \hline
-    \end{tabular}
-\end{center}
+\endmytabular
