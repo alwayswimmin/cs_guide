@@ -1,0 +1,156 @@
+\contentsline {chapter}{Acknowledgments}{iii}{chapter*.1}
+\contentsline {chapter}{Preface}{xi}{chapter*.4}
+\contentsline {chapter}{\numberline {1}Fundamentals}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Input and Output}{1}{section.1.1}
+\contentsline {section}{\numberline {1.2}Complexity}{2}{section.1.2}
+\contentsline {section}{\numberline {1.3}Sorting}{3}{section.1.3}
+\contentsline {subsection}{\numberline {1.3.1}Insertion Sort}{3}{subsection.1.3.1}
+\contentsline {subsection}{\numberline {1.3.2}Merge Sort}{3}{subsection.1.3.2}
+\contentsline {subsection}{\numberline {1.3.3}Quicksort}{3}{subsection.1.3.3}
+\contentsline {subsection}{\numberline {1.3.4}Comparison}{4}{subsection.1.3.4}
+\contentsline {section}{\numberline {1.4}Binary Search}{7}{section.1.4}
+\contentsline {chapter}{\numberline {2}Standard Library Data Structures}{9}{chapter.2}
+\contentsline {section}{\numberline {2.1}Generics}{9}{section.2.1}
+\contentsline {section}{\numberline {2.2}List}{10}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Dynamic Array}{10}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Linked List}{11}{subsection.2.2.2}
+\contentsline {section}{\numberline {2.3}Stack}{14}{section.2.3}
+\contentsline {section}{\numberline {2.4}Queue}{14}{section.2.4}
+\contentsline {section}{\numberline {2.5}Heap}{15}{section.2.5}
+\contentsline {section}{\numberline {2.6}Set}{20}{section.2.6}
+\contentsline {subsection}{\numberline {2.6.1}Binary Search Tree}{20}{subsection.2.6.1}
+\contentsline {subsection}{\numberline {2.6.2}Hash Table}{23}{subsection.2.6.2}
+\contentsline {section}{\numberline {2.7}Map}{26}{section.2.7}
+\contentsline {chapter}{\numberline {3}Big Ideas}{29}{chapter.3}
+\contentsline {section}{\numberline {3.1}Complete Search}{29}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}Depth-First Search}{29}{subsection.3.1.1}
+\contentsline {subsection}{\numberline {3.1.2}Breadth-First Search}{30}{subsection.3.1.2}
+\contentsline {subsection}{\numberline {3.1.3}Depth-First Search with Iterative Deepening}{30}{subsection.3.1.3}
+\contentsline {section}{\numberline {3.2}Greedy Algorithm}{30}{section.3.2}
+\contentsline {section}{\numberline {3.3}Binary Searching on the Answer}{31}{section.3.3}
+\contentsline {section}{\numberline {3.4}Dynamic Programming}{31}{section.3.4}
+\contentsline {chapter}{\numberline {4}Graph Algorithms}{33}{chapter.4}
+\contentsline {section}{\numberline {4.1}Connected Components}{33}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Flood Fill}{34}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Union-Find (Disjoint Set Union)}{34}{subsection.4.1.2}
+\contentsline {section}{\numberline {4.2}Shortest Path}{36}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Dijkstra}{36}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Floyd-Warshall}{39}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Bellman-Ford}{40}{subsection.4.2.3}
+\contentsline {section}{\numberline {4.3}Minimum Spanning Tree}{40}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Prim}{41}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Kruskal}{41}{subsection.4.3.2}
+\contentsline {section}{\numberline {4.4}Eulerian Tour}{42}{section.4.4}
+\contentsline {chapter}{\numberline {5}Complex Ideas and Data Structures}{43}{chapter.5}
+\contentsline {section}{\numberline {5.1}Dynamic Programming over Subsets ($n2^n$ DP)}{43}{section.5.1}
+\contentsline {section}{\numberline {5.2}$\sqrt {n}$ Bucketing}{44}{section.5.2}
+\contentsline {section}{\numberline {5.3}Segment Tree}{45}{section.5.3}
+\contentsline {subsection}{\numberline {5.3.1}Lazy Propagation}{48}{subsection.5.3.1}
+\contentsline {subsubsection}{Some Motivation: $\sqrt {n}$ Blocking}{49}{section*.5}
+\contentsline {subsubsection}{Lazy Propagation on a Segment Tree}{50}{section*.6}
+\contentsline {subsection}{\numberline {5.3.2}Fenwick Tree}{53}{subsection.5.3.2}
+\contentsline {section}{\numberline {5.4}Queue with Minimum Query}{57}{section.5.4}
+\contentsline {section}{\numberline {5.5}Balanced Binary Search Tree}{58}{section.5.5}
+\contentsline {subsection}{\numberline {5.5.1}Treap}{58}{subsection.5.5.1}
+\contentsline {subsection}{\numberline {5.5.2}Tree Rotation}{62}{subsection.5.5.2}
+\contentsline {subsection}{\numberline {5.5.3}Splay Tree}{63}{subsection.5.5.3}
+\contentsline {subsection}{\numberline {5.5.4}Red-Black Tree}{66}{subsection.5.5.4}
+\contentsline {chapter}{\numberline {6}Computational Geometry}{73}{chapter.6}
+\contentsline {section}{\numberline {6.1}Basic Tools}{74}{section.6.1}
+\contentsline {subsubsection}{Cross Product}{74}{section*.7}
+\contentsline {subsubsection}{Dot Product}{74}{section*.8}
+\contentsline {subsubsection}{$\qopname \relax o{tan}^{-1}$, \texttt {atan2}}{74}{section*.9}
+\contentsline {section}{\numberline {6.2}Formulas}{74}{section.6.2}
+\contentsline {subsection}{\numberline {6.2.1}Area}{74}{subsection.6.2.1}
+\contentsline {subsection}{\numberline {6.2.2}Distance}{74}{subsection.6.2.2}
+\contentsline {subsection}{\numberline {6.2.3}Configuration}{74}{subsection.6.2.3}
+\contentsline {subsection}{\numberline {6.2.4}Intersection}{74}{subsection.6.2.4}
+\contentsline {section}{\numberline {6.3}Convex Hull}{74}{section.6.3}
+\contentsline {section}{\numberline {6.4}Sweep Line}{74}{section.6.4}
+\contentsline {chapter}{\numberline {7}Tree Algorithms}{77}{chapter.7}
+\contentsline {section}{\numberline {7.1}DFS on Trees}{77}{section.7.1}
+\contentsline {section}{\numberline {7.2}Jump Pointers}{78}{section.7.2}
+\contentsline {section}{\numberline {7.3}Euler Tour Technique}{80}{section.7.3}
+\contentsline {subsection}{\numberline {7.3.1}Euler Tour Tree}{80}{subsection.7.3.1}
+\contentsline {section}{\numberline {7.4}Heavy-Light Decomposition}{82}{section.7.4}
+\contentsline {section}{\numberline {7.5}Link-Cut Tree}{82}{section.7.5}
+\contentsline {chapter}{\numberline {8}Strings}{83}{chapter.8}
+\contentsline {section}{\numberline {8.1}String Hashing}{83}{section.8.1}
+\contentsline {section}{\numberline {8.2}Knuth-Morris-Pratt}{83}{section.8.2}
+\contentsline {section}{\numberline {8.3}Trie}{83}{section.8.3}
+\contentsline {section}{\numberline {8.4}Suffix Array}{84}{section.8.4}
+\contentsline {section}{\numberline {8.5}Aho-Corasick}{86}{section.8.5}
+\contentsline {section}{\numberline {8.6}Advanced Suffix Data Structures}{88}{section.8.6}
+\contentsline {subsection}{\numberline {8.6.1}Suffix Tree}{89}{subsection.8.6.1}
+\contentsline {subsection}{\numberline {8.6.2}Suffix Automaton}{89}{subsection.8.6.2}
+\contentsline {chapter}{\numberline {9}More Graph Algorithms}{91}{chapter.9}
+\contentsline {section}{\numberline {9.1}Strongly Connected Components}{91}{section.9.1}
+\contentsline {section}{\numberline {9.2}Network Flow}{94}{section.9.2}
+\contentsline {subsection}{\numberline {9.2.1}Ford-Fulkerson}{95}{subsection.9.2.1}
+\contentsline {subsection}{\numberline {9.2.2}Max-Flow Min-Cut Theorem}{96}{subsection.9.2.2}
+\contentsline {subsection}{\numberline {9.2.3}Refinements of Ford-Fulkerson}{97}{subsection.9.2.3}
+\contentsline {subsubsection}{Edmonds-Karp}{97}{section*.10}
+\contentsline {subsubsection}{Dinic}{98}{section*.11}
+\contentsline {subsection}{\numberline {9.2.4}Push-Relabel}{98}{subsection.9.2.4}
+\contentsline {subsubsection}{Generic Push-Relabel}{98}{section*.12}
+\contentsline {subsubsection}{Discharge}{101}{section*.13}
+\contentsline {subsubsection}{FIFO Selection}{102}{section*.14}
+\contentsline {subsubsection}{Highest Label Selection}{102}{section*.15}
+\contentsline {subsubsection}{Improvements with Heuristics}{102}{section*.16}
+\contentsline {subsection}{\numberline {9.2.5}Other Problems with Flow Solutions}{102}{subsection.9.2.5}
+\contentsline {subsubsection}{Edge-Disjoint Paths}{102}{section*.17}
+\contentsline {subsubsection}{Bipartite Matching}{102}{section*.18}
+\contentsline {chapter}{\numberline {10}Math}{103}{chapter.10}
+\contentsline {section}{\numberline {10.1}Number Theory}{103}{section.10.1}
+\contentsline {subsection}{\numberline {10.1.1}Random Prime Numbers Bounds}{103}{subsection.10.1.1}
+\contentsline {subsection}{\numberline {10.1.2}Prime Number Testing}{103}{subsection.10.1.2}
+\contentsline {subsection}{\numberline {10.1.3}Sieve of Eratosthenes}{104}{subsection.10.1.3}
+\contentsline {subsection}{\numberline {10.1.4}Prime Factorization}{104}{subsection.10.1.4}
+\contentsline {subsection}{\numberline {10.1.5}GCD and the Euclidean Algorithm}{104}{subsection.10.1.5}
+\contentsline {subsection}{\numberline {10.1.6}Fermat's Little Theorem}{104}{subsection.10.1.6}
+\contentsline {subsection}{\numberline {10.1.7}Modular Inverses}{104}{subsection.10.1.7}
+\contentsline {section}{\numberline {10.2}Combinatorial Games}{104}{section.10.2}
+\contentsline {section}{\numberline {10.3}Karatsuba}{105}{section.10.3}
+\contentsline {section}{\numberline {10.4}Matrices}{105}{section.10.4}
+\contentsline {section}{\numberline {10.5}Fast Fourier Transform}{105}{section.10.5}
+\contentsline {subsubsection}{Introduction}{105}{section*.19}
+\contentsline {subsubsection}{Algorithm Outline}{105}{section*.20}
+\contentsline {subsubsection}{Roots of Unity}{105}{section*.21}
+\contentsline {subsubsection}{Algorithm Specifics: Step 1}{106}{section*.22}
+\contentsline {subsubsection}{Algorithm Specifics: Step 2}{107}{section*.23}
+\contentsline {subsubsection}{Algorithm Specifics: Step 3}{107}{section*.24}
+\contentsline {subsubsection}{A Brief Note on Number Theory}{110}{section*.25}
+\contentsline {chapter}{\numberline {11}Nonsense}{111}{chapter.11}
+\contentsline {section}{\numberline {11.1}Segment Tree Extensions}{111}{section.11.1}
+\contentsline {subsection}{\numberline {11.1.1}Fractional Cascading}{111}{subsection.11.1.1}
+\contentsline {subsection}{\numberline {11.1.2}Persistence}{111}{subsection.11.1.2}
+\contentsline {subsection}{\numberline {11.1.3}Higher Dimensions}{111}{subsection.11.1.3}
+\contentsline {section}{\numberline {11.2}DP Optimizations}{111}{section.11.2}
+\contentsline {section}{\numberline {11.3}Top Tree}{111}{section.11.3}
+\contentsline {section}{\numberline {11.4}Link-Cut Cactus}{111}{section.11.4}
+\contentsline {chapter}{\numberline {12}Problems}{113}{chapter.12}
+\contentsline {section}{\numberline {12.1}Bronze}{113}{section.12.1}
+\contentsline {section}{\numberline {12.2}Silver}{113}{section.12.2}
+\contentsline {subsection}{\numberline {12.2.1}Complete Search}{113}{subsection.12.2.1}
+\contentsline {subsection}{\numberline {12.2.2}Greedy}{113}{subsection.12.2.2}
+\contentsline {subsection}{\numberline {12.2.3}Standard Dynamic Programming}{113}{subsection.12.2.3}
+\contentsline {subsection}{\numberline {12.2.4}Standard Graph Theory}{114}{subsection.12.2.4}
+\contentsline {subsubsection}{Flood Fill}{114}{section*.26}
+\contentsline {subsubsection}{Shortest Path}{114}{section*.27}
+\contentsline {subsubsection}{Minimal Spanning Tree}{115}{section*.28}
+\contentsline {subsubsection}{Union-Find}{116}{section*.29}
+\contentsline {subsubsection}{Euler Tour}{116}{section*.30}
+\contentsline {subsection}{\numberline {12.2.5}Easy Computational Geometry}{117}{subsection.12.2.5}
+\contentsline {section}{\numberline {12.3}Gold}{117}{section.12.3}
+\contentsline {subsection}{\numberline {12.3.1}More Dynamic Programming}{117}{subsection.12.3.1}
+\contentsline {subsection}{\numberline {12.3.2}Binary Search}{117}{subsection.12.3.2}
+\contentsline {subsection}{\numberline {12.3.3}Segment Tree}{119}{subsection.12.3.3}
+\contentsline {subsection}{\numberline {12.3.4}More Standard Graph Theory}{119}{subsection.12.3.4}
+\contentsline {subsubsection}{Maximum Flow and Variants}{119}{section*.31}
+\contentsline {subsubsection}{Strongly Connected Components}{119}{section*.32}
+\contentsline {subsubsection}{Other Graph Theory}{119}{section*.33}
+\contentsline {subsection}{\numberline {12.3.5}Standard Computational Geometry}{120}{subsection.12.3.5}
+\contentsline {subsection}{\numberline {12.3.6}Less Standard Problems}{120}{subsection.12.3.6}
+\contentsline {section}{\numberline {12.4}Beyond}{120}{section.12.4}
+\contentsline {subsection}{\numberline {12.4.1}Data Structure Nonsense}{120}{subsection.12.4.1}
+\contentsline {subsection}{\numberline {12.4.2}Other Nonsense}{120}{subsection.12.4.2}

@@ -4,7 +4,47 @@ Algorithms here exhibit a different flavor than the graph theory, string, or geo
 
 \section{Number Theory}
 
-In this section we explore ways for computers to quickly compute some useful mathematical quantities.
+This section will contain much information about primes in many different ways. Indeed, prime numbers are the building blocks of number theory!
+
+\subsection{Random Prime Numbers Bounds}
+
+The point of this section is mostly to make the complexity analysis of the later sections easier. Therefore, I will list some useful theorems and bounds without proof. The proofs can be found in any standard number theory textbook or online. They are extremely insignificant in the context of the goals of this section.
+
+\textbf{Prime Number Theorem}: The number of prime numbers less than $n$ is $O(\frac{n}{\log n})$ for any positive integer $n.$
+
+\emph{Corollary}: The $n$-th prime number, $p_n$, is $O(n \log n).$
+
+\textbf{Prime Number Harmonic Sum}: $\sum_{p \le n} \frac{1}{p} = O(\log \log n).$
+
+\subsection{Prime Number Testing}
+
+Let's say if you want to test is a number $n$ is prime. The most obvious way is to test all integers from $2$ to $n-1$, and see if they divide $n$. This takes $O(n)$ time. We can do better though! Note that if $n$ has a nontrivial factor, then it has one that is less than $\sqrt{n}.$ Indeed, if $n = pq,$ (as a nontrivial factorization) if both $p, q > \sqrt{n}$, then $pq > \sqrt{n}^2 = n$, a contradiction. So we only need to check whether $n$ has factors between $2$ and $\sqrt{n}.$ This takes $O(\sqrt{n})$ time. If you have precomputed a list of prime numbers (up to say $\sqrt{n}$), ten you only need to check whether $n$ has any prime factors in the same $2$ to $\sqrt{n}.$ This would give runtime $O(\frac{\sqrt{n}}{\log n})$ from the \emph{Prime Number Theorem} in section 10.1.1, a small but nontrivial improvement.
+
+\subsection{Sieve of Eratosthenes}
+
+If you want to compute all primes in the range $1$ to $n$. Runs in $O(n \log \log n)$. In other words, super fast.
+
+\subsection{Prime Factorization}
+
+How can we prime factorize a number? That is, given a positive integer $n$, how can we write it in the form $p_1 \cdot p_2 \cdot \dots \cdot p_k$, where the $p_i$ are all primes? Form example, $30 = 2 \cdot 3 \cdot 5$ and $24 = 2 \cdot 2 \cdot 2 \cdot 3$. The fact that every number can be uniquely factorized is called the \emph{Fundamental Theorem of Arithmetic}. Let's now figure out how to prime factorize every number efficiently. Using our intuition from above, we should expect that checking up to around $\sqrt{n}$ suffices. This is indeed true. The code below demonstrates:
+
+\subsection{GCD and the Euclidean Algorithm}
+
+I'll start once again with a theorem in number theory: if positive integers $a, b$ satisfy $\gcd(a, b) = 1$, then there exist integers $x, y$ such that $ax+by=1.$ This is called \emph{Bezout's Lemma.}
+
+Similarly, if $\gcd(a, b) = g$, then there are integers $x, y$ such that $ax+by = g.$
+
+%example gcd code here... and also some description of Euclidean Algorithm
+
+\subsection{Fermat's Little Theorem}
+
+Fermat's Little Theorem states that $a^p \equiv a \pmod{p}$ for any positive integer $a.$ Equivalently, we can say that $a^{p-1} \equiv 1 \pmod{p}.$
+
+\subsection{Modular Inverses}
+
+If $p$ is a prime, and $x$ satisfies $\gcd(x, p) = 1$, then there exists a positive integer $k$ such that $kx \equiv 1 \pmod{p}.$ $k$ is called the \emph{modular inverse} of $x \pmod{p},$ often just denoted as $1/x$ or $x^{-1}.$ Indeed, $1/x \cdot x = x^{-1} \cdot x = 1,$ so this notation is natural. The cool thing about modular inverses is that you can see them as division modulo $p.$ Since $x$ is nonzero $\pmod{p},$ it makes sense that you should be able to divide by $x.$ This is the main application of modular inverses. But how to find one quickly? There are two common algorithms, both of which run in $O(\log p)$ time. You can do this by running the Euclidean Algorithm described above: find positive integers $j, k$ such that $pj + kx = 1.$ Then obviously $kx \equiv 1 \pmod{p}.$ The other way is to notice that $x^{p-1} \equiv 1 \pmod{p}$ by Fermat's Little Theorem, so $x^{p-2} \equiv x^{-1} \pmod{p}.$ Now compute the left hand side of the previous expression using binary exponentiation.
+
+Exercises related: Do $O(n \log p)$ precomputation to compute any binomial coefficient of the form $\binom{m}{k} \pmod{p}$ where $0 \le m, k \le n$ in $O(1)$ time.
 
 \section{Combinatorial Games}
 
@@ -16,13 +56,11 @@ In this section we explore ways for computers to quickly compute some useful mat
 
 \section{Fast Fourier Transform}
 
-\textit{This section generously contributed by Yang Liu.}
-
-\subsection{Introduction}
+\subsubsection{Introduction}
 
 The \emph{Fast Fourier Transform} (FFT) is a technique used to multiply two polynomials of degree $n$ in $O(n \cdot \log n)$ time. At a high level, what this algorithm is doing is something called \emph{polynomial interpolation}. This refers to the fact that if we know the value of a polynomial $P$ of degree $n$ at $n+1$ points, then we can uniquely determine the polynomial $P.$ The proof of this statement is simple, and involves the Lagrange Interpolation Formula for one direction and a simple root counting argument to prove uniqueness. I won't go into detail here because the proof isn't important, but it is useful to know some motivation behind the algorithm.
 
-\subsection{Algorithm Outline}
+\subsubsection{Algorithm Outline}
 
 Let's say we want to multiply 2 polynomials $A(x), B(x)$, both of degree $n$. Let $C(x) = A(x)B(x).$ The algorithm will proceed in 3 steps. Choose an integer $m > 2n,$ and choose $m$ numbers $x_0, x_1, \dots, x_{m-1}.$ I'll clarify what to choose $m$ and the $x_i$ as later. Just keep in mind that we can choose these values to be anything we want.
 
@@ -40,7 +78,7 @@ The last step explains why we need $m > 2n.$ The degree of $C(x)$ is $2n$, so we
 
 You should be skeptical that the above approach does any better than $O(n^2).$ In particular, step 1 seems like it should take $O(n^2).$ It turns out that if we choose the values $x_0, x_1, \dots, x_{m-1}$ properly, then we can do much better. Let me now describe what to choose $m$ to be, and what to choose $x_0, x_1, \dots, x_{m-1}$ to be.
 
-\subsection{Roots of Unity}
+\subsubsection{Roots of Unity}
 
 Before telling you precisely, here's some food for thought. Let's take then example polynomial $A(x) = 1+2x+3x^2+4x^3+5x^4+6x^5+7x^6+8x^7.$ Let's split this into 2 groups: the even degree coefficients and odd degree coefficients. Let's call these two groups $A_{even}$ and $A_{odd}.$ Define $A_{even}(x) = 1+3x+5x^2+7x^3, A_{odd}(x) = 2+4x+6x^2+8x^7.$ Then clearly \[ A(x) = A_{even}(x^2) + x \cdot A_{odd}(x^2) \]
 
@@ -50,7 +88,7 @@ So what should we choose $m$ and the $x_i$ to be? I'll tell you now and then exp
 
 Let $\omega$ be a \emph{primitive} root of unity, i.e. the smallest $m'$ such that $\omega^{m'} = 1$ is $m' = m.$ We can without loss of generality set $\omega = \cos\left(\frac{2\pi i}{m}\right) + i \cdot \sin\left(\frac{2\pi i}{m} \right).$ One can easily check the the remaining roots of unity are $\omega^2, \omega^3, \dots, \omega^m.$ From now on, let's just set $x_i = \omega^i$ for all $0 \le i \le m-1.$ Note that $x_0 = 1.$ Also set $m = 2^k > 2n.$ Now I can proceed to describing why this algorithm works.
 
-\subsection{Algorithm Specifics: Step 1}
+\subsubsection{Algorithm Specifics: Step 1}
 
 In this section I'll implement (using pseudocode) a function 
 
@@ -59,10 +97,10 @@ vector<double> fft(vector<int> $A$, k, $\omega$). This means that this will retu
 Here's an implementation. The brackets $\{ \}$ will be shorthand for containing a vector.
 
 \begin{algorithm}[H]
-\caption{FFT}
+\caption{Fast Fourier Transform}
 %\label{}
 \begin{algorithmic}
-\Function{fft}{vector<int> $A, k, \omega$} \Comment $\omega^{2^k} = 1$
+\Function{FFT}{vector<int> $A, k, \omega$} \Comment $\omega^{2^k} = 1$
 	\State $A$.resize($2^k$)
 	\State vector<double> $f, f_{even}, f_{odd}$
 	\State $f$.resize($2^k$)
@@ -72,8 +110,8 @@ Here's an implementation. The brackets $\{ \}$ will be shorthand for containing 
     \EndIf
     \State $A_{even}$ = $ \{A[0], A[2], \dots, A[2^k-2] \}$
     \State $A_{odd}$ = $ \{A[1], A[3], \dots, A[2^k-1] \}$
-    \State $f_{even} = $ \Call{fft}{$A_{even}, k-1, \omega^2$}
-    \State $f_{odd} = $ \Call{fft}{$A_{odd}, k-1, \omega^2$}
+    \State $f_{even} = $ \Call{FFT}{$A_{even}, k-1, \omega^2$}
+    \State $f_{odd} = $ \Call{FFT}{$A_{odd}, k-1, \omega^2$}
     
     \ForAll {$i = 0, i < 2^{k-1}, i++$}
     	\State $f[i] = f_{even}[i] + \omega^i \cdot f_{odd}[i]$
@@ -94,15 +132,139 @@ The key is to note that $A(x) = B_{even}(x) + x \cdot B_{odd}(x).$ Since we know
 
 Let's analyze the runtime of this function FFT. Let $T(2^k)$ denote the time needed to run FFT on an array of length $2^k.$ Then $T(2^k) = 2T(2^{k-1}) + O(2^k) \implies T(2^k) = k \cdot 2^k,$ by the Master Theorem. Since $2^k$ is $O(n)$ by the above discussion, this steps runs in $O(n \cdot \log n)$ time.
 
-\subsection{Algorithm Specifics: Step 2}
+\subsubsection{Algorithm Specifics: Step 2}
 
 I'll give you a rest after a hard theoretical previous section. You do this step by looping through the values $A(x_0), A(x_1), \dots, A(x_{2^k-1}), B(x_0), B(x_1), \dots, B(x_{2^k-1})$ and directly multiplying $C(x_i) = A(x_i)B(x_i).$ This step runs in $O(n)$ time.
 
-\subsection{Algorithm Specifics: Step 3}
+\subsubsection{Algorithm Specifics: Step 3}
 
-This may seem like something completely new, but actually most of the work is already done. I'll explain. In fact I claim that writing the code $C = \text{fft}(C, k, \omega^{-1}),$ and then dividing all elements of $C$ by $2^k$ finishes. You should believe me on this. If you work out the computations, you'll see that this is true. You can think of it kind of as a roots of unity filter if you know what that means. If not, just be happy that step 3 is very easy once you have Step 1!
+This may seem like something completely new, but actually most of the work is already done. I'll explain. In fact I claim that writing the code $C = \text{fft}(C, k, \omega^{-1}),$ and then dividing all elements of $C$ by $2^k$ finishes. Step 3 is very easy once you have Step 1!
 
-\subsection{A Brief Note on Number Theory}
+To see this, let's take a look at how step 1 works. We'll consider the coefficients of $A$ as a vector (not a C++ vector, but an actual math vector -- matrices!).
+
+\begin{align*}
+\begin{pmatrix}
+A(\omega^0) \\ 
+A(\omega^1) \\ 
+A(\omega^2) \\ 
+A(\omega^3) \\ 
+\vdots \\
+A(\omega^{2^k - 2}) \\
+A(\omega^{2^k - 1})
+\end{pmatrix}
+&=
+\begin{pmatrix}
+\omega^0 & \omega^0 & \omega^0 & \omega^0 & \cdots & \omega^0 & \omega^0 \\ 
+\omega^0 & \omega^1 & \omega^2 & \omega^3 & \cdots & \omega^{2^k-2} & \omega^{2^k-1} \\ 
+\omega^0 & \omega^2 & \omega^4 & \omega^6 & \cdots & \omega^{2(2^k-2)} & \omega^{2(2^k-1)} \\ 
+\omega^0 & \omega^3 & \omega^6 & \omega^9 & \cdots & \omega^{3(2^k-2)} & \omega^{3(2^k-1)} \\ 
+\vdots   & \vdots   & \vdots   & \vdots   & \ddots & \vdots            & \vdots            \\
+\omega^0 & \omega^{2^k - 2} & \omega^{2(2^k - 2)} & \omega^{3(2^k - 2)} & \cdots & \omega^{(2^k - 2)(2^k-2)} & \omega^{(2^k-1)(2^k - 2)} \\ 
+\omega^0 & \omega^{2^k - 1} & \omega^{2(2^k - 1)} & \omega^{3(2^k - 1)} & \cdots & \omega^{(2^k - 2)(2^k-1)} & \omega^{(2^k-1)(2^k - 1)}
+\end{pmatrix}
+\begin{pmatrix}
+A[0] \\ 
+A[1] \\ 
+A[2] \\ 
+A[3] \\
+\vdots \\
+A[2^k - 2] \\
+A[2^k - 1]
+\end{pmatrix}
+\end{align*}
+
+Now suppose we perform the FFT with $\omega^{-1}$. This is equivalent by multiplying by a similar matrix.
+
+\eject \pdfpagewidth=13in \pdfpageheight=11in
+
+\begin{align*}
+&\phantom{= }
+\begin{pmatrix}
+\omega^0 & \omega^0 & \omega^0 & \omega^0 & \cdots & \omega^0 & \omega^0 \\ 
+\omega^0 & \omega^{-1} & \omega^{-2} & \omega^{-3} & \cdots & \omega^{-(2^k-2)} & \omega^{-(2^k-1)} \\ 
+\omega^0 & \omega^{-2} & \omega^{-4} & \omega^{-6} & \cdots & \omega^{-2(2^k-2)} & \omega^{-2(2^k-1)} \\ 
+\omega^0 & \omega^{-3} & \omega^{-6} & \omega^{-9} & \cdots & \omega^{-3(2^k-2)} & \omega^{-3(2^k-1)} \\ 
+\vdots   & \vdots   & \vdots   & \vdots   & \ddots & \vdots            & \vdots            \\
+\omega^0 & \omega^{-(2^k - 2)} & \omega^{-2(2^k - 2)} & \omega^{-3(2^k - 2)} & \cdots & \omega^{-(2^k - 2)(2^k-2)} & \omega^{-(2^k-1)(2^k - 2)} \\ 
+\omega^0 & \omega^{-(2^k - 1)} & \omega^{-2(2^k - 1)} & \omega^{-3(2^k - 1)} & \cdots & \omega^{-(2^k - 2)(2^k-1)} & \omega^{-(2^k-1)(2^k - 1)}
+\end{pmatrix}
+\begin{pmatrix}
+A(\omega^0) \\ 
+A(\omega^1) \\ 
+A(\omega^2) \\ 
+A(\omega^3) \\ 
+\vdots \\
+A(\omega^{2^k - 2}) \\
+A(\omega^{2^k - 1})
+\end{pmatrix}
+\\
+&=
+\begin{pmatrix}
+\omega^0 & \omega^0 & \omega^0 & \omega^0 & \cdots & \omega^0 & \omega^0 \\ 
+\omega^0 & \omega^{-1} & \omega^{-2} & \omega^{-3} & \cdots & \omega^{-(2^k-2)} & \omega^{-(2^k-1)} \\ 
+\omega^0 & \omega^{-2} & \omega^{-4} & \omega^{-6} & \cdots & \omega^{-2(2^k-2)} & \omega^{-2(2^k-1)} \\ 
+\omega^0 & \omega^{-3} & \omega^{-6} & \omega^{-9} & \cdots & \omega^{-3(2^k-2)} & \omega^{-3(2^k-1)} \\ 
+\vdots   & \vdots   & \vdots   & \vdots   & \ddots & \vdots            & \vdots            \\
+\omega^0 & \omega^{-(2^k - 2)} & \omega^{-2(2^k - 2)} & \omega^{-3(2^k - 2)} & \cdots & \omega^{-(2^k - 2)(2^k-2)} & \omega^{-(2^k-1)(2^k - 2)} \\ 
+\omega^0 & \omega^{-(2^k - 1)} & \omega^{-2(2^k - 1)} & \omega^{-3(2^k - 1)} & \cdots & \omega^{-(2^k - 2)(2^k-1)} & \omega^{-(2^k-1)(2^k - 1)}
+\end{pmatrix}
+\begin{pmatrix}
+\omega^0 & \omega^0 & \omega^0 & \omega^0 & \cdots & \omega^0 & \omega^0 \\ 
+\omega^0 & \omega^1 & \omega^2 & \omega^3 & \cdots & \omega^{2^k-2} & \omega^{2^k-1} \\ 
+\omega^0 & \omega^2 & \omega^4 & \omega^6 & \cdots & \omega^{2(2^k-2)} & \omega^{2(2^k-1)} \\ 
+\omega^0 & \omega^3 & \omega^6 & \omega^9 & \cdots & \omega^{3(2^k-2)} & \omega^{3(2^k-1)} \\ 
+\vdots   & \vdots   & \vdots   & \vdots   & \ddots & \vdots            & \vdots            \\
+\omega^0 & \omega^{2^k - 2} & \omega^{2(2^k - 2)} & \omega^{3(2^k - 2)} & \cdots & \omega^{(2^k - 2)(2^k-2)} & \omega^{(2^k-1)(2^k - 2)} \\ 
+\omega^0 & \omega^{2^k - 1} & \omega^{2(2^k - 1)} & \omega^{3(2^k - 1)} & \cdots & \omega^{(2^k - 2)(2^k-1)} & \omega^{(2^k-1)(2^k - 1)}
+\end{pmatrix}
+\begin{pmatrix}
+A[0] \\ 
+A[1] \\ 
+A[2] \\ 
+A[3] \\
+\vdots \\
+A[2^k - 2] \\
+A[2^k - 1]
+\end{pmatrix}
+\\
+&=
+\begin{pmatrix}
+2^k & 0 & 0 & 0 & \cdots & 0 & 0 \\ 
+0 & 2^k & 0 & 0 & \cdots & 0 & 0 \\ 
+0 & 0 & 2^k & 0 & \cdots & 0 & 0 \\ 
+0 & 0 & 0 & 2^k & \cdots & 0 & 0 \\ 
+\vdots   & \vdots   & \vdots   & \vdots   & \ddots & \vdots            & \vdots            \\
+0 & 0 & 0 & 0 & \cdots & 2^k & 0 \\ 
+0 & 0 & 0 & 0 & \cdots & 0 & 2^k \\ 
+\end{pmatrix}
+\begin{pmatrix}
+A[0] \\ 
+A[1] \\ 
+A[2] \\ 
+A[3] \\
+\vdots \\
+A[2^k - 2] \\
+A[2^k - 1]
+\end{pmatrix}
+\\
+&=
+2^k
+\begin{pmatrix}
+A[0] \\ 
+A[1] \\ 
+A[2] \\ 
+A[3] \\
+\vdots \\
+A[2^k - 2] \\
+A[2^k - 1]
+\end{pmatrix}.
+\end{align*}
+
+\eject \pdfpagewidth=8.5in \pdfpageheight=11in
+
+It follows that the \textit{inverse FFT} is simply the same function, but run with $\omega^{-1}$ instead of $\omega$, and dividing out $m=2^k$.
+
+\subsubsection{A Brief Note on Number Theory}
 
 There is a slight variation on FTT that avoids using complex numbers completely. Complex numbers are often bad at precision and run slowly. There is a way to make FFT work over only the integers, which is pretty cool. Here's a brief description how.
 

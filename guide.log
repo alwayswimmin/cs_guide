@@ -1,0 +1,3414 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  8 OCT 2015 11:59
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**main.tex
+(./main.tex
+LaTeX2e <2014/05/01>
+Babel <3.9k> and hyphenation patterns for 78 languages loaded.
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/bk11.clo
+File: bk11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/emptypage/emptypage.sty
+Package: emptypage 2010/05/30 v1.2 Suppress page numbers and headings on empty 
+pages
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/t1enc.def
+File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
+))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2014/04/30 v1.2b Input encoding file
+\inpenc@prehook=\toks14
+\inpenc@posthook=\toks15
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/ucs/ucs.sty
+Package: ucs 2013/05/11 v2.2 UCS: Unicode input support
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/ucs/data/uni-global.def
+File: uni-global.def 2013/05/13 UCS: Unicode global data
+)
+\uc@secondtry=\count88
+\uc@combtoks=\toks16
+\uc@combtoksb=\toks17
+\uc@temptokena=\toks18
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/lm/lmodern.sty
+Package: lmodern 2009/10/30 v1.6 Latin Modern Fonts
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> OT1/lmr/m/n on input line 22.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
+(Font)                  OML/cmm/m/it --> OML/lmm/m/it on input line 23.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/cmsy/m/n --> OMS/lmsy/m/n on input line 24.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> OMX/lmex/m/n on input line 25.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 26.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/cmm/b/it --> OML/lmm/b/it on input line 27.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/cmsy/b/n --> OMS/lmsy/b/n on input line 28.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> OMX/lmex/m/n on input line 29.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 31.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/cmss/m/n --> OT1/lmss/m/n on input line 32.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> OT1/lmr/m/it on input line 33.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 34.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 35.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/cmss/bx/n --> OT1/lmss/bx/n on input line 36.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> OT1/lmr/bx/it on input line 37.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 38.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/pdflscape.sty
+Package: pdflscape 2008/08/11 v0.10 Display of landscape pages in PDF (HO)
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/lscape.sty
+Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count89
+)))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+Package pdflscape Info: Auto-detected driver: pdftex on input line 80.
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2013/01/14 v2.14 AMS math features
+\@mathmargin=\skip43
+
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks19
+\ex@=\dimen103
+))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen104
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count90
+LaTeX Info: Redefining \frac on input line 210.
+\uproot@=\count91
+\leftroot@=\count92
+LaTeX Info: Redefining \overline on input line 306.
+\classnum@=\count93
+\DOTSCASE@=\count94
+LaTeX Info: Redefining \ldots on input line 378.
+LaTeX Info: Redefining \dots on input line 381.
+LaTeX Info: Redefining \cdots on input line 466.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen105
+LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
+\macc@depth=\count95
+\c@MaxMatrixCols=\count96
+\dotsspace@=\muskip10
+\c@parentequation=\count97
+\dspbrk@lvl=\count98
+\tag@help=\toks20
+\row@=\count99
+\column@=\count100
+\maxfields@=\count101
+\andhelp@=\toks21
+\eqnshift@=\dimen106
+\alignsep@=\dimen107
+\tagshift@=\dimen108
+\tagwidth@=\dimen109
+\totwidth@=\dimen110
+\lineht@=\dimen111
+\@envbody=\toks22
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks23
+LaTeX Info: Redefining \[ on input line 2665.
+LaTeX Info: Redefining \] on input line 2666.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amscls/amsthm.sty
+Package: amsthm 2004/08/06 v2.20
+\thm@style=\toks24
+\thm@bodyfont=\toks25
+\thm@headfont=\toks26
+\thm@notefont=\toks27
+\thm@headpunct=\toks28
+\thm@preskip=\skip46
+\thm@postskip=\skip47
+\thm@headsep=\skip48
+\dth@everypar=\toks29
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/tools/verbatim.sty
+Package: verbatim 2003/08/22 v1.5q LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks30
+\verbatim@line=\toks31
+\verbatim@in@stream=\read1
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/listings.sty
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/05/08 v1.15 key=value parser (DPC)
+\KV@toks@=\toks32
+)
+\lst@mode=\count102
+\lst@gtempboxa=\box28
+\lst@token=\toks33
+\lst@length=\count103
+\lst@currlwidth=\dimen112
+\lst@column=\count104
+\lst@pos=\count105
+\lst@lostspace=\dimen113
+\lst@width=\dimen114
+\lst@newlines=\count106
+\lst@lineno=\count107
+\lst@maxwidth=\dimen115
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2014/03/04 1.5c (Carsten Heinz)
+\c@lstnumber=\count108
+\lst@skipnumbers=\count109
+\lst@framebox=\box29
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2014/03/04 1.5c listings configuration
+))
+Package: listings 2014/03/04 1.5c (Carsten Heinz)
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2012/11/06 v6.83m Hypertext links for LaTeX
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+Package: hobsub-hyperref 2012/05/28 v1.13 Bundle oberdiek, subset hyperref (HO)
+
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+Package: hobsub-generic 2012/05/28 v1.13 Bundle oberdiek, subset generic (HO)
+Package: hobsub 2012/05/28 v1.13 Construct package bundles (HO)
+Package hobsub Info: Skipping package `infwarerr' (already loaded).
+Package hobsub Info: Skipping package `ltxcmds' (already loaded).
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+Package: intcalc 2007/09/27 v1.1 Expandable calculations with integers (HO)
+Package hobsub Info: Skipping package `ifpdf' (already loaded).
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+Package: pdfescape 2011/11/25 v1.13 Implements pdfTeX's escape features (HO)
+Package: bigintcalc 2012/04/08 v1.3 Expandable calculations on big integers (HO
+)
+Package: bitset 2011/01/30 v1.1 Handle bit-vector datatype (HO)
+Package: uniquecounter 2011/01/30 v1.2 Provide unlimited unique counter (HO)
+)
+Package hobsub Info: Skipping package `hobsub' (already loaded).
+Package: letltxmacro 2010/09/02 v1.4 Let assignment for LaTeX macros (HO)
+Package: hopatch 2012/05/28 v1.2 Wrapper for package hooks (HO)
+Package: xcolor-patch 2011/01/30 xcolor patch
+Package: atveryend 2011/06/30 v1.8 Hooks at the very end of document (HO)
+Package atveryend Info: \enddocument detected (standard20110627).
+Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
+Package: refcount 2011/10/16 v3.4 Data extraction from label references (HO)
+Package: hycolor 2011/01/30 v1.7 Color options for hyperref/bookmark (HO)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/auxhook.sty
+Package: auxhook 2011/03/04 v1.3 Hooks for auxiliary files (HO)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+)
+\@linkdim=\dimen116
+\Hy@linkcounter=\count110
+\Hy@pagecounter=\count111
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2012/11/06 v6.83m Hyperref: PDFDocEncoding definition (HO)
+)
+\Hy@SavedSpaceFactor=\count112
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
+)
+Package hyperref Info: Option `hyperfootnotes' set `false' on input line 4319.
+Package hyperref Info: Hyper figures OFF on input line 4443.
+Package hyperref Info: Link nesting OFF on input line 4448.
+Package hyperref Info: Hyper index ON on input line 4451.
+Package hyperref Info: Plain pages OFF on input line 4458.
+Package hyperref Info: Backreferencing OFF on input line 4463.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4688.
+\c@Hy@tempcnt=\count113
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip11
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 5041.
+\XeTeXLinkMargin=\dimen117
+\Fld@menulength=\count114
+\Field@Width=\dimen118
+\Fld@charsize=\dimen119
+Package hyperref Info: Hyper figures OFF on input line 6295.
+Package hyperref Info: Link nesting OFF on input line 6300.
+Package hyperref Info: Hyper index ON on input line 6303.
+Package hyperref Info: backreferencing OFF on input line 6310.
+Package hyperref Info: Link coloring OFF on input line 6315.
+Package hyperref Info: Link coloring with OCG OFF on input line 6320.
+Package hyperref Info: PDF/A mode OFF on input line 6325.
+LaTeX Info: Redefining \ref on input line 6365.
+LaTeX Info: Redefining \pageref on input line 6369.
+\Hy@abspage=\count115
+\c@Item=\count116
+)
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2012/11/06 v6.83m Hyperref driver for pdfTeX
+\Fld@listcount=\count117
+\c@bookmark@seq@number=\count118
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+Package: rerunfilecheck 2011/04/15 v1.7 Rerun checks for auxiliary files (HO)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+82.
+)
+\Hy@SectionHShift=\skip49
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/exercise/exercise.sty
+Package: exercise 2012/05/08 v1.58 Exercise package (P.Pichaureau)
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\ExerciseSkipBefore=\skip50
+\ExerciseSkipAfter=\skip51
+\Exesep=\skip52
+\Exetopsep=\skip53
+\Exeparsep=\skip54
+\Exepartopsep=\skip55
+\Exeleftmargin=\skip56
+\Exerightmargin=\skip57
+\Exelabelwidth=\skip58
+\Exelabelsep=\skip59
+\ExerciseBefore=\skip60
+\QuestionBefore=\skip61
+\subQuestionBefore=\skip62
+\subsubQuestionBefore=\skip63
+\QuestionIndent=\skip64
+\subQuestionIndent=\skip65
+\subsubQuestionIndent=\skip66
+\c@Exercise=\count119
+\c@Answer=\count120
+\c@ExePart=\count121
+\c@Question=\count122
+\c@subQuestion=\count123
+\c@subsubQuestion=\count124
+\c@savedQuestion=\count125
+\c@savedsubQuestion=\count126
+\c@savedsubsubQuestion=\count127
+\@QuestionLevel=\count128
+\@Exercisebox=\box30
+\all@Exercisebox=\box31
+\temp@Exercisebox=\box32
+\all@Answerbox=\box33
+\temp@Answerbox=\box34
+\ExerciseDifficulty=\count129
+\QuestionDifficulty=\count130
+\subQuestionDifficulty=\count131
+\subsubQuestionDifficulty=\count132
+\ExePartDifficulty=\count133
+\@Answerbox=\box35
+\colonnesLevel=\count134
+\tempskipa=\skip67
+\tempskipb=\skip68
+\@savedmathindent=\skip69
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/algorithms/algorithm.sty
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count135
+\float@exts=\toks34
+\float@box=\box36
+\@float@everytoks=\toks35
+\@floatcapt=\box37
+)
+\@float@every@algorithm=\toks36
+\c@algorithm=\count136
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
+
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+\c@ALG@line=\count137
+\c@ALG@rem=\count138
+\c@ALG@nested=\count139
+\ALG@tlm=\skip70
+\ALG@thistlm=\skip71
+\c@ALG@Lnr=\count140
+\c@ALG@blocknr=\count141
+\c@ALG@storecount=\count142
+\c@ALG@tmpcounter=\count143
+\ALG@tmplength=\skip72
+) (/usr/local/texlive/2014/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+Package: algpseudocode 
+
+Document Style - pseudocode environments for use with the `algorithmicx' style
+) (/usr/local/texlive/2014/texmf-dist/tex/latex/appendix/appendix.sty
+Package: appendix 2009/09/02 v1.2b extra appendix facilities
+\c@@pps=\count144
+\c@@ppsavesec=\count145
+\c@@ppsaveapp=\count146
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/answers/answers.sty
+Package: answers 2010/10/11 v2.13 Production of solution sheets in LaTeX2e
+) (./evan.sty
+Package: evan 
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/asymptote/asymptote.sty
+Package: asymptote 2012/08/25 v1.27 Asymptote style file for LaTeX
+
+(./guide.pre)
+\ASYbox=\box38
+\c@asy=\count147
+\AsyStream=\write3
+\AsyPreStream=\write4
+ (/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2014/04/23 v1.1a Standard LaTeX Color (DPC)
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/latexconfig/color.cfg
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 137.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/04/25 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+\Gin@req@height=\dimen120
+\Gin@req@width=\dimen121
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/catchfile.sty
+Package: catchfile 2011/03/01 v1.6 Catch the contents of a file (HO)
+)
+\openout4 = `guide.pre'.
+
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/cleveref/cleveref.sty
+Package: cleveref 2013/12/28 v0.19 Intelligent cross-referencing
+Package cleveref Info: `hyperref' support loaded on input line 2230.
+LaTeX Info: Redefining \cref on input line 2230.
+LaTeX Info: Redefining \Cref on input line 2230.
+LaTeX Info: Redefining \crefrange on input line 2230.
+LaTeX Info: Redefining \Crefrange on input line 2230.
+LaTeX Info: Redefining \cpageref on input line 2230.
+LaTeX Info: Redefining \Cpageref on input line 2230.
+LaTeX Info: Redefining \cpagerefrange on input line 2230.
+LaTeX Info: Redefining \Cpagerefrange on input line 2230.
+LaTeX Info: Redefining \labelcref on input line 2230.
+LaTeX Info: Redefining \labelcpageref on input line 2230.
+Package cleveref Info: `amsthm' support loaded on input line 2858.
+Package cleveref Info: `algorithmicx' support loaded on input line 2939.
+Package cleveref Info: `listings' support loaded on input line 2950.
+Package cleveref Info: include cross-reference names in hyperlinks on input lin
+e 7476.
+Package cleveref Info: include cross-reference names in hyperlinks on input lin
+e 7493.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/thmtools/thmtools.sty
+Package: thmtools 2014/04/21 v66
+\thmt@toks=\toks37
+\c@thmt@dummyctr=\count148
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/thmtools/thm-patch.sty
+Package: thm-patch 2014/04/21 v66
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/thmtools/parseargs.sty
+Package: parseargs 2014/04/21 v66
+\@parsespec=\toks38
+))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/thmtools/thm-kv.sty
+Package: thm-kv 2014/04/21 v66
+Package thm-kv Info: Theorem names will be uppercased on input line 40.
+Package thm-kv Info: kvsetkeys patch (v1.16 or later) on input line 156.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/thmtools/thm-autoref.sty
+Package: thm-autoref 2014/04/21 v66
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/thmtools/aliasctr.sty
+Package: aliasctr 2014/04/21 v66
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/carlisle/remreset.sty)))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/thmtools/thm-listof.sty
+Package: thm-listof 2014/04/21 v66
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/thmtools/thm-restate.sty
+Package: thm-restate 2014/04/21 v66
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/thmtools/thm-amsthm.sty
+Package: thm-amsthm 2014/04/21 v66
+\thmt@style@headstyle=\toks39
+))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/mdframed/mdframed.sty
+Package: mdframed 2013/07/01 1.9b: mdframed
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+(/usr/local/texlive/2014/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2014/05/20 v4814 L3 programming layer (loader) 
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/l3kernel/expl3-code.tex
+Package: expl3 2014/05/20 v4814 L3 programming layer (code) 
+L3 Module: l3bootstrap 2014/05/16 v4782 L3 Bootstrap code
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/etex-pkg/etex.sty
+Package: etex 1998/03/26 v2.0 eTeX basic definition package (PEB)
+\et@xins=\count149
+)
+L3 Module: l3names 2014/05/04 v4728 L3 Namespace for primitives
+L3 Module: l3basics 2014/05/04 v4728 L3 Basic definitions
+L3 Module: l3expan 2014/04/30 v4712 L3 Argument expansion
+L3 Module: l3tl 2014/05/04 v4728 L3 Token lists
+L3 Module: l3seq 2014/04/30 v4712 L3 Sequences and stacks
+L3 Module: l3int 2014/05/16 v4776 L3 Integers
+\c_max_int=\count150
+\l_tmpa_int=\count151
+\l_tmpb_int=\count152
+\g_tmpa_int=\count153
+\g_tmpb_int=\count154
+L3 Module: l3quark 2014/05/04 v4728 L3 Quarks
+L3 Module: l3prg 2014/05/04 v4728 L3 Control structures
+\g__prg_map_int=\count155
+L3 Module: l3clist 2014/05/04 v4728 L3 Comma separated lists
+L3 Module: l3token 2014/05/04 v4728 L3 Experimental token manipulation
+L3 Module: l3prop 2014/04/30 v4712 L3 Property lists
+L3 Module: l3msg 2014/05/04 v4728 L3 Messages
+L3 Module: l3file 2014/05/05 v4737 L3 File and I/O operations
+\l_iow_line_count_int=\count156
+\l__iow_target_count_int=\count157
+\l__iow_current_line_int=\count158
+\l__iow_current_word_int=\count159
+\l__iow_current_indentation_int=\count160
+L3 Module: l3skip 2014/05/05 v4738 L3 Dimensions and skips
+\c_zero_dim=\dimen122
+\c_max_dim=\dimen123
+\l_tmpa_dim=\dimen124
+\l_tmpb_dim=\dimen125
+\g_tmpa_dim=\dimen126
+\g_tmpb_dim=\dimen127
+\c_zero_skip=\skip73
+\c_max_skip=\skip74
+\l_tmpa_skip=\skip75
+\l_tmpb_skip=\skip76
+\g_tmpa_skip=\skip77
+\g_tmpb_skip=\skip78
+\c_zero_muskip=\muskip12
+\c_max_muskip=\muskip13
+\l_tmpa_muskip=\muskip14
+\l_tmpb_muskip=\muskip15
+\g_tmpa_muskip=\muskip16
+\g_tmpb_muskip=\muskip17
+L3 Module: l3keys 2014/05/08 v4753 L3 Key-value interfaces
+\g__keyval_level_int=\count161
+\l_keys_choice_int=\count162
+L3 Module: l3fp 2014/04/30 v4712 L3 Floating points
+\c__fp_leading_shift_int=\count163
+\c__fp_middle_shift_int=\count164
+\c__fp_trailing_shift_int=\count165
+\c__fp_big_leading_shift_int=\count166
+\c__fp_big_middle_shift_int=\count167
+\c__fp_big_trailing_shift_int=\count168
+\c__fp_Bigg_leading_shift_int=\count169
+\c__fp_Bigg_middle_shift_int=\count170
+\c__fp_Bigg_trailing_shift_int=\count171
+L3 Module: l3box 2014/05/04 v4728 L3 Experimental boxes
+\c_empty_box=\box39
+\l_tmpa_box=\box40
+\l_tmpb_box=\box41
+\g_tmpa_box=\box42
+\g_tmpb_box=\box43
+L3 Module: l3coffins 2014/05/04 v4728 L3 Coffin code layer
+\l__coffin_internal_box=\box44
+\l__coffin_internal_dim=\dimen128
+\l__coffin_offset_x_dim=\dimen129
+\l__coffin_offset_y_dim=\dimen130
+\l__coffin_x_dim=\dimen131
+\l__coffin_y_dim=\dimen132
+\l__coffin_x_prime_dim=\dimen133
+\l__coffin_y_prime_dim=\dimen134
+\c_empty_coffin=\box45
+\l__coffin_aligned_coffin=\box46
+\l__coffin_aligned_internal_coffin=\box47
+\l_tmpa_coffin=\box48
+\l_tmpb_coffin=\box49
+\l__coffin_display_coffin=\box50
+\l__coffin_display_coord_coffin=\box51
+\l__coffin_display_pole_coffin=\box52
+\l__coffin_display_offset_dim=\dimen135
+\l__coffin_display_x_dim=\dimen136
+\l__coffin_display_y_dim=\dimen137
+L3 Module: l3color 2014/04/30 v4712 L3 Experimental color support
+L3 Module: l3luatex 2014/04/30 v4712 L3 Experimental LuaTeX-specific functions
+\g__cctab_allocate_int=\count172
+\g__cctab_stack_int=\count173
+L3 Module: l3candidates 2014/05/04 v4734 L3 Experimental additions to l3kernel
+\l__box_top_dim=\dimen138
+\l__box_bottom_dim=\dimen139
+\l__box_left_dim=\dimen140
+\l__box_right_dim=\dimen141
+\l__box_top_new_dim=\dimen142
+\l__box_bottom_new_dim=\dimen143
+\l__box_left_new_dim=\dimen144
+\l__box_right_new_dim=\dimen145
+\l__box_internal_box=\box53
+\l__coffin_bounding_shift_dim=\dimen146
+\l__coffin_left_corner_dim=\dimen147
+\l__coffin_right_corner_dim=\dimen148
+\l__coffin_bottom_corner_dim=\dimen149
+\l__coffin_top_corner_dim=\dimen150
+\l__coffin_scaled_total_height_dim=\dimen151
+\l__coffin_scaled_width_dim=\dimen152
+))
+Package: xparse 2014/05/05 v4740 L3 Experimental document command parser
+\l__xparse_current_arg_int=\count174
+\l__xparse_m_args_int=\count175
+\l__xparse_mandatory_args_int=\count176
+\l__xparse_processor_int=\count177
+\l__xparse_v_nesting_int=\count178
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2011/01/03 v2.1 e-TeX tools for LaTeX
+\etb@tempcnta=\count179
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/zref-abspage.sty
+Package: zref-abspage 2012/04/04 v2.24 Module abspage for zref (HO)
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/zref-base.sty
+Package: zref-base 2012/04/04 v2.24 Module base for zref (HO)
+Package zref Info: New property list: main on input line 759.
+Package zref Info: New property: default on input line 760.
+Package zref Info: New property: page on input line 761.
+)
+\c@abspage=\count180
+Package zref Info: New property: abspage on input line 62.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/needspace/needspace.sty
+Package: needspace 2010/09/12 v1.3d reserve vertical space
+)
+\mdf@templength=\skip79
+\c@mdf@globalstyle@cnt=\count181
+\mdf@skipabove@length=\skip80
+\mdf@skipbelow@length=\skip81
+\mdf@leftmargin@length=\skip82
+\mdf@rightmargin@length=\skip83
+\mdf@innerleftmargin@length=\skip84
+\mdf@innerrightmargin@length=\skip85
+\mdf@innertopmargin@length=\skip86
+\mdf@innerbottommargin@length=\skip87
+\mdf@splittopskip@length=\skip88
+\mdf@splitbottomskip@length=\skip89
+\mdf@outermargin@length=\skip90
+\mdf@innermargin@length=\skip91
+\mdf@linewidth@length=\skip92
+\mdf@innerlinewidth@length=\skip93
+\mdf@middlelinewidth@length=\skip94
+\mdf@outerlinewidth@length=\skip95
+\mdf@roundcorner@length=\skip96
+\mdf@footenotedistance@length=\skip97
+\mdf@userdefinedwidth@length=\skip98
+\mdf@needspace@length=\skip99
+\mdf@frametitleaboveskip@length=\skip100
+\mdf@frametitlebelowskip@length=\skip101
+\mdf@frametitlerulewidth@length=\skip102
+\mdf@frametitleleftmargin@length=\skip103
+\mdf@frametitlerightmargin@length=\skip104
+\mdf@shadowsize@length=\skip105
+\mdf@extratopheight@length=\skip106
+\mdf@subtitleabovelinewidth@length=\skip107
+\mdf@subtitlebelowlinewidth@length=\skip108
+\mdf@subtitleaboveskip@length=\skip109
+\mdf@subtitlebelowskip@length=\skip110
+\mdf@subtitleinneraboveskip@length=\skip111
+\mdf@subtitleinnerbelowskip@length=\skip112
+\mdf@subsubtitleabovelinewidth@length=\skip113
+\mdf@subsubtitlebelowlinewidth@length=\skip114
+\mdf@subsubtitleaboveskip@length=\skip115
+\mdf@subsubtitlebelowskip@length=\skip116
+\mdf@subsubtitleinneraboveskip@length=\skip117
+\mdf@subsubtitleinnerbelowskip@length=\skip118
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
+(/usr/local/texlive/2014/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
+(/usr/local/texlive/2014/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.te
+x
+\pgfutil@everybye=\toks40
+\pgfutil@tempdima=\dimen153
+\pgfutil@tempdimb=\dimen154
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/utilities/pgfutil-common-li
+sts.tex))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
+\pgfutil@abb=\box54
+(/usr/local/texlive/2014/texmf-dist/tex/latex/ms/everyshi.sty
+Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
+))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex
+Package: pgfrcs 2013/12/20 v3.0.0 (rcs-revision 1.28)
+))
+Package: pgf 2013/12/18 v3.0.0 (rcs-revision 1.14)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty
+(/usr/local/texlive/2014/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
+Package: pgfsys 2013/11/30 v3.0.0 (rcs-revision 1.47)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
+\pgfkeys@pathtoks=\toks41
+\pgfkeys@temptoks=\toks42
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/utilities/pgfkeysfiltered.c
+ode.tex
+\pgfkeys@tmptoks=\toks43
+))
+\pgf@x=\dimen155
+\pgf@y=\dimen156
+\pgf@xa=\dimen157
+\pgf@ya=\dimen158
+\pgf@xb=\dimen159
+\pgf@yb=\dimen160
+\pgf@xc=\dimen161
+\pgf@yc=\dimen162
+\w@pgf@writea=\write5
+\r@pgf@reada=\read2
+\c@pgf@counta=\count182
+\c@pgf@countb=\count183
+\c@pgf@countc=\count184
+\c@pgf@countd=\count185
+\t@pgf@toka=\toks44
+\t@pgf@tokb=\toks45
+\t@pgf@tokc=\toks46
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
+File: pgf.cfg 2008/05/14  (rcs-revision 1.7)
+)
+Driver file for pgf: pgfsys-pdftex.def
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.d
+ef
+File: pgfsys-pdftex.def 2013/07/18  (rcs-revision 1.33)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-p
+df.def
+File: pgfsys-common-pdf.def 2013/10/10  (rcs-revision 1.13)
+)))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.
+code.tex
+File: pgfsyssoftpath.code.tex 2013/09/09  (rcs-revision 1.9)
+\pgfsyssoftpath@smallbuffer@items=\count186
+\pgfsyssoftpath@bigbuffer@items=\count187
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.
+code.tex
+File: pgfsysprotocol.code.tex 2006/10/16  (rcs-revision 1.4)
+)) (/usr/local/texlive/2014/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/latexconfig/color.cfg
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+LaTeX Info: Redefining \color on input line 702.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1337.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1341.
+Package xcolor Info: Model `RGB' extended on input line 1353.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1355.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1356.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1357.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1358.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1359.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
+Package: pgfcore 2010/04/11 v3.0.0 (rcs-revision 1.7)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
+\pgfmath@dimen=\dimen163
+\pgfmath@count=\count188
+\pgfmath@box=\box55
+\pgfmath@toks=\toks47
+\pgfmath@stack@operand=\toks48
+\pgfmath@stack@operation=\toks49
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.
+tex
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic
+.code.tex)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigo
+nometric.code.tex)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.rando
+m.code.tex)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.compa
+rison.code.tex)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.
+code.tex)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round
+.code.tex)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.
+code.tex)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integ
+erarithmetics.code.tex)))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
+\c@pgfmathroundto@lastzeros=\count189
+))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.co
+de.tex
+File: pgfcorepoints.code.tex 2013/10/07  (rcs-revision 1.27)
+\pgf@picminx=\dimen164
+\pgf@picmaxx=\dimen165
+\pgf@picminy=\dimen166
+\pgf@picmaxy=\dimen167
+\pgf@pathminx=\dimen168
+\pgf@pathmaxx=\dimen169
+\pgf@pathminy=\dimen170
+\pgf@pathmaxy=\dimen171
+\pgf@xx=\dimen172
+\pgf@xy=\dimen173
+\pgf@yx=\dimen174
+\pgf@yy=\dimen175
+\pgf@zx=\dimen176
+\pgf@zy=\dimen177
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconst
+ruct.code.tex
+File: pgfcorepathconstruct.code.tex 2013/10/07  (rcs-revision 1.29)
+\pgf@path@lastx=\dimen178
+\pgf@path@lasty=\dimen179
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage
+.code.tex
+File: pgfcorepathusage.code.tex 2013/12/13  (rcs-revision 1.23)
+\pgf@shorten@end@additional=\dimen180
+\pgf@shorten@start@additional=\dimen181
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.co
+de.tex
+File: pgfcorescopes.code.tex 2013/10/09  (rcs-revision 1.44)
+\pgfpic=\box56
+\pgf@hbox=\box57
+\pgf@layerbox@main=\box58
+\pgf@picture@serial@count=\count190
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicst
+ate.code.tex
+File: pgfcoregraphicstate.code.tex 2013/09/19  (rcs-revision 1.11)
+\pgflinewidth=\dimen182
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransform
+ations.code.tex
+File: pgfcoretransformations.code.tex 2013/10/10  (rcs-revision 1.17)
+\pgf@pt@x=\dimen183
+\pgf@pt@y=\dimen184
+\pgf@pt@temp=\dimen185
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.cod
+e.tex
+File: pgfcorequick.code.tex 2008/10/09  (rcs-revision 1.3)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.c
+ode.tex
+File: pgfcoreobjects.code.tex 2006/10/11  (rcs-revision 1.2)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathproce
+ssing.code.tex
+File: pgfcorepathprocessing.code.tex 2013/09/09  (rcs-revision 1.9)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.co
+de.tex
+File: pgfcorearrows.code.tex 2013/11/07  (rcs-revision 1.40)
+\pgfarrowsep=\dimen186
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.cod
+e.tex
+File: pgfcoreshade.code.tex 2013/07/15  (rcs-revision 1.15)
+\pgf@max=\dimen187
+\pgf@sys@shading@range@num=\count191
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.cod
+e.tex
+File: pgfcoreimage.code.tex 2013/07/15  (rcs-revision 1.18)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.
+code.tex
+File: pgfcoreexternal.code.tex 2013/07/15  (rcs-revision 1.20)
+\pgfexternal@startupbox=\box59
+))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.co
+de.tex
+File: pgfcorelayers.code.tex 2013/07/18  (rcs-revision 1.7)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretranspare
+ncy.code.tex
+File: pgfcoretransparency.code.tex 2013/09/30  (rcs-revision 1.5)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.
+code.tex
+File: pgfcorepatterns.code.tex 2013/11/07  (rcs-revision 1.5)
+)))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.cod
+e.tex
+File: pgfmoduleshapes.code.tex 2013/10/31  (rcs-revision 1.34)
+\pgfnodeparttextbox=\box60
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.
+tex
+File: pgfmoduleplot.code.tex 2013/07/31  (rcs-revision 1.12)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version
+-0-65.sty
+Package: pgfcomp-version-0-65 2007/07/03 v3.0.0 (rcs-revision 1.7)
+\pgf@nodesepstart=\dimen188
+\pgf@nodesepend=\dimen189
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version
+-1-18.sty
+Package: pgfcomp-version-1-18 2007/07/23 v3.0.0 (rcs-revision 1.1)
+))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/pgf/utilities/pgffor.sty
+(/usr/local/texlive/2014/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex)
+) (/usr/local/texlive/2014/texmf-dist/tex/latex/pgf/math/pgfmath.sty
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
+Package: pgffor 2013/12/13 v3.0.0 (rcs-revision 1.25)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)
+\pgffor@iter=\dimen190
+\pgffor@skip=\dimen191
+\pgffor@stack=\toks50
+\pgffor@toks=\toks51
+))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.cod
+e.tex
+Package: tikz 2013/12/13 v3.0.0 (rcs-revision 1.142)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothan
+dlers.code.tex
+File: pgflibraryplothandlers.code.tex 2013/08/31 v3.0.0 (rcs-revision 1.20)
+\pgf@plot@mark@count=\count192
+\pgfplotmarksize=\dimen192
+)
+\tikz@lastx=\dimen193
+\tikz@lasty=\dimen194
+\tikz@lastxsaved=\dimen195
+\tikz@lastysaved=\dimen196
+\tikzleveldistance=\dimen197
+\tikzsiblingdistance=\dimen198
+\tikz@figbox=\box61
+\tikz@figbox@bg=\box62
+\tikz@tempbox=\box63
+\tikz@tempbox@bg=\box64
+\tikztreelevel=\count193
+\tikznumberofchildren=\count194
+\tikznumberofcurrentchild=\count195
+\tikz@fig@count=\count196
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.cod
+e.tex
+File: pgfmodulematrix.code.tex 2013/09/17  (rcs-revision 1.8)
+\pgfmatrixcurrentrow=\count197
+\pgfmatrixcurrentcolumn=\count198
+\pgf@matrix@numberofcolumns=\count199
+)
+\tikz@expandcount=\count200
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibrarytopaths.code.tex
+File: tikzlibrarytopaths.code.tex 2008/06/17 v3.0.0 (rcs-revision 1.2)
+)))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/mdframed/md-frame-1.mdf
+File: md-frame-1.mdf 2013/07/01\ 1.9b: md-frame-1
+)
+\mdf@frametitlebox=\box65
+\mdf@footnotebox=\box66
+\mdf@splitbox@one=\box67
+\mdf@splitbox@two=\box68
+\mdf@splitbox@save=\box69
+\mdfsplitboxwidth=\skip119
+\mdfsplitboxtotalwidth=\skip120
+\mdfsplitboxheight=\skip121
+\mdfsplitboxdepth=\skip122
+\mdfsplitboxtotalheight=\skip123
+\mdfframetitleboxwidth=\skip124
+\mdfframetitleboxtotalwidth=\skip125
+\mdfframetitleboxheight=\skip126
+\mdfframetitleboxdepth=\skip127
+\mdfframetitleboxtotalheight=\skip128
+\mdffootnoteboxwidth=\skip129
+\mdffootnoteboxtotalwidth=\skip130
+\mdffootnoteboxheight=\skip131
+\mdffootnoteboxdepth=\skip132
+\mdffootnoteboxtotalheight=\skip133
+\mdftotallinewidth=\skip134
+\mdfboundingboxwidth=\skip135
+\mdfboundingboxtotalwidth=\skip136
+\mdfboundingboxheight=\skip137
+\mdfboundingboxdepth=\skip138
+\mdfboundingboxtotalheight=\skip139
+\mdf@freevspace@length=\skip140
+\mdf@horizontalwidthofbox@length=\skip141
+\mdf@verticalmarginwhole@length=\skip142
+\mdf@horizontalspaceofbox=\skip143
+\mdfsubtitleheight=\skip144
+\mdfsubsubtitleheight=\skip145
+\c@mdfcountframes=\count201
+
+****** mdframed patching \endmdf@trivlist
+
+****** -- success******
+
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining document command \newmdtheoremenv with arg. spec. 'O{} m o m o ' on
+. line 601.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining document command \mdtheorem with arg. spec. ' O{} m o m o ' on line
+. 701.
+.................................................
+Normal \count register pool exhausted, switching to extended pool.
+\mdf@envdepth=\count277
+\c@mdf@env@i=\count278
+\c@mdf@env@ii=\count279
+\c@mdf@zref@counter=\count280
+Package zref Info: New property: mdf@pagevalue on input line 895.
+)
+Package thmtools Info: Key `mdframed' (with value `style=mdbluebox')
+(thmtools)             is not a known style key.
+(thmtools)             Will pass this to every \declaretheorem
+(thmtools)             that uses `style=thmbluebox' on input line 216.
+Package thmtools Info: Key `mdframed' (with value `style=mdrecbox')
+(thmtools)             is not a known style key.
+(thmtools)             Will pass this to every \declaretheorem
+(thmtools)             that uses `style=thmrecbox' on input line 234.
+Package thmtools Info: Automatically pulling in `thmdef-mdframed' on input line
+ 238.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/thmtools/thmdef-mdframed.sty
+Package: thmdef-mdframed 2014/04/21 v66
+)
+\c@theorem=\count281
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/paralist/paralist.sty
+Package: paralist 2013/06/09 v2.4 Extended list environments
+\pltopsep=\skip146
+\plpartopsep=\skip147
+\plitemsep=\skip148
+\plparsep=\skip149
+\pl@lab=\toks52
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/todonotes/todonotes.sty
+Package: todonotes 2012/07/25 .dtx Todonotes source and documentation.
+Package: todonotes 2012/07/25
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+Package: xkeyval 2014/05/09 v2.6d package option processing (HA)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+\XKV@toks=\toks53
+\XKV@tempa@toks=\toks54
+\XKV@depth=\count282
+File: xkeyval.tex 2014/05/09 v2.6d key=value parser (HA)
+))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibrarypositioning.code.tex
+File: tikzlibrarypositioning.code.tex 2008/10/06 v3.0.0 (rcs-revision 1.7)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2007/08/22 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count283
+\calc@Bcount=\count284
+\calc@Adimen=\dimen199
+\calc@Bdimen=\dimen200
+\calc@Askip=\skip150
+\calc@Bskip=\skip151
+LaTeX Info: Redefining \setlength on input line 75.
+LaTeX Info: Redefining \addtolength on input line 76.
+\calc@Ccount=\count285
+\calc@Cskip=\skip152
+)
+\c@@todonotes@numberoftodonotes=\count286
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/mh/mathtools.sty
+Package: mathtools 2014/05/21 v1.14 mathematical typesetting tools
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/mh/mhsetup.sty
+Package: mhsetup 2010/01/21 v1.2a programming setup (MH)
+)
+LaTeX Info: Thecontrolsequence`\['isalreadyrobust on input line 129.
+LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 129.
+\g_MT_multlinerow_int=\count287
+\l_MT_multwidth_dim=\dimen201
+\origjot=\skip153
+Normal \dimen register pool exhausted, switching to extended pool.
+\l_MT_shortvdotswithinadjustabove_dim=\dimen256
+\l_MT_shortvdotswithinadjustbelow_dim=\dimen257
+\l_MT_above_intertext_sep=\dimen258
+\l_MT_below_intertext_sep=\dimen259
+\l_MT_above_shortintertext_sep=\dimen260
+\l_MT_below_shortintertext_sep=\dimen261
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/microtype/microtype.sty
+Package: microtype 2013/05/23 v2.5a Micro-typographical refinements (RS)
+\MT@toks=\toks55
+\MT@count=\count288
+LaTeX Info: Redefining \textls on input line 766.
+\MT@outer@kern=\dimen262
+LaTeX Info: Redefining \textmicrotypecontext on input line 1285.
+\MT@listname@count=\count289
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/microtype/microtype-pdftex.def
+File: microtype-pdftex.def 2013/05/23 v2.5a Definitions specific to pdftex (RS)
+
+LaTeX Info: Redefining \lsstyle on input line 915.
+LaTeX Info: Redefining \lslig on input line 915.
+\MT@outer@space=\skip154
+)
+Package microtype Info: Loading configuration file microtype.cfg.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/microtype/microtype.cfg
+File: microtype.cfg 2013/05/23 v2.5a microtype main configuration file (RS)
+))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/titling/titling.sty
+Package: titling 2009/09/04 v2.1d maketitle typesetting
+\thanksmarkwidth=\skip155
+\thanksmargin=\skip156
+\droptitle=\skip157
+)
+\posttitledrop=\skip158
+\postauthordrop=\skip159
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+\fancy@headwidth=\skip160
+\f@ncyO@elh=\skip161
+\f@ncyO@erh=\skip162
+\f@ncyO@olh=\skip163
+\f@ncyO@orh=\skip164
+\f@ncyO@elf=\skip165
+\f@ncyO@erf=\skip166
+\f@ncyO@olf=\skip167
+\f@ncyO@orf=\skip168
+))
+(./htlatexsupport.sty
+Package: htlatexsupport 
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/tikz-dependency/tikz-dependency.s
+ty
+Package: tikz-dependency 2011/01/08 v1.1 Macros to draw dependency trees
+ (/usr/local/texlive/2014/texmf-dist/tex/latex/environ/environ.sty
+Package: environ 2014/05/04 v0.3 A new way to define environments
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/trimspaces/trimspaces.sty
+Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
+))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibrarymatrix.code.tex
+File: tikzlibrarymatrix.code.tex 2013/07/12 v3.0.0 (rcs-revision 1.4)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibraryarrows.code.tex
+File: tikzlibraryarrows.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.
+code.tex
+File: pgflibraryarrows.code.tex 2013/09/23 v3.0.0 (rcs-revision 1.16)
+\arrowsize=\dimen263
+))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibrarybackgrounds.code.tex
+File: tikzlibrarybackgrounds.code.tex 2013/07/18 v3.0.0 (rcs-revision 1.3)
+\pgf@layerbox@background=\box70
+\pgf@layerboxsaved@background=\box71
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibrarycalc.code.tex
+File: tikzlibrarycalc.code.tex 2013/07/15 v3.0.0 (rcs-revision 1.9)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibrarypatterns.code.tex
+File: tikzlibrarypatterns.code.tex 2008/01/15 v3.0.0 (rcs-revision 1.2)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/pgflibrarypattern
+s.code.tex
+File: pgflibrarypatterns.code.tex 2008/03/03 v3.0.0 (rcs-revision 1.13)
+))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibraryfit.code.tex
+File: tikzlibraryfit.code.tex 2013/07/12 v3.0.0 (rcs-revision 1.5)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibraryshapes.code.tex
+File: tikzlibraryshapes.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibraryshapes.geometric.code.tex
+File: tikzlibraryshapes.geometric.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
+
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibrary
+shapes.geometric.code.tex
+File: pgflibraryshapes.geometric.code.tex 2008/06/26 v3.0.0 (rcs-revision 1.1)
+))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibraryshapes.misc.code.tex
+File: tikzlibraryshapes.misc.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibrary
+shapes.misc.code.tex
+File: pgflibraryshapes.misc.code.tex 2013/07/18 v3.0.0 (rcs-revision 1.5)
+))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibraryshapes.symbols.code.tex
+File: tikzlibraryshapes.symbols.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibrary
+shapes.symbols.code.tex
+File: pgflibraryshapes.symbols.code.tex 2013/09/11 v3.0.0 (rcs-revision 1.6)
+))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibraryshapes.arrows.code.tex
+File: tikzlibraryshapes.arrows.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibrary
+shapes.arrows.code.tex
+File: pgflibraryshapes.arrows.code.tex 2008/06/26 v3.0.0 (rcs-revision 1.1)
+))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibraryshapes.callouts.code.tex
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibrary
+shapes.callouts.code.tex))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibraryshapes.multipart.code.tex
+File: tikzlibraryshapes.multipart.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
+
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibrary
+shapes.multipart.code.tex
+File: pgflibraryshapes.multipart.code.tex 2010/01/07 v3.0.0 (rcs-revision 1.2)
+\pgfnodepartlowerbox=\box72
+\pgfnodeparttwobox=\box73
+\pgfnodepartthreebox=\box74
+\pgfnodepartfourbox=\box75
+\pgfnodeparttwentybox=\box76
+\pgfnodepartnineteenbox=\box77
+\pgfnodeparteighteenbox=\box78
+\pgfnodepartseventeenbox=\box79
+\pgfnodepartsixteenbox=\box80
+\pgfnodepartfifteenbox=\box81
+\pgfnodepartfourteenbox=\box82
+\pgfnodepartthirteenbox=\box83
+\pgfnodeparttwelvebox=\box84
+\pgfnodepartelevenbox=\box85
+\pgfnodeparttenbox=\box86
+\pgfnodepartninebox=\box87
+\pgfnodeparteightbox=\box88
+\pgfnodepartsevenbox=\box89
+\pgfnodepartsixbox=\box90
+\pgfnodepartfivebox=\box91
+)))
+\pgf@layerbox@depgroups=\box92
+\pgf@layerboxsaved@depgroups=\box93
+\c@dt@labelid=\count290
+\xca=\skip169
+\yca=\skip170
+\xcb=\skip171
+\ycb=\skip172
+))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibrarychains.code.tex
+File: tikzlibrarychains.code.tex 2013/07/15 v3.0.0 (rcs-revision 1.6)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibrarydecorations.shapes.code.tex
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibrarydecorations.code.tex
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/modules/pgfmoduledecoration
+s.code.tex
+\pgfdecoratedcompleteddistance=\dimen264
+\pgfdecoratedremainingdistance=\dimen265
+\pgfdecoratedinputsegmentcompleteddistance=\dimen266
+\pgfdecoratedinputsegmentremainingdistance=\dimen267
+\pgf@decorate@distancetomove=\dimen268
+\pgf@decorate@repeatstate=\count291
+\pgfdecorationsegmentamplitude=\dimen269
+\pgfdecorationsegmentlength=\dimen270
+)
+\tikz@lib@dec@box=\box94
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/decorations/pgfli
+brarydecorations.shapes.code.tex))
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibrarytrees.code.tex
+File: tikzlibrarytrees.code.tex 2008/02/24 v3.0.0 (rcs-revision 1.2)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibrarymindmap.code.tex
+File: tikzlibrarymindmap.code.tex 2013/07/16 v3.0.0 (rcs-revision 1.10)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2014/03/04 1.5c listings language file
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/mdwtools/footnote.sty
+Package: footnote 1997/01/28 1.13 Save footnotes around boxes
+\fn@notes=\box95
+\fn@width=\dimen271
+)
+(./guide.aux (./chapters/title.aux) (./chapters/acknowledgments.aux)
+(./chapters/preface.aux) (./chapters/fundamentals.aux)
+(./chapters/standard_ds.aux) (./chapters/big_ideas.aux) (./chapters/graphs.aux)
+(./chapters/complex.aux) (./chapters/computational_geometry.aux)
+(./chapters/trees.aux) (./chapters/strings.aux) (./chapters/more_graphs.aux)
+(./chapters/math.aux) (./chapters/nonsense.aux) (./chapters/problems.aux))
+\openout1 = `guide.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 132.
+LaTeX Font Info:    ... okay on input line 132.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 132.
+LaTeX Font Info:    ... okay on input line 132.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 132.
+LaTeX Font Info:    ... okay on input line 132.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 132.
+LaTeX Font Info:    ... okay on input line 132.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 132.
+LaTeX Font Info:    ... okay on input line 132.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 132.
+LaTeX Font Info:    ... okay on input line 132.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 132.
+LaTeX Font Info:    ... okay on input line 132.
+LaTeX Font Info:    Try loading font information for T1+lmr on input line 132.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/lm/t1lmr.fd
+File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/ucs/ucsencs.def
+File: ucsencs.def 2011/01/21 Fixes to fontencodings LGR, T3
+)
+(/usr/local/texlive/2014/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count292
+\scratchdimen=\dimen272
+\scratchbox=\box96
+\nofMPsegments=\count293
+\nofMParguments=\count294
+\everyMPshowfont=\toks56
+\MPscratchCnt=\count295
+\MPscratchDim=\dimen273
+\MPnumerator=\count296
+\makeMPintoPDFobject=\count297
+\everyMPtoPDFconversion=\toks57
+) (/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
+)
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 452.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+\c@lstlisting=\count298
+\AtBeginShipoutBox=\box97
+Package hyperref Info: Link coloring OFF on input line 132.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
+)
+\c@section@level=\count299
+)
+LaTeX Info: Redefining \ref on input line 132.
+LaTeX Info: Redefining \pageref on input line 132.
+LaTeX Info: Redefining \nameref on input line 132.
+
+(./guide.out) (./guide.out)
+\@outlinefile=\write6
+\openout6 = `guide.out'.
+
+ ABD: EveryShipout initializing macros
+LaTeX Info: Redefining \microtypecontext on input line 132.
+Package microtype Info: Generating PDF output.
+Package microtype Info: Character protrusion enabled (level 2).
+Package microtype Info: Using default protrusion set `alltext'.
+Package microtype Info: Automatic font expansion enabled (level 2),
+(microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
+Package microtype Info: Using default expansion set `basictext'.
+Package microtype Info: No adjustment of tracking.
+Package microtype Info: No adjustment of interword spacing.
+Package microtype Info: No adjustment of character kerning.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/microtype/mt-cmr.cfg
+File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
+(RS)
+)
+\openout2 = `chapters/title.aux'.
+
+
+(./chapters/title.tex
+LaTeX Font Info:    Try loading font information for T1+lmss on input line 15.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/lm/t1lmss.fd
+File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+Package microtype Info: Loading generic settings for font family
+(microtype)             `lmss' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+Package microtype Info: Character `029' is missing
+(microtype)             in font `T1/lmr/m/sc/10.95'.
+(microtype)             Ignoring protrusion settings for this character.
+LaTeX Font Info:    Try loading font information for T1+lmtt on input line 15.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+Package microtype Info: Loading generic settings for font family
+(microtype)             `lmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+Package microtype Info: Character `029' is missing
+(microtype)             in font `T1/lmtt/m/sc/10.95'.
+(microtype)             Ignoring protrusion settings for this character.
+ [1
+
+
+
+
+{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 33.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/lm/ot1lmr.fd
+File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 33.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/lm/omllmm.fd
+File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 33.
+
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/lm/omslmsy.fd
+File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 33.
+
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/lm/omxlmex.fd
+File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10.95> on input line 33.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <8> on input line 33.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <6> on input line 33.
+LaTeX Font Info:    Try loading font information for U+msa on input line 33.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/microtype/mt-msa.cfg
+File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 33.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/microtype/mt-msb.cfg
+File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
+) [2])
+\openout2 = `chapters/acknowledgments.aux'.
+
+
+(./chapters/acknowledgments.tex) [3
+
+
+
+] [4
+
+
+] (./guide.toc [5] [6] [7])
+\tf@toc=\write7
+\openout7 = `guide.toc'.
+
+ [8]
+(./guide.loa)
+\tf@loa=\write8
+\openout8 = `guide.loa'.
+
+ [9
+
+]
+\openout2 = `chapters/preface.aux'.
+
+ (./chapters/preface.tex [10
+
+
+]
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <9> on input line 3.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 3.
+LaTeX Font Info:    Try loading font information for OMS+lmr on input line 12.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/lm/omslmr.fd
+File: omslmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Font shape `OMS/lmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/lmsy/m/n' tried instead on input line 12.
+) [11] [12
+
+
+]
+\openout2 = `chapters/fundamentals.aux'.
+
+
+(./chapters/fundamentals.tex
+Chapter 1.
+
+Overfull \hbox (18.01122pt too wide) in paragraph at lines 5--6
+\T1/lmr/m/n/10.95 (-20) tion, we'll briefly go over in-put and out-put in Java 
+us-ing \T1/lmtt/m/n/10.95 java.util.Scanner \T1/lmr/m/n/10.95 (-20) and \T1/lmt
+t/m/n/10.95 java.io.PrintWriter\T1/lmr/m/n/10.95 (-20) .
+ []
+
+[1
+
+
+] [2] [3] [4]
+Overfull \hbox (52.23076pt too wide) in paragraph at lines 154--155
+\T1/lmr/m/n/10.95 (-20) ture that re-quires a cus-tom com-par-i-son, we use a d
+if-fer-ent con-struc-tor: \T1/lmtt/m/n/10.95 new TreeSet<ArrayList<Integer>>(ne
+w
+ []
+
+[5] (/usr/local/texlive/2014/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2014/03/04 1.5c listings language file
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2014/03/04 1.5c listings language file
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2014/03/04 1.5c (Carsten Heinz)
+) [6])
+[7]
+\openout2 = `chapters/standard_ds.aux'.
+
+ (./chapters/standard_ds.tex [8
+
+
+
+]
+Chapter 2.
+[9]
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 118.
+
+Underfull \hbox (badness 10000) in paragraph at lines 119--119
+[]\T1/lmtt/m/n/10.95 void push_back(const
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--120
+[]\T1/lmtt/m/n/10.95 void add(int index, E
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--120
+[]\T1/lmtt/m/n/10.95 iterator insert(iterator
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--120
+\T1/lmtt/m/n/10.95 position, const
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 121--121
+[]\T1/lmtt/m/n/10.95 reference operator[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 122--122
+[]\T1/lmtt/m/n/10.95 E set(int index, E
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 122--122
+[]\T1/lmtt/m/n/10.95 reference operator[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 123--123
+[]\T1/lmtt/m/n/10.95 boolean contains(Object
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 123--123
+[]\T1/lmtt/m/n/10.95 iterator find (iterator
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 123--123
+\T1/lmtt/m/n/10.95 first, iterator last,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 124--124
+[]\T1/lmtt/m/n/10.95 iterator erase (iterator
+ []
+
+[10] <images/paper_clip_chain.jpg, id=532, 301.125pt x 200.75pt>
+File: images/paper_clip_chain.jpg Graphic file (type jpg)
+
+<use images/paper_clip_chain.jpg>
+Package pdftex.def Info: images/paper_clip_chain.jpg used on input line 138.
+(pdftex.def)             Requested size: 301.12425pt x 200.7495pt.
+ [11] [12 <./images/paper_clip_chain.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 211--211
+[]\T1/lmtt/m/n/10.95 void add(int index,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 212--212
+[]\T1/lmtt/m/n/10.95 reference
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 212--212
+\T1/lmtt/m/n/10.95 operator[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 213--213
+[]\T1/lmtt/m/n/10.95 E set(int index, E
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 213--213
+[]\T1/lmtt/m/n/10.95 reference
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 213--213
+\T1/lmtt/m/n/10.95 operator[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 214--214
+[]\T1/lmtt/m/n/10.95 boolean
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 214--214
+\T1/lmtt/m/n/10.95 contains(Object
+ []
+
+
+Underfull \hbox (badness 5091) in paragraph at lines 215--215
+[]\T1/lmr/m/it/10.95 (+20) remove \T1/lmr/m/n/10.95 (+20) the el-e-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 216--216
+[]\T1/lmtt/m/n/10.95 boolean
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 216--216
+[]\T1/lmtt/m/n/10.95 void remove (const
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 218--218
+[]\T1/lmtt/m/n/10.95 addFirst\T1/lmr/m/n/10.95 (+20) , \T1/lmtt/m/n/10.95 addLa
+st\T1/lmr/m/n/10.95 (+20) ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 218--218
+\T1/lmtt/m/n/10.95 getFirst\T1/lmr/m/n/10.95 (+20) , \T1/lmtt/m/n/10.95 getLast
+\T1/lmr/m/n/10.95 (+20) ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 218--218
+\T1/lmtt/m/n/10.95 removeFirst\T1/lmr/m/n/10.95 (+20) ,
+ []
+
+
+Overfull \hbox (5.03633pt too wide) in paragraph at lines 207--219
+ [] 
+ []
+
+[13]
+Underfull \hbox (badness 10000) in paragraph at lines 232--232
+[]\T1/lmtt/m/n/10.95 void push (const
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 249--249
+[]\T1/lmtt/m/n/10.95 void push (const
+ []
+
+[14] [15] [16] [17] [18]
+Underfull \hbox (badness 10000) in paragraph at lines 691--691
+[]\T1/lmtt/m/n/10.95 void push (const
+ []
+
+[19] [20] [21] [22]
+Underfull \hbox (badness 10000) in paragraph at lines 916--916
+[]\T1/lmtt/m/n/10.95 void insert (const
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 917--917
+[]\T1/lmtt/m/n/10.95 boolean contains(Object
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 917--917
+[]\T1/lmtt/m/n/10.95 size_type count (const
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 918--918
+[]\T1/lmtt/m/n/10.95 size_type erase (const
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 918--918
+\T1/lmtt/m/n/10.95 value_type& val)\T1/lmr/m/n/10.95 (+20) ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 918--918
+\T1/lmtt/m/n/10.95 void erase (iterator
+ []
+
+[23] [24]
+Underfull \hbox (badness 10000) in paragraph at lines 1063--1063
+[]\T1/lmtt/m/n/10.95 void insert (const
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1064--1064
+[]\T1/lmtt/m/n/10.95 boolean contains(Object
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1064--1064
+[]\T1/lmtt/m/n/10.95 size_type count (const
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1065--1065
+[]\T1/lmtt/m/n/10.95 size_type erase (const
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1065--1065
+\T1/lmtt/m/n/10.95 value_type& val)\T1/lmr/m/n/10.95 (+20) ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1065--1065
+\T1/lmtt/m/n/10.95 void erase (iterator
+ []
+
+[25] [26]
+Underfull \hbox (badness 10000) in paragraph at lines 1227--1227
+[]\T1/lmtt/m/n/10.95 mapped_type& operator[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1228--1228
+[]\T1/lmtt/m/n/10.95 mapped_type& operator[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1229--1229
+[]\T1/lmtt/m/n/10.95 size_type erase
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1229--1229
+\T1/lmtt/m/n/10.95 (const key_type& val)\T1/lmr/m/n/10.95 (+20) ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1229--1229
+\T1/lmtt/m/n/10.95 void erase (iterator
+ []
+
+[27]
+Underfull \hbox (badness 10000) in paragraph at lines 1238--1238
+[]\T1/lmtt/m/n/10.95 mapped_type& operator[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1239--1239
+[]\T1/lmtt/m/n/10.95 mapped_type& operator[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1240--1240
+[]\T1/lmtt/m/n/10.95 size_type erase
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1240--1240
+\T1/lmtt/m/n/10.95 (const key_type& val)\T1/lmr/m/n/10.95 (+20) ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1240--1240
+\T1/lmtt/m/n/10.95 void erase (iterator
+ []
+
+) [28]
+\openout2 = `chapters/big_ideas.aux'.
+
+ (./chapters/big_ideas.tex
+Chapter 3.
+[29
+
+
+
+] [30] [31]pdfTeX warning (ext4): destination with the same identifier (name{AL
+G@line.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.119 \Function
+               {Process}{$i$}pdfTeX warning (ext4): destination with the same i
+dentifier (name{ALG@line.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.120 \If
+         {$i$ has already been processed}pdfTeX warning (ext4): destination wit
+h the same identifier (name{ALG@line.3}) has been already used, duplicate ignor
+ed
+<to be read again> 
+                   \relax 
+l.121 	\State
+              \Return $dp(i)$pdfTeX warning (ext4): destination with the same i
+dentifier (name{ALG@line.4}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.123 \State
+             $max \gets 0$pdfTeX warning (ext4): destination with the same iden
+tifier (name{ALG@line.5}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.124 \For
+          {$j\equiv i+1,N$}pdfTeX warning (ext4): destination with the same ide
+ntifier (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.125 	\If
+          {$value(i) > value(j)$}pdfTeX warning (ext4): destination with the sa
+me identifier (name{ALG@line.7}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.126 		\State
+               $x \gets \Call{Process}{j}$pdfTeX warning (ext4): destination wi
+th the same identifier (name{ALG@line.8}) has been already used, duplicate igno
+red
+<to be read again> 
+                   \relax 
+l.127 		\If
+           {$x > max$}pdfTeX warning (ext4): destination with the same identifi
+er (name{ALG@line.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.142 \For
+          {$i \equiv N,1$}pdfTeX warning (ext4): destination with the same iden
+tifier (name{ALG@line.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.144 	\State
+              $max \gets 0$pdfTeX warning (ext4): destination with the same ide
+ntifier (name{ALG@line.3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.145 	\For
+           {$j\equiv i+1,N$}pdfTeX warning (ext4): destination with the same id
+entifier (name{ALG@line.4}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.146 		\If
+           {$value(i) > value(j)$}pdfTeX warning (ext4): destination with the s
+ame identifier (name{ALG@line.5}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.147 			\If
+            {$dp(j) > max$}pdfTeX warning (ext4): destination with the same ide
+ntifier (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.148 				\State
+                 $max \gets dp(j)$pdfTeX warning (ext4): destination with the s
+ame identifier (name{ALG@line.7}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.152 	\State
+              $dp(i) \gets max + 1$) [32]
+\openout2 = `chapters/graphs.aux'.
+
+ (./chapters/graphs.tex
+Chapter 4.
+[33
+
+
+
+] [34]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 193.
+pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.1}) 
+has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.196 \Function
+               {Find}{$v$}pdfTeX warning (ext4): destination with the same iden
+tifier (name{ALG@line.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.197 	\If
+           {$v$ is the root}pdfTeX warning (ext4): destination with the same id
+entifier (name{ALG@line.3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.198 		\State
+               \Return $v$pdfTeX warning (ext4): destination with the same iden
+tifier (name{ALG@line.4}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.200     \State
+                 $parent(v) \gets \Call{Find}{parent(v)}$pdfTeX warning (ext4):
+ destination with the same identifier (name{ALG@line.5}) has been already used,
+ duplicate ignored
+<to be read again> 
+                   \relax 
+l.201     \State
+                 \Return $parent(v)$pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.203 \Function
+               {Union}{$u$, $v$}pdfTeX warning (ext4): destination with the sam
+e identifier (name{ALG@line.7}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.204 	\State
+              $uRoot \gets \Call{Find}{u}$pdfTeX warning (ext4): destination wi
+th the same identifier (name{ALG@line.8}) has been already used, duplicate igno
+red
+<to be read again> 
+                   \relax 
+l.205 	\State
+              $vRoot \gets \Call{Find}{v}$pdfTeX warning (ext4): destination wi
+th the same identifier (name{ALG@line.9}) has been already used, duplicate igno
+red
+<to be read again> 
+                   \relax 
+l.206     \If
+              {$uRoot = vRoot$}pdfTeX warning (ext4): destination with the same
+ identifier (name{ALG@line.10}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.207 		\State
+               \ReturnpdfTeX warning (ext4): destination with the same identifi
+er (name{ALG@line.11}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.209     \If
+              {$size(uRoot)<size(vRoot)$} [35]pdfTeX warning (ext4): destinatio
+n with the same identifier (name{ALG@line.1}) has been already used, duplicate 
+ignored
+<to be read again> 
+                   \relax 
+l.237 \ForAll
+             {vertices $v$}pdfTeX warning (ext4): destination with the same ide
+ntifier (name{ALG@line.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.238 	\State
+              $dist(v) \gets \infty$pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.239 	\State
+              $visited(v) \gets 0$pdfTeX warning (ext4): destination with the s
+ame identifier (name{ALG@line.4}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.240     \State
+                 $prev(v) \gets -1$pdfTeX warning (ext4): destination with the 
+same identifier (name{ALG@line.5}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.242 \State
+             $dist(src) \gets 0$pdfTeX warning (ext4): destination with the sam
+e identifier (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.243 \While
+            {$\exists v$ s.t. $visited(v)=0$}pdfTeX warning (ext4): destination
+ with the same identifier (name{ALG@line.7}) has been already used, duplicate i
+gnored
+<to be read again> 
+                   \relax 
+l.244 	\State
+              $v \equiv v$ s.t. $visited(v)=0$ with min $dist(v)$pdfTeX warning
+ (ext4): destination with the same identifier (name{ALG@line.8}) has been alrea
+dy used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.245     \State
+                 $visited(v) \gets 1$pdfTeX warning (ext4): destination with th
+e same identifier (name{ALG@line.9}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.246 	\ForAll
+              {neighbors $u$ of $v$}pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.10}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.247     	\If
+              {$visited(u) = 0$}pdfTeX warning (ext4): destination with the sam
+e identifier (name{ALG@line.11}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.248     		\State
+                   $alt \gets dist(v) + weight(v, u)$ [36] [37pdfTeX warning (e
+xt4): destination with the same identifier (name{ALG@line.12}) has been already
+ used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.296 
+      pdfTeX warning (ext4): destination with the same identifier (name{ALG@lin
+e.13}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.296 
+      pdfTeX warning (ext4): destination with the same identifier (name{ALG@lin
+e.14}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.296 
+      ] [38]pdfTeX warning (ext4): destination with the same identifier (name{A
+LG@line.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.391 \ForAll
+             {vertices $v$}pdfTeX warning (ext4): destination with the same ide
+ntifier (name{ALG@line.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.392 	\State
+              $dist(v,v)=0$pdfTeX warning (ext4): destination with the same ide
+ntifier (name{ALG@line.3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.394 \ForAll
+             {edges $(u,v)$}pdfTeX warning (ext4): destination with the same id
+entifier (name{ALG@line.4}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.395 	\State
+              $dist(u,v)=weight(u,v)$pdfTeX warning (ext4): destination with th
+e same identifier (name{ALG@line.5}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.397 \ForAll
+             {vertices $k$}pdfTeX warning (ext4): destination with the same ide
+ntifier (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.398 	\ForAll
+              {vertices $i$}pdfTeX warning (ext4): destination with the same id
+entifier (name{ALG@line.7}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.399     	\ForAll
+                  {vertices $j$}pdfTeX warning (ext4): destination with the sam
+e identifier (name{ALG@line.8}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.400         	\If
+                  {$dist(i,j) > dist(i,k)+dist(k,j)$}pdfTeX warning (ext4): des
+tination with the same identifier (name{ALG@line.9}) has been already used, dup
+licate ignored
+<to be read again> 
+                   \relax 
+l.401             	\State
+                          $dist(i,j) \gets dist(i,k)+dist(k,j)$ [39]pdfTeX warn
+ing (ext4): destination with the same identifier (name{ALG@line.1}) has been al
+ready used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.418 \ForAll
+             {vertices $v$}pdfTeX warning (ext4): destination with the same ide
+ntifier (name{ALG@line.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.419 	\State
+              $dist(v)\gets\infty$pdfTeX warning (ext4): destination with the s
+ame identifier (name{ALG@line.3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.420     \State
+                 $prev(v)=\gets -1$pdfTeX warning (ext4): destination with the 
+same identifier (name{ALG@line.4}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.422 \State
+             $dist(src) \gets 0$pdfTeX warning (ext4): destination with the sam
+e identifier (name{ALG@line.5}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.423 \For
+          {$i\equiv 1,V-1$}pdfTeX warning (ext4): destination with the same ide
+ntifier (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.424 	\ForAll
+              {edges $(u,v)$}pdfTeX warning (ext4): destination with the same i
+dentifier (name{ALG@line.7}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.425 		\If
+           {$dist(u)+weight(u,v) < dist(v)$}pdfTeX warning (ext4): destination 
+with the same identifier (name{ALG@line.8}) has been already used, duplicate ig
+nored
+<to be read again> 
+                   \relax 
+l.426     	    \State
+                      $dist(v) \gets dist(u)+weight(u,v)$pdfTeX warning (ext4):
+ destination with the same identifier (name{ALG@line.9}) has been already used,
+ duplicate ignored
+<to be read again> 
+                   \relax 
+l.427 	        \State
+                      $prev(v) \gets u$pdfTeX warning (ext4): destination with 
+the same identifier (name{ALG@line.10}) has been already used, duplicate ignore
+d
+<to be read again> 
+                   \relax 
+l.431 \ForAll
+             {edges $(u,v)$}pdfTeX warning (ext4): destination with the same id
+entifier (name{ALG@line.11}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.433 	\If
+          {$dist(u)+weight(u,v) < dist(v)$}pdfTeX warning (ext4): destination w
+ith the same identifier (name{ALG@line.12}) has been already used, duplicate ig
+nored
+<to be read again> 
+                   \relax 
+l.434    	    \State
+                    {negative cycle detected} [40]pdfTeX warning (ext4): destin
+ation with the same identifier (name{ALG@line.1}) has been already used, duplic
+ate ignored
+<to be read again> 
+                   \relax 
+l.468 \ForAll
+             {vertices $v$}pdfTeX warning (ext4): destination with the same ide
+ntifier (name{ALG@line.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.469 	\State
+              $dist(v) \gets \infty$pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.470 	\State
+              $visited(v) \gets 0$pdfTeX warning (ext4): destination with the s
+ame identifier (name{ALG@line.4}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.471     \State
+                 $prev(v) \gets -1$pdfTeX warning (ext4): destination with the 
+same identifier (name{ALG@line.5}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.473 \State
+             $dist(src) \gets 0$pdfTeX warning (ext4): destination with the sam
+e identifier (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.474 \While
+            {$\exists v$ s.t. $visited(v)=0$}pdfTeX warning (ext4): destination
+ with the same identifier (name{ALG@line.7}) has been already used, duplicate i
+gnored
+<to be read again> 
+                   \relax 
+l.475 	\State
+              $v \equiv v$ s.t. $visited(v)=0$ with min $dist(v)$pdfTeX warning
+ (ext4): destination with the same identifier (name{ALG@line.8}) has been alrea
+dy used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.476     \State
+                 $visited(v) \gets 1$pdfTeX warning (ext4): destination with th
+e same identifier (name{ALG@line.9}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.477 	\ForAll
+              {neighbors $u$ of $v$}pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.10}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.478     	\If
+              {$visited(u) = 0$}pdfTeX warning (ext4): destination with the sam
+e identifier (name{ALG@line.11}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.479 			\If
+            {$weight(v, u) < dist(u)$}pdfTeX warning (ext4): destination with t
+he same identifier (name{ALG@line.12}) has been already used, duplicate ignored
+
+<to be read again> 
+                   \relax 
+l.480 				\State
+                 $dist(u) \gets weight(v, u)$pdfTeX warning (ext4): destination
+ with the same identifier (name{ALG@line.13}) has been already used, duplicate 
+ignored
+<to be read again> 
+                   \relax 
+l.481    	        	\State
+                          $prev(u) \gets v$pdfTeX warning (ext4): destination w
+ith the same identifier (name{ALG@line.1}) has been already used, duplicate ign
+ored
+<to be read again> 
+                   \relax 
+l.498 \ForAll
+             {edges $(u,v)$ in sorted order}pdfTeX warning (ext4): destination 
+with the same identifier (name{ALG@line.2}) has been already used, duplicate ig
+nored
+<to be read again> 
+                   \relax 
+l.499 	\If
+          {$\Call{Find}{u} \not= \Call{Find}{v}$}pdfTeX warning (ext4): destina
+tion with the same identifier (name{ALG@line.3}) has been already used, duplica
+te ignored
+<to be read again> 
+                   \relax 
+l.500 		\State
+               add $(u,v)$ to spanning treepdfTeX warning (ext4): destination w
+ith the same identifier (name{ALG@line.4}) has been already used, duplicate ign
+ored
+<to be read again> 
+                   \relax 
+l.501 		\State
+               $\Call{Union}{u,v}$ [41]pdfTeX warning (ext4): destination with 
+the same identifier (name{ALG@line.1}) has been already used, duplicate ignored
+
+<to be read again> 
+                   \relax 
+l.516 \Function
+               {FindTour}{$v$}pdfTeX warning (ext4): destination with the same 
+identifier (name{ALG@line.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.517 \While
+            {$v$ has a neighbor $u$}pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.518 	\State
+              delete edge $(v,u)$pdfTeX warning (ext4): destination with the sa
+me identifier (name{ALG@line.4}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.519 	\State
+              \Call{FindTour}{$u$}pdfTeX warning (ext4): destination with the s
+ame identifier (name{ALG@line.5}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.522 \State
+             add $v$ to tour) [42]
+\openout2 = `chapters/complex.aux'.
+
+ (./chapters/complex.tex
+Chapter 5.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <14.4> on input line 5.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 5.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 5.
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 5.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `superscript' on input line 5.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 5.
+
+[43
+
+
+
+]pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.1})
+ has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.33 \For
+         {$i\gets 0, 2^N-1$}pdfTeX warning (ext4): destination with the same id
+entifier (name{ALG@line.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.35 	\State
+             $dp(i) \gets -1$pdfTeX warning (ext4): destination with the same i
+dentifier (name{ALG@line.3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.36 	\ForAll
+             {$j \in S$}pdfTeX warning (ext4): destination with the same identi
+fier (name{ALG@line.4}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.38 		\State
+              $alt \gets \min(dp(i-2^j), strength(j) - \sum_{k \in S \setmin...
+pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.5}) 
+has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.39 		\If
+          {$dp(i) < alt$}pdfTeX warning (ext4): destination with the same ident
+ifier (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.40 			\State
+               $dp(i) \gets alt$
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 49.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\@ifnextchar' on input line 49.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 49.
+
+[44] [45] [46]pdfTeX warning (ext4): destination with the same identifier (name
+{ALG@line.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.464 \Function
+               {Query}{range $[l,r]$, range $[a,b]$}pdfTeX warning (ext4): dest
+ination with the same identifier (name{ALG@line.2}) has been already used, dupl
+icate ignored
+<to be read again> 
+                   \relax 
+l.466 	\If
+          {$r < a$ or $b < l$}pdfTeX warning (ext4): destination with the same 
+identifier (name{ALG@line.3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.468 		\State
+               \Return 0pdfTeX warning (ext4): destination with the same identi
+fier (name{ALG@line.4}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.470 	\If
+          {$a \le l$ and $r \le b$}pdfTeX warning (ext4): destination with the 
+same identifier (name{ALG@line.5}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.472 		\State
+               \Return $sum(l,r)$pdfTeX warning (ext4): destination with the sa
+me identifier (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.474 	\State
+              \Return $\Call{Query}{\left[l,\floor{\frac{l+r}{2}}\right], [a...
+pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.1}) 
+has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.557 \Function
+               {Update}{range $[l,r]$, $p$, $k$}pdfTeX warning (ext4): destinat
+ion with the same identifier (name{ALG@line.2}) has been already used, duplicat
+e ignored
+<to be read again> 
+                   \relax 
+l.559 	\If
+          {$r < p$ or $p < l$}pdfTeX warning (ext4): destination with the same 
+identifier (name{ALG@line.3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.561 		\State
+               \ReturnpdfTeX warning (ext4): destination with the same identifi
+er (name{ALG@line.4}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.563 	\If
+          {$l = r$}pdfTeX warning (ext4): destination with the same identifier 
+(name{ALG@line.5}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.565 		\State
+               $sum(l,r) \gets k$pdfTeX warning (ext4): destination with the sa
+me identifier (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.566 		\State
+               \ReturnpdfTeX warning (ext4): destination with the same identifi
+er (name{ALG@line.7}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.568 	\State
+              \Call{Update}{$\left[l,\floor{\frac{l+r}{2}}\right]$, $p$, $k$}pd
+fTeX warning (ext4): destination with the same identifier (name{ALG@line.8}) ha
+s been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.569 	\State
+              \Call{Update}{$\left[\floor{\frac{l+r}{2}}+1,r\right]$, $p$, $k$}
+pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.9}) 
+has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.570 	\State
+              $sum(l,r) \gets sum(l,\floor{\frac{l+r}{2}}) + sum(\floor{\fra...
+[47] [48] [49] [50] [51] [52] [53] [54] [55] [56] [57] [58] [59] [60] [61]
+[62] [63] [64] [65] [66] [67] [68] [69] [70]) [71]
+\openout2 = `chapters/computational_geometry.aux'.
+
+
+(./chapters/computational_geometry.tex [72
+
+
+
+]
+Chapter 6.
+[73] [74] [75]) [76]
+\openout2 = `chapters/trees.aux'.
+
+ (./chapters/trees.tex
+Chapter 7.
+pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.1}) 
+has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.24 \Function
+              {DFS}{$v$, $p$}pdfTeX warning (ext4): destination with the same i
+dentifier (name{ALG@line.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.26   \State
+              $sum(v) \gets 1$pdfTeX warning (ext4): destination with the same 
+identifier (name{ALG@line.3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.28   \State
+              $depth(v) \gets depth(p) + 1$pdfTeX warning (ext4): destination w
+ith the same identifier (name{ALG@line.4}) has been already used, duplicate ign
+ored
+<to be read again> 
+                   \relax 
+l.30   \ForAll
+              {vertices $n$ adjacent to $v$}pdfTeX warning (ext4): destination 
+with the same identifier (name{ALG@line.5}) has been already used, duplicate ig
+nored
+<to be read again> 
+                   \relax 
+l.31     \If
+            {$n \neq p$}pdfTeX warning (ext4): destination with the same identi
+fier (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.32       \State
+                  \Call{DFS}{$n$, $v$}pdfTeX warning (ext4): destination with t
+he same identifier (name{ALG@line.7}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.33       \State
+                  $sum(v) \gets sum(v) + sum(n)$ [77
+
+
+
+] [78]pdfTeX warning (ext4): destination with the same identifier (name{ALG@lin
+e.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.61 \Function
+              {BuildJumpPointers}{$V$, $par$}pdfTeX warning (ext4): destination
+ with the same identifier (name{ALG@line.2}) has been already used, duplicate i
+gnored
+<to be read again> 
+                   \relax 
+l.63   \State
+              $par(i, v)$ denotes the $2^i$th ancestor of vertex $v$pdfTeX warn
+ing (ext4): destination with the same identifier (name{ALG@line.3}) has been al
+ready used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.64   \ForAll
+              {i from 1 to $\lfloor \log_2 n \rfloor$}pdfTeX warning (ext4): de
+stination with the same identifier (name{ALG@line.4}) has been already used, du
+plicate ignored
+<to be read again> 
+                   \relax 
+l.65     \ForAll
+                {vertices $v$}pdfTeX warning (ext4): destination with the same 
+identifier (name{ALG@line.5}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.66       \State
+                  $par(i, v) \gets par(i - 1, par(i - 1, v))$pdfTeX warning (ex
+t4): destination with the same identifier (name{ALG@line.6}) has been already u
+sed, duplicate ignored
+<to be read again> 
+                   \relax 
+l.70 \Function
+              {LevelAncestor}{$u$, $k$}pdfTeX warning (ext4): destination with 
+the same identifier (name{ALG@line.7}) has been already used, duplicate ignored
+
+<to be read again> 
+                   \relax 
+l.71   \ForAll
+              {i from $\lfloor \log_2 n \rfloor$ to 0}pdfTeX warning (ext4): de
+stination with the same identifier (name{ALG@line.8}) has been already used, du
+plicate ignored
+<to be read again> 
+                   \relax 
+l.72     \If
+            {$2^i \le k$}pdfTeX warning (ext4): destination with the same ident
+ifier (name{ALG@line.9}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.73       \State
+                  $u \gets par(i, u)$pdfTeX warning (ext4): destination with th
+e same identifier (name{ALG@line.10}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.74       \State
+                  $k \gets k - 2^i$pdfTeX warning (ext4): destination with the 
+same identifier (name{ALG@line.11}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.77   \State
+              \Return $u$pdfTeX warning (ext4): destination with the same ident
+ifier (name{ALG@line.12}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.79 \Function
+              {LCA}{$u$, $v$}pdfTeX warning (ext4): destination with the same i
+dentifier (name{ALG@line.13}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.80   \If
+          {$depth(u) < depth(v)$}pdfTeX warning (ext4): destination with the sa
+me identifier (name{ALG@line.14}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.81     \State
+                \Call{swap}{$u$, $v$}pdfTeX warning (ext4): destination with th
+e same identifier (name{ALG@line.15}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.83   \State
+              $u \gets \Call{LevelAncestor}{u, depth(v) - depth(u)}$pdfTeX warn
+ing (ext4): destination with the same identifier (name{ALG@line.16}) has been a
+lready used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.84   \If
+          {$u = v$} [79] [80] [81]) [82]
+\openout2 = `chapters/strings.aux'.
+
+ (./chapters/strings.tex
+Chapter 8.
+[83
+
+
+
+] [84] [85] [86] [87]) [88] [89]
+\openout2 = `chapters/more_graphs.aux'.
+
+ (./chapters/more_graphs.tex [90
+
+
+
+]
+Chapter 9.
+[91] [92]pdfTeX warning (ext4): destination with the same identifier (name{ALG@
+line.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.115 \Function
+               {StrongConnect}{vertex $u$}pdfTeX warning (ext4): destination wi
+th the same identifier (name{ALG@line.2}) has been already used, duplicate igno
+red
+<to be read again> 
+                   \relax 
+l.116 	\State
+              $num \gets num + 1$		\Comment increment $num$pdfTeX warning (ext4
+): destination with the same identifier (name{ALG@line.3}) has been already use
+d, duplicate ignored
+<to be read again> 
+                   \relax 
+l.117 	\State
+              $order(u) \gets num$		\Comment set $order(u)$ to smallest unus...
+pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.4}) 
+has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.118 	\State
+              $link(u) \gets order(u)$	\Comment least $order(v)$ accessible ...
+pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.5}) 
+has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.119 	\State
+              push $u$ on $S$pdfTeX warning (ext4): destination with the same i
+dentifier (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.120 	\ForAll
+              {neighbors $v$ of $u$}pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.7}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.121 		\If
+           {$order(v)$ is undefined}	\Comment $v$ has not been visitedpdfTeX wa
+rning (ext4): destination with the same identifier (name{ALG@line.8}) has been 
+already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.122 			\State
+                \Call{StrongConnect}{$v$}pdfTeX warning (ext4): destination wit
+h the same identifier (name{ALG@line.9}) has been already used, duplicate ignor
+ed
+<to be read again> 
+                   \relax 
+l.123 			\State
+                $link(u) \gets \min(link(u), link(v))$pdfTeX warning (ext4): de
+stination with the same identifier (name{ALG@line.10}) has been already used, d
+uplicate ignored
+<to be read again> 
+                   \relax 
+l.124 		\ElsIf
+              {$v$ is on stack $S$}		\Comment $v$ is in current componentpdfTeX
+ warning (ext4): destination with the same identifier (name{ALG@line.11}) has b
+een already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.125 			\State
+                $link(u) \gets \min(link(u), order(v))$pdfTeX warning (ext4): d
+estination with the same identifier (name{ALG@line.12}) has been already used, 
+duplicate ignored
+<to be read again> 
+                   \relax 
+l.128 	\If
+          {$link(u) = order(u)$}			\Comment $u$ is root of component, create...
+pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.13})
+ has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.129 		\State
+               create new strongly connected componentpdfTeX warning (ext4): de
+stination with the same identifier (name{ALG@line.14}) has been already used, d
+uplicate ignored
+<to be read again> 
+                   \relax 
+l.130 		\Repeat
+               pdfTeX warning (ext4): destination with the same identifier (nam
+e{ALG@line.15}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.131 			\State
+                $v \gets$ top of $S$pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.16}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.132 			\State
+                add $v$ to strongly connected componentpdfTeX warning (ext4): d
+estination with the same identifier (name{ALG@line.17}) has been already used, 
+duplicate ignored
+<to be read again> 
+                   \relax 
+l.133 			\State
+                pop top from $S$pdfTeX warning (ext4): destination with the sam
+e identifier (name{ALG@line.18}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.134 		\Until
+              {$u=v$}pdfTeX warning (ext4): destination with the same identifie
+r (name{ALG@line.19}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.137 \Function
+               {Tarjan}{$G(V,E)$}pdfTeX warning (ext4): destination with the sa
+me identifier (name{ALG@line.20}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.138 	\State
+              $num \gets 0$pdfTeX warning (ext4): destination with the same ide
+ntifier (name{ALG@line.21}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.139 	\State
+              initialize new empty stack $S$pdfTeX warning (ext4): destination 
+with the same identifier (name{ALG@line.22}) has been already used, duplicate i
+gnored
+<to be read again> 
+                   \relax 
+l.140 	\ForAll
+              {vertices $v \in V$} [93] [94]pdfTeX warning (ext4): destination 
+with the same identifier (name{ALG@line.1}) has been already used, duplicate ig
+nored
+<to be read again> 
+                   \relax 
+l.201 \Function
+               {AugmentPath}{path $p=\{v_i\}_{i=1}^m$, where $(v_i,v_{i+1}) ...
+pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.2}) 
+has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.202 \State
+             $cap \gets \min_{i=1}^{m-1}(c_f(v_i,v_{i+1}))$pdfTeX warning (ext4
+): destination with the same identifier (name{ALG@line.3}) has been already use
+d, duplicate ignored
+<to be read again> 
+                   \relax 
+l.203 \For
+          {$i \equiv 1, m-1$}pdfTeX warning (ext4): destination with the same i
+dentifier (name{ALG@line.4}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.204 	\State
+              $f(v_i,v_{i+1}) \gets f(v_i,v_{i+1}) + cap$pdfTeX warning (ext4):
+ destination with the same identifier (name{ALG@line.5}) has been already used,
+ duplicate ignored
+<to be read again> 
+                   \relax 
+l.205 	\State
+              $c_f(v_i,v_{i+1}) \gets c_f(v_i,v_{i+1}) + cap$pdfTeX warning (ex
+t4): destination with the same identifier (name{ALG@line.6}) has been already u
+sed, duplicate ignored
+<to be read again> 
+                   \relax 
+l.206 	\State
+              $f(v_{i+1},v_i) \gets f(v_{i+1},v_i) - cap$pdfTeX warning (ext4):
+ destination with the same identifier (name{ALG@line.7}) has been already used,
+ duplicate ignored
+<to be read again> 
+                   \relax 
+l.207 	\State
+              $c_f(v_{i+1},v_i) \gets c_f(v_{i+1},v_i) + cap$pdfTeX warning (ex
+t4): destination with the same identifier (name{ALG@line.8}) has been already u
+sed, duplicate ignored
+<to be read again> 
+                   \relax 
+l.211 \Function
+               {MaxFlow}{$G(V,E)$, $s,t \in V$}pdfTeX warning (ext4): destinati
+on with the same identifier (name{ALG@line.9}) has been already used, duplicate
+ ignored
+<to be read again> 
+                   \relax 
+l.212 	\ForAll
+              {$(u,v) \in V^2$}pdfTeX warning (ext4): destination with the same
+ identifier (name{ALG@line.10}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.213 		\State
+               $f(u,v) \gets 0$pdfTeX warning (ext4): destination with the same
+ identifier (name{ALG@line.11}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.214 		\State
+               $c_f(u,v) \gets c(u,v)$pdfTeX warning (ext4): destination with t
+he same identifier (name{ALG@line.12}) has been already used, duplicate ignored
+
+<to be read again> 
+                   \relax 
+l.216 	\State
+              $|f| \gets 0$pdfTeX warning (ext4): destination with the same ide
+ntifier (name{ALG@line.13}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.217 	\While
+             {$\exists p=\{v_i\}_{i=1}^m$, where $(v_i,v_{i+1}) \in E_f$, $v...
+pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.14})
+ has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.218 		\State
+               $cap \gets \min_{i=1}^{m-1}(c_f(v_i,v_{i+1}))$pdfTeX warning (ex
+t4): destination with the same identifier (name{ALG@line.15}) has been already 
+used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.219 		\State
+               $|f| \gets |f| + cap$pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.16}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.220 		\State
+               \Call{AugmentPath}{$p$} [95] [96]pdfTeX warning (ext4): destinat
+ion with the same identifier (name{ALG@line.1}) has been already used, duplicat
+e ignored
+<to be read again> 
+                   \relax 
+l.278 \Function
+               {ChoosePath}{$G_f(V,E_f)$, $s,t \in V$}pdfTeX warning (ext4): de
+stination with the same identifier (name{ALG@line.2}) has been already used, du
+plicate ignored
+<to be read again> 
+                   \relax 
+l.280 	\State
+              $visited(v)$ denotes $v$ has been added to queuepdfTeX warning (e
+xt4): destination with the same identifier (name{ALG@line.3}) has been already 
+used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.281 	\State
+              $prev(v)$ denotes vertex preceding $v$ in BFSpdfTeX warning (ext4
+): destination with the same identifier (name{ALG@line.4}) has been already use
+d, duplicate ignored
+<to be read again> 
+                   \relax 
+l.282 	\State
+              push $s$ on queue $Q$pdfTeX warning (ext4): destination with the 
+same identifier (name{ALG@line.5}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.283 	\State
+              $visited(s) \gets 1$pdfTeX warning (ext4): destination with the s
+ame identifier (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.284 	\While
+             {$Q$ is not empty}pdfTeX warning (ext4): destination with the same
+ identifier (name{ALG@line.7}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.285 		\State
+               $u \gets $ top of $Q$pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.8}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.286 		\ForAll
+               {neighbors $v$ of $u$ in $G_f$ where $visited(v)=0$}pdfTeX warni
+ng (ext4): destination with the same identifier (name{ALG@line.9}) has been alr
+eady used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.287 			\State
+                push $v$ on $Q$pdfTeX warning (ext4): destination with the same
+ identifier (name{ALG@line.10}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.288 			\State
+                $visited(v) \gets 1$pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.11}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.289 			\State
+                $prev(v) \gets u$pdfTeX warning (ext4): destination with the sa
+me identifier (name{ALG@line.12}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.292 	\State
+              pointer $curr \gets t$pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.13}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.293 	\While
+             {$curr \not= s$}pdfTeX warning (ext4): destination with the same i
+dentifier (name{ALG@line.14}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.294 		\State
+               add $curr$ to beginning of path $p$pdfTeX warning (ext4): destin
+ation with the same identifier (name{ALG@line.15}) has been already used, dupli
+cate ignored
+<to be read again> 
+                   \relax 
+l.295 		\State
+               $curr \gets prev(curr)$pdfTeX warning (ext4): destination with t
+he same identifier (name{ALG@line.16}) has been already used, duplicate ignored
+
+<to be read again> 
+                   \relax 
+l.297 	\State
+              add $s$ to beginning of $p$pdfTeX warning (ext4): destination wit
+h the same identifier (name{ALG@line.17}) has been already used, duplicate igno
+red
+<to be read again> 
+                   \relax 
+l.298 	\State
+              \Return $p$pdfTeX warning (ext4): destination with the same ident
+ifier (name{ALG@line.18}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.300 \Function
+               {MaxFlow}{$G(V,E)$, $s,t \in V$}pdfTeX warning (ext4): destinati
+on with the same identifier (name{ALG@line.19}) has been already used, duplicat
+e ignored
+<to be read again> 
+                   \relax 
+l.301 	\ForAll
+              {$(u,v) \in V^2$}pdfTeX warning (ext4): destination with the same
+ identifier (name{ALG@line.20}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.302 		\State
+               $f(u,v) \gets 0$pdfTeX warning (ext4): destination with the same
+ identifier (name{ALG@line.21}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.303 		\State
+               $c_f(u,v) \gets c(u,v)$pdfTeX warning (ext4): destination with t
+he same identifier (name{ALG@line.22}) has been already used, duplicate ignored
+
+<to be read again> 
+                   \relax 
+l.305 	\State
+              $|f| \gets 0$pdfTeX warning (ext4): destination with the same ide
+ntifier (name{ALG@line.23}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.306 	\While
+             {$t$ can be reached from $s$}pdfTeX warning (ext4): destination wi
+th the same identifier (name{ALG@line.24}) has been already used, duplicate ign
+ored
+<to be read again> 
+                   \relax 
+l.307 		\State
+               $p \gets \Call{ChoosePath}{G_f,s,t}$ [97] [98]pdfTeX warning (ex
+t4): destination with the same identifier (name{ALG@line.1}) has been already u
+sed, duplicate ignored
+<to be read again> 
+                   \relax 
+l.354 \Function
+               {Push}{edge $(u,v)$}pdfTeX warning (ext4): destination with the 
+same identifier (name{ALG@line.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.355 	\State
+              $\delta \gets \min(e(u), c_f(u,v))$pdfTeX warning (ext4): destina
+tion with the same identifier (name{ALG@line.3}) has been already used, duplica
+te ignored
+<to be read again> 
+                   \relax 
+l.357 	\State
+              $f(u,v) \gets f(u,v) + \delta$pdfTeX warning (ext4): destination 
+with the same identifier (name{ALG@line.4}) has been already used, duplicate ig
+nored
+<to be read again> 
+                   \relax 
+l.358 	\State
+              $f(v,u) \gets f(v,y) - \delta$pdfTeX warning (ext4): destination 
+with the same identifier (name{ALG@line.5}) has been already used, duplicate ig
+nored
+<to be read again> 
+                   \relax 
+l.359 	\State
+              $e(u) \gets e(u) - \delta$pdfTeX warning (ext4): destination with
+ the same identifier (name{ALG@line.6}) has been already used, duplicate ignore
+d
+<to be read again> 
+                   \relax 
+l.360 	\State
+              $e(v) \gets e(v) + \delta$ [99]pdfTeX warning (ext4): destination
+ with the same identifier (name{ALG@line.1}) has been already used, duplicate i
+gnored
+<to be read again> 
+                   \relax 
+l.393 \Function
+               {Relabel}{vertex $u$}pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.394 		\State
+               $h(u) \gets \min_{v | (u,v) \in E_f}(h(v)) + 1$pdfTeX warning (e
+xt4): destination with the same identifier (name{ALG@line.1}) has been already 
+used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.409 \Function
+               {Push}{edge $(u,v)$}pdfTeX warning (ext4): destination with the 
+same identifier (name{ALG@line.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.410 	\If
+          {$e(u) > 0$ and $h(u) = h(v) + 1$}pdfTeX warning (ext4): destination 
+with the same identifier (name{ALG@line.3}) has been already used, duplicate ig
+nored
+<to be read again> 
+                   \relax 
+l.412 		\State
+               $\delta \gets \min(e(u), c_f(u,v))$pdfTeX warning (ext4): destin
+ation with the same identifier (name{ALG@line.4}) has been already used, duplic
+ate ignored
+<to be read again> 
+                   \relax 
+l.414 		\State
+               $f(u,v) \gets f(u,v) + \delta$pdfTeX warning (ext4): destination
+ with the same identifier (name{ALG@line.5}) has been already used, duplicate i
+gnored
+<to be read again> 
+                   \relax 
+l.415 		\State
+               $f(v,u) \gets f(v,y) - \delta$pdfTeX warning (ext4): destination
+ with the same identifier (name{ALG@line.6}) has been already used, duplicate i
+gnored
+<to be read again> 
+                   \relax 
+l.416 		\State
+               $e(u) \gets e(u) - \delta$pdfTeX warning (ext4): destination wit
+h the same identifier (name{ALG@line.7}) has been already used, duplicate ignor
+ed
+<to be read again> 
+                   \relax 
+l.417 		\State
+               $e(v) \gets e(v) + \delta$pdfTeX warning (ext4): destination wit
+h the same identifier (name{ALG@line.8}) has been already used, duplicate ignor
+ed
+<to be read again> 
+                   \relax 
+l.420 \Function
+               {Relabel}{vertex $u$}pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.9}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.421 	\If
+          {$u \not= s,t$ and $e(u)>0$ and $h(u) \le h(v) \forall v | (u,v) \...
+pdfTeX warning (ext4): destination with the same identifier (name{ALG@line.10})
+ has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.423 		\State
+               $h(u) \gets \min_{v | (u,v) \in E_f}(h(v)) + 1$pdfTeX warning (e
+xt4): destination with the same identifier (name{ALG@line.11}) has been already
+ used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.427 \Function
+               {MaxFlow}{$G(V,E)$, $s,t \in V$}pdfTeX warning (ext4): destinati
+on with the same identifier (name{ALG@line.12}) has been already used, duplicat
+e ignored
+<to be read again> 
+                   \relax 
+l.428 	\ForAll
+              {$v \in V \setminus \{s\}$}pdfTeX warning (ext4): destination wit
+h the same identifier (name{ALG@line.13}) has been already used, duplicate igno
+red
+<to be read again> 
+                   \relax 
+l.430 		\State
+               $e(v) \gets 0$pdfTeX warning (ext4): destination with the same i
+dentifier (name{ALG@line.14}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.432 	\State
+              $e(s) \gets \infty$pdfTeX warning (ext4): destination with the sa
+me identifier (name{ALG@line.15}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.433 	\ForAll
+              {$(u,v) \in V^2$}pdfTeX warning (ext4): destination with the same
+ identifier (name{ALG@line.16}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.435 		\State
+               $f(u,v) \gets 0$pdfTeX warning (ext4): destination with the same
+ identifier (name{ALG@line.17}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.437 	\ForAll
+              {neighbors $v \not= s$ of $s$}pdfTeX warning (ext4): destination 
+with the same identifier (name{ALG@line.18}) has been already used, duplicate i
+gnored
+<to be read again> 
+                   \relax 
+l.439 		\State
+               $f(s,v) \gets c(s,v)$pdfTeX warning (ext4): destination with the
+ same identifier (name{ALG@line.19}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.440 		\State
+               $f(v,s) \gets -c(s,v)$pdfTeX warning (ext4): destination with th
+e same identifier (name{ALG@line.20}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.441 		\State
+               $e(v) \gets c(s,v)$pdfTeX warning (ext4): destination with the s
+ame identifier (name{ALG@line.21}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.443 	\ForAll
+              {$v \in V \setminus \{s\}$}pdfTeX warning (ext4): destination wit
+h the same identifier (name{ALG@line.22}) has been already used, duplicate igno
+red
+<to be read again> 
+                   \relax 
+l.445 		\State
+               $h(v) \gets 0$pdfTeX warning (ext4): destination with the same i
+dentifier (name{ALG@line.23}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.447 	\State
+              $h(s) \gets |V|$pdfTeX warning (ext4): destination with the same 
+identifier (name{ALG@line.24}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.448 	\While
+             {we can still \Call{Push}{} or \Call{Relabel}{}}pdfTeX warning (ex
+t4): destination with the same identifier (name{ALG@line.25}) has been already 
+used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.449 		\State
+               \Call{Push}{} or \Call{Relabel}{}pdfTeX warning (ext4): destinat
+ion with the same identifier (name{ALG@line.26}) has been already used, duplica
+te ignored
+<to be read again> 
+                   \relax 
+l.451 	\State
+              \Return $e(t)$ [100]pdfTeX warning (ext4): destination with the s
+ame identifier (name{ALG@line.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.465 \Function
+               {Discharge}{vertex $u$}pdfTeX warning (ext4): destination with t
+he same identifier (name{ALG@line.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.466 	\While
+             {$e(u)>0$}pdfTeX warning (ext4): destination with the same identif
+ier (name{ALG@line.3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.468 		\If
+           {$curr(u)$ is at end of list of neighbors}pdfTeX warning (ext4): des
+tination with the same identifier (name{ALG@line.4}) has been already used, dup
+licate ignored
+<to be read again> 
+                   \relax 
+l.469 			\State
+                \Call{Relabel}{$u$}pdfTeX warning (ext4): destination with the 
+same identifier (name{ALG@line.5}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.470 			\State
+                reset $curr(u)$pdfTeX warning (ext4): destination with the same
+ identifier (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.471 		\Else
+             pdfTeX warning (ext4): destination with the same identifier (name{
+ALG@line.7}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.472 			\If
+            {$(u,curr(u))$ is an admissible edge}pdfTeX warning (ext4): destina
+tion with the same identifier (name{ALG@line.8}) has been already used, duplica
+te ignored
+<to be read again> 
+                   \relax 
+l.473 				\State
+                 \Call{Push}{$(u,curr(u))$}pdfTeX warning (ext4): destination w
+ith the same identifier (name{ALG@line.9}) has been already used, duplicate ign
+ored
+<to be read again> 
+                   \relax 
+l.474 			\Else
+              pdfTeX warning (ext4): destination with the same identifier (name
+{ALG@line.10}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.475 				\State
+                 move $curr(u)$ to next neighbor of $u$ [101]) [102]
+\openout2 = `chapters/math.aux'.
+
+
+(./chapters/math.tex
+Chapter 10.
+[103
+
+
+
+] [104] [105]pdfTeX warning (ext4): destination with the same identifier (name{
+ALG@line.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.103 \Function
+               {FFT}{vector<int> $A, k, \omega$} \Comment $\omega^{2^k} = 1$pdf
+TeX warning (ext4): destination with the same identifier (name{ALG@line.2}) has
+ been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.104 	\State
+              $A$.resize($2^k$)pdfTeX warning (ext4): destination with the same
+ identifier (name{ALG@line.3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.105 	\State
+              vector<double> $f, f_{even}, f_{odd}$pdfTeX warning (ext4): desti
+nation with the same identifier (name{ALG@line.4}) has been already used, dupli
+cate ignored
+<to be read again> 
+                   \relax 
+l.106 	\State
+              $f$.resize($2^k$)pdfTeX warning (ext4): destination with the same
+ identifier (name{ALG@line.5}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.108 	\If
+           {$k = 0$}pdfTeX warning (ext4): destination with the same identifier
+ (name{ALG@line.6}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.109 		\State
+               \Return $ \{A[0] \}$ \Comment a vector of length 1pdfTeX warning
+ (ext4): destination with the same identifier (name{ALG@line.7}) has been alrea
+dy used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.111     \State
+                 $A_{even}$ = $ \{A[0], A[2], \dots, A[2^k-2] \}$pdfTeX warning
+ (ext4): destination with the same identifier (name{ALG@line.8}) has been alrea
+dy used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.112     \State
+                 $A_{odd}$ = $ \{A[1], A[3], \dots, A[2^k-1] \}$pdfTeX warning 
+(ext4): destination with the same identifier (name{ALG@line.9}) has been alread
+y used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.113     \State
+                 $f_{even} = $ \Call{FFT}{$A_{even}, k-1, \omega^2$}pdfTeX warn
+ing (ext4): destination with the same identifier (name{ALG@line.10}) has been a
+lready used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.114     \State
+                 $f_{odd} = $ \Call{FFT}{$A_{odd}, k-1, \omega^2$}pdfTeX warnin
+g (ext4): destination with the same identifier (name{ALG@line.11}) has been alr
+eady used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.116     \ForAll
+                  {$i = 0, i < 2^{k-1}, i++$}pdfTeX warning (ext4): destination
+ with the same identifier (name{ALG@line.12}) has been already used, duplicate 
+ignored
+<to be read again> 
+                   \relax 
+l.117     	\State
+                  $f[i] = f_{even}[i] + \omega^i \cdot f_{odd}[i]$pdfTeX warnin
+g (ext4): destination with the same identifier (name{ALG@line.13}) has been alr
+eady used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.118 	\State
+              $f[i+2^{k-1}] = f_{even}[i] - \omega^i \cdot f_{odd}[i]$ [106]
+[107] [108]
+Overfull \hbox (306.84615pt too wide) in paragraph at lines 261--261
+[] 
+ []
+
+[109]) [110]
+\openout2 = `chapters/nonsense.aux'.
+
+ (./chapters/nonsense.tex
+Chapter 11.
+) [111
+
+
+
+]
+\openout2 = `chapters/problems.aux'.
+
+ (./chapters/problems.tex [112
+
+
+
+]
+Chapter 12.
+[113] [114] [115] [116]
+(/usr/local/texlive/2014/texmf-dist/tex/latex/ucs/data/uni-32.def
+File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
+) [117]
+(/usr/local/texlive/2014/texmf-dist/tex/latex/ucs/data/uni-0.def
+File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
+) [118]
+[119]) [120]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 176.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 176.
+ (./guide.aux (./chapters/title.aux)
+(./chapters/acknowledgments.aux) (./chapters/preface.aux)
+(./chapters/fundamentals.aux) (./chapters/standard_ds.aux)
+(./chapters/big_ideas.aux) (./chapters/graphs.aux) (./chapters/complex.aux)
+(./chapters/computational_geometry.aux) (./chapters/trees.aux)
+(./chapters/strings.aux) (./chapters/more_graphs.aux) (./chapters/math.aux)
+(./chapters/nonsense.aux) (./chapters/problems.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 176.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 176.
+
+
+Package rerunfilecheck Warning: File `guide.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `guide.out':
+(rerunfilecheck)             Before: A83E92A54A14C57315838FCC75D1E53B;908
+(rerunfilecheck)             After:  56250F1C9A172CA1B00885C34F4E7842;8278.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 176.
+ )
+(\end occurred when \iftrue on line 177 was incomplete) 
+Here is how much of TeX's memory you used:
+ 38740 strings out of 493117
+ 748453 string characters out of 6135433
+ 1281219 words of memory out of 5000000
+ 40403 multiletter control sequences out of 15000+600000
+ 114686 words of font info for 208 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 74i,18n,100p,10394b,1861s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2014
+/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/2014/texmf-dis
+t/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2014/texmf-dist/fonts/enc/dv
+ips/lm/lm-mathit.enc}{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/lm/lm-
+mathex.enc}{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</u
+sr/local/texlive/2014/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/t
+exlive/2014/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/201
+4/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local/texlive/2014/texmf-d
+ist/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/2014/texmf-dist/fonts/
+type1/public/lm/lmmi10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/publ
+ic/lm/lmmi12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/lm/lmmi
+6.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr
+/local/texlive/2014/texmf-dist/fonts/type1/public/lm/lmmi9.pfb></usr/local/texl
+ive/2014/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2014/te
+xmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2014/texmf-dist/fo
+nts/type1/public/lm/lmr6.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/pu
+blic/lm/lmr8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/lm/lmr9
+.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr
+/local/texlive/2014/texmf-dist/fonts/type1/public/lm/lmri9.pfb></usr/local/texl
+ive/2014/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr/local/texlive/2014
+/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2014/texmf-dis
+t/fonts/type1/public/lm/lmsy6.pfb></usr/local/texlive/2014/texmf-dist/fonts/typ
+e1/public/lm/lmsy8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/l
+m/lmsy9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/lm/lmtk10.pf
+b></usr/local/texlive/2014/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/lo
+cal/texlive/2014/texmf-dist/fonts/type1/public/lm/lmtt9.pfb></usr/local/texlive
+/2014/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on guide.pdf (132 pages, 950875 bytes).
+PDF statistics:
+ 1672 PDF objects out of 1728 (max. 8388607)
+ 1497 compressed objects within 15 object streams
+ 764 named destinations out of 1000 (max. 500000)
+ 32378 words of extra memory for PDF output out of 35830 (max. 10000000)
+
