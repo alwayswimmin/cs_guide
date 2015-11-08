@@ -46,21 +46,24 @@ This problem shows that even when we brute force, we still have to think. Some a
 
 \section{Depth-First Search (DFS)}
 
-Depth-first search is a recursive search technique that has a similar flavor to brute force. Here's an example. All of your friends, upon realizing that it only takes four nested \texttt{for} loops to iterate through all possible 4-digit iPhone passcodes, have decided to make their passcodes $n$ digits long. Since you don't know $n$, nested \texttt{for} loops will no longer do the trick. Instead, we can use a DFS to recursively generate all $n$-digit passcodes.
+Depth-first search is a recursive search technique that has a similar flavor to brute force. Instead of using nested loops to iterate through all possibilities, we generate the possibilities using recursion, checking all possible choices in each level. Here's an example: All of your friends, upon realizing that it only takes four nested \texttt{for} loops to iterate through all possible 4-digit iPhone passcodes, have decided to make their passcodes $n$ digits long. Since you don't know $n$, nested \texttt{for} loops will no longer do the trick. Instead, we can use a DFS to recursively generate all $n$-digit passcodes.
 
-DFS works as follows: We check all passcodes starting with ``0'', then all passcodes starting with ``1'', then all passcodes starting with ``2'', and so on. To check all passcodes starting with ``0'', we check all passcodes starting with ``00'', then all passcodes starting with ``01'', then all passcodes starting with ``02'', and so on. To check all passcodes starting with ``00'', we have to check all passcodes starting with ``000'', then all passcodes starting with ... (Think about why DFS is \emph{depth-first}.)
+Depth-first search works as follows: We check all passcodes starting with ``0'', then all passcodes starting with ``1'', then all passcodes starting with ``2'', and so on. To check all passcodes starting with ``0'', we check all passcodes starting with ``00'', then all passcodes starting with ``01'', then all passcodes starting with ``02'', and so on. To check all passcodes starting with ``00'', we have to check all passcodes starting with ``000'', then all passcodes starting with ``001'' and so on... (Think about why DFS is \emph{depth-first}.)
 
-In essence, we recursively generate all possible passcodes with a given prefix. We keep going down until we have to check a passcode starting with a string of length $n$, in which case that string is the passcode itself. Thus the first passcode we check is ``00$\cdots$0'' and the last passcode we check is ``99$\cdots$9''. Below is some pseudocode describing the algorithm. Make sure you understand how the recursion works!
+In this way, we recursively generate all possible passcodes by extending the prefix character by character. We keep recursing until we have to check a passcode starting with a string of length $n$, in which case that string is the passcode itself. Thus the first passcode we check is ``00$\cdots$0'' and the last passcode we check is ``99$\cdots$9''. We implement this algorithm by writing a function that generates all passcodes given a prefix. Below is some pseudocode describing the algorithm. Make sure you understand how the recursion works!
 
 \noindent \begin{minipage}{\textwidth}
   \begin{algorithmic}[1]
-    \Function{DFS}{$depth$, $prefix$}
+    \Function{generatePasscodes}{$depth$, $prefix$}
     \If{$depth = n$}
-      \State \Call{check\_password\_on\_iPhone}{$prefix$}
+      \Comment {If we've reached maximum depth, then print and return.}
+      \State \Call{print}{$prefix$}
       \State \Return
     \EndIf
     \For{$c$ from `0' to `9'}
-      \State \Call{DFS}{$depth + 1$, $prefix + c$}
+      \Comment{Iterates over all possible next digits.}
+      \State \Call{generatePasscodes}{$depth + 1$, $prefix + c$}
+      \Comment{Recurses with a longer prefix.}
     \EndFor
     \EndFunction
   \end{algorithmic}
@@ -69,7 +72,7 @@ In essence, we recursively generate all possible passcodes with a given prefix. 
 \subsection{Permutations}
 
 \begin{typewriter}
-  Given $n$ ($n \le 8$), print all permutations of the sequence $\{1, 2, \cdots, n\}$. (For $n=3$, we would have $(1, 2, 3)$, $(1, 3, 2)$, $(2, 1, 3)$, $(2, 3, 1)$, $(3, 1, 2)$, and $(3, 2, 1)$.)
+  Given $n$ ($n \le 8$), print all permutations of the sequence $\{1, 2, \cdots, n\}$ in lexicographic (alphabetical) order. (For $n=3$, this would be $(1, 2, 3)$, $(1, 3, 2)$, $(2, 1, 3)$, $(2, 3, 1)$, $(3, 1, 2)$, and $(3, 2, 1)$.)
 \end{typewriter}
 
 Like the passcode problem, we use DFS instead of nested \texttt{for} loops, since we don't know $n$. However, we have to be careful with implementation---we can use each number only once. Along with our current prefix, we have to keep track of the set of numbers that we've already used. This is best done with a boolean ``used'' array outside of the recursive function. Here's the pseudocode:
@@ -77,7 +80,8 @@ Like the passcode problem, we use DFS instead of nested \texttt{for} loops, sinc
 \noindent \begin{minipage}{\textwidth}
   \begin{algorithmic}[1]
     \State $used \gets \{false, false, \cdots, false\}$
-    \Function{DFS}{$depth$, $prefix$}
+    \Comment{Initialize $used$ as an array of $false$ values.}
+    \Function{generatePermutations}{$depth$, $prefix$}
     \If{$depth = n$}
       \State \Call{print}{$prefix$}
       \State \Return
@@ -85,7 +89,7 @@ Like the passcode problem, we use DFS instead of nested \texttt{for} loops, sinc
     \For{$i=1$ to $n$}
       \If{not $used[i]$}
         \State $used[i] \gets true$
-        \State \Call{DFS}{$depth + 1$, $prefix + i$}
+        \State \Call{generatePermutations}{$depth + 1$, $prefix + i$}
         \State $used[i] \gets false$
         \Comment We have to reset the $used[i]$ variable once we're done.
       \EndIf
@@ -94,17 +98,19 @@ Like the passcode problem, we use DFS instead of nested \texttt{for} loops, sinc
   \end{algorithmic}
 \end{minipage}
 
+To understand the order in which we visit the permutations, we can visualize this algorithm as traversing a tree-like structure. An animation of this algorithm for $n = 5$ is \href{http://dabbler0.github.io/ecc-animations/dfs.html}{here}.
+
 \subsection{Basketball}
 
 \begin{typewriter}
-Two teams are competing in a game of basketball: the Exonians and the Smurfs. There are $n$ players on the Exonian team and $m$ players on the Smurf team, with $n + m \le 17$. Each player has an integer skill level $s$ between $1$ and $10^8$. Define the strength of a set of players as the sum of their individual skill levels. In order to ensure a fair game, the Exonians and Smurfs plan on choosing two equally strong starting lineups. In how many ways can the teams choose their lineups? (Two games are considered different if there exists a player who starts in one game, but not in the other.)
+Two teams are competing in a game of basketball: the Exonians and the Smurfs. There are $n$ players on the Exonian team and $m$ players on the Smurf team, with $n + m \le 17$. Each player has an integer skill level $s$ between $1$ and $10^8$. Define the strength of a set of players as the sum of their individual skill levels. In order to ensure a fair game, the Exonians and Smurfs plan on choosing two equally strong starting lineups. In how many ways can the two teams choose their lineups? (Two lineups are considered different if there exists a player who starts in one game, but not in the other.)
 \end{typewriter}
 
 We use a DFS to recursively generate all possible starting lineups. Each starting lineup can be represented by a sequence of $n + m$ 0's and 1's, where a player starts if and only if he/she is assigned a 1. We do this the same way we generate all passcodes of length $n + m$. Once we have a starting lineup, it is straightforward to check for fairness. (Is it also possible to keep track of the strength of each team as we DFS? Hint: Keep an extra variable similar to ``used'' in \texttt{Permutations}.)
 
 \subsection{Problem Break}
 
-Before moving on, try to implement the DFSes described above. You can test your code on the problem set \href{http://codeforces.com}{here}. How does the runtime of these algorithms grow with respect to $n$?
+Before moving on, try to implement the DFS problems described above. You can test your code on the problem set \href{http://codeforces.com/group/iMPx86rZXm/contest/205012}{here}. Try to do some complexity analysis too. How does the runtime of these algorithms grow with respect to $n$?
 
 \subsection{Generalizing DFS}
 
