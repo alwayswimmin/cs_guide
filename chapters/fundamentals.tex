@@ -44,7 +44,7 @@ As to why we drop the constants and the lower order terms, consider the first tw
 
 Thus in programming contests, we usually want a program with the correct complexity, without worrying about too much constant factors. Complexity will be the difference between whether a program gets \textbf{\color{green}accepted} or \textbf{\color{red}time limit exceeded}. As a rule of thumb, a modern processor can do around $10^8$ computations each second. When you plug the maximum possible $n$ into the complexity of your algorithm, it should never be much more than that.
 
-We've focused on time and haven't talked much about memory so far, but memory does gets tested. The amount of memory a program uses as a function of $n$ is called its \emph{space complexity}, as opposed to the \emph{time complexity} we discussed earlier. Space complexity however, shows up much less frequently than time complexity. One of the reasons is that you usually run out of time before you can exceed the memory limit.
+We've focused on time and haven't talked much about memory so far, but memory does gets tested. The amount of memory a program uses as a function of $n$ is called its \emph{space complexity}, as opposed to the \emph{time complexity} we discussed earlier. Space complexity however, shows up much less frequently than time complexity---you usually run out of time before you can exceed the memory limit.
 
 \section{First Problems}
 
@@ -71,7 +71,7 @@ Now that you know the basics, let's get started by solving a few problems. Try t
   \fontdimen4\font=0.1em% interword shrink
   \fontdimen7\font=0.1em% extra space
   \hyphenchar\font=`\-% allowing hyphenation
-  Bessie has recently founded a froyo startup, offering froyo made from the best cows in Wisconsin. She has kept track of her profits for the first $n$ days ($1 \le n \le 10^5$) and knows that she earned $a_i$ dollars on the $i$th day. Growth is always important in startups, so Bessie wants to know the length of the longest non-decreasing subsegment in her profits. Help her figure this out! (Here, a subsegment denotes a contiguous block of numbers $a_i, a_{i+1}, \cdots, a_j$ ($i < j$).) [Adapted from \href{http://codeforces.com/problemset/problem/580/A}{Codeforces 580A}.]
+  Bessie has recently founded a froyo startup, offering froyo made from the best cows in Wisconsin. She has kept track of her profits for the first $n$ days ($1 \le n \le 10^5$) and knows that she earned $a_i$ dollars on the $i$-th day. Growth is always important in startups, so Bessie wants to know the length of the longest non-decreasing subsegment in her profits. Help her figure this out! (Here, a subsegment denotes a contiguous block of numbers $a_i, a_{i+1}, \cdots, a_j$ ($i < j$).) [Adapted from \href{http://codeforces.com/problemset/problem/580/A}{Codeforces 580A}.]
 }
 
 Our first thought upon reading this problem might be to check each subsegment of the sequence $a_i$ and see if that subsegment is non-decreasing. Unfortunately, this is too slow. There are approximately $n^2/2$ pairs of endpoints that we could choose, far too many when $n$ can be up to $10^5$. (Remember that rule of $10^8$?) Instead, we can solve this problem with around $n$ steps by performing a single sweep through the array. We maintain a counter representing Bessie's currrent ``streak''---the number of days since her profit last decreased. If her profit decreases from day $i$ to day $i+1$, then we reset the counter to zero. The answer we report is the longest streak that we ever see.
@@ -80,25 +80,29 @@ Our first thought upon reading this problem might be to check each subsegment of
 
 \section{Sorting}
 
-To further explore the concept of complexity, we will use sorting algorithms as a case study. Sorting is just as it sounds---we're given a collection of objects, and we want to sort them into a predefined order. For example, suppose we have a list of scores from a programming contest. In order to generate the final standings, we'll need to sort the contestants into ascending order by score. Below, we present three classic sorting algorithms of varying complexity: insertion sort, merge sort and quicksort. To supplement our descriptions of the algorithms, you can check out the animations at \url{http://visualgo.net/sorting.html}.
+To further explore the concept of complexity, we will use sorting algorithms as a case study. Sorting is just as it sounds---we're given a collection of objects, and we want to sort them into a predefined order. For example, suppose we have a list of scores from a programming contest. In order to generate the final standings, we'll need to sort the contestants into ascending order by score. Below, we present three classic sorting algorithms of varying complexity: insertion sort, merge sort and quicksort.
 
-In our last subsection, we discuss a problem that involves sorting as a subtask and go over how to sort in Java and C++.
+Don't worry too much about the details of these algorithms for now. You'll rarely need to implement them from scratch, since most modern programming languages come with built-in sorting algorithms. In our last subsection, we discuss how to use these library functions in Java and C++ with a problem that involves sorting as a subtask.
+
+To supplement our descriptions of the algorithms, you can check out the animations at \url{http://visualgo.net/sorting.html}.
 
 \subsection{Insertion Sort}
 
-Insertion sort builds up a sorted list by inserting new elements one at a time. Inserting an element into a sorted list takes time proportional to the length of the list, so the runtime of this algorithm is $1 + 2 + 3 + \cdots + n$, which is $O(n^2)$. One way to think about this is to iterate $i$ from $1$ to $n$, and let the first $i$ elements be our sorted list. To insert the $(i+1)$th element, we just swap it with the largest, the second largest, and so on, until it's greater than than the next largest element. Then we have a sorted list in the first $(i+1)$ entries of the array. Insertion sort, despite being slower than merge sort and quicksort, is still useful because of its efficiency on small inputs. Many implementations of merge sort and quicksort actually use insertion sort once the problem size gets small.
+Insertion sort builds up a sorted list by inserting new elements one at a time. Inserting an element into a sorted list takes time proportional to the length of the list, so the runtime of this algorithm is $1 + 2 + 3 + \cdots + n = (n^2 + n) / 2$, which is $O(n^2)$. One way to think about this is to iterate $i$ from $1$ to $n$, and let the first $i$ elements be our sorted list. To insert the $(i+1)$-th element, we just swap it with the largest, the second largest, and so on, until it's greater than than the next largest element. Then we have a sorted list in the first $(i+1)$ entries of the array. Insertion sort, despite being slower than merge sort and quicksort, is still useful because of its efficiency on small inputs. Many implementations of merge sort and quicksort actually use insertion sort once the problem size gets small.
 
 Around how long is the longest list that you can sort with insertion sort in less than a second?
 
 \subsection{Merge Sort}
 
-The idea behind merge sort is the following observation: If we are given two sorted lists of length $n/2$, we only need $n$ comparisons to merge them into one sorted list of length $n$. So we can divide and conquer. We do this by cutting the array in half, sorting each half recursively, and merging the two halves back together. Because our recursion goes $\log_2 n$ levels deep, this algorithm runs in $O(n \log n)$. Try to work out the details of this yourself. (You can in fact prove that $O(n \log n)$ comparisons is optimal for sorting algorithms, one of the few problems in computer science that has a non-trivial lower bound.)
+The idea behind merge sort is the following observation: If we are given two sorted lists of length $n/2$, we only need $n$ comparisons to merge them into one sorted list of length $n$. It is easy to find the smallest element among the two lists, since this element has to be the smallest element in one of the lists. To find the second-smallest element, we can delete the smallest and do the same comparison again.
+
+This method of merging lists allows us to divide and conquer. We cut the array in half, sort each half recursively with merge sort, and then merge the two halves back together. Because our recursion goes $\log_2 n$ levels deep and takes $O(n)$ operations per level, this algorithm runs in $O(n \log n)$. (In fact, it is possible to prove that $O(n \log n)$ comparisons is optimal for sorting algorithms, one of the few problems in computer science that has a non-trivial lower bound.)
 
 Around how long is the longest list that you can sort with merge sort in less than a second?
 
 \subsection{Quicksort}
 
-Quicksort also uses a divide and conquer strategy to run in $O(n \log n)$ on average. We first take a random element from the array, called the \emph{pivot}. Then, we move anything less than the pivot to the left of the array, anything greater than the pivot to the right of the array, and recurse on the two halves that we just created. We say that quicksort runs in $O(n \log n)$ only on average because there are cases that can make quicksort run in $O(n^2)$. What would happen if we chose the smallest element of the array as the pivot each time?
+Quicksort also uses a divide and conquer strategy to run in $O(n \log n)$ on average. We first take a random element from the array, called the \emph{pivot}. We move anything less than the pivot to the left of the pivot and anything greater than the pivot to the right of the pivot. Like merge sort, we can then recursively quicksort the two ``halves'' that we just created. Since we choose the pivot randomly, our problem size usually gets cut down by a constant factor, giving us $O(\log n)$ levels of recursion with $O(n)$ operations at each level. Thus quicksort runs in $O(n \log n)$ on average. We say ``on average'' because there are cases that can make quicksort run in $O(n^2)$. What would happen if we chose the smallest element of the array as the pivot each time?
 
 Quicksort was previously used by Java's \texttt{Arrays.sort} and \texttt{Collections.sort}, but these functions now use dual-pivot quicksort and timsort.
 
@@ -115,7 +119,7 @@ Quicksort was previously used by Java's \texttt{Arrays.sort} and \texttt{Collect
 
 We solve this problem by first sorting the sequence $f_i$. After sorting, Ms. Manana will want to buy puzzles from a contiguous block of the sequence. (If she doesn't, then the difference between the largest and smallest puzzles will be greater than necessary.) Thus we can iterate through the sorted sequence to find the minimum difference between the endpoints of length $n$ blocks.
 
-Usually, when solving a sorting problem, we don't need to implement our own sorting function. If you're using Java, \texttt{java.utils.Arrays} has a function \texttt{Arrays.sort} that does the magic for you. In C++, you can add \texttt{\#include <algorithm>} to your header and use \texttt{std::sort}. When coding this problem, try to use the builtin-in sort function in your language.
+Usually, when solving a sorting problem, we don't need to implement our own sorting function. If you're using Java, \texttt{java.utils.Arrays} has a function \texttt{Arrays.sort} that does the magic for you. In C++, you can add \texttt{\#include <algorithm>} to your header and use \texttt{std::sort}. While coding \texttt{Ms. Manana's Puzzles}, try to use the builtin-in sort function in your language.
 
 Here are code snippets for sorting an array \texttt{arr} of length \texttt{n} in Java and C++, respectively:
 
