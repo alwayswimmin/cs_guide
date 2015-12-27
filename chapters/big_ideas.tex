@@ -1,165 +1,180 @@
 \chapter{Big Ideas}
 
-In this chapter we'll discuss some general ideas for solving problems. Starting in this chapter I'm going to shift from language-specific terms, like PriorityQueue and TreeMap, to more general terms, like binary heap and binary search tree. Algorithms I present will no longer be in the form of concrete Java code but rather in a more abstract pseudocode.
+In this chapter, we'll discuss some general problem solving ideas: brute force, depth-first search, and the greedy algorithm. We can think of these as the building blocks to more complex methods---each provides a very general approach to simplifying problems. In programming contests, they also appear frequently by themselves as the core ideas to solutions. Since the concepts we cover are independent of language, we will no longer present algorithms in concrete Java or C++ code, but rather in more abstract pseudocode.
 
-\section{Complete Search}
+\section{Brute Force}
 
-Sometimes the best way is simply to try everything. This could be the intended solution (check the complexity of a complete search and compare it against the time limits), or we may be just coding a brute force to squeeze out a few extra points from an intractable problem at the end of a contest. Either way, the order in which we search can make or break the code.
+Sometimes, the best way to approach a problem is to try everything. This idea of exhaustively searching all possibilities is called \emph{brute force}. For example, if we want to unlock a friend's iPhone, we could try all of the $10^4$ possible passcodes. As the name and this example suggest, brute force is often crude and inefficient. Usually we want to make some clever observations to make the problem more tractable. However, if the input size is small (check the number of operations against $10^8$) or if we want to squeeze a few points out of a problem by solving only the small cases, brute force could be the way to go. And if you're stuck on a problem, thinking about a brute force is not a bad way to start. Simpler, slower algorithms can often inspire faster ones. Through the following problems, we'll show you how to brutally apply the idea of brute force.
 
-Suppose we wanted to solve the game of chess. The placement of the pieces on the board and a toggle for whether black or white is to move represents a game state. The set of legal moves maps this game state to one set of states and another set of states to this game state.
+\subsection{Square Root}
 
-We can therefore think of the different states as vertices in a very large directed graph. Methods we use for solving chess, or any other problem, are identical to ways of traversing graphs, especially trees.
+\begin{typewriter}
+  Given an integer $n$, $1 \le n \le 10^{12}$, find the greatest integer less than or equal to $\sqrt{n}$ without using any library functions. (This means you can't call functions like Math.sqrt or Math.log.)
+\end{typewriter}
 
-\subsection{Depth-First Search}
+At first, it's not obvious how we can compute square roots. However, we can always go simple. Set $i = 1$, and while $(i+1)^2\le n$, increment $i$. That is, we increment $i$ until increasing it further will cause $i$ to exceed $\sqrt n$. Since our answer $i$ is at most $\sqrt n \le 10^6$, our program runs in time. This is about the silliest approach we can use to calculate square roots, but hey, it works!
 
-\textit{Depth-first search} is the most simple of the searches. A depth-first search called on a vertex $v$ in the search tree recursively calls itself on each of the children of $v$. To go back to the chess example, a DFS would begin with one possible first move, like a3, and test \textit{every possible move sequence} beginning with a3 before moving on to a second possible first move, like a4.
+When implementing this algorithm, be careful about the size of $n$. The 32-bit \texttt{int} type in Java and C++ only holds values up to $2^{31} - 1 = 2,147,483,647$, which is exceeded by the maximum possible value of $n$. Thus we need to use a 64-bit integer type for our calculations: \texttt{long} in Java and \texttt{long long} in C++.
 
-A quick note on recursive processes: The \textit{run-time stack} keeps track of our position and data that go out of scope when we jump into a new function. This stack allows us to call functions within functions safely. Recursion is dangerous in contest programming because the run-time stack is slow and can easily balloon in size, crashing the program. For this reason do not hesitate to use your own stack in an iterative process in practice, though I often describe processes as recursive as they are easier to understand, code, and debug in this form.
+\subsection{Combination Lock}
 
-Now it is painfully obvious that strictly using a DFS is not preferable in computer chess. The computer would certainly never finish testing every move sequence beginning with a3 and therefore would not consider more standard, and likely better, moves like e4.
+\begin{typewriter}
+  Farmer John purchases a combination lock to stop his cows from escaping their pasture and causing mischief! His lock has three circular dials, each with tick marks numbered $1$ through $N$ ($1\le N\le 100$), with $1$ and $N$ adjacent. There are two combinations that open the lock: one combination set by Farmer John and one ``master'' combination set by the locksmith. The lock has a small tolerance for error, however, so it will open if the numbers on each of the dials are at most two positions away from that of a valid combination. Given Farmer John's combination and the master combination, determine the number of distinct settings for the dials that will open the lock. 
 
-\subsection{Breadth-First Search}
+  (For example, if Farmer John's combination is $(1,2,3)$ and the master combination is $(4,5,6)$, the lock will open if its dials are set to $(1,N,5)$ (since this is close to Farmer John's combination) or to $(2,4,8)$ (since this is close to the master combination). Note that $(1,5,6)$ would not open the lock, since it is not close enough to any single combination. Furthermore, order matters, so $(1,2,3)$ is distinct from $(3,2,1)$.) [Adapted from \href{http://usaco.org/index.php?page=viewproblem2&cpid=340}{USACO 2013, Combination Lock}.]
+\end{typewriter}
 
-\textit{Breadth-first search} traverses the search tree level by level. We keep track of a queue that stores each level's state. At each step we pop off the first element in the queue and add the states that it can reach to the end of the queue. In this way, we explore those states only after we explore all the states associated with a lower level. In the chess example, we would store all 20 possible first moves in the queue, and for each first move, we add all possible second moves to the end of the queue.
+Again, the simplest idea works. We can iterate over all possible settings of the lock, and for each setting, check if it matches either Farmer John's combination or the master combination. To do this, we can use three nested \texttt{for} loops. The first loop goes through the values for the first dial, the second loop through the values for the second dial, and the third loop through the values for the third dial. Since there are three dials, the lock has at most $N^3 \le 10^6$ possible settings. We can check if each dial matches in $O(1)$ time, hence our algorithm runs in less than a second.
 
-This means that we search all possible states of a certain depth at roughly the same time, but we need to store the data associated with each of these states, and this can be quite costly in terms of memory.
+In terms of implementation, \texttt{Combination Lock} is a great example of how a problem can decompose into two easier components that we can think about separately. The first component is to use nested loops to iterate through the possible settings, which we've described above. (Nested \texttt{for} loops like this show up often!) The second component is to check if a given setting is close to either of the given combinations. If we implement a function \texttt{is\_valid(a, b, c)} to do this, then the code becomes quite clean.
 
-BFS is the better choice over DFS when we are asked for the ``smallest'' answer, which is often associated with the lowest level.
+\subsection{Ski Course Design}
 
-\subsection{Depth-First Search with Iterative Deepening}
+\begin{typewriter}
+Farmer John has $N$ hills on his farm ($1\le N\le 1000$), each with an integer elevation in the range $0$ to $100$. In the winter, since there is abundant snow on these hills, he routinely operates a ski training camp. In order to evade taxes, Farmer John wants to add or subtract height from each of his hills so that the difference between the heights of his shortest and tallest hills is at most $17$ before this year's camp.
 
-\textit{Depth-first search with iterative deepening} is a DFS that only searches up to a certain level in the search tree before stopping and heading back to lower levels. If it turns out the search did not find anything in the first $N$ levels, we broaden the search to the first $N+1$ levels with another DFS, hence iterative deepening. This method of searching is slower than a BFS, but maintains the nice BFS property of finding the ``smallest'' answer first while shedding the memory harness that holds the BFS back.
+Suppose it costs $x^2$ dollars for Farmer John to change the height of a hill by $x$ units. Given the current heights of his hills, what is the minimum amount that Farmer John will need to pay? (Farmer John is only willing to change the height of each hill by an integer amount.) [Adapted from \href{http://usaco.org/index.php?page=viewproblem2&cpid=376}{USACO 2014, Ski Course Design}.]
+\end{typewriter}
 
-DFSID is the closest to what we do when analyzing an actual chess game. We make a move in our minds and test its performance against whatever the opponent might make as his move, tracing the game around 3-4 moves deep before testing another possible move.
+For \texttt{Ski Course Design}, we need to be a bit clever about how to implement our brute force. There are infinitely many ways we could change the heights of each hill, so it seems intractable to iterate over the possible heights for each hill separately. Instead, we look at the final range of the ski slope heights, which has length at most $17$. This final range has to fall within the interval $[0,100]$, hence there are less than $100$ possibilities. (The possible ranges are $[0, 17]$, $[1, 18]$, $\cdots$, $[83, 100]$.) Once we fix a range, we can calculate in $O(N)$ the minimum cost to make the height of each hill fall within that range. Thus if we let $M$ be the number of possible ranges ($M < 100$), we have an $O(MN)$ algorithm.
 
-\section{Greedy Algorithm}
+This problem shows that even when we brute force, we still have to think. Some approaches are better than others. In particular, we don't want to deal with cases that are irrelevant---for example, when the heights are not within a range of width $17$ or when Farmer John has not used the cheapest set of changes. We also don't want our possibilities to explode out of control, which would have happened had we adjusted the height of each hill separately with nested \texttt{for} loops or recursion. By iterating over a more restricted set of possibilities, we have created a brute force solution that runs significantly faster.
 
-The main problem with any of the searches described above is they are exponential in nature. A \textit{greedy algorithm} is one that takes the ``best'' possible option at each step, essentially disregarding any other possible option. To find the best solution for $n=4$, we consider only the best solution for $n=3$ and no other possible solution. The approach of maximizing at each step clearly does not always work, as the locally optimal choice is not necessarily globally optimal. Always moving in the direction of a target, for example, fails if there is a wall in the way. However, if the greedy algorithm can solve a problem, the code runs very quickly.
+\subsection{Contest Practice}
 
-One problem that cannot be solve using the greedy approach is the integer knapsack problem. It's important to be able to catch an incorrect greedy algorithm, and one classic
-example involves finding the most efficient way to make change. Given a sequence of coin denominations ($d_i$, where $1 \le i \le n$), with $d_1 = 1$, find the smallest number of coins necessary that sum to some value $V$. The greedy approach takes the most valuable coin that doesn't overshoot $V$ and adds it to our set until we achieve $V$. One counterexample is $v_1=1$, $v_2=3$, $v_3=4$ and $V = 6$. The greedy algorithm chooses $4+1+1$, which is worse than $3+3$. Note however that greedy algorithm still always works for some sets of coin values, like United States currency. Don't let the fact that the greedy algorithm works for the most obvious example fool you.
+\href{http://codeforces.com/group/5tN48zOVvQ/contest/204642}{Here} is a collection of problems solvable through brute force. Try working through them on your own and applying the ideas you've seen so far. (May the brute force be with you.)
 
-The greedy algorithm combined with ideas from dynamic programming constitute \textit{best-first search}, a category of searches that includes the Dijkstra algorithm for shortest paths.
+\section{Depth-First Search (DFS)}
 
-\section{Binary Searching on the Answer}
+Depth-first search is a recursive search technique that provides us with another way to brute force. Instead of using nested loops to iterate through all possibilities, we can generate the possibilities using recursion, checking all possible choices in each level. Here's an example: All of your friends, upon realizing that it only takes four nested \texttt{for} loops to iterate through all possible 4-digit iPhone passcodes, have decided to make their passcodes $n$ digits long. Since you don't know $n$, nested \texttt{for} loops will no longer do the trick. Instead, we can use a DFS to recursively generate all $n$-digit passcodes.
 
-Suppose that the problem we need to solve is finding the minimum number $M$ such that some property holds. That is, the property holds for any $x \ge M$ but does not hold for $x < M$. Perhaps the best approach we have so far for finding this $M$ is simply trying all the numbers from 1 to $M$. However, this linear search is clearly inefficient.
+Depth-first search works as follows: We check all passcodes starting with ``0'', then all passcodes starting with ``1'', then all passcodes starting with ``2'', and so on. To check all passcodes starting with ``0'', we check all passcodes starting with ``00'', then all passcodes starting with ``01'', then all passcodes starting with ``02'', and so on. To check all passcodes starting with ``00'', we have to check all passcodes starting with ``000'', then all passcodes starting with ``001'' and so on... (Think about why DFS is \emph{depth-first}.)
 
-The nature of this problem should remind you of some other search technique. Oftentimes, with problems of this property, it is easy to check whether some condition holds for some given $x$. In this case, it is much easier to binary search on $M$ rather than find it some other way.
-
-\section{Dynamic Programming}
-
-The idea behind dynamic programming is to avoid doing the same thing twice. Two nodes in the search tree described in the complete search techniques might very well represent the same state. For example, two different sets of initial moves could result in the same chessboard configuration, and if we already calculated who has the winning or losing position in that configuration, we ought to remember that fact somehow so we don't need to calculate it again. Of course, however, actually keeping track of every possible game state is intractable by both time and memory constraints.
-
-Here's a much more reasonable problem. Given a sequence of $N \le 10,000$ integers, what is the maximum decreasing subsequence? A subsequence does not have to consist of consecutive terms in the original sequence.
-
-\begin{center}
-{
-\begin{tikzpicture}[
-  thick,
-  myrect/.style={
-    draw,
-    fill=myseagreen,
-    rectangle split,
-    rectangle split horizontal,
-    rectangle split parts=#1,
-    rectangle split part align=left,
-    text width=5ex,
-    text centered
-    },
-  mycallout/.style={
-    shape=rectangle callout,
-    rounded corners,
-    fill=mysalmon,
-    callout absolute pointer={#1},
-    callout pointer width=1cm
-  }  
-]
-
-\node[myrect=6]
-  (array)
-  {
-  					\strut 6
-  \nodepart{two}	\strut 9
-  \nodepart{three}	\strut 8
-  \nodepart{four}	\strut 4
-  \nodepart{five}	\strut 7
-  \nodepart{six}	\strut 5
-  };
-\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
-  \node[below] at (array.\Valor south) {\Valori};
-
-\end{tikzpicture}
-}
-\end{center}
-
-The natural complete search approach would be to use recursion, or DFS. When we process an element in the list, we recursively process all elements that come after it and choose the one that gives the maximum subsequence.
+In this way, we recursively generate all possible passcodes by extending the prefix character by character. We keep recursing until we have to check a passcode starting with a string of length $n$, in which case that string is the passcode itself. Thus the first passcode we check is ``00$\cdots$0'' and the last passcode we check is ``99$\cdots$9''. We implement this algorithm by writing a function that generates all passcodes given a prefix. Below is some pseudocode describing the algorithm. Make sure you understand how the function calls itself!
 
 \noindent \begin{minipage}{\textwidth}
-\begin{algorithmic}
-\Function{Process}{$i$}
-\State $max \gets 0$
-\For{$j\equiv i+1,N$}
-	\If{$value(i) > value(j)$}
-		\State $x \gets \Call{Process}{$j$}$
-		\If{$x > max$}
-			\State $max \gets x$
-		\EndIf
-	\EndIf
-\EndFor
-\State \Return $max + 1$
-\EndFunction
-\end{algorithmic}
+  \begin{algorithmic}[1]
+    \Function{generatePasscodes}{$depth$, $prefix$}
+    \If{$depth = n$}
+      \Comment {If we've reached maximum depth, then print and return.}
+      \State \Call{print}{$prefix$}
+      \State \Return
+    \EndIf
+    \For{$c$ from `0' to `9'}
+      \Comment{Iterates over all possible next digits.}
+      \State \Call{generatePasscodes}{$depth + 1$, $prefix + c$}
+      \Comment{Recurses with a longer prefix.}
+    \EndFor
+    \EndFunction
+  \end{algorithmic}
 \end{minipage}
 
-However, this algorithm is exponential. In the worst case, it is $O(2^N)$. We notice a lot of repetition: processing the 9 in the list above, for example, requires finding the longest subsequences beginning with 8, 4, 7, and 5, while processing 8 requires finding subsequences for 4, 7, and 5. It seems silly to do the same task twice, so we'll keep track of the length of the longest subsequence in a separate array.
+\subsection{Permutations}
+
+\begin{typewriter}
+  Given $n$ ($n \le 8$), print all permutations of the sequence $\{1, 2, \cdots, n\}$ in lexicographic (alphabetical) order. (For $n=3$, this would be $(1, 2, 3)$, $(1, 3, 2)$, $(2, 1, 3)$, $(2, 3, 1)$, $(3, 1, 2)$, and $(3, 2, 1)$.)
+\end{typewriter}
+
+Like the passcode problem, we use DFS instead of nested \texttt{for} loops, since we don't know $n$. However, we have to be careful with implementation---we can use each number only once. Along with our current prefix, we have to keep track of the set of numbers that we've already used. This is best done with a Boolean ``used'' array outside of the recursive function. Here's the pseudocode:
 
 \noindent \begin{minipage}{\textwidth}
-\begin{algorithmic}
-\Function{Process}{$i$}
-\If{$i$ has already been processed}
-	\State \Return $dp(i)$
-\EndIf
-\State $max \gets 0$
-\For{$j\equiv i+1,N$}
-	\If{$value(i) > value(j)$}
-		\State $x \gets \Call{Process}{j}$
-		\If{$x > max$}
-			\State $max \gets x$
-		\EndIf
-	\EndIf
-\EndFor
-\State $dp(i) \gets max + 1$
-\State \Return $max + 1$
-\EndFunction
-\end{algorithmic}
+  \begin{algorithmic}[1]
+    \State $used \gets \{false, false, \cdots, false\}$
+    \Comment{Initialize $used$ as an array of $false$ values.}
+    \Function{generatePermutations}{$depth$, $prefix$}
+    \If{$depth = n$}
+      \State \Call{print}{$prefix$}
+      \State \Return
+    \EndIf
+    \For{$i=1$ to $n$}
+      \If{not $used[i]$}
+        \State $used[i] \gets true$
+        \State \Call{generatePermutations}{$depth + 1$, $prefix + i$}
+        \State $used[i] \gets false$
+        \Comment We have to reset the $used[i]$ variable once we're done.
+      \EndIf
+    \EndFor
+    \EndFunction
+  \end{algorithmic}
 \end{minipage}
 
-This reduces the complexity of the algorithm to $O(n^2)$. Note that to process an index, we must process first all later indices. This imposes a natural ordering in which to process the indices: in reverse. This idea lends itself to a nice iterative solution.
+To understand the order in which we visit the permutations, we can visualize this algorithm as traversing a tree-like structure. An animation of this algorithm for $n = 5$ is \href{http://dabbler0.github.io/ecc-animations/dfs.html}{here}.
 
-\noindent \begin{minipage}{\textwidth}
-\begin{algorithmic}
-\For{$i \equiv N,1$}
-	\Comment $i$ goes in reverse
-	\State $max \gets 0$
-	\For{$j\equiv i+1,N$}
-		\If{$value(i) > value(j)$}
-			\If{$dp(j) > max$}
-				\State $max \gets dp(j)$
-			\EndIf
-		\EndIf
-	\EndFor
-	\State $dp(i) \gets max + 1$
-\EndFor
-\end{algorithmic}
-\end{minipage}
+\subsection{Basketball}
 
-The answer to the original problem is then the maximum value of $dp(i)$ for all $i$. For this specific problem, it's relatively easy to speed up the algorithm to $O(\log{n})$ by replacing the linear search with something else.
+\begin{typewriter}
+Two teams are competing in a game of basketball: the Exonians and the Smurfs. There are $n$ players on the Exonian team and $m$ players on the Smurf team, with $n + m \le 17$. Each player has an integer skill level $s$ between $1$ and $10^8$. Define the strength of a set of players as the sum of their individual skill levels. In order to ensure a fair game, the Exonians and Smurfs plan on choosing two equally strong starting lineups. In how many ways can the two teams choose their lineups? (Two lineups are considered different if there exists a player who starts in one game, but not in the other.)
+\end{typewriter}
 
-The integer knapsack problem is another example where dynamic programming may be useful. \textit{Knapsack problems} are a family of problems with the following form:
+We use a DFS to recursively generate all possible starting lineups. Each starting lineup can be represented by a sequence of $n + m$ 0's and 1's, where a player starts if and only if he/she is assigned a 1. We do this the same way we generate all passcodes of length $n + m$. Once we have a starting lineup, it is straightforward to check for fairness. (Is it also possible to keep track of the strength of each team as we DFS? Hint: Keep an extra variable similar to ``used'' in \texttt{Permutations}.)
 
-We are given a list of $K$ objects each assigned an availability, a size, and a value. We have a total amount of ``space'' available in our knapsack and need to find the set of objects from our list that maximizes the total the value of objects in the set such that the total size does not exceed the space and the number of times we take one particular object does not exceed its availability.
+\subsection{Problem Break}
 
-Dynamic programming yields a straightforward $O(NK)$ solution. See if you can find it. Note, however, if $N$ is very large, this solution is no longer practical. In general, the knapsack problem is NP-complete, so don't think dynamic programming works on everything!
+Before moving on, try to implement the DFS problems described above. You can test your code on the problem set \href{http://codeforces.com/group/5tN48zOVvQ/contest/205012}{here}. Try to do some complexity analysis too. How does the runtime of these algorithms grow with respect to $n$?
 
-Brian Dean compiled some standard dynamic programming problems with animations and analyses. Practice dynamic programming here: \url{http://people.cs.clemson.edu/~bcdean/dp_practice/}
+\subsection{Generalizing DFS}
+
+Thus far, all of the DFS solutions that we've seen have involved sequences. However, we can also use DFS in a much more general setting. In the same spirit as brute force, if we want to enumerate or construct something and we have a number of options at each step, we can recurse on each of the possible options and thereby check all possibilities. The examples below show the flexibility of depth-first search---a huge class of problems can be solved in a brute force manner like this.
+
+\subsection{Dungeon}
+
+\begin{typewriter}
+  Bessie is trying to escape from the dungeon of the meat packing plant! The dungeon is represented by an $n$-by-$n$ grid ($2 \le n \le 6$) where each of the grid cells is trapped and can only be stepped on once. Some cells of the grid also contain obstacles that block her way. Bessie is currently located in the upper-left corner and wants to make her way to the exit in the lower-right corner. How many paths can Bessie take to escape, assuming that she avoids all obstacles and steps on no cell twice?
+\end{typewriter}
+
+We write a function \texttt{DFS(x, y)} thats runs a DFS from cell $(x, y)$ and counts the number of paths to the lower-right corner given obstacles and previously visited squares. Upon arriving at $(x, y)$, we mark that cell as visited. If $(x, y)$ is the destination, we increment our answer by one. Otherwise, we try recursing in each direction---up, down, left, and right. Before recursing, we check that we don't go out of bounds and that we don't step on an obstacle or previously visited square. Once we're done counting paths from $(x, y)$, we have to remember to mark this cell as unvisited again.
+
+In terms of implementation, it is easiest to store the obstacles and visited cells in Boolean arrays outside of the recursive function. We can also define a function \texttt{ok(x, y)} to check if a cell $(x, y)$ is safe to step on---if $x$ and $y$ are in bounds, $(x, y)$ is not an obstacle, and $(x, y)$ is unvisited. Finally, to avoid doing four cases, one for each direction, we can define two arrays \texttt{dx} and \texttt{dy} which contain \texttt{[1, 0, -1, 0]} and \texttt{[0, 1, 0, -1]}, respectively. Then \texttt{dx[i]} and \texttt{dy[i]} for $0 \le i < 4$ represent the changes in $x$- and $y$-coordinates for each of Bessie's possible moves.
+\subsection{$n$ Queens Puzzle}
+
+\begin{typewriter}
+  Given $n$ ($4 \le n \le 8$), find an arrangement of $n$ queens on an $n$-by-$n$ chessboard so that no two queens attack each other. 
+\end{typewriter}
+
+First, observe that each row must contain exactly one queen. Thus we can assume that the $i$-th queen is placed in the $i$-th row. Like before, we try putting each queen on each possible square in its row and recurse, keeping track of used columns and diagonals. When we add the $i$-th queen, we mark its column and diagonals (both of them) as attacked. As usual, once we're done checking all possibilities for the $i$-th queen, we unmark its column and diagonals. We terminate when we find an arrangement using all $n$ queens.
+
+\section{Greedy Algorithms}
+
+A greedy algorithm is an algorithm that makes the (locally) most desirable choice at each step. Instead of checking all possibilities as we do in a depth-first search, we choose the option that ``seems'' best at the time. This usually results in a fast and easy to implement algorithm. While this may not be a good way to live life---doing homework would always be relegated in favor of solving programming contest problems---there exist many computer science problems where being greedy produces optimal or almost optimal results. Keep in mind, however, that greedy algorithms usually don't work. Before coding any greedy solution, you should be able to convince yourself with a proof of correctness. Let's go through a few examples to get a better sense for what greedy algorithms are like.
+
+\subsection{Bessie the Polyglot}
+
+\begin{typewriter}
+  Bessie would like to learn how to code! There are $n$ ($1\le n\le 100$) programming languages suitable for cows and the $i$-th of them takes $a_i$ ($1\le a_i\le 100$) days to learn. Help Bessie determine the maximum number of languages she could know after $k$ ($1\le k\le 10^4$) days. [Adapted from \href{http://codeforces.com/problemset/problem/507/A}{Codeforces 507A}.]
+\end{typewriter}
+
+It's pretty easy to see that we want to learn programming languages in order of increasing $a_i$, starting from the smallest. Thus Bessie can obtain an optimal solution with a greedy approach. She first learns the language that requires the fewest days to learn, then the language that takes the next fewest days, and so on, until she can't learn another language without exceeding $k$ days. To implement this, we sort $a_i$ and find the longest prefix whose sum is at most $k$. Due to sorting, the complexity is $O(n\log n)$.
+
+With greedy algorithms, we usually want to have an ordering or heuristic by which we decide what is the best choice at a given instance. In this case, our ordering was the most straightforward possible, just choosing languages in order of increasing learning time. However, figuring out how we want to greedily make decisions is not always obvious. Oftentimes, coming up with the correct heuristic is what makes greedy algorithms hard to find.
+
+\subsection{More Cowbell}
+
+\begin{typewriter}
+  Kevin Sun wants to move his precious collection of $n$ ($1\le n\le 10^5$) cowbells from Naperthrill to Exeter, where there is actually grass instead of corn. Before moving, he must pack his cowbells into $k$ boxes of a fixed size. In order to keep his collection safe during transportation, he will not place more than two cowbells into a single box. Since Kevin wishes to minimize expenses, he is curious about the smallest size box he can use to pack his entire collection.
+
+  Kevin is a meticulous cowbell collector and knows that the size of his $i$-th ($1\le i\le n$) cowbell is an integer $s_i$. In fact, he keeps his cowbells sorted by size, so $s_{i - 1}\le s_i$ for any $i > 1$. Also an expert packer, Kevin can fit one or two cowbells into a box of size $s$ if and only if the sum of their sizes does not exceed $s$. Given this information, help Kevin determine the smallest $s$ for which it is possible to put all of his cowbells into $k$ ($n\le 2k\le 10^5$) boxes of size $s$. [Adapted from \href{http://codeforces.com/problemset/problem/604/B}{Codeforces 604B}.]
+\end{typewriter}
+
+Intuitively, we want to use as many boxes as we can and put the largest cowbells by themselves. Then, we want to pair the leftover cowbells so that the largest sum of a pair is minimized. This leads to the following greedy algorithm:
+
+First, if $k \ge n$, then each cowbell can go into its own box, so our answer is $\max(s_1, s_2, \cdots, s_n)$. Otherwise, we can have at most $2k-n$ boxes that contain one cowbell. Thus we put the $2k-n$ largest cowbells into their own boxes. For the remaining $n-(2k-n) = 2(n-k)$ cowbells, we pair the $i$th largest cowbell with the $(2(n-k) - i + 1)$-th largest. In other words, we match the smallest remaining cowbell with the largest, the second smallest with the second largest, and so on. Given these pairings, we can loop through them to find the largest box we'll need. The complexity of this algorithm is $O(n)$ since we need to iterate through all of the cowbells.
+
+To prove that this greedy algorithm works, we first prove the case $n = 2k$, where each box must contain exactly two cowbells. Consider any optimal pairing of cowbells. If $s_{2k}$ is not paired with $s_1$, then we can perform a swap so that they are paired without increasing the size of the largest box: Suppose we initially have the pairs $(s_1, s_i)$ and $(s_{2k}, s_j)$. If we rearrange them so that we have the pairs $(s_1, s_{2k})$ and $(s_i, s_j)$, then $s_1 + s_{2k}, s_i + s_j \le s_{2k} + s_j$. After we've paired the largest cowbell with the smallest, we can apply the same logic to the second largest, third largest, and so on until we're done. Therefore, our construction is optimal if $n = 2k$. For $n < 2k$, we can imagine that we have $2k - n$ cowbells of size $0$ and use the same argument.
+
+This method of proving correctness for a greedy algorithm is rather common. We want to show that our greedily constructed solution is as good as an arbitrarily chosen optimal solution, so we compare where the optimal solution and our greedy solution differ. Once we find a difference, we try to transform one to the other without changing the value we're trying to optimize. In this case, since transforming the optimal solution to our greedily constructed solution doesn't make it worse, our solution must be optimal as well.
+
+\subsection{Farmer John and Boxes}
+
+\begin{typewriter}
+  Farmer John has $n$ ($1 \le n \le 100$) boxes in his barn. His boxes all have the same size and weight but have varying strengths---the $i$-th box is able to support at most $x_i$ other boxes on top of it. If Farmer John wants to stack his boxes so that each box is directly on top of at most one other box, what is the minimum number of stacks that he'll need? [Adapted from \href{http://codeforces.com/problemset/problem/388/A}{Codeforces 388A}.]
+\end{typewriter}
+
+We first observe that if a stronger box is on top of a weaker box, then we can swap the two boxes and still have a valid stacking. Therefore, an optimal solution exists where no box is stronger than any box below it. This allows us to sort the boxes in increasing order of strength and construct an optimal solution by inserting stronger boxes below piles of weaker boxes.
+
+Initially, we start with a single empty stack. We then add boxes one-by-one as follows: If we can, we insert our new box below some stack that it can successfully support. Otherwise, if no such stack exists, we create a new stack containing only the new box. It's possible to check all existing stacks in $O(n)$; therefore this algorithm runs in $O(n^2)$. (In fact, binary searching allows us to do the checking step in $O(\log n)$.) To prove correctness, we can again compare our construction to an arbitrary optimal construction. Finishing the argument is left as an exercise for the reader.
+
+The subtle part about this problem is the order in which we process the boxes. Processing boxes from weakest to strongest offers an elegant greedy solution, while processing from strongest to weakest offers no simple approach. (At least I haven't found one yet.) Again, we see that ordering is important. Stepping back a bit, this problem also isn't one that immediately suggests a greedy approach. Since greedy solutions can often be unexpected, it's always worthwhile to take a moment to consider various orderings and ``na\"ive'' approaches to see if any work. Telltale hints of a greedy approach are observations about order and monotonicity---for example ``we can always have stronger boxes below weaker ones.''
+
+\subsection{Snack Time}
+
+Here's the \href{http://codeforces.com}{link} to the greedy problem set. Feast away!

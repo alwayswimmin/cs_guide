@@ -2,7 +2,7 @@
 
 \section{Input and Output}
 
-The first part of solving any programming contest problem is reading the input correctly. In this section, we'll briefly go over input and output in Java using \texttt{java.util.Scanner} and \texttt{java.io.PrintWriter}. There are two scenarios that you should be familiar with: \texttt{stdin}/\texttt{stdout} and file I/O. You encounter the former when you enter input and see output for a program run in the command line. You encounter the latter when you have two files (for example \texttt{input.txt} and \texttt{output.txt}) that you read from and write to.
+The first part of solving any programming contest problem is reading the input correctly. In this section, we go over input and output in Java using \texttt{java.util.Scanner} and \texttt{java.io.PrintWriter}. There are two scenarios that you should be familiar with: \texttt{stdin}/\texttt{stdout} and file I/O. You encounter the former when you enter input and see output for a program run in the command line. You encounter the latter when you have two files (for example \texttt{input.txt} and \texttt{output.txt}) that you read from and write to.
 
 When using \texttt{stdin}/\texttt{stdout}, we read input from \texttt{System.in} using a Scanner and output our results using \texttt{System.out.println()}. \texttt{Scanner.nextInt()} and \texttt{Scanner.next()} read in integers and strings, respectively. \texttt{System.out.println()} prints its argument and adds a newline at the end. (If we don't want the newline, we can use \texttt{System.out.print()}.) Here's an example of a main method that takes two integers and outputs their sum:
 
@@ -36,7 +36,7 @@ Although more efficient methods of I/O exist, such as BufferedReader and Buffere
 
 Before we start computing contests, we should understand what the problems on these contests are trying to test. One class of problems, called \emph{implementation problems}, assesses your ability write code quickly and accurately. These problems are only common in easier contests, since they usually don't involve too much thinking or creativity---you just have to implement what's written in the problem statement. Most competitive programming problems ask you to come up with a clever algorithm instead, testing speed and memory efficiency.
 
-To analyze the efficiency of algorithms, computer scientists use a concept called \emph{complexity}. Complexity is measured as a function of the input size; an algorithm could require $3n$, $n^4/3$ or even $2^n + n^2$ steps to finish calculating for an input of size $n$. To express complexity, we use something called ``big-O notation.'' Essentially, we write the number of steps it takes for an algorithm to finish inside a pair of parentheses with an $O$ in front, like this: $O(\text{\# of steps})$. However, we drop any constant factors and lower order terms from the expression.\footnote{Unfortunately, this isn't entirely accurate. Saying an algorithm is $O(f(n))$ actually means it takes \emph{at most} $c\cdot f(n)$ steps to finish, for a sufficiently large constant $c$.} I'll explain why in a moment; let's look at some examples for now. 
+To analyze the efficiency of algorithms, computer scientists use a concept called \emph{complexity}. Complexity is measured as a function of the input size; an algorithm could require $3n$, $n^4/3$ or even $2^n + n^2$ steps to finish calculating for an input of size $n$. To express complexity, we use something called ``big-O notation.'' Essentially, we write the number of steps it takes for an algorithm to finish inside a pair of parentheses with an $O$ in front, like this: $O(\text{\# of steps})$. However, we drop any constant factors and lower order terms from the expression.\footnote{Actually, this isn't entirely accurate. Saying an algorithm is $O(f(n))$ really means it takes \emph{at most} $c\cdot f(n)$ steps to finish, for a sufficiently large constant $c$.} I'll explain why in a moment; let's look at some examples for now. 
 
 Suppose we have three programs that require $3n$, $n^4/3$ and $2^n + n^2$ steps to finish, respectively. The complexity of the first program is $O(n)$ because we don't care about the constant factor $3$ on the $3n$. The complexity of the second program is $O(n^4)$; again, we drop the constant. For the last program, we write its complexity as $O(2^n)$ because $n^2$ is a lower order term.
 
@@ -44,160 +44,95 @@ As to why we drop the constants and the lower order terms, consider the first tw
 
 Thus in programming contests, we usually want a program with the correct complexity, without worrying about too much constant factors. Complexity will be the difference between whether a program gets \textbf{\color{green}accepted} or \textbf{\color{red}time limit exceeded}. As a rule of thumb, a modern processor can do around $10^8$ computations each second. When you plug the maximum possible $n$ into the complexity of your algorithm, it should never be much more than that.
 
-We've focused on time and haven't talked much about memory so far, but memory does gets tested. The amount of memory a program uses as a function of $n$ is called its \emph{space complexity}, as opposed to the \emph{time complexity} we discussed earlier. Space complexity however, shows up much less frequently than time complexity. One of the reasons is that you usually run out of time before you can exceed the memory limit.
+We've focused on time and haven't talked much about memory so far, but memory does gets tested. The amount of memory a program uses as a function of $n$ is called its \emph{space complexity}, as opposed to the \emph{time complexity} we discussed earlier. Space complexity however, shows up much less frequently than time complexity---you usually run out of time before you can exceed the memory limit.
+
+\section{First Problems}
+
+Now that you know the basics, let's get started by solving a few problems. Try to figure out a solution to each problem before reading our analysis. To test your code for the problems in this chapter, you should create an account on Codeforces. After you login, there will be an ``Introduction'' problem set available \href{http://codeforces.com/group/5tN48zOVvQ/contests}{here} that includes these problems and a few extras.
+
+\subsection{Bessie's Candles}
+
+\texttt{
+  \fontdimen2\font=0.4em% interword space
+  \fontdimen3\font=0.2em% interword stretch
+  \fontdimen4\font=0.1em% interword shrink
+  \fontdimen7\font=0.1em% extra space
+  \hyphenchar\font=`\-% allowing hyphenation
+  Bessie is a romantic cow; she spends her evenings writing code in the warm glow of candlelight. In her barn, she currently has $a$ new candles, each of which burns for exactly one hour. Ever the efficient cow, Bessie can make a new candle from $b$ burnt out candles. Your task, given $a$ and $b$ ($2 \le a, b \le 1000$), is to help her figure out the maximum number of hours for which she can keep her barn illuminated. [Adapted from \href{http://codeforces.com/problemset/problem/379/A}{Codeforces 379A}.]
+}
+
+\texttt{Bessie's Candles} is a straightforward implementation problem. Since $a$ and $b$ are small, we can simulate Bessie's candle burning process. We track of the number of candles we have left, the number of burnt out candles, and the number of hours that have passed. Whenever we have more than $b$ burnt out candles, we make a new candle. Once we run out of candles, we print our answer.
+
+\subsection{Froyo}
+
+\texttt{
+  \fontdimen2\font=0.4em% interword space
+  \fontdimen3\font=0.2em% interword stretch
+  \fontdimen4\font=0.1em% interword shrink
+  \fontdimen7\font=0.1em% extra space
+  \hyphenchar\font=`\-% allowing hyphenation
+  Bessie has recently founded a froyo startup, offering froyo made from the best cows in Wisconsin. She has kept track of her profits for the first $n$ days ($1 \le n \le 10^5$) and knows that she earned $a_i$ dollars on the $i$-th day. Growth is always important in startups, so Bessie wants to know the length of the longest non-decreasing subsegment in her profits. Help her figure this out! (Here, a subsegment denotes a contiguous block of numbers $a_i, a_{i+1}, \cdots, a_j$ ($i < j$).) [Adapted from \href{http://codeforces.com/problemset/problem/580/A}{Codeforces 580A}.]
+}
+
+Our first thought upon reading this problem might be to check each subsegment of the sequence $a_i$ and see if that subsegment is non-decreasing. Unfortunately, this is too slow. There are approximately $n^2/2$ pairs of endpoints that we could choose, far too many when $n$ can be up to $10^5$. (Remember that rule of $10^8$?) Instead, we can solve this problem with around $n$ steps by performing a single sweep through the array. We maintain a counter representing Bessie's currrent ``streak''---the number of days since her profit last decreased. If her profit decreases from day $i$ to day $i+1$, then we reset the counter to zero. The answer we report is the longest streak that we ever see.
+
+\texttt{Froyo} is a clear example of how getting the right complexity is essential. Our initial idea, which could have been implemented in $O(n^3)$ or $O(n^2)$, was too slow. To make our program finish in time, we had to work out a more efficient alrogithm that ran in $O(n)$.
 
 \section{Sorting}
 
-To further explore the concept of complexity, we will use sorting algorithms as a case study. Sorting is just as it sounds---we're given a collection of objects, and we want to sort them into a predefined order.
+To further explore the concept of complexity, we will use sorting algorithms as a case study. Sorting is just as it sounds---we're given a collection of objects, and we want to sort them into a predefined order. For example, suppose we have a list of scores from a programming contest. In order to generate the final standings, we'll need to sort the contestants into ascending order by score. Below, we present three classic sorting algorithms of varying complexity: insertion sort, merge sort and quicksort.
+
+Don't worry too much about the details of these algorithms for now. You'll rarely need to implement them from scratch, since most modern programming languages come with built-in sorting algorithms. In our last subsection, we discuss how to use these library functions in Java and C++ with a problem that involves sorting as a subtask.
+
+To supplement our descriptions of the algorithms, you can check out the animations at \url{http://visualgo.net/sorting.html}.
 
 \subsection{Insertion Sort}
 
-Insertion sort builds up a sorted list by inserting new elements one at a time. Inserting an element into a sorted list takes time proportional to the length of the list, so the runtime of this algorithm is $1 + 2 + 3 + \cdots + n$, which is $O(n^2)$. One way to think about this is to iterate $i$ from $1$ to $n$, and let the first $i$ elements be our sorted list. To insert the $(i+1)$th element, we just swap it with the largest, the second largest, and so on, until it's greater than than the next largest element. Then we have a sorted list in the first $(i+1)$ entries of the array. Insertion sort, despite being slower than merge sort and quicksort, is still useful because of its efficiency on small inputs. Many implementations of merge sort and quicksort actually use insertion sort once the problem size gets small.
+Insertion sort builds up a sorted list by inserting new elements one at a time. Inserting an element into a sorted list takes time proportional to the length of the list, so the runtime of this algorithm is $1 + 2 + 3 + \cdots + n = (n^2 + n) / 2$, which is $O(n^2)$. One way to think about this is to iterate $i$ from $1$ to $n$, and let the first $i$ elements be our sorted list. To insert the $(i+1)$-th element, we just swap it with the largest, the second largest, and so on, until it's greater than than the next largest element. Then we have a sorted list in the first $(i+1)$ entries of the array. Insertion sort, despite being slower than merge sort and quicksort, is still useful because of its efficiency on small inputs. Many implementations of merge sort and quicksort actually use insertion sort once the problem size gets small.
 
 Around how long is the longest list that you can sort with insertion sort in less than a second?
 
 \subsection{Merge Sort}
 
-The idea behind merge sort is the following observation: If we are given two sorted lists of length $n/2$, we only need $n$ comparisons to merge them into one sorted list of length $n$. So we can divide and conquer. We do this by cutting the array in half, sorting each half recursively, and merging the two halves back together. Because our recursion goes $\log_2 n$ levels deep, this algorithm runs in $O(n \log n)$. Try to work out the details of this yourself. (You can in fact prove that $O(n \log n)$ comparisons is optimal for sorting algorithms, one of the few problems in computer science that has a non-trivial lower bound.)
+The idea behind merge sort is the following observation: If we are given two sorted lists of length $n/2$, we only need $n$ comparisons to merge them into one sorted list of length $n$. It is easy to find the smallest element among the two lists, since this element has to be the smallest element in one of the lists. To find the second-smallest element, we can delete the smallest and do the same comparison again.
+
+This method of merging lists allows us to divide and conquer. We cut the array in half, sort each half recursively with merge sort, and then merge the two halves back together. Because our recursion goes $\log_2 n$ levels deep and takes $O(n)$ operations per level, this algorithm runs in $O(n \log n)$. (In fact, it is possible to prove that $O(n \log n)$ comparisons is optimal for sorting algorithms, one of the few problems in computer science that has a non-trivial lower bound.)
 
 Around how long is the longest list that you can sort with merge sort in less than a second?
 
 \subsection{Quicksort}
 
-Quicksort also uses a divide and conquer strategy to run in $O(n \log n)$ on average. We first take a random element from the array, called the \emph{pivot}. Then, we move anything less than the pivot to the left of the array, anything greater than the pivot to the right of the array, and recurse on the two halves that we just created. We say that quicksort runs in $O(n \log n)$ only on average because there are cases that can make quicksort run in $O(n^2)$. What would happen if we chose the smallest element of the array as the pivot each time?
+Quicksort also uses a divide and conquer strategy to run in $O(n \log n)$ on average. We first take a random element from the array, called the \emph{pivot}. We move anything less than the pivot to the left of the pivot and anything greater than the pivot to the right of the pivot. Like merge sort, we can then recursively quicksort the two ``halves'' that we just created. Since we choose the pivot randomly, our problem size usually gets cut down by a constant factor, giving us $O(\log n)$ levels of recursion with $O(n)$ operations at each level. Thus quicksort runs in $O(n \log n)$ on average. We say ``on average'' because there are cases that can make quicksort run in $O(n^2)$. What would happen if we chose the smallest element of the array as the pivot each time?
 
-Quicksort was previously implemented by \texttt{Arrays.sort()} and \texttt{Collections.sort()}, but Java now uses dual-pivot quicksort and timsort.
+Quicksort was previously used by Java's \texttt{Arrays.sort} and \texttt{Collections.sort}, but these functions now use dual-pivot quicksort and timsort.
 
-\subsection{Comparison}
+\subsection{Ms. Manana's Puzzles}
 
-We'll finish our section on sorting by taking a look at how Java and C++ sorts objects. We also provide a brief glimpse into using standard data structures that require a natural ordering on the objects within the container.
+\texttt{
+  \fontdimen2\font=0.4em% interword space
+  \fontdimen3\font=0.2em% interword stretch
+  \fontdimen4\font=0.1em% interword shrink
+  \fontdimen7\font=0.1em% extra space
+  \hyphenchar\font=`\-% allowing hyphenation
+  The end of the school year is near and Ms. Manana will soon have to say goodbye to a yet another class. As a farewell present, she decides to give each of her $n$ ($1\le n\le 50$) students a jigsaw puzzle. The shop assistant tells Ms. Manana that there are $m$ ($1\le m\le 50$) puzzles in the shop, but they differ in difficulty and size. Specifically, the first jigsaw puzzle consists of $f_1$ pieces, the second one consists of $f_2$ pieces, and so on. Ms. Manana doesn't want to upset the children, so she wants the difference between the numbers of pieces in her largest puzzle and her smallest puzzle to be as small as possible. Can you help Ms. Manana find this minimum difference? [Adapted from \href{http://codeforces.com/problemset/problem/337/A}{Codeforces 337A}.]
+}
 
-In Java, there is a built-in sort method, \texttt{Arrays.sort()}, in \texttt{java.util.Arrays}, which takes an array and sorts it. To sort an array \texttt{int array[]}, we call \texttt{Arrays.sort(array)}. Java always sorts least to greatest.
+We solve this problem by first sorting the sequence $f_i$. After sorting, Ms. Manana will want to buy puzzles from a contiguous block of the sequence. (If she doesn't, then the difference between the largest and smallest puzzles will be greater than necessary.) Thus we can iterate through the sorted sequence to find the minimum difference between the endpoints of length $n$ blocks.
 
-If we want to sort an array of our own objects, we have to first implement the \texttt{Comparable} interface. This is how Java orders a set of objects. Implementing \texttt{Comparable} requires support of the method \texttt{int compareTo(Object o)}. If \texttt{a.compareTo(b) < 0}, then \texttt{a} comes before \texttt{b}; if \texttt{a.compareTo(b) > 0}, then \texttt{a} comes after \texttt{b}; if \texttt{a.compareTo(b) == 0}, then \texttt{a} is considered equal to \texttt{b}. (\texttt{a.compareTo(b) == 0} should be equivalent to \texttt{a.equals(b)}.) For example, consider the class \texttt{MyPair}:
+Usually, when solving a sorting problem, we don't need to implement our own sorting function. If you're using Java, \texttt{java.utils.Arrays} has a function \texttt{Arrays.sort} that does the magic for you. In C++, you can add \texttt{\#include <algorithm>} to your header and use \texttt{std::sort}. While coding \texttt{Ms. Manana's Puzzles}, try to use the builtin-in sort function in your language.
+
+Here are code snippets for sorting an array \texttt{arr} of length \texttt{n} in Java and C++, respectively:
 
 \begin{mylstlisting}
-class MyPair implements Comparable {
-	int x;
-	int y;
-    // sort by x-coordinate first
-	public int compareTo(Object o) {
-		MyPair c = (MyPair) o;
-		if(x < c.x) return -1;
-		if(x > c.x) return 1;
-		// if x-coordinates equal, compare y
-		if(y < c.x) return -1;
-		if(y > c.x) return 1;
-		return 0; // equal
-	}
-}
+// hint: you should have "import java.util.*;" at the top of your code.
+int[] arr = new int[n];
+// do something to fill up the array.
+Arrays.sort(arr);
 \end{mylstlisting}
-
-If you know generics (Section \ref{sec:generics}), we can clean this up a bit. Note that no casting is required anymore.
 
 \begin{mylstlisting}
-class MyPair implements Comparable<MyPair> {
-	int x;
-	int y;
-	public int compareTo(MyPair c) {
-		if(x < c.x) return -1;
-		if(x > c.x) return 1;
-		if(y < c.x) return -1;
-		if(y > c.x) return 1;
-		return 0;
-	}
-}
+// hint: you should have "#include <algorithm>" at the top of your code.
+int arr[n];
+// do something to fill up the array.
+std::sort(arr, arr + n);
 \end{mylstlisting}
-
-We can sort much more than just arrays. Java provides us many data structures we can use, much more than just arrays. In this section, I'll mention briefly the \texttt{ArrayList} for Java and the \texttt{vector} for C++. If you don't know what either of these are, you can just pretend like they are arrays for now; they are very similar and will be covered in detail in a later chapter. To sort these more complex data structures in Java, we use \texttt{Collections.sort()}.
-
-Suppose we wanted to code a custom comparison operation for something that already exists. For example, suppose we wanted to sort an array of \texttt{ArrayList}s based on the sum of the elements in the \texttt{ArrayList}. We clearly don't want to code an entire \texttt{ArrayList} just because we want to sort it in a special way. One way we can easily resolve this is by using \texttt{extends}.
-
-\begin{mylstlisting}
-class MyArrayList extends ArrayList<Integer> implements Comparable<MyArrayList> {
-	public int compareTo(MyArrayList c) {
-		int sum = 0;
-		for(int k = 0; k < size(); k++) {
-			sum += get(k);
-		}
-		int csum = 0;
-		for(int k = 0; k < c.size(); k++) {
-			csum += c.get(k);
-		}
-		if(sum < csum) return -1;
-		if(sum == csum) return 0;
-		return 1;
-	}
-}
-\end{mylstlisting}
-
-Alternatively, we could use a \texttt{Comparator}. This is considered much better practice than the hack I presented earlier by coding a new class with \texttt{extends}. \texttt{Comparator}s are especially useful if we are to compare the same object different ways in the same program. A \texttt{Comparator} is an entirely separate class that takes two objects and determines which ought to come before the other in the ordering. Here is the \texttt{Comparator} implementation of the example I showed above.
-
-\begin{mylstlisting}
-class Cmp implements Comparator<ArrayList<Integer>> {
-	public int compare(ArrayList<Integer> o1, ArrayList<Integer> o2) {
-		int sum1 = 0;
-		for(int k = 0; k < o1.size(); k++) {
-			sum1 += o1.get(k);
-		}
-		int sum2 = 0;
-		for(int k = 0; k < o2.size(); k++) {
-			sum2 += o2.get(k);
-		}
-		if(sum1 < sum2) return -1;
-		if(sum1 == sum2) return 0;
-		return 1;
-	}
-}
-\end{mylstlisting}
-
-Now, when we sort, we'll need to pass our \texttt{Comparator} in addition to the data structure to be sorted. For example, we use the code \texttt{Arrays.sort(array, new Cmp())}. When we use a data structure that requires a custom comparison, we use a different constructor: \texttt{new TreeSet<ArrayList<Integer>>(new Cmp())}.
-
-In C++, comparing objects is slightly different. We have three methods, and all can be used with \texttt{sort}, which is in \texttt{<algorithm>}, or with any other standard library function or data structure which requires an ordering. As in Java, sorting is done least to greatest.
-
-The first method is to implement the method \texttt{operator<} in a \texttt{struct} or \texttt{class} we coded ourselves. Here's an example \texttt{struct my\_pair} which is equivalent to the above Java \texttt{class MyPair}.
-
-\begin{mylstlisting}[language=C++]
-struct my_pair {
-	int x;
-	int y;
-	friend bool operator<(const my_pair& lhs, const my_pair& rhs) {
-		return lhs.x < rhs.x || lhs.x == rhs.x && lhs.y < rhs.y;
-    }
-};
-\end{mylstlisting}
-
-Suppose we have an array \texttt{my\_pair array[]}. We can then call \texttt{sort(array, array + n)} to sort the first \texttt{n} elements of the array. If we have a different data structure, like \texttt{vector<my\_pair> v}, we can sort it using \texttt{sort(v.begin(), v.end())}.
-
-The second method is to use a custom comparison function. This is very similar to what we would put in function contained in the Java \texttt{Comparator}, but is distinct from the \texttt{Comparator} itself as it is only a function and not a class. Suppose we wanted to sort pairs primarily increasing in the first element and secondarily decreasing in the second. It seems inefficient to code a new pair class when C++ provides one, so we can simply use a custom comparison function to get around this.
-
-\begin{mylstlisting}[language=C++]
-typedef std::pair<int, int> pii;
-bool cmp(const pii& lhs, const pii& rhs) {
-	return lhs.x < rhs.x || lhs.x == rhs.x && lhs.y > rhs.y;
-}
-\end{mylstlisting}
-
-\texttt{cmp}, like \texttt{operator<}, should return \texttt{true} when \texttt{lhs} is considered to come before \texttt{rhs} in the ordering. To use \texttt{sort} here, we pass a third argument containing our custom comparison: \texttt{sort(array, array + n, cmp)}. Passing a custom comparison function to a standard library data structure is possible but unfortunately quite confusing and will not be covered here. This can be done more easily using the final method.
-
-The final method uses a functor, which is an object that can also work as a function. This is done by implementing the function \texttt{operator()()}. In the case of sorting, the functor works somewhat like a Java \texttt{Comparator}.
-
-\begin{mylstlisting}[language=C++]
-typedef std::pair<int, int> pii;
-struct cmp {
-	bool operator()(const pii& lhs, const pii& rhs) {
-		return lhs.x < rhs.x || lhs.x == rhs.x && lhs.y > rhs.y;
-	}
-};
-\end{mylstlisting}
-
-The functor method works just as the custom comparison function for \texttt{sort}: \texttt{sort(array, array + n, cmp)}. However, since it is now an object, it can be passed as a template argument to standard library containers much more easily than the comparison function can. For example, for the binary search tree implemented by C++, we can pass a custom comparison using \texttt{set<int, cmp> s}.
-
-\section{Binary Search}
-
-Before we begin studying data structures in Chapter \ref{chap:standard_ds}, it is necessary to first understand some search techniques. Suppose we're given a list and we want to check if it contains some element. We can do this directly by looking at every element of the list in a \emph{linear search}.
-
-One way we can make this faster is by imposing an ordering on the list. Then inserting elements becomes slower because we can no longer just pop the element to the the end of the list. However, if we are asked to find an element, we know roughly where to search because we can compare our element to other elements in the list. In fact, we only need to look at $O(\log n)$ elements to check if the queried element exists.
-
-Consider a sorted array that supports $O(1)$ access to any element. We can compare our queried element to the middle element of the array. Depending on whether our element is larger, smaller, or equal to the middle element, we'll be able to eliminate at least half of the array. Thus finding an element in a sorted array with \emph{binary search} is an $O(\log{n})$ operation. We can implement this either iteratively or recursively.
-
