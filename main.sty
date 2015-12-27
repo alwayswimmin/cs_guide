@@ -1,0 +1,135 @@
+\usepackage{emptypage}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage{lmodern}
+
+\usepackage{pdflscape}
+
+\usepackage{amsmath,amssymb,amsthm}
+
+\usepackage{verbatim}
+
+% \newcommand{\nothtml}{\comment}
+
+\usepackage{listings}
+\usepackage[hyperfootnotes=false]{hyperref}
+\usepackage{exercise}
+
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+
+\usepackage[toc,page]{appendix}
+
+\usepackage{answers}
+
+\usepackage[secthm,mdthm]{evan}
+
+\lhead{Hsiang, Wei, Liu}
+
+\usepackage{graphicx}
+
+\usepackage{color}
+
+\definecolor{myseagreen}{RGB}{88,197,191}
+\definecolor{mysalmon}{RGB}{255,160,122}
+\definecolor{myred}{RGB}{255,102,102}
+\definecolor{mypurple}{RGB}{225,145,255}
+\definecolor{myblack}{RGB}{0,0,0}
+\definecolor{mywhite}{RGB}{255,255,255}
+
+\usepackage{tikz}
+
+\usepackage{htlatexsupport}
+
+\usetikzlibrary{calc,shapes.multipart,chains,arrows,positioning}
+
+\tikzstyle{vertex}=[draw,fill=myseagreen,circle,minimum size=24pt,inner sep=0pt]
+
+\tikzstyle{splitvertex}=[draw,fill=myseagreen,circle split,minimum size=24pt]
+
+\usetikzlibrary{
+  shapes.multipart,
+  matrix,
+  positioning,
+  shapes.callouts,
+  shapes.arrows,
+  shapes.geometric,
+  decorations.shapes,
+  shapes,
+  fit,
+  arrows,
+  positioning,
+  trees,
+  mindmap,
+  calc}
+
+\tikzset{
+    squarecross/.style={
+        draw, rectangle,minimum size=18pt, fill=myseagreen,
+        inner sep=0pt, text=black,
+        path picture = {
+            \draw[black]
+            (path picture bounding box.north west) -- 
+            (path picture bounding box.south east)
+            (path picture bounding box.south west) -- 
+            (path picture bounding box.north east);
+        }
+    }
+}
+
+\lstset{language=Java}
+ 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\makeatletter
+\@ifpackageloaded{tex4ht}
+{
+	\newcommand{\mylstlisting}{\verbatim}
+}
+{
+\lstnewenvironment{mylstlisting}[1][]%
+  {\noindent\minipage{\linewidth}\medskip 
+   \lstset{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=t,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=4,
+   basicstyle=\ttfamily\footnotesize,
+   frame=single,#1}}
+  {\endminipage}
+}
+\makeatother
+
+\raggedbottom
+
+\usepackage{footnote}
+\makesavenoteenv{tabular}
+\makesavenoteenv{table}
+
+\renewcommand{\arraystretch}{1.5}
+
+\newenvironment{typewriter}{
+  \ttfamily
+  \fontdimen2\font=0.4em% interword space
+  \fontdimen3\font=0.2em% interword stretch
+  \fontdimen4\font=0.1em% interword shrink
+  \fontdimen7\font=0.1em% extra space
+  \hyphenchar\font=`\-% allowing hyphenation
+}{\par}
