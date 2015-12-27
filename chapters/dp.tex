@@ -1,0 +1,116 @@
+\chapter{Dynamic Programming}
+
+The idea behind dynamic programming is to avoid doing the same thing twice. Two nodes in the search tree described in the complete search techniques might very well represent the same state. For example, two different sets of initial moves could result in the same chessboard configuration, and if we already calculated who has the winning or losing position in that configuration, we ought to remember that fact somehow so we don't need to calculate it again. Of course, however, actually keeping track of every possible game state is intractable by both time and memory constraints.
+
+Here's a much more reasonable problem. Given a sequence of $N \le 10,000$ integers, what is the maximum decreasing subsequence? A subsequence does not have to consist of consecutive terms in the original sequence.
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=5ex,
+    text centered
+    },
+  mycallout/.style={
+    shape=rectangle callout,
+    rounded corners,
+    fill=mysalmon,
+    callout absolute pointer={#1},
+    callout pointer width=1cm
+  }  
+]
+
+\node[myrect=6]
+  (array)
+  {
+  					\strut 6
+  \nodepart{two}	\strut 9
+  \nodepart{three}	\strut 8
+  \nodepart{four}	\strut 4
+  \nodepart{five}	\strut 7
+  \nodepart{six}	\strut 5
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six }
+  \node[below] at (array.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+The natural complete search approach would be to use recursion, or DFS. When we process an element in the list, we recursively process all elements that come after it and choose the one that gives the maximum subsequence.
+
+\noindent \begin{minipage}{\textwidth}
+\begin{algorithmic}
+\Function{Process}{$i$}
+\State $max \gets 0$
+\For{$j\equiv i+1,N$}
+	\If{$value(i) > value(j)$}
+		\State $x \gets \Call{Process}{$j$}$
+		\If{$x > max$}
+			\State $max \gets x$
+		\EndIf
+	\EndIf
+\EndFor
+\State \Return $max + 1$
+\EndFunction
+\end{algorithmic}
+\end{minipage}
+
+However, this algorithm is exponential. In the worst case, it is $O(2^N)$. We notice a lot of repetition: processing the 9 in the list above, for example, requires finding the longest subsequences beginning with 8, 4, 7, and 5, while processing 8 requires finding subsequences for 4, 7, and 5. It seems silly to do the same task twice, so we'll keep track of the length of the longest subsequence in a separate array.
+
+\noindent \begin{minipage}{\textwidth}
+\begin{algorithmic}
+\Function{Process}{$i$}
+\If{$i$ has already been processed}
+	\State \Return $dp(i)$
+\EndIf
+\State $max \gets 0$
+\For{$j\equiv i+1,N$}
+	\If{$value(i) > value(j)$}
+		\State $x \gets \Call{Process}{j}$
+		\If{$x > max$}
+			\State $max \gets x$
+		\EndIf
+	\EndIf
+\EndFor
+\State $dp(i) \gets max + 1$
+\State \Return $max + 1$
+\EndFunction
+\end{algorithmic}
+\end{minipage}
+
+This reduces the complexity of the algorithm to $O(n^2)$. Note that to process an index, we must process first all later indices. This imposes a natural ordering in which to process the indices: in reverse. This idea lends itself to a nice iterative solution.
+
+\noindent \begin{minipage}{\textwidth}
+\begin{algorithmic}
+\For{$i \equiv N,1$}
+	\Comment $i$ goes in reverse
+	\State $max \gets 0$
+	\For{$j\equiv i+1,N$}
+		\If{$value(i) > value(j)$}
+			\If{$dp(j) > max$}
+				\State $max \gets dp(j)$
+			\EndIf
+		\EndIf
+	\EndFor
+	\State $dp(i) \gets max + 1$
+\EndFor
+\end{algorithmic}
+\end{minipage}
+
+The answer to the original problem is then the maximum value of $dp(i)$ for all $i$. For this specific problem, it's relatively easy to speed up the algorithm to $O(\log{n})$ by replacing the linear search with something else.
+
+The integer knapsack problem is another example where dynamic programming may be useful. \textit{Knapsack problems} are a family of problems with the following form:
+
+We are given a list of $K$ objects each assigned an availability, a size, and a value. We have a total amount of ``space'' available in our knapsack and need to find the set of objects from our list that maximizes the total the value of objects in the set such that the total size does not exceed the space and the number of times we take one particular object does not exceed its availability.
+
+Dynamic programming yields a straightforward $O(NK)$ solution. See if you can find it. Note, however, if $N$ is very large, this solution is no longer practical. In general, the knapsack problem is NP-complete, so don't think dynamic programming works on everything!
+
+Brian Dean compiled some standard dynamic programming problems with animations and analyses. Practice dynamic programming here: \url{http://people.cs.clemson.edu/~bcdean/dp_practice/}

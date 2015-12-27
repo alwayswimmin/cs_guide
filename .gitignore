@@ -4,3 +4,4 @@ main.*
 *.aux
 !guide.pdf
 !main.tex
+.DS_STORE
