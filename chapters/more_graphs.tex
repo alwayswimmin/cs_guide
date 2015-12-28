@@ -324,11 +324,19 @@ There are $E$ edges, each of which can be the bottleneck edge for $O(V)$ differe
 
 \subsubsection{Dinic}
 
-Dinic's algorithm is another refinement of Ford-Fulkerson.
+Dinic's algorithm is another refinement of Ford-Fulkerson. Dinic's algorithm is similar to Edmonds-Karp in that we make use of the length of the shortest path from $s$ to each vertex $v$. We first define the level graph $G_L$ of $G_f$ as the graph containing edges $(u,v)$ only if $dist(v) = dist(u) + 1$.
+
+We then define the blocking flow as a maximum flow $f$ of a level graph $G_L$. Dinic's algorithm constructs a level graph $G_L$, augments the graph with a blocking flow, and repeats by finding another level graph. This process can happen $O(V)$ times, as with each blocking flow, $dist(t)$ increases.
+
+Each BFS to compute the level graph is $O(E)$, and each blocking flow can be computed in $O(VE)$. Therefore, the run-time of Dinic's algorithm is $O(V^2E)$.
+
+Using a link-cut tree, the computation of a blocking flow can be improved to $O(E\log{V})$, improving the overall run-time to $O(VE\log{V})$.
+
+In networks with unit capacities, each blocking flow can be computed in $O(E)$, and the number of total blocking flows is $O(\min{\sqrt{E}, V^{2/3}})$, improving the overall run-time to $O(\min{\sqrt{E}, V^{2/3}}E)$.
 
 \subsection{Push-Relabel}
 
-Unfortunately, even the much-improved bounds of the $O(VE^2)$ Edmonds-Karp are admittedly bad. While the push-relabel method for solving the max flow problem does not have the fastest theoretical bounds, two of its implementations have complexities $O(V^3)$ and $O(V^2\sqrt{E})$ and are among the fastest in practice.
+Unfortunately, Dinic's algorithm is considerably complex, and even the much-improved bounds of the simpler $O(VE^2)$ Edmonds-Karp are admittedly bad. While the push-relabel method for solving the max flow problem does not have the fastest theoretical bounds, two of its implementations have complexities $O(V^3)$ and $O(V^2\sqrt{E})$ and are among the fastest in practice.
 
 \subsubsection{Generic Push-Relabel}
 
@@ -498,11 +506,9 @@ The \textit{global relabeling heuristic} performs a backwards BFS from $t$ every
 
 Some dude on Codeforces\footnote{\url{http://codeforces.com/blog/entry/14378}} didn't have much luck improving performance with the global relabeling heuristic. I'd suggest sticking to the gap heuristic only.
 
-\subsection{Other Problems with Flow Solutions}
+\subsection{Extensions}
 
-\subsubsection{Edge-Disjoint Paths}
-
-\subsubsection{Bipartite Matching}
+\subsection{Bipartite Matchings}
 
 The bipartite matching problem is perhaps the most well-known problem solvable by flows.
 
