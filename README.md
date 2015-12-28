@@ -3,11 +3,7 @@ Collection of Useful CS Algorithms
 
 Usage Notes
 --------------
-It is of my (na&iuml;ve, privileged teenager) belief that knowledge should be free and easily
-accessible to ambitious high schoolers, but it is paramount to respect intellectual property
-and someone else's work. I ask that you use this material to its fullest potential, however
-you like, provided it doesn't completely butcher the philosophy with which I embarked on this
-project.
+Learn something [:
 
 For Learners
 --------------
@@ -25,10 +21,14 @@ Compile in Terminal using the command
 
 latexmk -pdf -jobname=guide main.tex
 
-Contact Me
+Contact Us
 --------------
 Samuel Hsiang
 
 Thomas Jefferson High School for Science and Technology
 
 samuel.c.hsiang@gmail.com
+
+Alexander Wei
+
+Yang Liu
