@@ -2450,7 +2450,8 @@ Then property 3 is not violated, and we are done.
 \item
 $P$ is red, and $U$ is red ($G$ and $U$ exist since $P$ cannot be the root, as the root is black).
 
-As $P$ and $U$ are red, $G$ is black. We simply color $P$ and $U$ black and $G$ red to restore property 3.
+As $P$ and $U$ are red, $G$ is black. We simply color $P$ and $U$ black and $G$ red. Note that since $G$ is now red, we might have introduced a new violation of property
+3 further up the tree. We then recurse on $G$ and repeat the process as necessary until we reach the root.
 
 \begin{center}
 \begin{tikzpicture}[very thick,
@@ -2614,7 +2615,7 @@ child {
 
 \end{enumerate}
 
-Thus after we insert, we can always restructure the tree using a constant number of operations to restore the necessary red-black tree properties.
+Thus after we insert, we can always restructure the tree using $O(\log{n})$ number of operations (in the sole instance of repeated case 3) to restore the necessary red-black tree properties.
 
 Now we need to work on deletion. Recall how deletion works on a normal binary search tree. If the node we need to replace has two children, we swap the node with the least element in its right subtree, which does not have two children. We then are able to remove that node more easily.
 
