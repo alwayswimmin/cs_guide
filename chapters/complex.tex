@@ -720,7 +720,7 @@ With this in mind, highlighted are the elements we'll need for $update(4,14,3)$.
 \foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
   \node[below] at (array2.\Valor south) {\Valori};
 
-\node[myrect=4, text width=21.2ex, rectangle split part fill={myseagreen, myseagreen, myseagreen, mysalmon}] [below=of array2]
+\node[myrect=4, text width=21.2ex, rectangle split part fill={mysalmon, mysalmon, mysalmon, mysalmon}] [below=of array2]
   (array)
   {
   					\strut 11
@@ -751,9 +751,22 @@ With this in mind, highlighted are the elements we'll need for $update(4,14,3)$.
 }
 \end{center}
 
-To reiterate, we are not storing the actual values of the elements or buckets in the arrays, where they were stored when we solved the original formulation of the problem. Despite this fact, we can still calculate the value of any element or bucket. $a_i$ is equal to the sum of the $\ceiling{\frac{i}{\sqrt{n}}}$th value stored in the third array and the $i$th value stored in the first array. The sum of any given bucket can be calculated similarly. However, we must remember to adjust for bucket size. In the example, there are four elements per bucket, so we have to add $4 \cdot 3 = 12$ to get the correct sum for an updated bucket. Because of all this, we can query a range exactly like we did without range updates.
+The $3$ in the lazy array below the buckets indicate that some operation treated an entire bucket as one entity, and so the individual elements $a_i$ in that bucket
+were not used. In particular, the information individual elements store is no longer accurate, since doing so would cause the range update to be far too slow. The presence of a
+nonzero number in the lazy array indicates that the information encoded in the associated bucket and all individual elements under that bucket are no longer accurate. 
 
-Highlighted are the values necessary for $query(7,15)$.
+On the other hand,
+we can still easily calculate the value of any element or bucket. $a_i$ is equal to the sum of the $\ceiling{\frac{i}{\sqrt{n}}}$th value stored in the third array 
+and the $i$th value stored in the first array. The sum of any given bucket can be calculated similarly. However, we must remember to adjust for bucket size. In the example, 
+there are four elements per bucket, so we have to add $4 \cdot 3 = 12$ to calculate the true sum of bucket elements. 
+Because of all this, we can query a range exactly like we did without range updates.
+
+We will need to somehow correct the values of the elements if we encounter a query for which the bucket is no longer treated as a single entity, but rather split by the two ends
+of the query. In other words, when we need to update or query individual elements of a lazy bucket, we need to propagate the lazy value (in this case, 3) down to the individual
+elements, updating what is stored to the proper values by simply adding the lazy values to each individual element.
+
+Highlighted are the values necessary for $query(7,15)$. Notice that the lazy value of the second block is propagated to each individual element in that block before the
+query proceeds.
 
 \begin{center}
 {
@@ -770,17 +783,17 @@ Highlighted are the values necessary for $query(7,15)$.
     }
 ]
 
-\node[myrect=16, rectangle split part fill={myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, mysalmon, mysalmon, myseagreen}]
+\node[myrect=16, rectangle split part fill={myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, mysalmon, mysalmon, mysalmon, myseagreen, myseagreen, myseagreen, myseagreen, mysalmon, mysalmon, mysalmon, myseagreen}]
   (array2)
   {
   					\strut 2
   \nodepart{two}	\strut 4
   \nodepart{three}	\strut 7
   \nodepart{four}	\strut $-2$
-  \nodepart{five}	\strut 3
-  \nodepart{six}	\strut 6
-  \nodepart{seven}	\strut $-3$
-  \nodepart{eight}	\strut 1
+  \nodepart{five}	\strut 6
+  \nodepart{six}	\strut 9
+  \nodepart{seven}	\strut $0$
+  \nodepart{eight}	\strut 3
   \nodepart{nine}	\strut $-2$
   \nodepart{ten}	\strut $-4$
   \nodepart{eleven}	\strut $-6$
@@ -790,14 +803,14 @@ Highlighted are the values necessary for $query(7,15)$.
   \nodepart{fifteen}	\strut 0
   \nodepart{sixteen}	\strut $-7$
   };
-\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+\foreach \Valor [count=\Valori from 1] in {one , two , three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
   \node[below] at (array2.\Valor south) {\Valori};
 
-\node[myrect=4, text width=21.2ex, rectangle split part fill={myseagreen, myseagreen, mysalmon, myseagreen}] [below=of array2]
+\node[myrect=4, text width=21.2ex, rectangle split part fill={myseagreen, mysalmon, mysalmon, myseagreen}] [below=of array2]
   (array)
   {
   					\strut 11
-  \nodepart{two}	\strut 7
+  \nodepart{two}	\strut 19 
   \nodepart{three}	\strut $-10$
   \nodepart{four}	\strut 13
   };
@@ -807,11 +820,11 @@ Highlighted are the values necessary for $query(7,15)$.
 \node[below] at (array.three south) {$[9,12]$};
 \node[below] at (array.four south) {$[13,16]$};
 
-\node[myrect=4, text width=21.2ex, rectangle split part fill={myseagreen, mysalmon, mysalmon, mysalmon}] [below=of array]
+\node[myrect=4, text width=21.2ex, rectangle split part fill={myseagreen, mysalmon, mysalmon, myseagreen}] [below=of array]
   (array3)
   {
   					\strut 0
-  \nodepart{two}	\strut 3
+  \nodepart{two}	\strut 0
   \nodepart{three}	\strut 3
   \nodepart{four}	\strut 0
   };
