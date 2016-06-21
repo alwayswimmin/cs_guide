@@ -52,6 +52,55 @@ Exercises related: Do $O(n \log p)$ precomputation to compute any binomial coeff
 
 \section{Karatsuba}
 
+Consider two polynomials $P(x)$ and $Q(x)$ with $n$ coefficients. 
+The standard, long multiplication method of calculating $R(x) = P(x) \cdot Q(x)$
+involves $O(n^2)$ operations. We'll see if there's a way to speed this up.
+
+We first write
+\begin{align*}
+P(x) &= A(x) \cdot x^{n/2} + B(x) \\
+Q(x) &= C(x) \cdot x^{n/2} + D(x).
+\end{align*}
+
+where $A$, $B$, $C$, and $D$ are all polynomials with $n/2$ coefficients.
+Then, $R(x)$ can be written as
+\[P(x) \cdot Q(x) = (A(x) \cdot C(x)) x^n + (A(x) \cdot D(x) + B(x) \cdot C(x)) x^{n/2} + (B(x) \cdot D(x)).\]
+
+Addition of polynomials is linear, so assuming we have each of these parts computed, 
+added execution time is minimal. At first glance, it seems we have reduced the multiplication
+of two degree $n$ polynomials to summing three expressions that involve multiplication
+of degree $n/2$ polynomials, but unfortunately the middle expression involves two such
+multiplications, so there is no speedup.
+
+However, we observe that removing the various $x^k$ from the multiplication actually
+allows us to calculate that middle expression from the other two and one new 
+degree $n/2$ multiplication:
+\[
+(A(x) + B(x))(C(x) + D(x)) = A(x) \cdot C(x) + (A(x) \cdot D(x) + B(x) \cdot C(x)) + B(x) \cdot D(x).
+\]
+
+Then we can extract all the necessary pieces to $R(x)$ using only three smaller 
+multiplications, and proceed recursively. The complexity of this process satisfies
+\[T(n) = 3 T\left(\frac{n}{2}\right) + O(n),\]
+which solves to $O(n^{\log_2{3}}) \approx O(n^{1.585})$ by the Master theorem.
+
+\begin{algorithm}[H]
+\caption{Karatsuba}
+\begin{algorithmic}
+\Function{Multiply}{$P(x)$, $Q(x)$, $n$}
+	\If {$n \le 1$}
+		\State \Return $P(x) \cdot Q(x)$ \Comment{using normal multiplication}
+	\EndIf
+	\State Let $A$, $B$ satisfy $P(x) = A(x) \cdot x^{\floor{n/2}} + B(x)$
+	\State Let $C$, $D$ satisfy $Q(x) = C(x) \cdot x^{\floor{n/2}} + D(x)$
+	\State $F \gets \Call{Multiply}{A(x), C(x), \ceiling{n/2}}$
+	\State $G \gets \Call{Multiply}{B(x), D(x), \floor{n/2}}$
+	\State $H \gets \Call{Multiply}{A(x) + B(x), C(x) + D(x), \ceiling{n/2}}$
+	\State \Return $F(x) \cdot x^{2 \floor{n/2}} + H(x) \cdot x^{\floor{n/2}} + G(x)$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
 \section{Matrices}
 
 \section{Fast Fourier Transform}
