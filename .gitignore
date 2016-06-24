@@ -1,8 +1,10 @@
-guide.*
-main.*
-*.pre
 *.aux
-!guide.pdf
-!main.tex
-!main.sty
+*.fdb_latexmk
+*.fls
+*.loa
+*.log
+*.out
+*.pre
+*.toc
+main.pdf
 .DS_STORE
