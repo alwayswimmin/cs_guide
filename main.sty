@@ -123,6 +123,17 @@
 
 \renewcommand{\arraystretch}{1.5}
 
+% Alex's stuff.
+
+% Make \emph bold.
+\makeatletter
+\DeclareRobustCommand{\em}{%
+  \@nomath\em \if b\expandafter\@car\f@series\@nil
+  \normalfont \else \bfseries \fi}
+\makeatother
+
+\usepackage{tabularx} % For more sophisticated tables.
+
 \newenvironment{typewriter}{
   \ttfamily
   \fontdimen2\font=0.4em% interword space
@@ -131,3 +142,48 @@
   \fontdimen7\font=0.1em% extra space
   \hyphenchar\font=`\-% allowing hyphenation
 }{\par}
+
+% Commands for problem statements and sample cases.
+
+% Command for generating problem statements. Optional argument is title. Others
+% are problem statement, input specification, output specification, and source.
+\newcommand{\statement}[7][]{
+  {\sffamily
+    \if\relax\detokenize{#1}\relax\else
+      \noindent{\large \textbf{#1}}
+    \fi
+    \hfill{\small\emph{Time limit: #2. Memory limit: #3.}}\par\nopagebreak
+    \noindent #4
+    \par\vspace{0.2em}
+    \if\relax\detokenize{#5}\relax\else
+      \noindent\textbf{Input}\par
+      \noindent #5
+    \fi
+    \par\vspace{0.2em}
+    \if\relax\detokenize{#6}\relax\else
+      \noindent\textbf{Output}\par
+      \noindent #6
+    \fi
+    \par\vspace{0.2em}
+    \if\relax\detokenize{#7}\relax\else
+      \noindent[Adapted from #7.]
+    \fi
+    \par\vspace{0.2em}
+  }
+}
+
+% Dummy command for \sample.
+\newcommand{\sampel}[2]{
+  {\sffamily
+    \noindent\begin{tabularx}{\textwidth}{X|X}
+      \textbf{Sample Input} & \textbf{Sample Output} \\
+       {\ttfamily #1} & {\ttfamily #2}%
+    \end{tabularx}
+    \vspace{0.2em}
+  }\endgroup\par
+}
+
+% Make \sample respect newlines.
+\newcommand{\sample}{
+  \begingroup\obeylines\sampel
+}
