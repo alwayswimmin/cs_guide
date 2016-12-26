@@ -2,7 +2,9 @@
 
 \section{Introduction}
 
-Welcome to competitive programming! If you know a bit about coding and you're curious about programming contests, then you're in the right place. We'll start these notes with some basic background: what happens during a programming contest, which skills they train, and how to practice and become better. In the second part of this section, we'll walk through an example contest problem together. As you move forward, these notes will both guide you through key algorithmic and data structural ideas and provide interesting problems for you to think about. We'll try to challenge you, make you a better thinker and programmer, and give you a sense for how the foundational concepts in computer science are intricately connected. And if you have questions or feedback about anything, feel free to hit us up at \mailto{@gmail.com}. We hope you'll enjoy the world of competitive programming as much as we have. Have fun with it!
+Welcome to competitive programming! If you know a bit about coding and you're curious about programming contests, then you're in the right place. We'll start these notes with some basic background: what happens during a programming contest, which skills they train, and how to practice and become better. In the second part of this section, we'll walk through an example contest problem together.
+
+As you move forward, these notes will both guide you through key algorithmic and data structural ideas and provide interesting problems for you to think about. We'll try to challenge you, make you a better problem solver and programmer, and give you a sense for how the foundational concepts in computer science are intricately connected. The skills you'll pick up will be useful in not just other areas of computer science, but will also make you a stronger and more creative thinker. If you have questions or feedback about anything as you go along, feel free to contact us at \mailto{@gmail.com}. We hope you'll enjoy the world of competitive programming as much as we have. Have fun with it!
 
 \subsection{What is Competitive Programming?}
 
@@ -144,11 +146,39 @@ public static void main(String args[]) throws IOException {
 }
 \end{mylstlisting}
 
-Although more efficient methods of I/O exist, such as BufferedReader and BufferedWriter, what we've covered here should be sufficient for now. For example, it is possible to read $10^5$ integers with Scanner within a fraction of a second.
+Although more efficient methods of I/O exist, such as BufferedReader and BufferedWriter, what we've covered here should be sufficient for now. For example, it is possible to read $10^5$ integers with Scanner in a fraction of a second.
 
 \subsection{C++}
 
-When you want to read something to a variable \texttt{x}, just do \verb+cin >> x+. And if you want to write a variable \texttt{x}, just do \verb+cout << x+. Capeesh?
+Here, we discuss I/O in C++ using the Standard Template Library's (STL) \texttt{iostream} and \texttt{fstream}. There are two scenarios that you should be familiar with: standard I/O and file I/O. You may have encountered standard I/O when you enter input and see output while running a program in the command line, whereas file I/O involves reading from and writing to files like \texttt{in.txt} or \texttt{out.txt}. In C++, standard I/O is done with the \texttt{cin} and \texttt{cout} objects in \texttt{iostream}, and file I/O is done with the \texttt{ofstream} and \texttt{ifstream} classes in \texttt{fstream}. We'll go through each of these below.
+
+Using \texttt{cin} and \texttt{cout} is pretty straightforward. If you have a variable \texttt{x} that you want to read input into, you can do so by writing \verb+cin >> x+. If \texttt{x} is an \texttt{int}, \texttt{double}, or \texttt{long long}, this will read the next such number in the input (up to a whitespace) into \texttt{x}. If \texttt{x} is a string, then \texttt{cin} will read similarly the input up to a whitespace into \texttt{x}. To output a variable \texttt{x} that is of type \texttt{int}, \texttt{double}, \texttt{long long}, \texttt{string}, or \texttt{bool}, we simply write \verb+cout << x+. To output a newline, you can write \verb+cout << endl+. And that's all!
+
+Here's an example with \texttt{cin} and \texttt{cout} that outputs the sum of two integers:
+
+\begin{mylstlisting}
+int main() {
+  // hint: you should have "#include <iostream>" at the top of your code.
+  int x, y;
+  cin >> x >> y;
+  cout << x + y << endl;
+}
+\end{mylstlisting}
+
+Moving on to file I/O, suppose we want to read from \texttt{in.txt} and write to \texttt{out.txt}. We construct an \texttt{ifstream} and an \texttt{ofstream} on \texttt{in.txt} and \texttt{out.txt}, respectively. We can do so by writing \texttt{ifstream fin("in.txt")} and \texttt{ofstream fout("out.txt")}. Then \texttt{fin} and \texttt{fout} behave just like \texttt{cin} and \texttt{cout}. Here's an example:
+
+\begin{mylstlisting}
+int main() {
+  // hint: you should have "#include <iostream>" at the top of your code.
+  ifstream fin("in.txt");
+  ofstream fout("in.txt");
+  int x, y;
+  fin >> x >> y;
+  fout << x + y << endl;
+}
+\end{mylstlisting}
+
+Although more efficient methods of I/O exist, such as \texttt{scanf} and \texttt{printf}, what we've covered here should be sufficient for now. For example, it is possible to read $10^5$ integers with \texttt{cin} and \texttt{cout} in a fraction of a second.
 
 \section{Complexity}
 
