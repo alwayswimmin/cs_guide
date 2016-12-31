@@ -186,5 +186,152 @@ Here's the \href{http://codeforces.com}{link} to the greedy problem set. Feast a
 
 \section{Prefix Sums}
 
+Suppose we were given an array of numbers of length $N$ and were asked to compute a series of $Q$ queries each asking for the sum of the numbers in the contiguous 
+subsequence of numbers indexed from $i$ to $j$. 
+
+\begin{center}
+{
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+
+\node[myrect=16]
+  (array)
+  {
+  					\strut 2
+  \nodepart{two}	\strut 4
+  \nodepart{three}	\strut 7
+  \nodepart{four}	\strut $-5$
+  \nodepart{five}	\strut 3
+  \nodepart{six}	\strut 6
+  \nodepart{seven}	\strut $-3$
+  \nodepart{eight}	\strut 1
+  \nodepart{nine}	\strut $-2$
+  \nodepart{ten}	\strut $-4$
+  \nodepart{eleven}	\strut $-6$
+  \nodepart{twelve}	\strut 2
+  \nodepart{thirteen}	\strut 8
+  \nodepart{fourteen}	\strut 6
+  \nodepart{fifteen}	\strut 0
+  \nodepart{sixteen}	\strut $-7$
+  };
+\foreach \Valor [count=\Valori from 1] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen }
+  \node[below] at (array.\Valor south) {\Valori};
+
+\end{tikzpicture}
+}
+\end{center}
+
+For example, the query on $[4,14]$ would sum 11 numbers and return the answer 6.
+The na\"{i}ve solution would simply resum the numbers from position $i$ to position $j$ each time:
+
+\begin{mylstlisting}
+int arr[MAXN];
+int query(int i, int j) {
+	int sum = 0;
+	for(int k = i; k <= j; ++k)
+		sum += arr[k];
+	return sum;
+}
+\end{mylstlisting}
+
+In the worst case, this for loop is $O(N)$, since each query could loop over the majority of the size $N$ array.
+This solution is fine if we only have a constant number of queries. But what if $Q$ is large? Notice that in case our na\"{i}ve solution is doing a lot of repeated work.
+If we were to query $[3,12]$, for example, we would sum $[4,12]$ all over again, three fourths of the whole array! 
+
+How can we eliminate this excess work? Our intuition from this specific example
+would tell us to take our answer for $[4,14]$, subtract out anything that is not in the overlap ($[13,14]$),
+and add any part of the new query that we haven't yet included ($[3,3]$). In this way we avoid summing over $[4,12]$ twice. But we quickly see that this solution is 
+unnecessarily complicated and does not always speed up our solution: the ranges $[1,8]$ and $[9,16]$ are both half the array size but have no overlap whatsoever, so each
+query could still be $O(N)$.
+
+We find our answer using something called \textbf{prefix sums}. Prefix sums are an example of precomputation: performing some computation on our data before we read in any
+queries to make the subsequent series of queries faster. Another example of precomputation you may have encountered before is sorting prior to a binary search, where we might
+be queried how many numbers in a list are greater than $x$ for some number $x$. Na\"{i}vely checking each element in the list would result in a linear $O(N)$ time solution
+per query, while sorting beforehand costs $O(N \log N)$ but results in each query costing $O(\log N)$.
+
+In this case, we notice that if we knew the answers to the queries $[1,j]$ and $[1,i-1]$, we could simply subtract the two to get the answer to the query for $[i,j]$.
+Consider the following array, where the number stored in index $i$ is the answer to the query $[1,i]$.
+
+\begin{center}
+\begin{tikzpicture}[
+  thick,
+  myrect/.style={
+    draw,
+    fill=myseagreen,
+    rectangle split,
+    rectangle split horizontal,
+    rectangle split parts=#1,
+    rectangle split part align=left,
+    text width=4ex,
+    text centered
+    }
+]
+
+\node[myrect=17]
+  (array)
+  {
+  					\strut 0
+  \nodepart{two}	\strut 2
+  \nodepart{three}	\strut 6
+  \nodepart{four}	\strut 13
+  \nodepart{five}	\strut 8
+  \nodepart{six}	\strut 11
+  \nodepart{seven}	\strut 17
+  \nodepart{eight}	\strut 14
+  \nodepart{nine}	\strut 15
+  \nodepart{ten}	\strut 13
+  \nodepart{eleven}	\strut 9
+  \nodepart{twelve}	\strut 3
+  \nodepart{thirteen}	\strut 5
+  \nodepart{fourteen}	\strut 13
+  \nodepart{fifteen}	\strut 19
+  \nodepart{sixteen}	\strut 19
+  \nodepart{seventeen}	\strut 12
+  };
+\foreach \Valor [count=\Valori from 0] in {one ,two ,three , four , five , six , seven , eight , nine , ten , eleven , twelve , thirteen , fourteen , fifteen , sixteen , seventeen }
+  \node[below] at (array.\Valor south) {\Valori};
+
+\end{tikzpicture}
+
+\end{center}
+
+Then the query for $[4,14]$ would simply subtract 13 from 19 to get 6. In general, once we have constructed this array, each query takes $O(1)$, since we simply look up
+two numbers in the array and subtract them.
+
+How might we construct this array in an efficient manner, though? We could use our na\"{i}ve solution $N$ times to get the $N$ sums that we need. This would then result
+in an $O(N^2 + Q)$ overall solution. But the $N^2$ factor is very offputting. Here, we can make use of our observation that we are doing a lot of repeated work. If we know the
+sum for $[1,i]$, then calculating the sum for $[1,i+1]$ is a simple matter of taking our previous answer and adding the $(i+1)$th term in the array:
+
+\begin{mylstlisting}
+int N;
+int arr[MAXN];
+int prefix[MAXN];
+void preprocess() {
+	prefix[0] = 0;
+	for(int k = 1; k <= N; ++k)
+		prefix[k] = prefix[k - 1] + arr[k];
+}
+int query(int i, int j) {
+	return prefix[j] - prefix[i - 1];
+}
+\end{mylstlisting}
+
+This solution is now $O(N + Q)$, much faster than the original $O(NQ)$ that we originally conceived!
+
+So, at a high level, what happened here? We first noticed there was a lot of repetition in the work we were doing. We found a way to cut out the repetition by first 
+finding the answer to a small (in this case, linear) number of nice cases. These nice cases have a certain structure that allow us to solve individual queries very quickly.
+Finally, we exploited the same structure to compute those nice cases in a quick, neat fashion.
+
 \section{Two Pointers}
 
