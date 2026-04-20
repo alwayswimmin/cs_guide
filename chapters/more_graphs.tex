@@ -202,7 +202,7 @@ Find a path from the source to the sink in which all the edges have positive wei
 \State $cap \gets \min_{i=1}^{m-1}(c_f(v_i,v_{i+1}))$
 \For{$i \equiv 1, m-1$}
 	\State $f(v_i,v_{i+1}) \gets f(v_i,v_{i+1}) + cap$
-	\State $c_f(v_i,v_{i+1}) \gets c_f(v_i,v_{i+1}) + cap$
+	\State $c_f(v_i,v_{i+1}) \gets c_f(v_i,v_{i+1}) - cap$
 	\State $f(v_{i+1},v_i) \gets f(v_{i+1},v_i) - cap$
 	\State $c_f(v_{i+1},v_i) \gets c_f(v_{i+1},v_i) + cap$
 	\Comment incrementing reverse edge

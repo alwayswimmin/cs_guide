@@ -582,7 +582,7 @@ int[] sum = new int[2 * SZ]; // sum[1] contains sum for [1, SZ], and so on
 int query(int i, int l, int r, int a, int b) {
 	// i.e. query(1, 1, SZ, 7, 15)
 	if(r < a || b < l) return 0;
-	if(a <= l && r <= b) return tree[i];
+	if(a <= l && r <= b) return sum[i];
 	int m = (l + r) / 2;
 	int ql = query(2 * i, l, m, a, b);
 	int qr = query(2 * i + 1, m + 1, r, a, b);

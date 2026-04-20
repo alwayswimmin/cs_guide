@@ -965,17 +965,19 @@ int index(E o) {
 }
 \end{mylstlisting}
 
-The length of our array is somewhat arbitrary. We chose the number 100007 because it is a prime number, and primes are generally nice since integers modulo a prime form a field. Remember that a negative number \texttt{\%} another number is not necessarily positive, so we need to be a little careful.
+The length of our array is somewhat arbitrary. We chose the number 10007 because it is a prime number, and primes are generally nice since integers modulo a prime form a field. Remember that a negative number \texttt{\%} another number is not necessarily positive, so we need to be a little careful.
 
 From here, adding an element to the table and checking if an element is contained both seem straightforward:
 
 \begin{mylstlisting}
 boolean add(E o) {
+	// Note: silently overwrites on collision; see chaining below.
 	table[index(o)] = o;
     return true;
 }
 boolean contains(Object o) {
     int i = index((E) o);
+    // Only checks the single slot; colliding entries are lost.
 	return table[i] != null && table[i].equals(o);
 }
 \end{mylstlisting}
